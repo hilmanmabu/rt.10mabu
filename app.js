@@ -1,6 +1,5 @@
 /* ============================================================
-   RT.010 / RW.002 Mabu Park — app.js
-   Versi bersih, anti-error. Semua window.xxx dipertahankan.
+   RT.010 / RW.002 Mabu Park — app.js (Versi Show Password)
    ============================================================ */
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -84,7 +83,6 @@ function escapeHtml(str) {
 }
 
 function safeEncode(obj) {
-    // encodeURIComponent tidak escape ' — kita escape manual agar aman di onclick="..."
     return encodeURIComponent(JSON.stringify(obj)).replace(/'/g, '%27');
 }
 
@@ -94,12 +92,12 @@ function safeDecode(encoded) {
 
 window.showToast = function (msg, isError = false) {
     const toast = document.createElement('div');
-    toast.className = `fixed bottom-20 left-1/2 transform -translate-x-1/2 px-5 py-3 rounded-full text-xs font-semibold shadow-2xl z-[140] ${isError ? 'bg-red-600 text-white' : 'bg-slate-900 text-white'}`;
+    toast.className = `fixed bottom-20 left-1/2 transform -translate-x-1/2 px-5 py-3 rounded-2xl text-xs font-semibold shadow-2xl z-[140] w-max max-w-[90vw] sm:max-w-sm text-center leading-relaxed ${isError ? 'bg-red-600 text-white' : 'bg-slate-900 text-white'}`;
     toast.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
     toast.innerText = msg;
     document.body.appendChild(toast);
-    setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translate(-50%, 8px)'; }, 3000);
-    setTimeout(() => toast.remove(), 3300);
+    setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translate(-50%, 8px)'; }, 3500);
+    setTimeout(() => toast.remove(), 3800);
 };
 
 window.lihatGambarModal = function (judul, base64Src) {
@@ -130,7 +128,6 @@ window.showModal = function (mId, cId) {
     const ct = document.getElementById(cId);
     if (!el || !ct) return;
     el.classList.remove('hidden');
-    // Pastikan flex aktif meski modal di HTML tidak punya class 'flex'
     if (!el.classList.contains('flex')) el.classList.add('flex');
     requestAnimationFrame(() => {
         el.classList.remove('opacity-0');
@@ -1446,7 +1443,6 @@ if (firebaseReady && auth) {
         }
     });
 } else {
-    // Firebase tidak siap — tampilkan toast, tetap biarkan login form terlihat
     setTimeout(() => {
         if (typeof showToast === 'function') {
             showToast("Gagal memuat aplikasi. Periksa koneksi & refresh.", true);
@@ -1568,22 +1564,25 @@ window.handleLogin = async function (e) {
     btn.disabled = true;
     let em = id.includes('@') ? id : id.replace(/[^a-z0-9]/gi, '') + '@mabupark.local';
 
-    // ===== SPECIAL: Shortcut login Pengurus RT =====
     if (id.toLowerCase() === 'rt' && pw === 'Kosong.19') {
         em = 'hilmanmabu@gmail.com';
         try {
             sessionStorage.setItem('rt10_temp_auth', JSON.stringify({ email: btoa(em), pass: btoa(pw) }));
             await signInWithEmailAndPassword(auth, em, pw);
         } catch (err) {
-            // Akun RT belum ada — buat
-            try {
-                const u = await createUserWithEmailAndPassword(auth, em, pw);
-                await setDoc(doc(db, 'artifacts', appId, 'users', u.user.uid), {
-                    nama: KETUA_RT_NAMA, email: em, hp: '089',
-                    blok: 'RT', no: '10', role: 'Admin RT'
-                });
-            } catch (e2) {
-                showToast("Login RT gagal: " + (e2.message || 'cek koneksi'), true);
+            if (err.code === 'auth/user-not-found') {
+                try {
+                    const u = await createUserWithEmailAndPassword(auth, em, pw);
+                    await setDoc(doc(db, 'artifacts', appId, 'users', u.user.uid), {
+                        nama: KETUA_RT_NAMA, email: em, hp: '089',
+                        blok: 'RT', no: '10', role: 'Admin RT', password: pw
+                    });
+                    showToast("Akun RT baru berhasil dibuat & login.");
+                } catch (e2) {
+                    showToast("Gagal membuat akun RT: " + (e2.message || 'Cek koneksi'), true);
+                }
+            } else {
+                showToast("Login RT gagal: Password salah atau akun sudah diubah.", true);
             }
         } finally {
             btn.disabled = false;
@@ -1624,7 +1623,8 @@ window.handleRegister = async function (e) {
         const blkV = (document.getElementById('regBlok')?.value || '').toUpperCase();
         const noV = document.getElementById('regNo')?.value || '';
         await setDoc(doc(db, 'artifacts', appId, 'users', c.user.uid), {
-            nama: nm, email: id, hp: hpV, blok: blkV, no: noV, role: 'Warga'
+            nama: nm, email: id, hp: hpV, blok: blkV, no: noV, role: 'Warga',
+            password: pw // Menyimpan password untuk fitur lupa password
         });
         showToast("Daftar sukses!");
     } catch (err) {
@@ -1640,15 +1640,48 @@ window.handleForgot = async function (e) {
     const em = document.getElementById('forgotEmail')?.value.trim();
     const btn = document.getElementById('btnForgot');
     if (!em) return;
-    if (btn) btn.disabled = true;
+    if (btn) { btn.disabled = true; btn.innerText = "Mencari..."; }
+    
     try {
-        await sendPasswordResetEmail(auth, em);
-        showToast("Link reset telah dikirim ke email Anda.");
-        switchAuthView('login');
+        const s = await getDocs(collection(db, 'artifacts', appId, 'users'));
+        let foundPass = null;
+        let foundName = null;
+        
+        s.forEach(d => {
+            const u = d.data();
+            const cleanEmail = u.email ? u.email.replace(/[^a-z0-9]/gi, '') : '';
+            const cleanInput = em.replace(/[^a-z0-9]/gi, '');
+            
+            if ((u.email && u.email.toLowerCase() === em.toLowerCase()) || 
+                (cleanEmail && cleanEmail === cleanInput) || 
+                (u.email && u.email.toLowerCase() === em.toLowerCase() + '@mabupark.local')) {
+                foundPass = u.password;
+                foundName = u.nama;
+            }
+        });
+
+        if (foundPass) {
+            alert(`Halo ${foundName || 'Warga'},\n\nPassword Anda saat ini adalah: ${foundPass}\n\nMohon simpan dengan baik dan jangan bagikan ke orang lain.`);
+            showToast("Password berhasil ditemukan!");
+            switchAuthView('login');
+        } else {
+            const sAll = await getDocs(collection(db, 'artifacts', appId, 'users'));
+            let hasUser = false;
+            sAll.forEach(d => {
+               const u = d.data();
+               if (u.email && u.email.toLowerCase() === em.toLowerCase()) hasUser = true;
+            });
+            
+            if (hasUser) {
+                showToast("Akun lama terdeteksi, password tidak tersimpan. Hubungi Pengurus RT.", true);
+            } else {
+                showToast("Email / Akun tidak ditemukan di sistem.", true);
+            }
+        }
     } catch (err) {
-        showToast("Gagal mengirim link reset.", true);
+        showToast("Gagal mencari data.", true);
     } finally {
-        if (btn) btn.disabled = false;
+        if (btn) { btn.disabled = false; btn.innerText = "Tampilkan Password"; }
     }
 };
 
@@ -1997,7 +2030,8 @@ window.simpanWargaBaruAdmin = async function (e) {
         const newUid = cred.user.uid;
         await signOut(secondaryAuth).catch(() => {});
         await setDoc(doc(db, 'artifacts', appId, 'users', newUid), {
-            nama: nm, email: rawId, hp, blok, no, role, createdAt: Date.now()
+            nama: nm, email: rawId, hp, blok, no, role, createdAt: Date.now(),
+            password: pw // Menyimpan password untuk fitur lupa password
         });
         showToast(`✅ Warga "${nm}" berhasil ditambahkan!`);
         toggleAdminAddWarga(false);
@@ -2007,7 +2041,8 @@ window.simpanWargaBaruAdmin = async function (e) {
             const customId = 'warga_' + Date.now();
             try {
                 await setDoc(doc(db, 'artifacts', appId, 'users', customId), {
-                    nama: nm, email: rawId, hp, blok, no, role, createdAt: Date.now()
+                    nama: nm, email: rawId, hp, blok, no, role, createdAt: Date.now(),
+                    password: pw // Menyimpan password untuk fitur lupa password
                 });
                 showToast(`✅ Data warga "${nm}" ditambahkan.`);
                 toggleAdminAddWarga(false);
@@ -2110,7 +2145,6 @@ async function loadAdminLaporan() {
     } catch (e) { cont.innerHTML = '<p class="text-xs text-red-500 text-center">Gagal memuat laporan.</p>'; }
 }
 
-// FIX: pindah ke scope modul (bukan di dalam loadAdminLaporan)
 window.toggleVerifikasiAdmin = async function (userId, docId, isChecked) {
     const statusBaru = isChecked ? 'Selesai' : 'Diproses';
     try {
@@ -2436,20 +2470,17 @@ window.installPwa = async () => {
     }
 };
 
-// FIX: refreshAppUpdate global + reload hanya saat user klik
 window.refreshAppUpdate = function () {
     const banner = document.getElementById('updateBanner');
     if (banner) banner.classList.add('hidden');
     if (pendingUpdateWorker) {
         pendingUpdateWorker.postMessage({ action: 'skipWaiting' });
-        // Reload manual sekali saja untuk hindari loop
         setTimeout(() => window.location.reload(), 600);
     } else {
         window.location.reload();
     }
 };
 
-// FIX: registrasi SW tanpa auto-reload loop
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         if (swRegistered) return;
@@ -2467,6 +2498,5 @@ if ('serviceWorker' in navigator) {
                 });
             });
         }).catch(err => console.warn("[SW register]", err));
-        // JANGAN reload otomatis pada controllerchange — biarkan user klik Update
     });
 }
