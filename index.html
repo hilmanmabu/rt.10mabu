@@ -168,7 +168,10 @@
                 </div>
                 <div class="flex items-center gap-2 shrink-0">
                     <button id="btnHeaderSOS" onclick="bukaHalamanSOS()" class="bg-red-600 text-white px-3 py-1.5 rounded-full text-[11px] font-bold shadow-md flex items-center gap-1 border border-white/20 hover:bg-red-700"><i class="fa-solid fa-triangle-exclamation text-xs"></i> <span>SOS</span></button>
-                    <button onclick="switchTab('chat')" class="relative w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white"><i class="fa-solid fa-comments text-base"></i><span id="headerChatBadge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-emerald-600">0</span></button>
+                    <button onclick="switchTab('profil')" class="relative w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white overflow-hidden border border-white/40 shadow-sm transition active:scale-95" title="Profil Saya">
+    <img id="headerProfileImg" src="" class="w-full h-full object-cover hidden">
+    <i id="headerProfileIcon" class="fa-solid fa-user text-base"></i>
+</button>
                 </div>
             </div>
         </header>
