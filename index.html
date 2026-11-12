@@ -78,16 +78,41 @@
         </div>
     </div>
 
-    <!-- POPUP WAJIB INSTALL (DIPERBARUI) -->
+    <!-- POPUP WAJIB INSTALL -->
     <div id="wajibInstallModal" class="hidden fixed inset-0 bg-slate-950/80 z-[150] flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-sm rounded-3xl p-7 text-center relative shadow-2xl animate-fade-slide-up">
             <img src="1000531885.png" onerror="this.src='/icon-192.png';" class="w-20 h-20 mx-auto rounded-2xl object-cover shadow-md mb-4">
             <h3 class="text-xl font-bold text-slate-900 mb-2">Install Aplikasi Sekarang</h3>
-            <p class="text-sm text-slate-600 mb-6">Agar notifikasi darurat, chat, dan fitur lainnya berjalan lancar di HP Anda, silakan install aplikasi ini.</p>
+            <p class="text-sm text-slate-600 mb-2">Aplikasi ini <b>sangat ringan</b>, tidak akan membebani HP Anda. Dapat diakses offline.</p>
+            <p class="text-xs text-emerald-600 font-semibold mb-6 bg-emerald-50 py-1.5 rounded-lg inline-block px-3">✨ Ringan & Cepat</p>
+            
             <div class="flex flex-col gap-2">
                 <button onclick="installPwa(true)" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg flex items-center justify-center gap-2">
                     <i class="fa-solid fa-arrow-down animate-bounce text-lg"></i> Install Aplikasi Sekarang
                 </button>
+            </div>
+            <button onclick="document.getElementById('wajibInstallModal').classList.add('hidden')" class="mt-4 text-xs text-slate-400 underline">Nanti Saja</button>
+        </div>
+    </div>
+
+    <!-- MODAL QRIS -->
+    <div id="qrisModal" class="hidden fixed inset-0 bg-slate-950/80 z-[150] flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center relative animate-fade-slide-up">
+            <button onclick="document.getElementById('qrisModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500 z-10"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="font-bold text-lg text-slate-800 mb-1">QRIS Pembayaran Iuran</h3>
+            <p class="text-xs text-slate-500 mb-4">Scan menggunakan Mobile Banking atau Dompet Digital.</p>
+            
+            <div class="bg-slate-100 p-2 rounded-xl mb-3 relative group">
+                <img id="qrisImage" src="qris.jpg" class="w-full rounded-lg object-contain" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png';">
+                <div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg pointer-events-none">
+                    <span class="text-white text-xs font-bold bg-slate-900/80 px-3 py-1.5 rounded-full"><i class="fa-solid fa-download mr-1"></i> Tekan Lama</span>
+                </div>
+            </div>
+            
+            <p class="text-[11px] text-amber-600 font-semibold mb-4 bg-amber-50 p-2 rounded-lg leading-tight"><i class="fa-solid fa-circle-info mr-1"></i> Tekan lama pada gambar QRIS di atas jika ingin menyimpannya ke galeri.</p>
+            
+            <div class="flex flex-col gap-2">
+                <button onclick="pindaiQRIS()" class="w-full bg-slate-900 text-white font-bold py-3 rounded-xl shadow-md flex items-center justify-center gap-2"><i class="fa-solid fa-camera"></i> Pindai via Aplikasi Bank</button>
             </div>
         </div>
     </div>
@@ -100,7 +125,15 @@
         </div>
         <div class="flex-1 relative flex items-center justify-center overflow-hidden bg-black p-0">
             <video id="liveCameraVideo" autoplay playsinline muted class="w-full h-full object-cover"></video>
-            <div class="absolute inset-6 border-2 border-white/25 rounded-3xl pointer-events-none flex items-end justify-center pb-4"><span class="text-[10px] text-white/90 bg-black/60 px-3 py-1 rounded-full">Arahkan kamera</span></div>
+            
+            <!-- Bingkai KTP/KK -->
+            <div id="ktpOverlay" class="hidden absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div class="w-[85%] aspect-[1.58] border-2 border-dashed border-emerald-400 rounded-xl relative bg-black/20 shadow-[0_0_0_9999px_rgba(0,0,0,0.5)]">
+                    <span class="absolute -top-7 left-0 text-xs text-emerald-300 font-bold bg-slate-900/80 px-2 py-1 rounded">Posisikan KTP/KK di dalam kotak</span>
+                </div>
+            </div>
+
+            <div id="defaultCamHint" class="absolute inset-6 border-2 border-white/25 rounded-3xl pointer-events-none flex items-end justify-center pb-4"><span class="text-[10px] text-white/90 bg-black/60 px-3 py-1 rounded-full">Arahkan kamera</span></div>
         </div>
         <div class="p-6 pb-safe-bottom bg-black flex justify-around items-center z-10 w-full">
             <button type="button" onclick="gantiArahKamera()" class="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center text-white text-lg"><i class="fa-solid fa-camera-rotate"></i></button>
@@ -170,10 +203,7 @@
 
     <!-- ============================== AUTHENTICATION ============================== -->
     <div id="authContainer" class="w-full h-full bg-slate-50 relative flex flex-col items-center justify-center overflow-y-auto p-4 sm:p-6">
-        <!-- Frame Login Responsif (Split Screen di PC, Vertikal di HP) -->
         <div class="w-full max-w-4xl bg-white rounded-none sm:rounded-[2rem] sm:shadow-2xl flex flex-col md:flex-row overflow-hidden relative">
-            
-            <!-- Bagian Kiri (Branding) - Disembunyikan di HP -->
             <div class="hidden md:flex md:w-1/2 bg-emerald-600 p-10 flex-col justify-center items-center text-center relative overflow-hidden">
                 <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
                 <img src="1000531885.png" alt="Logo" class="relative w-32 h-32 rounded-[2rem] object-cover bg-white border-4 border-white shadow-xl mb-6" onerror="this.src='/icon-192.png';">
@@ -181,10 +211,7 @@
                 <p class="relative text-emerald-100 font-semibold tracking-widest text-sm uppercase">RT.010 / RW.002</p>
                 <p class="relative text-emerald-200 text-xs mt-1">Perumahan Mabu Park</p>
             </div>
-
-            <!-- Bagian Kanan (Form) -->
             <div class="w-full md:w-1/2 p-6 sm:p-10 relative flex flex-col justify-center">
-                <!-- Logo untuk HP -->
                 <div class="text-center mb-8 relative z-10 w-full md:hidden">
                     <img src="1000531885.png" alt="Logo" class="relative w-20 h-20 mx-auto rounded-[2rem] object-cover bg-white border-4 border-white shadow-xl mb-4" onerror="this.src='/icon-192.png';">
                     <h1 class="font-extrabold text-2xl text-slate-900 tracking-tight leading-tight">Layanan Warga</h1>
@@ -235,7 +262,7 @@
     <div id="mainAppContainer" class="w-full h-[100dvh] bg-slate-50 relative hidden flex-col overflow-hidden">
         
         <!-- HEADER -->
-        <header class="bg-emerald-600 text-white px-4 pb-5 pt-safe-top sm:px-6 lg:px-8 sm:py-4 shrink-0 z-30 shadow-md w-full">
+        <header class="bg-emerald-600 text-white px-4 pb-2 pt-safe-top sm:px-6 lg:px-8 sm:py-2 shrink-0 z-30 shadow-md w-full relative">
             <div class="flex items-center justify-between gap-2 max-w-7xl mx-auto w-full">
                 <div class="flex items-center gap-3 min-w-0">
                     <div class="w-11 h-11 rounded-2xl bg-white shadow-sm flex items-center justify-center overflow-hidden shrink-0"><img src="1000531885.png" class="w-full h-full object-cover" onerror="this.src='/icon-192.png';"></div>
@@ -245,7 +272,7 @@
                         <p class="text-[9px] sm:text-[10px] text-emerald-200 mt-0.5 truncate font-normal" id="headerDate">Memuat tanggal...</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-2 shrink-0">
+                <div class="flex items-center gap-2 shrink-0 pb-1">
                     <button id="btnHeaderSOS" onclick="bukaHalamanSOS()" class="bg-red-600 text-white px-3 py-1.5 rounded-full text-[11px] font-bold shadow-md flex items-center gap-1 border border-white/20 hover:bg-red-700"><i class="fa-solid fa-triangle-exclamation text-xs"></i> <span>SOS</span></button>
                     <button onclick="switchTab('profil')" class="relative w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white overflow-hidden border border-white/40 shadow-sm transition active:scale-95" title="Profil Saya">
                         <img id="headerProfileImg" src="" class="w-full h-full object-cover hidden">
@@ -254,6 +281,13 @@
                 </div>
             </div>
         </header>
+
+        <!-- RUNNING TEXT (MARQUEE) -->
+        <div class="bg-amber-500 text-white text-[11px] font-semibold py-1.5 px-4 overflow-hidden relative shadow-sm w-full z-20">
+            <marquee scrollamount="4" class="cursor-default w-full">
+                <span id="marqueeContent" class="inline-block w-full">Memuat informasi...</span>
+            </marquee>
+        </div>
 
         <!-- MAIN CONTENT AREA -->
         <main class="flex-1 overflow-y-auto overflow-x-hidden bg-slate-50 flex flex-col relative w-full">
@@ -282,7 +316,6 @@
                 <!-- DEMOGRAFI WARGA -->
                 <div class="px-4 sm:px-6 lg:px-8 pb-4 w-full">
                     <div class="flex items-center justify-between mb-3.5"><h3 class="font-bold text-slate-800 text-xs sm:text-sm uppercase tracking-wider">Demografi & Pertumbuhan Warga</h3></div>
-                    <!-- FIX: Dibuat 2 kolom (grid-cols-2) untuk HP, 4 kolom untuk PC -->
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                         <div class="bg-white p-3 md:p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center text-center gap-2">
                             <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center shrink-0"><i class="fa-solid fa-house"></i></div>
@@ -330,14 +363,13 @@
                 </div>
 
                 <div class="px-4 sm:px-6 lg:px-8 pb-4 pt-1 w-full">
-                    <div class="flex items-center justify-between mb-3.5"><h3 class="font-bold text-slate-800 text-xs sm:text-sm uppercase tracking-wider">Menu Layanan</h3><span class="text-[10px] text-slate-400 font-medium">10 Layanan</span></div>
+                    <div class="flex items-center justify-between mb-3.5"><h3 class="font-bold text-slate-800 text-xs sm:text-sm uppercase tracking-wider">Menu Layanan</h3><span class="text-[10px] text-slate-400 font-medium">9 Layanan</span></div>
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                         <button onclick="switchTab('lapor')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-emerald-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Speech%20balloon/3D/speech_balloon_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Lapor & Tanya RT</span></button>
                         <button onclick="switchTab('surat')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-blue-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Envelope/3D/envelope_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Surat Pengantar</span></button>
                         <button onclick="switchTab('data')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-purple-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Memo/3D/memo_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Isi Data Warga</span></button>
                         <button onclick="switchTab('tamu')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-rose-50 flex justify-center items-center"><i class="fa-solid fa-address-book text-2xl text-rose-500"></i></div><span class="font-semibold text-[10px] text-slate-700">Buku Tamu</span></button>
                         <button onclick="switchTab('umkm')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-orange-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Shopping%20bags/3D/shopping_bags_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Pasar UMKM</span></button>
-                        <button onclick="switchTab('iuran')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-yellow-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Credit%20card/3D/credit_card_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Kartu Iuran</span></button>
                         <button onclick="switchTab('kas')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-teal-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Money%20bag/3D/money_bag_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Laporan Kas</span></button>
                         <button onclick="switchTab('inventaris')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-cyan-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Package/3D/package_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Inventaris</span></button>
                         <button onclick="switchTab('pekerja')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-indigo-50 flex justify-center items-center"><i class="fa-solid fa-users-rectangle text-2xl text-indigo-500"></i></div><span class="font-semibold text-[10px] text-slate-700">Data Pekerja</span></button>
@@ -460,17 +492,21 @@
                 <form id="formDataWarga" onsubmit="submitForm(event, 'Isi Data Warga')" class="p-4 md:p-6 space-y-4 flex-1">
                     <div><label class="block text-xs font-semibold text-slate-600 mb-1">Alamat (Otomatis)</label><textarea id="dwAlamatRumah" rows="2" readonly class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-700 text-sm resize-none">Perumahan Mabu Park RT.010/RW.002 Desa Aweh Kalanganyar</textarea></div>
                     
-                    <!-- FIX: Radio Button Status Pernikahan -->
+                    <!-- FIX: Radio Button Status Pernikahan dengan peer-checked -->
                     <div class="bg-blue-50/60 p-4 rounded-xl border border-blue-100">
                         <label class="block text-xs font-semibold text-slate-700 mb-3">Status Pernikahan</label>
                         <div class="flex gap-3">
-                            <label for="statusBelumKawin" class="flex-1 flex items-center gap-2 cursor-pointer border border-slate-200 rounded-xl px-4 py-3 bg-white hover:bg-slate-50 transition peer-checked:border-emerald-500 peer-checked:bg-emerald-50 peer-checked:text-emerald-700">
-                                <input type="radio" id="statusBelumKawin" name="statusKeluarga" value="Belum Kawin" onchange="toggleKeluargaStatus()" checked class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
-                                <span class="text-sm font-medium">Belum Kawin</span>
+                            <label class="flex-1 relative cursor-pointer">
+                                <input type="radio" id="statusBelumKawin" name="statusKeluarga" value="Belum Kawin" onchange="toggleKeluargaStatus()" checked class="peer sr-only">
+                                <div class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-center text-sm transition-all peer-checked:bg-emerald-50 peer-checked:border-emerald-500 peer-checked:text-emerald-700 peer-checked:font-bold peer-checked:shadow-sm">
+                                    Belum Kawin
+                                </div>
                             </label>
-                            <label for="statusKawin" class="flex-1 flex items-center gap-2 cursor-pointer border border-slate-200 rounded-xl px-4 py-3 bg-white hover:bg-slate-50 transition peer-checked:border-emerald-500 peer-checked:bg-emerald-50 peer-checked:text-emerald-700">
-                                <input type="radio" id="statusKawin" name="statusKeluarga" value="Kawin" onchange="toggleKeluargaStatus()" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
-                                <span class="text-sm font-medium">Kawin</span>
+                            <label class="flex-1 relative cursor-pointer">
+                                <input type="radio" id="statusKawin" name="statusKeluarga" value="Kawin" onchange="toggleKeluargaStatus()" class="peer sr-only">
+                                <div class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-center text-sm transition-all peer-checked:bg-emerald-50 peer-checked:border-emerald-500 peer-checked:text-emerald-700 peer-checked:font-bold peer-checked:shadow-sm">
+                                    Kawin
+                                </div>
                             </label>
                         </div>
                     </div>
@@ -479,13 +515,17 @@
                     <div class="bg-emerald-50/60 p-4 rounded-xl border border-emerald-100">
                         <label class="block text-xs font-semibold text-slate-700 mb-3">Tempat Tinggal</label>
                         <div class="flex gap-3">
-                            <label for="statusPribadi" class="flex-1 flex items-center gap-2 cursor-pointer border border-slate-200 rounded-xl px-4 py-3 bg-white hover:bg-slate-50 transition peer-checked:border-emerald-500 peer-checked:bg-emerald-50 peer-checked:text-emerald-700">
-                                <input type="radio" id="statusPribadi" name="statusRumah" value="Milik Pribadi" checked class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
-                                <span class="text-sm font-medium">Pribadi</span>
+                            <label class="flex-1 relative cursor-pointer">
+                                <input type="radio" id="statusPribadi" name="statusRumah" value="Milik Pribadi" checked class="peer sr-only">
+                                <div class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-center text-sm transition-all peer-checked:bg-emerald-50 peer-checked:border-emerald-500 peer-checked:text-emerald-700 peer-checked:font-bold peer-checked:shadow-sm">
+                                    Pribadi
+                                </div>
                             </label>
-                            <label for="statusNgontrak" class="flex-1 flex items-center gap-2 cursor-pointer border border-slate-200 rounded-xl px-4 py-3 bg-white hover:bg-slate-50 transition peer-checked:border-emerald-500 peer-checked:bg-emerald-50 peer-checked:text-emerald-700">
-                                <input type="radio" id="statusNgontrak" name="statusRumah" value="Ngontrak" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
-                                <span class="text-sm font-medium">Ngontrak</span>
+                            <label class="flex-1 relative cursor-pointer">
+                                <input type="radio" id="statusNgontrak" name="statusRumah" value="Ngontrak" class="peer sr-only">
+                                <div class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-center text-sm transition-all peer-checked:bg-emerald-50 peer-checked:border-emerald-500 peer-checked:text-emerald-700 peer-checked:font-bold peer-checked:shadow-sm">
+                                    Ngontrak
+                                </div>
                             </label>
                         </div>
                     </div>
@@ -503,13 +543,17 @@
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-2">Sudah KTP Mabu?</label>
                         <div class="flex gap-3">
-                            <label for="ktpSudah" class="flex-1 flex items-center gap-2 cursor-pointer border border-slate-200 rounded-xl px-4 py-3 bg-white hover:bg-slate-50 transition peer-checked:border-emerald-500 peer-checked:bg-emerald-50 peer-checked:text-emerald-700">
-                                <input type="radio" id="ktpSudah" name="statusKtp" value="Sudah KTP Mabu" checked class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
-                                <span class="text-sm font-medium">Sudah</span>
+                            <label class="flex-1 relative cursor-pointer">
+                                <input type="radio" id="ktpSudah" name="statusKtp" value="Sudah KTP Mabu" checked class="peer sr-only">
+                                <div class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-center text-sm transition-all peer-checked:bg-emerald-50 peer-checked:border-emerald-500 peer-checked:text-emerald-700 peer-checked:font-bold peer-checked:shadow-sm">
+                                    Sudah
+                                </div>
                             </label>
-                            <label for="ktpBelum" class="flex-1 flex items-center gap-2 cursor-pointer border border-slate-200 rounded-xl px-4 py-3 bg-white hover:bg-slate-50 transition peer-checked:border-emerald-500 peer-checked:bg-emerald-50 peer-checked:text-emerald-700">
-                                <input type="radio" id="ktpBelum" name="statusKtp" value="Belum KTP Mabu" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
-                                <span class="text-sm font-medium">Belum</span>
+                            <label class="flex-1 relative cursor-pointer">
+                                <input type="radio" id="ktpBelum" name="statusKtp" value="Belum KTP Mabu" class="peer sr-only">
+                                <div class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-center text-sm transition-all peer-checked:bg-emerald-50 peer-checked:border-emerald-500 peer-checked:text-emerald-700 peer-checked:font-bold peer-checked:shadow-sm">
+                                    Belum
+                                </div>
                             </label>
                         </div>
                     </div>
@@ -690,7 +734,6 @@
                                     <div class="min-w-0"><p class="text-[8px] uppercase tracking-wider opacity-80">Pengeluaran</p><p class="font-bold text-xs truncate" id="kasTotalKeluar">Rp 0</p></div>
                                 </div>
                             </div>
-                            <!-- TOMBOL DOWNLOAD CSV & PDF -->
                             <div class="grid grid-cols-2 gap-2">
                                 <button onclick="downloadLaporanKas()" class="w-full bg-emerald-800 text-white font-bold py-2 rounded-lg shadow-sm text-xs flex items-center justify-center gap-1.5 hover:bg-emerald-900"><i class="fa-solid fa-file-csv"></i> Excel/CSV</button>
                                 <button onclick="downloadLaporanKasPDF()" class="w-full bg-white text-emerald-700 font-bold py-2 rounded-lg shadow-sm text-xs flex items-center justify-center gap-1.5 hover:bg-slate-100"><i class="fa-solid fa-file-pdf"></i> Cetak PDF</button>
@@ -937,15 +980,16 @@
 
         </main>
 
-        <!-- BOTTOM NAV -->
+        <!-- BOTTOM NAV (IURAN PINDAH KE TENGAH) -->
         <nav id="bottomNav" class="bg-white border-t border-slate-200 flex justify-center items-center pt-2 pb-safe-bottom shrink-0 z-30 shadow-[0_-4px_12px_-4px_rgba(15,23,42,0.05)] w-full">
-            <div class="flex justify-around items-center w-full max-w-md mx-auto px-2">
-                <button id="navBerandaBtn" onclick="switchTab('beranda')" class="flex flex-col items-center text-emerald-600 flex-1 py-1"><i class="fa-solid fa-house text-lg mb-1"></i><span class="text-[10px] font-semibold">Beranda</span></button>
-                <button id="navChatBtn" onclick="switchTab('chat')" class="relative flex flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-comments text-lg mb-1"></i><span class="text-[10px] font-semibold">Obrolan</span><span id="navChatBadge" class="hidden absolute top-0 right-1/4 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span></button>
-                <button id="navKasBtn" onclick="switchTab('kas')" class="flex flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-wallet text-lg mb-1"></i><span class="text-[10px] font-semibold">KAS</span></button>
-                <button id="navRiwayatBtn" onclick="switchTab('riwayat')" class="hidden flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-clock-rotate-left text-lg mb-1"></i><span class="text-[10px] font-semibold">Riwayat</span></button>
-                <button onclick="switchTab('profil')" class="flex flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-user text-lg mb-1"></i><span class="text-[10px] font-semibold">Profil</span></button>
-                <button id="navAdminBtn" onclick="switchTab('admin')" class="hidden flex-col items-center text-slate-400 hover:text-emerald-600 flex-1 py-1"><i class="fa-solid fa-users-gear text-lg mb-1"></i><span class="text-[10px] font-semibold">Admin</span></button>
+            <div class="flex justify-around items-center w-full max-w-md mx-auto px-1">
+                <button id="navBerandaBtn" onclick="switchTab('beranda')" class="flex flex-col items-center text-emerald-600 flex-1 py-1"><i class="fa-solid fa-house text-lg mb-1"></i><span class="text-[9px] font-semibold">Beranda</span></button>
+                <button id="navChatBtn" onclick="switchTab('chat')" class="relative flex flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-comments text-lg mb-1"></i><span class="text-[9px] font-semibold">Obrolan</span><span id="navChatBadge" class="hidden absolute top-0 right-1/4 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span></button>
+                <button id="navIuranBtn" onclick="switchTab('iuran')" class="flex flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-id-card-clip text-lg mb-1"></i><span class="text-[9px] font-semibold">Iuran</span></button>
+                <button id="navKasBtn" onclick="switchTab('kas')" class="flex flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-wallet text-lg mb-1"></i><span class="text-[9px] font-semibold">KAS</span></button>
+                <button id="navRiwayatBtn" onclick="switchTab('riwayat')" class="hidden flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-clock-rotate-left text-lg mb-1"></i><span class="text-[9px] font-semibold">Riwayat</span></button>
+                <button onclick="switchTab('profil')" class="flex flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-user text-lg mb-1"></i><span class="text-[9px] font-semibold">Profil</span></button>
+                <button id="navAdminBtn" onclick="switchTab('admin')" class="hidden flex-col items-center text-slate-400 hover:text-emerald-600 flex-1 py-1"><i class="fa-solid fa-users-gear text-lg mb-1"></i><span class="text-[9px] font-semibold">Admin</span></button>
             </div>
         </nav>
     </div>
@@ -1077,6 +1121,18 @@
         let liveStream = null; let currentFacingMode = 'environment'; let camTargetConfig = null;
         window.bukaKameraRealtime = async function (prevId, icoId, hidId, textHideId = null, forceFacing = null) {
             camTargetConfig = { prevId, icoId, hidId, textHideId }; if (forceFacing) currentFacingMode = forceFacing; else if (prevId !== 'KEEP') currentFacingMode = 'environment';
+            
+            // Tampilkan bingkai KTP jika target adalah dwKtpPreview atau dwKkPreview
+            const ktpOverlay = document.getElementById('ktpOverlay');
+            const defaultCamHint = document.getElementById('defaultCamHint');
+            if (prevId === 'dwKtpPreview' || prevId === 'dwKkPreview') {
+                if(ktpOverlay) ktpOverlay.classList.remove('hidden');
+                if(defaultCamHint) defaultCamHint.classList.add('hidden');
+            } else {
+                if(ktpOverlay) ktpOverlay.classList.add('hidden');
+                if(defaultCamHint) defaultCamHint.classList.remove('hidden');
+            }
+
             const modal = document.getElementById('liveCameraModal'); const video = document.getElementById('liveCameraVideo'); const lbl = document.getElementById('camModeLabel');
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return showToast("Browser/HP tidak mengizinkan kamera.", true);
             try {
@@ -1979,10 +2035,11 @@
         window.loadIuranUser = async function () { const cont = document.getElementById('iuranListContainer'); if (!cont || !auth.currentUser || !firebaseReady) return; cont.innerHTML = '<div class="text-center py-10"><i class="fa-solid fa-spinner fa-spin text-slate-400 text-2xl"></i></div>'; try { const s = await getDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid)); const dataIuran = (s.exists() && s.data().iuran) || {}; const dataNominal = (s.exists() && s.data().iuranNominal) || {}; let h = ''; DAFTAR_BULAN_IURAN.forEach(bln => { const status = dataIuran[bln]; const isLunas = ['L', 'LK', 'LA', 'LC', 'P', 'T'].includes(status); const nomBln = dataNominal[bln] || nominalIuranDefault; h += `<div class="p-3.5 border ${isLunas ? 'bg-emerald-50 border-emerald-300' : 'bg-white border-slate-200'} rounded-xl flex justify-between items-center shadow-sm"><div class="flex items-center gap-3 min-w-0"><div class="w-10 h-10 rounded-xl flex justify-center items-center shrink-0 ${isLunas ? 'bg-emerald-600 text-white' : 'bg-red-50 text-red-500'}"><i class="fa-solid ${isLunas ? 'fa-check' : 'fa-clock'} text-lg"></i></div><div class="min-w-0"><h4 class="font-bold text-sm ${isLunas ? 'text-emerald-900' : 'text-slate-800'}">${bln}</h4><p class="text-[11px] ${isLunas ? 'text-emerald-700 font-semibold' : 'text-slate-500'}">Iuran: ${formatRupiah(nomBln)}</p></div></div><span class="px-3 py-1.5 text-xs font-bold rounded-lg shrink-0 ${isLunas ? 'bg-emerald-600 text-white' : 'bg-red-100 text-red-600'}">${isLunas ? '✓ LUNAS' : 'BELUM'}</span></div>`; }); cont.innerHTML = h; } catch (e) { cont.innerHTML = '<p class="text-center text-red-500 text-xs">Gagal memuat kartu iuran.</p>'; } };
         
         window.bayarIuranQRIS = function() {
-            showToast("Memuat QRIS...");
-            setTimeout(() => {
-                lihatGambarModal('Scan QRIS Iuran RT.10 Mabu', 'qris.jpg');
-            }, 800);
+            document.getElementById('qrisModal').classList.remove('hidden');
+        };
+
+        window.pindaiQRIS = function() {
+            alert("Silakan buka aplikasi Mobile Banking atau Dompet Digital Anda (seperti GoPay, OVO, Dana, BCA, dll), lalu pilih menu 'Scan QRIS' atau 'Bayar' dan arahkan kamera ke layar ini.");
         };
 
         window.simpanNominalDefault = async function () { const aNom = document.getElementById('adminNominalIuran'); if (!aNom) return; nominalIuranDefault = Number(aNom.value); try { await setDoc(doc(db, 'artifacts', appId, 'kas', 'config_iuran'), { nominalDefault: nominalIuranDefault, updatedAt: Date.now() }, { merge: true }); showToast(`Nominal aktif: ${formatRupiah(nominalIuranDefault)}`); } catch (e) { } };
@@ -2048,12 +2105,19 @@
                     const jiwa = parseInt(u.jumlah_jiwa) || 1;
                     totalJiwa += jiwa;
 
-                    if (u.jenis_kelamin === 'Laki-laki') totalLaki++;
-                    else if (u.jenis_kelamin === 'Perempuan') totalPerempuan++;
-                    else {
+                    if (u.status_keluarga === 'Kawin' || u.status_keluarga === 'Sudah Berkeluarga') {
                         if (u.nama_suami) totalLaki++;
                         if (u.nama_istri) totalPerempuan++;
-                        if (!u.nama_suami && !u.nama_istri && u.status_keluarga === 'Belum Berkeluarga/Single') totalLaki++; 
+                        // Jika form tidak terisi lengkap, minimal hitung 1 L & 1 P
+                        if (!u.nama_suami && !u.nama_istri) { totalLaki++; totalPerempuan++; }
+                    } else {
+                        if (u.jenis_kelamin === 'Laki-laki') totalLaki++;
+                        else if (u.jenis_kelamin === 'Perempuan') totalPerempuan++;
+                        else {
+                            if (u.nama_suami) totalLaki++;
+                            if (u.nama_istri) totalPerempuan++;
+                            if (!u.nama_suami && !u.nama_istri) totalLaki++;
+                        }
                     }
                 });
 
@@ -2067,13 +2131,49 @@
             }
         };
 
+        // FUNGSI RUNNING TEXT (MARQUEE)
+        async function loadMarquee() {
+            const el = document.getElementById('marqueeContent');
+            if (!el || !firebaseReady) return;
+            try {
+                // 1. Cek Pengumuman
+                const sPeng = await getDocs(query(collection(db, 'artifacts', appId, 'pengumuman'), orderBy('timestamp', 'desc')));
+                if (!sPeng.empty) {
+                    const peng = sPeng.docs[0].data();
+                    el.innerHTML = `📢 <b>INFO TERBARU:</b> ${escapeHtml(peng.judul)} - ${escapeHtml(peng.isi)}`;
+                    return;
+                }
+
+                // 2. Jika tidak ada pengumuman, cek Iuran Warga
+                if (!auth.currentUser) return;
+                const userDoc = await getDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid));
+                if (userDoc.exists()) {
+                    const u = userDoc.data();
+                    const iuran = u.iuran || {};
+                    const unpaidMonths = DAFTAR_BULAN_IURAN.filter(bln => !['L', 'LK', 'LA', 'LC', 'P', 'T'].includes(iuran[bln]));
+                    
+                    if (unpaidMonths.length > 0) {
+                        el.innerHTML = `🔔 <b>PENGINGAT IURAN:</b> Mohon maaf Bapak/Ibu ${escapeHtml(u.nama || 'Warga')}, Iuran bulan <b>${unpaidMonths.join(', ')}</b> belum tercatat lunas. Silakan cek menu Kartu Iuran.`;
+                    } else {
+                        el.innerHTML = `✅ <b>INFORMASI:</b> Terima kasih, iuran Anda sudah lunas. Selamat beraktivitas!`;
+                    }
+                } else {
+                    el.innerHTML = `Selamat datang di Aplikasi Layanan Warga RT.010 / RW.002 Mabu Park.`;
+                }
+            } catch(e) {
+                console.error("Gagal load marquee", e);
+                el.innerHTML = `Selamat datang di Aplikasi Layanan Warga RT.010 / RW.002 Mabu Park.`;
+            }
+        }
+
         function mulaiPantau(user) {
             if (!firebaseReady || !db) return; unSubs.forEach(u => { try { u(); } catch (e) { } }); unSubs = []; cekTombolNotifikasi();
+            loadMarquee(); // Panggil marquee saat mulai
             let initL = true; try { unSubs.push(onSnapshot(collection(db, 'artifacts', appId, 'laporan'), (s) => { if (initL) { initL = false; return; } s.docChanges().forEach(c => { if (c.type === 'added' && c.doc.data().userId !== user.uid) { const lap = c.doc.data(); if (lap.layanan && lap.layanan.startsWith('DARURAT SOS')) { bunyikanSireneDarurat(); kirimNotifikasiPesan(`🚨 ${lap.layanan}`, `${lap.nama} (Blok ${lap.blok}/${lap.no}) butuh bantuan!`); } else { kirimNotifikasiPesan(`Laporan Baru`, lap.layanan || 'Laporan'); } const admView = document.getElementById('admViewLaporan'); if (admView && !admView.classList.contains('hidden')) loadAdminLaporan(); } }); }, (e) => console.warn(e))); } catch (e) { }
             let initC = true; try { unSubs.push(onSnapshot(collection(db, 'artifacts', appId, 'chats'), (s) => { allChatMessages = []; s.forEach(d => allChatMessages.push(Object.assign({ id: d.id }, d.data()))); renderChatMessages(); if (initC) { initC = false; return; } s.docChanges().forEach(c => { const m = c.doc.data(); const isRT = window.currentUserData && window.currentUserData.role === 'Admin RT'; if (c.type === 'added' && m.senderId !== user.uid && (m.roomId === 'GLOBAL' || m.recipientId === user.uid || isRT)) { const msgText = m.text || (m.imageUrl ? '[Foto]' : '[Stiker]'); if (msgText.includes('SINYAL DARURAT SOS')) bunyikanSireneDarurat(); kirimNotifikasiPesan(`Chat: ${m.senderName}`, msgText); const cv = document.getElementById('chatView'); if (cv && cv.classList.contains('hidden')) updateChatBadge(unreadChatCount + 1); } }); }, (e) => console.warn(e))); } catch (e) { }
-            let initP = true; try { unSubs.push(onSnapshot(collection(db, 'artifacts', appId, 'pengumuman'), (s) => { if (initP) { initP = false; return; } s.docChanges().forEach(c => { if (c.type === 'added') { loadPengumumanUtama(); const isRT = window.currentUserData && window.currentUserData.role === 'Admin RT'; if (!isRT) kirimNotifikasiPesan(`Pengumuman RT`, c.doc.data().judul); } }); }, (e) => console.warn(e))); } catch (e) { }
+            let initP = true; try { unSubs.push(onSnapshot(collection(db, 'artifacts', appId, 'pengumuman'), (s) => { if (initP) { initP = false; return; } s.docChanges().forEach(c => { if (c.type === 'added') { loadPengumumanUtama(); loadMarquee(); const isRT = window.currentUserData && window.currentUserData.role === 'Admin RT'; if (!isRT) kirimNotifikasiPesan(`Pengumuman RT`, c.doc.data().judul); } }); }, (e) => console.warn(e))); } catch (e) { }
             try { unSubs.push(onSnapshot(doc(db, 'artifacts', appId, 'kas', 'config_sos'), (snap) => { const d = snap.exists() ? snap.data() : { enabled: true }; isFiturSOSEnabled = d.enabled !== false; const bHead = document.getElementById('btnHeaderSOS'); const bHome = document.getElementById('btnHomeSOS'); const cbAdmin = document.getElementById('toggleFiturSOSCheckbox'); if (cbAdmin) cbAdmin.checked = isFiturSOSEnabled; if (isFiturSOSEnabled) { if (bHead) bHead.classList.remove('hidden'); if (bHome) bHome.classList.remove('hidden'); } else { if (bHead) bHead.classList.add('hidden'); if (bHome) bHome.classList.add('hidden'); } const alertBanner = document.getElementById('sosActiveAlertBanner'); const statusTxt = document.getElementById('adminStatusSOSText'); const isRT = window.currentUserData && ['Admin RT', 'Pengurus RT', 'Bendahara', 'Sekretaris'].includes(window.currentUserData.role); const btnStopBanner = document.getElementById('btnAdminStopSOSBanner'); if (btnStopBanner) btnStopBanner.classList.toggle('hidden', !isRT); if (d.activeSOS && d.activeSOS.jenis) { if (alertBanner) { const t = document.getElementById('sosAlertTitle'); const desc = document.getElementById('sosAlertDesc'); if (t) t.innerText = `DARURAT: ${d.activeSOS.jenis}!`; if (desc) desc.innerText = `Pelapor: ${d.activeSOS.nama} (${d.activeSOS.blok}) butuh bantuan!`; alertBanner.classList.remove('hidden'); } if (statusTxt) statusTxt.innerText = `🚨 DARURAT AKTIF: ${d.activeSOS.jenis} oleh ${d.activeSOS.nama} (${d.activeSOS.blok})`; } else { if (alertBanner) alertBanner.classList.add('hidden'); if (statusTxt) statusTxt.innerText = "Aman. Tidak ada sinyal darurat aktif."; } }, () => { })); } catch (e) { }
-            try { unSubs.push(onSnapshot(doc(db, 'artifacts', appId, 'users', user.uid), (snap) => { if (!snap.exists()) return; window.currentUserData = snap.data(); const iuranMod = document.getElementById('iuranView'); if (iuranMod && !iuranMod.classList.contains('hidden')) loadIuranUser(); }, () => { })); } catch (e) { }
+            try { unSubs.push(onSnapshot(doc(db, 'artifacts', appId, 'users', user.uid), (snap) => { if (!snap.exists()) return; window.currentUserData = snap.data(); const iuranMod = document.getElementById('iuranView'); if (iuranMod && !iuranMod.classList.contains('hidden')) loadIuranUser(); loadMarquee(); }, () => { })); } catch (e) { }
             let initK = true; try { unSubs.push(onSnapshot(doc(db, 'artifacts', appId, 'kas', 'config_iuran'), (snap) => { if (!snap.exists()) return; const d = snap.data(); if (d.nominalDefault) nominalIuranDefault = d.nominalDefault; if (d.reminderBulan) { const myIuran = (window.currentUserData && window.currentUserData.iuran) || {}; const sudahLunas = ['L', 'LK', 'LA', 'LC', 'P', 'T'].includes(myIuran[d.reminderBulan]); const banner = document.getElementById('iuranReminderBanner'); if (!sudahLunas && banner) { const t = document.getElementById('iuranReminderTitle'); const txt = document.getElementById('iuranReminderText'); if (t) t.innerText = `Pengingat Iuran ${d.reminderBulan}`; if (txt) txt.innerText = `Iuran ${formatRupiah(d.reminderNominal || nominalIuranDefault)} belum tercatat lunas.`; banner.classList.remove('hidden'); if (!initK) kirimNotifikasiPesan(`Pengingat Iuran ${d.reminderBulan}`, `Mohon cek Kartu Iuran Anda.`); } else if (banner) { banner.classList.add('hidden'); } } initK = false; }, () => { })); } catch (e) { }
             let initH = true; try { unSubs.push(onSnapshot(collection(db, 'artifacts', appId, 'users', user.uid, 'history'), (s) => { if (initH) { initH = false; return; } s.docChanges().forEach(c => { if (c.type === 'modified') { kirimNotifikasiPesan(`Status Update`, `Permohonan ${c.doc.data().layanan}: ${c.doc.data().status}`); const rv = document.getElementById('riwayatView'); if (rv && !rv.classList.contains('hidden')) loadRiwayat(); } }); }, () => { })); } catch (e) { }
         }
@@ -2116,9 +2216,11 @@
                 hIco.innerText = nm.charAt(0).toUpperCase();
             }
 
-            // CEK INSTALL PWA (Tampilkan Modal Wajib Install jika belum install)
+            // CEK INSTALL PWA (Hanya jika di Mobile/HP)
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-            if (!isStandalone) {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (!isStandalone && isMobile && localStorage.getItem('pwaDismissed') !== 'true') {
                 setTimeout(() => {
                     const wm = document.getElementById('wajibInstallModal');
                     if(wm) wm.classList.remove('hidden');
@@ -2233,7 +2335,7 @@
                 if (GOOGLE_SCRIPT_URL) fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(dObj) }).catch(() => { });
                 await addDoc(collection(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'history'), { layanan: srv, timestamp: Date.now(), detail: dObj.detail, suratData, foto_bukti: dObj.foto_bukti || null, foto_ktp: dObj.foto_ktp || null, foto_kk: dObj.foto_kk || null, status: 'Menunggu' });
                 await addDoc(collection(db, 'artifacts', appId, 'laporan'), { userId: auth.currentUser.uid, nama: dObj.nama, blok: dObj.blok, no: dObj.no_rumah, layanan: srv, detail: dObj.detail, timestamp: Date.now() });
-                showToast("Permohonan terkirim!"); switchTab('beranda'); if (e.target) e.target.reset(); prefillFormData(); loadStatistik();
+                showToast("Permohonan terkirim!"); switchTab('beranda'); if (e.target) e.target.reset(); prefillFormData(); loadStatistik(); loadMarquee();
             } catch (e) { showToast("Gagal mengirim laporan.", true); } finally { if (b) b.disabled = false; }
         };
         window.submitInventaris = async function (e) {
@@ -2334,8 +2436,8 @@
         window.toggleVerifikasiAdmin = async function (userId, docId, isChecked) { const statusBaru = isChecked ? 'Selesai' : 'Diproses'; try { await updateDoc(doc(db, 'artifacts', appId, 'users', userId, 'history', docId), { status: statusBaru, approvedBy: KETUA_RT_NAMA, approvedAt: Date.now() }); showToast(isChecked ? "✅ Diverifikasi!" : "Verifikasi dibatalkan."); loadAdminLaporan(); } catch (err) { showToast("Gagal memperbarui status.", true); loadAdminLaporan(); } };
         window.hapusLaporanWarga = async (uid, did, type) => { if (!confirm("Yakin hapus?")) return; try { if (type === 'laporan') await deleteDoc(doc(db, 'artifacts', appId, 'users', uid, 'history', did)); else await deleteDoc(doc(db, 'artifacts', appId, 'users', uid)); showToast("Dihapus."); if (type === 'laporan') loadAdminLaporan(); else { loadAdminWargaList(); loadStatistik(); } } catch (e) { } };
         window.loadAdminPengumuman = async function () { const cont = document.getElementById('adminPengumumanList'); if (!cont) return; try { const s = await getDocs(query(collection(db, 'artifacts', appId, 'pengumuman'), orderBy('timestamp', 'desc'))); let h = ''; s.forEach(d => { h += `<div class="p-2.5 border border-slate-200 rounded-xl bg-white flex justify-between items-start mb-2 gap-2"><div class="min-w-0"><h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(d.data().judul)}</h4><p class="text-xs text-slate-500 line-clamp-2">${escapeHtml(d.data().isi)}</p></div><button onclick="hapusPengumuman('${d.id}')" class="text-red-500 shrink-0 w-8 h-8 bg-red-50 rounded-lg flex items-center justify-center"><i class="fa-solid fa-trash text-xs"></i></button></div>`; }); cont.innerHTML = h || '<p class="text-xs text-slate-400 text-center py-3">Belum ada pengumuman.</p>'; } catch (e) { } };
-        window.postPengumuman = async function () { try { const jEl = document.getElementById('pengJudul'); const iEl = document.getElementById('pengIsi'); const judul = jEl?.value.trim(); const isi = iEl?.value.trim(); if (!judul || !isi) return showToast("Judul & isi wajib diisi.", true); await addDoc(collection(db, 'artifacts', appId, 'pengumuman'), { judul, isi, timestamp: Date.now() }); showToast("Diposting."); if (jEl) jEl.value = ''; if (iEl) iEl.value = ''; loadAdminPengumuman(); loadPengumumanUtama(); } catch (e) { showToast("Gagal memposting.", true); } };
-        window.hapusPengumuman = async function (id) { try { await deleteDoc(doc(db, 'artifacts', appId, 'pengumuman', id)); showToast("Dihapus."); loadAdminPengumuman(); loadPengumumanUtama(); } catch (e) { } };
+        window.postPengumuman = async function () { try { const jEl = document.getElementById('pengJudul'); const iEl = document.getElementById('pengIsi'); const judul = jEl?.value.trim(); const isi = iEl?.value.trim(); if (!judul || !isi) return showToast("Judul & isi wajib diisi.", true); await addDoc(collection(db, 'artifacts', appId, 'pengumuman'), { judul, isi, timestamp: Date.now() }); showToast("Diposting."); if (jEl) jEl.value = ''; if (iEl) iEl.value = ''; loadAdminPengumuman(); loadPengumumanUtama(); loadMarquee(); } catch (e) { showToast("Gagal memposting.", true); } };
+        window.hapusPengumuman = async function (id) { try { await deleteDoc(doc(db, 'artifacts', appId, 'pengumuman', id)); showToast("Dihapus."); loadAdminPengumuman(); loadPengumumanUtama(); loadMarquee(); } catch (e) { } };
         window.loadPengumumanUtama = async function () { try { const s = await getDocs(query(collection(db, 'artifacts', appId, 'pengumuman'), orderBy('timestamp', 'desc'))); const pc = document.getElementById('pengumumanContainer'); if (!s.empty) { const d = s.docs[0].data(); const pj = document.getElementById('pengumumanJudul'); const pi = document.getElementById('pengumumanIsi'); if (pj) pj.innerText = d.judul; if (pi) pi.innerText = d.isi; if (pc) pc.classList.remove('hidden'); } else { if (pc) pc.classList.add('hidden'); } } catch (e) { } };
         window.loadAdminInventaris = async function () { const cont = document.getElementById('adminInventarisList'); if (!cont) return; cont.innerHTML = 'Loading...'; try { const s = await getDocs(query(collection(db, 'artifacts', appId, 'inventaris'), orderBy('timestamp', 'asc'))); let h = ''; s.forEach(d => { h += `<div class="p-2 border border-slate-200 rounded-xl bg-white flex justify-between items-center mb-2"><div class="min-w-0"><h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(d.data().nama)}</h4><p class="text-[10px] text-slate-500 truncate">${escapeHtml(d.data().detail || '-')}</p></div><button onclick="hapusInventaris('${d.id}')" class="text-red-500 w-8 h-8 flex items-center justify-center bg-red-50 rounded-lg hover:bg-red-100 shrink-0"><i class="fa-solid fa-trash text-xs"></i></button></div>`; }); cont.innerHTML = h || '<p class="text-xs text-slate-500 text-center">Belum ada barang. Klik "Muat 13 Bawaan".</p>'; } catch (e) { cont.innerHTML = '<p class="text-xs text-red-500">Gagal memuat.</p>'; } };
         window.tambahInventaris = async function () { const nEl = document.getElementById('invBaruNama'); const dEl = document.getElementById('invBaruDetail'); const nm = nEl?.value.trim(); const dt = dEl?.value.trim() || ''; if (!nm) return showToast("Nama barang wajib diisi!", true); try { await addDoc(collection(db, 'artifacts', appId, 'inventaris'), { nama: nm, detail: dt, timestamp: Date.now() }); showToast("Barang ditambahkan."); if (nEl) nEl.value = ''; if (dEl) dEl.value = ''; loadAdminInventaris(); } catch (e) { showToast("Gagal menambah.", true); } };
@@ -2347,7 +2449,7 @@
             const views = ['homeView', 'chatView', 'riwayatView', 'laporView', 'suratView', 'dataView', 'profilView', 'umkmView', 'iuranView', 'kasView', 'inventarisView', 'sosView', 'adminView', 'pekerjaView', 'pengurusView', 'tamuView'];
             views.forEach(id => { const el = document.getElementById(id); if (el) { el.classList.add('hidden'); el.classList.remove('flex'); } });
             
-            ['navBerandaBtn', 'navChatBtn', 'navKasBtn', 'navRiwayatBtn'].forEach(id => { const el = document.getElementById(id); if (el) { el.classList.remove('text-emerald-600'); el.classList.add('text-slate-400'); } });
+            ['navBerandaBtn', 'navChatBtn', 'navKasBtn', 'navRiwayatBtn', 'navIuranBtn'].forEach(id => { const el = document.getElementById(id); if (el) { el.classList.remove('text-emerald-600'); el.classList.add('text-slate-400'); } });
 
             const show = (id, display = 'block') => { const el = document.getElementById(id); if (el) { el.classList.remove('hidden'); el.classList.add(display); } };
 
@@ -2359,7 +2461,7 @@
             else if (t === 'profil') { show('profilView', 'flex'); perbaruiStatusUI_Fingerprint(); showAppScreen(); }
             else if (t === 'tamu') { show('tamuView', 'flex'); }
             else if (t === 'umkm') { show('umkmView', 'flex'); loadUmkmWarga(); }
-            else if (t === 'iuran') { show('iuranView', 'flex'); const u = window.currentUserData || {}; const el1 = document.getElementById('kartuIuranNama'); const el2 = document.getElementById('kartuIuranBlok'); const el3 = document.getElementById('kartuIuranNominalAktif'); if (el1) el1.innerText = u.nama || 'Warga'; if (el2) el2.innerText = `Blok ${u.blok || '-'} / No. ${u.no || '-'}`; if (el3) el3.innerText = formatRupiah(nominalIuranDefault) + ' / bln'; loadIuranUser(); }
+            else if (t === 'iuran') { show('iuranView', 'flex'); const ni = document.getElementById('navIuranBtn'); if(ni){ ni.classList.remove('text-slate-400'); ni.classList.add('text-emerald-600'); } const u = window.currentUserData || {}; const el1 = document.getElementById('kartuIuranNama'); const el2 = document.getElementById('kartuIuranBlok'); const el3 = document.getElementById('kartuIuranNominalAktif'); if (el1) el1.innerText = u.nama || 'Warga'; if (el2) el2.innerText = `Blok ${u.blok || '-'} / No. ${u.no || '-'}`; if (el3) el3.innerText = formatRupiah(nominalIuranDefault) + ' / bln'; loadIuranUser(); }
             else if (t === 'kas') { show('kasView', 'flex'); const nk = document.getElementById('navKasBtn'); if (nk) { nk.classList.remove('text-slate-400'); nk.classList.add('text-emerald-600'); } switchKasTab('riwayat'); }
             else if (t === 'inventaris') { show('inventarisView', 'flex'); prefillFormData(); loadInventarisWarga(); }
             else if (t === 'sos') { show('sosView', 'flex'); }
@@ -2425,7 +2527,12 @@
                 }
                 deferredPrompt = null;
             } else {
-                alert("Untuk menginstall di iPhone/iPad:\n1. Tekan tombol 'Share' (Bagikan) di Safari.\n2. Pilih 'Add to Home Screen' (Tambahkan ke Layar Utama).\n\nUntuk Android (Chrome):\n1. Tekan titik tiga di kanan atas.\n2. Pilih 'Install App' atau 'Tambahkan ke Layar Utama'.");
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                if (isIOS) {
+                    alert("Untuk menginstall di iPhone/iPad:\n1. Tekan tombol 'Share' (Bagikan) di Safari.\n2. Scroll ke bawah dan pilih 'Add to Home Screen' (Tambahkan ke Layar Utama).\n3. Klik 'Add'.");
+                } else {
+                    alert("Untuk menginstall di Android:\n1. Tekan titik tiga di kanan atas browser.\n2. Pilih 'Install App' atau 'Tambahkan ke Layar Utama'.");
+                }
             }
         };
 
