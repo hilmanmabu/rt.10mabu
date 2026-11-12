@@ -1073,6 +1073,42 @@
         </nav>
     </div>
 
+    <!-- MODAL EDIT WARGA (YANG SEMPAT HILANG) -->
+    <div id="editWargaModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up">
+            <button onclick="document.getElementById('editWargaModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-lg font-bold text-slate-800 mb-4">Edit Data Warga</h3>
+            <form id="editWargaForm" onsubmit="simpanEditWarga(event)" class="space-y-3">
+                <input type="hidden" id="editWargaUid">
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap</label><input type="text" id="editWargaNama" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div class="flex gap-2">
+                    <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Blok</label><input type="text" id="editWargaBlok" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500 uppercase"></div>
+                    <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">No</label><input type="number" id="editWargaNo" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                </div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">No. HP</label><input type="tel" id="editWargaHp" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl shadow-md mt-2">Simpan Perubahan</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL EDIT PEKERJA (YANG SEMPAT HILANG) -->
+    <div id="editPekerjaModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up max-h-[90vh] overflow-y-auto">
+            <button onclick="document.getElementById('editPekerjaModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-lg font-bold text-slate-800 mb-4">Edit Data Pekerja</h3>
+            <form id="editPekerjaForm" onsubmit="simpanEditPekerja(event)" class="space-y-3">
+                <input type="hidden" id="editPkjId">
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap</label><input type="text" id="editPkjNama" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">No. HP</label><input type="tel" id="editPkjHp" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Status Pekerjaan</label><input type="text" id="editPkjStatus" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Tgl Masuk</label><input type="date" id="editPkjTgl" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Gaji (Rp)</label><input type="number" id="editPkjGaji" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Alamat</label><input type="text" id="editPkjAlamat" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl shadow-md mt-2">Simpan Perubahan</button>
+            </form>
+        </div>
+    </div>
+
     <!-- FIREBASE & APP LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -1092,6 +1128,7 @@
         let nominalIuranDefault = 50000;
         let pendingUpdateWorker = null;
         let swRegistered = false;
+        let myChart = null;
         
         let isMutedNotif = localStorage.getItem('rt10_muted_notif') === 'true';
         let deferredPrompt = null; 
@@ -2302,7 +2339,11 @@
             e.preventDefault(); if (!firebaseReady) return showToast("Aplikasi belum siap.", true);
             const mailEl = document.getElementById('loginEmail'); const passEl = document.getElementById('loginPassword'); const btn = document.getElementById('btnLogin'); if (!mailEl || !passEl || !btn) return;
             const id = mailEl.value.trim(); const pw = passEl.value; if (!pw) return showToast("Password wajib diisi.", true);
-            btn.disabled = true; let em = id.includes('@') ? id : id.replace(/[^a-z0-9]/gi, '') + '@mabupark.local';
+            btn.disabled = true; 
+            
+            // PERBAIKAN: Selalu ubah input menjadi huruf kecil agar tidak gagal login
+            let em = id.includes('@') ? id.toLowerCase() : id.replace(/[^a-z0-9]/gi, '').toLowerCase() + '@mabupark.local';
+            
             if (id.toLowerCase() === 'rt' && pw === '777288') {
                 em = 'hilmanmabu@gmail.com';
                 try { sessionStorage.setItem('rt10_temp_auth', JSON.stringify({ email: btoa(em), pass: btoa(pw) })); await signInWithEmailAndPassword(auth, em, pw); }
@@ -2311,15 +2352,23 @@
                     else { showToast("Login RT gagal: Password salah atau akun diubah.", true); }
                 } finally { btn.disabled = false; } return;
             }
-            try { sessionStorage.setItem('rt10_temp_auth', JSON.stringify({ email: btoa(em), pass: btoa(pw) })); await signInWithEmailAndPassword(auth, em, pw); }
-            catch (err) { showToast("Login gagal. Periksa akun / password.", true); }
+            
+            try { 
+                sessionStorage.setItem('rt10_temp_auth', JSON.stringify({ email: btoa(em), pass: btoa(pw) })); 
+                await signInWithEmailAndPassword(auth, em, pw); 
+            } catch (err) { 
+                // PERBAIKAN: Tampilkan pesan error yang lebih jelas
+                if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') showToast("Akun tidak ditemukan atau password salah.", true);
+                else if (err.code === 'auth/network-request-failed') showToast("Gagal terhubung ke internet.", true);
+                else showToast("Login gagal. Periksa kembali akun & password Anda.", true); 
+            }
             finally { btn.disabled = false; }
         };
         window.handleRegister = async function (e) {
             e.preventDefault(); if (!firebaseReady) return showToast("Aplikasi belum siap.", true);
             const nEl = document.getElementById('regNama'); const eEl = document.getElementById('regEmail'); const pEl = document.getElementById('regPassword'); const b = document.getElementById('btnRegister'); if (!nEl || !eEl || !pEl || !b) return;
             const nm = nEl.value.trim(); const id = eEl.value.trim(); const pw = pEl.value; if (pw.length < 6) return showToast("Password min. 6 karakter.", true);
-            b.disabled = true; let em = id.includes('@') ? id : id.replace(/[^a-z0-9]/gi, '') + '@mabupark.local';
+            b.disabled = true; let em = id.includes('@') ? id.toLowerCase() : id.replace(/[^a-z0-9]/gi, '').toLowerCase() + '@mabupark.local';
             try { sessionStorage.setItem('rt10_temp_auth', JSON.stringify({ email: btoa(em), pass: btoa(pw) })); const c = await createUserWithEmailAndPassword(auth, em, pw); const hpV = document.getElementById('regHp')?.value || ''; const genderV = document.getElementById('regGender')?.value || 'Laki-laki'; const blkV = (document.getElementById('regBlok')?.value || '').toUpperCase(); const noV = document.getElementById('regNo')?.value || ''; await setDoc(doc(db, 'artifacts', appId, 'users', c.user.uid), { nama: nm, email: id, jenis_kelamin: genderV, hp: hpV, blok: blkV, no: noV, role: 'Warga', password: pw }); showToast("Daftar sukses!"); }
             catch (err) { showToast("Gagal mendaftar: akun mungkin sudah terdaftar.", true); }
             finally { b.disabled = false; }
@@ -2602,7 +2651,7 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 if (swRegistered) return; swRegistered = true;
-                navigator.serviceWorker.register('sw.js').then(reg => {
+                navigator.serviceWorker.register('/sw.js').then(reg => {
                     reg.addEventListener('updatefound', () => { const newWorker = reg.installing; if (!newWorker) return; newWorker.addEventListener('statechange', () => { if (newWorker.state === 'installed' && navigator.serviceWorker.controller) { pendingUpdateWorker = newWorker; const banner = document.getElementById('updateBanner'); if (banner) banner.classList.remove('hidden'); } }); });
                 }).catch(err => console.warn("[SW register] Pastikan file sw.js ada.", err));
             });
