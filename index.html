@@ -156,46 +156,64 @@
 
     <!-- ============================== AUTHENTICATION ============================== -->
     <div id="authContainer" class="w-full h-full bg-slate-50 relative flex flex-col items-center justify-center overflow-y-auto p-4 sm:p-6">
-        <div class="w-full max-w-md bg-white rounded-none sm:rounded-[2rem] sm:shadow-2xl p-6 sm:p-8 relative">
-            <div class="text-center mb-8 relative z-10 w-full">
-                <img src="1000531885.png" alt="Logo" class="relative w-24 h-24 mx-auto rounded-[2rem] object-cover bg-white border-4 border-white shadow-xl mb-4" onerror="this.src='/icon-192.png';">
-                <h1 class="font-extrabold text-2xl text-slate-900 tracking-tight leading-tight">Layanan Warga</h1>
-                <p class="text-slate-500 text-xs font-semibold mt-1.5 tracking-wide">RT.010 / RW.002 · MABU PARK</p>
+        <!-- Frame Login Responsif (Split Screen di PC, Vertikal di HP) -->
+        <div class="w-full max-w-4xl bg-white rounded-none sm:rounded-[2rem] sm:shadow-2xl flex flex-col md:flex-row overflow-hidden relative">
+            
+            <!-- Bagian Kiri (Branding) - Disembunyikan di HP -->
+            <div class="hidden md:flex md:w-1/2 bg-emerald-600 p-10 flex-col justify-center items-center text-center relative overflow-hidden">
+                <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+                <img src="1000531885.png" alt="Logo" class="relative w-32 h-32 rounded-[2rem] object-cover bg-white border-4 border-white shadow-xl mb-6" onerror="this.src='/icon-192.png';">
+                <h1 class="relative font-extrabold text-3xl text-white tracking-tight leading-tight mb-2">Layanan Warga</h1>
+                <p class="relative text-emerald-100 font-semibold tracking-widest text-sm uppercase">RT.010 / RW.002</p>
+                <p class="relative text-emerald-200 text-xs mt-1">Perumahan Mabu Park</p>
             </div>
-            <form id="loginForm" onsubmit="handleLogin(event)" class="w-full space-y-4 fade-transition relative z-10">
-                <div class="flex bg-slate-100 p-1 rounded-2xl mb-4">
-                    <button type="button" id="tabWarga" onclick="setLoginRole('warga')" class="flex-1 py-2.5 text-sm font-bold bg-white shadow-sm rounded-xl text-emerald-600 transition-all">Warga</button>
-                    <button type="button" id="tabAdmin" onclick="setLoginRole('admin')" class="flex-1 py-2.5 text-sm font-semibold text-slate-500 rounded-xl transition-all">Pengurus RT</button>
+
+            <!-- Bagian Kanan (Form) -->
+            <div class="w-full md:w-1/2 p-6 sm:p-10 relative flex flex-col justify-center">
+                <!-- Logo untuk HP -->
+                <div class="text-center mb-8 relative z-10 w-full md:hidden">
+                    <img src="1000531885.png" alt="Logo" class="relative w-20 h-20 mx-auto rounded-[2rem] object-cover bg-white border-4 border-white shadow-xl mb-4" onerror="this.src='/icon-192.png';">
+                    <h1 class="font-extrabold text-2xl text-slate-900 tracking-tight leading-tight">Layanan Warga</h1>
+                    <p class="text-slate-500 text-xs font-semibold mt-1.5 tracking-wide">RT.010 / RW.002 · MABU PARK</p>
                 </div>
-                <div id="loginEmailContainer"><label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase">Email / Akun</label><input type="text" id="loginEmail" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 outline-none bg-slate-50/50 text-sm"></div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase">Password</label>
-                    <div class="relative"><input type="password" id="loginPassword" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 outline-none bg-slate-50/50 text-sm pr-12"><button type="button" onclick="togglePasswordVisibility('loginPassword', 'loginEyeIcon')" class="absolute inset-y-0 right-0 px-4 flex items-center text-slate-400 hover:text-emerald-600"><i id="loginEyeIcon" class="fa-regular fa-eye"></i></button></div>
-                </div>
-                <div class="flex justify-end"><button type="button" onclick="switchAuthView('forgot')" class="text-xs text-emerald-600 font-semibold">Lupa Password?</button></div>
-                <button type="submit" id="btnLogin" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl shadow-lg">Masuk</button>
-                <div class="relative flex py-1 items-center"><div class="flex-grow border-t border-slate-200"></div><span class="flex-shrink mx-3 text-slate-400 text-[10px] font-semibold uppercase">atau</span><div class="flex-grow border-t border-slate-200"></div></div>
-                <button type="button" id="btnFingerprintLogin" onclick="handleFingerprintLogin()" class="w-full bg-slate-50 hover:bg-emerald-50 text-slate-700 font-bold py-3 rounded-xl border border-slate-200 flex items-center justify-center gap-2.5"><i class="fa-solid fa-fingerprint text-2xl text-emerald-600"></i><span class="text-sm">Masuk dengan Fingerprint</span></button>
-                <p id="regPrompt" class="text-center text-sm text-slate-600 mt-4">Belum punya akun? <button type="button" onclick="switchAuthView('register')" class="text-emerald-600 font-bold">Daftar Warga</button></p>
-            </form>
-            <form id="registerForm" onsubmit="handleRegister(event)" class="w-full space-y-4 fade-transition hidden absolute inset-0 bg-white p-6 sm:p-8 overflow-y-auto z-20">
-                <div class="flex items-center gap-3 mb-6 sticky top-0 bg-white py-2 z-10 border-b border-slate-100"><button type="button" onclick="switchAuthView('login')" class="w-9 h-9 bg-slate-100 rounded-full"><i class="fa-solid fa-arrow-left text-slate-600"></i></button><h2 class="text-lg font-bold text-slate-800">Registrasi Warga</h2></div>
-                <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Nama Lengkap</label><input type="text" id="regNama" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"></div>
-                <div class="flex gap-3">
-                    <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">Jenis Kelamin</label><select id="regGender" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"><option value="Laki-laki">Laki-laki</option><option value="Perempuan">Perempuan</option></select></div>
-                    <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">No. WhatsApp</label><input type="tel" id="regHp" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"></div>
-                </div>
-                <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Email / Akun</label><input type="text" id="regEmail" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"></div>
-                <div class="flex gap-3"><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">Blok</label><input type="text" id="regBlok" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm uppercase" placeholder="A"></div><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">No</label><input type="number" id="regNo" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm" placeholder="12"></div></div>
-                <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Password</label><div class="relative"><input type="password" id="regPassword" required minlength="6" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm pr-12"><button type="button" onclick="togglePasswordVisibility('regPassword', 'regEyeIcon')" class="absolute inset-y-0 right-0 px-4 flex items-center text-slate-400"><i id="regEyeIcon" class="fa-regular fa-eye"></i></button></div></div>
-                <button type="submit" id="btnRegister" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl mt-4 shadow-lg">Daftar Sekarang</button>
-            </form>
-            <form id="forgotForm" onsubmit="handleForgot(event)" class="w-full space-y-4 fade-transition hidden absolute inset-0 bg-white p-6 sm:p-8 z-20">
-                <div class="flex items-center gap-3 mb-6"><button type="button" onclick="switchAuthView('login')" class="w-9 h-9 bg-slate-100 rounded-full"><i class="fa-solid fa-arrow-left text-slate-600"></i></button><h2 class="text-lg font-bold text-slate-800">Lupa Password</h2></div>
-                <p class="text-sm text-slate-600 mb-4">Masukkan Email / Akun yang terdaftar untuk melihat password Anda.</p>
-                <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Email / Akun</label><input type="text" id="forgotEmail" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"></div>
-                <button type="submit" id="btnForgot" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg">Tampilkan Password</button>
-            </form>
+
+                <form id="loginForm" onsubmit="handleLogin(event)" class="w-full space-y-4 fade-transition relative z-10">
+                    <div class="flex bg-slate-100 p-1 rounded-2xl mb-4">
+                        <button type="button" id="tabWarga" onclick="setLoginRole('warga')" class="flex-1 py-2.5 text-sm font-bold bg-white shadow-sm rounded-xl text-emerald-600 transition-all">Warga</button>
+                        <button type="button" id="tabAdmin" onclick="setLoginRole('admin')" class="flex-1 py-2.5 text-sm font-semibold text-slate-500 rounded-xl transition-all">Pengurus RT</button>
+                    </div>
+                    <div id="loginEmailContainer"><label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase">Email / Akun</label><input type="text" id="loginEmail" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 outline-none bg-slate-50/50 text-sm"></div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase">Password</label>
+                        <div class="relative"><input type="password" id="loginPassword" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 outline-none bg-slate-50/50 text-sm pr-12"><button type="button" onclick="togglePasswordVisibility('loginPassword', 'loginEyeIcon')" class="absolute inset-y-0 right-0 px-4 flex items-center text-slate-400 hover:text-emerald-600"><i id="loginEyeIcon" class="fa-regular fa-eye"></i></button></div>
+                    </div>
+                    <div class="flex justify-end"><button type="button" onclick="switchAuthView('forgot')" class="text-xs text-emerald-600 font-semibold">Lupa Password?</button></div>
+                    <button type="submit" id="btnLogin" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl shadow-lg">Masuk</button>
+                    <div class="relative flex py-1 items-center"><div class="flex-grow border-t border-slate-200"></div><span class="flex-shrink mx-3 text-slate-400 text-[10px] font-semibold uppercase">atau</span><div class="flex-grow border-t border-slate-200"></div></div>
+                    <button type="button" id="btnFingerprintLogin" onclick="handleFingerprintLogin()" class="w-full bg-slate-50 hover:bg-emerald-50 text-slate-700 font-bold py-3 rounded-xl border border-slate-200 flex items-center justify-center gap-2.5"><i class="fa-solid fa-fingerprint text-2xl text-emerald-600"></i><span class="text-sm">Masuk dengan Fingerprint</span></button>
+                    <p id="regPrompt" class="text-center text-sm text-slate-600 mt-4">Belum punya akun? <button type="button" onclick="switchAuthView('register')" class="text-emerald-600 font-bold">Daftar Warga</button></p>
+                </form>
+
+                <form id="registerForm" onsubmit="handleRegister(event)" class="w-full space-y-4 fade-transition hidden absolute inset-0 bg-white p-6 sm:p-10 overflow-y-auto z-20">
+                    <div class="flex items-center gap-3 mb-6 sticky top-0 bg-white py-2 z-10 border-b border-slate-100"><button type="button" onclick="switchAuthView('login')" class="w-9 h-9 bg-slate-100 rounded-full"><i class="fa-solid fa-arrow-left text-slate-600"></i></button><h2 class="text-lg font-bold text-slate-800">Registrasi Warga</h2></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Nama Lengkap</label><input type="text" id="regNama" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"></div>
+                    <div class="flex gap-3">
+                        <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">Jenis Kelamin</label><select id="regGender" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"><option value="Laki-laki">Laki-laki</option><option value="Perempuan">Perempuan</option></select></div>
+                        <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">No. WhatsApp</label><input type="tel" id="regHp" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"></div>
+                    </div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Email / Akun</label><input type="text" id="regEmail" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"></div>
+                    <div class="flex gap-3"><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">Blok</label><input type="text" id="regBlok" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm uppercase" placeholder="A"></div><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">No</label><input type="number" id="regNo" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm" placeholder="12"></div></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Password</label><div class="relative"><input type="password" id="regPassword" required minlength="6" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm pr-12"><button type="button" onclick="togglePasswordVisibility('regPassword', 'regEyeIcon')" class="absolute inset-y-0 right-0 px-4 flex items-center text-slate-400"><i id="regEyeIcon" class="fa-regular fa-eye"></i></button></div></div>
+                    <button type="submit" id="btnRegister" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl mt-4 shadow-lg">Daftar Sekarang</button>
+                </form>
+
+                <form id="forgotForm" onsubmit="handleForgot(event)" class="w-full space-y-4 fade-transition hidden absolute inset-0 bg-white p-6 sm:p-10 z-20">
+                    <div class="flex items-center gap-3 mb-6"><button type="button" onclick="switchAuthView('login')" class="w-9 h-9 bg-slate-100 rounded-full"><i class="fa-solid fa-arrow-left text-slate-600"></i></button><h2 class="text-lg font-bold text-slate-800">Lupa Password</h2></div>
+                    <p class="text-sm text-slate-600 mb-4">Masukkan Email / Akun yang terdaftar untuk melihat password Anda.</p>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Email / Akun</label><input type="text" id="forgotEmail" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"></div>
+                    <button type="submit" id="btnForgot" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg">Tampilkan Password</button>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -250,26 +268,23 @@
                 <!-- DEMOGRAFI WARGA -->
                 <div class="px-4 sm:px-6 lg:px-8 pb-4 w-full">
                     <div class="flex items-center justify-between mb-3.5"><h3 class="font-bold text-slate-800 text-xs sm:text-sm uppercase tracking-wider">Demografi & Pertumbuhan Warga</h3></div>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center">
-                            <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-2"><i class="fa-solid fa-house"></i></div>
-                            <p class="text-[10px] text-slate-500 font-semibold mb-1 uppercase">Total Rumah</p>
-                            <p class="text-lg font-bold text-slate-800" id="statRumah">0</p>
+                    <!-- Diubah menjadi 1 kolom di HP, 4 kolom di PC -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+                            <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center shrink-0"><i class="fa-solid fa-house text-xl"></i></div>
+                            <div><p class="text-[10px] text-slate-500 font-semibold mb-1 uppercase">Total Rumah</p><p class="text-xl font-bold text-slate-800" id="statRumah">0</p></div>
                         </div>
-                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center">
-                            <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-2"><i class="fa-solid fa-users"></i></div>
-                            <p class="text-[10px] text-slate-500 font-semibold mb-1 uppercase">Total Jiwa</p>
-                            <p class="text-lg font-bold text-slate-800" id="statJiwa">0</p>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+                            <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center shrink-0"><i class="fa-solid fa-users text-xl"></i></div>
+                            <div><p class="text-[10px] text-slate-500 font-semibold mb-1 uppercase">Total Jiwa</p><p class="text-xl font-bold text-slate-800" id="statJiwa">0</p></div>
                         </div>
-                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center">
-                            <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-2"><i class="fa-solid fa-mars"></i></div>
-                            <p class="text-[10px] text-slate-500 font-semibold mb-1 uppercase">Laki-laki</p>
-                            <p class="text-lg font-bold text-slate-800" id="statLaki">0</p>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+                            <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center shrink-0"><i class="fa-solid fa-mars text-xl"></i></div>
+                            <div><p class="text-[10px] text-slate-500 font-semibold mb-1 uppercase">Laki-laki</p><p class="text-xl font-bold text-slate-800" id="statLaki">0</p></div>
                         </div>
-                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center">
-                            <div class="w-10 h-10 bg-pink-50 text-pink-600 rounded-full flex items-center justify-center mx-auto mb-2"><i class="fa-solid fa-venus"></i></div>
-                            <p class="text-[10px] text-slate-500 font-semibold mb-1 uppercase">Perempuan</p>
-                            <p class="text-lg font-bold text-slate-800" id="statPerempuan">0</p>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+                            <div class="w-12 h-12 bg-pink-50 text-pink-600 rounded-full flex items-center justify-center shrink-0"><i class="fa-solid fa-venus text-xl"></i></div>
+                            <div><p class="text-[10px] text-slate-500 font-semibold mb-1 uppercase">Perempuan</p><p class="text-xl font-bold text-slate-800" id="statPerempuan">0</p></div>
                         </div>
                     </div>
                 </div>
@@ -497,6 +512,12 @@
                         <p class="flex justify-between text-slate-500"><span class="font-medium">Email</span> <span id="profEmail" class="font-semibold text-slate-800 text-right truncate pl-4 max-w-[60%]"></span></p>
                         <p class="flex justify-between text-slate-500"><span class="font-medium">No HP</span> <span id="profHp" class="font-semibold text-slate-800"></span></p>
                         <p class="flex justify-between text-slate-500"><span class="font-medium">Blok / No</span> <span class="font-semibold text-slate-800"><span id="profBlok"></span> / <span id="profNo"></span></span></p>
+                        <!-- Tambahan info profil dari form data warga -->
+                        <div class="border-t border-slate-100 pt-2 mt-2 space-y-2">
+                            <p class="flex justify-between text-slate-500"><span class="font-medium">Status Keluarga</span> <span id="profStatusKeluarga" class="font-semibold text-slate-800">-</span></p>
+                            <p class="flex justify-between text-slate-500"><span class="font-medium">Jumlah Jiwa</span> <span id="profJiwa" class="font-semibold text-slate-800">-</span></p>
+                            <p class="flex justify-between text-slate-500"><span class="font-medium">Agama</span> <span id="profAgama" class="font-semibold text-slate-800">-</span></p>
+                        </div>
                     </div>
                     
                     <div class="bg-white p-4 rounded-xl border border-slate-200">
@@ -1784,6 +1805,12 @@
             }
 
             const nm = (window.currentUserData && window.currentUserData.nama) || 'Warga'; const wN = document.getElementById('welcomeName'); if (wN) wN.innerText = nm.split(' ')[0] + '!'; const pN = document.getElementById('profNama'); if (pN) pN.innerText = nm; const pR = document.getElementById('profRole'); if (pR) pR.innerText = (window.currentUserData && window.currentUserData.role) || 'Warga'; const pE = document.getElementById('profEmail'); if (pE) pE.innerText = (window.currentUserData && window.currentUserData.email) || '-'; const pH = document.getElementById('profHp'); if (pH) pH.innerText = (window.currentUserData && window.currentUserData.hp) || '-'; const pB = document.getElementById('profBlok'); if (pB) pB.innerText = (window.currentUserData && window.currentUserData.blok) || '-'; const pNo = document.getElementById('profNo'); if (pNo) pNo.innerText = (window.currentUserData && window.currentUserData.no) || '-';
+            
+            // Menampilkan data dari form Isi Data Warga ke Profil
+            const pSk = document.getElementById('profStatusKeluarga'); if (pSk) pSk.innerText = (window.currentUserData && window.currentUserData.status_keluarga) || '-';
+            const pJw = document.getElementById('profJiwa'); if (pJw) pJw.innerText = (window.currentUserData && window.currentUserData.jumlah_jiwa) || '-';
+            const pAg = document.getElementById('profAgama'); if (pAg) pAg.innerText = (window.currentUserData && window.currentUserData.agama) || '-';
+
             const eN = document.getElementById('editNama'); if (eN) eN.value = (window.currentUserData && window.currentUserData.nama) || ''; const eG = document.getElementById('editGender'); if (eG) eG.value = (window.currentUserData && window.currentUserData.jenis_kelamin) || 'Laki-laki'; const eH = document.getElementById('editHp'); if (eH) eH.value = (window.currentUserData && window.currentUserData.hp) || ''; const eB = document.getElementById('editBlok'); if (eB) eB.value = (window.currentUserData && window.currentUserData.blok) || ''; const eNo = document.getElementById('editNo'); if (eNo) eNo.value = (window.currentUserData && window.currentUserData.no) || '';
             
             const hPic = (window.currentUserData && window.currentUserData.photoBase64) || null;
@@ -1811,7 +1838,9 @@
             const mailEl = document.getElementById('loginEmail'); const passEl = document.getElementById('loginPassword'); const btn = document.getElementById('btnLogin'); if (!mailEl || !passEl || !btn) return;
             const id = mailEl.value.trim(); const pw = passEl.value; if (!pw) return showToast("Password wajib diisi.", true);
             btn.disabled = true; let em = id.includes('@') ? id : id.replace(/[^a-z0-9]/gi, '') + '@mabupark.local';
-            if (id.toLowerCase() === 'rt' && pw === 'Kosong.19') {
+            
+            // PASSWORD RT DIGANTI MENJADI 777288
+            if (id.toLowerCase() === 'rt' && pw === '777288') {
                 em = 'hilmanmabu@gmail.com';
                 try { sessionStorage.setItem('rt10_temp_auth', JSON.stringify({ email: btoa(em), pass: btoa(pw) })); await signInWithEmailAndPassword(auth, em, pw); }
                 catch (err) {
@@ -1880,7 +1909,19 @@
                     const nsEl = document.getElementById('dwNamaSingle'); const nsuEl = document.getElementById('dwNamaSuami'); const nisEl = document.getElementById('dwNamaIstri');
                     const nm = sk === 'Belum Berkeluarga/Single' ? (nsEl?.value || '') : (nsuEl?.value || ''); const bEl = document.getElementById('dwBlok'); const noEl = document.getElementById('dwNo'); const alEl = document.getElementById('dwAlamat'); const agEl = document.getElementById('dwAgama'); const jwEl = document.getElementById('dwJiwa'); const ktpB = document.getElementById('dwKtpBase64'); const kkB = document.getElementById('dwKkBase64');
                     dObj = Object.assign(dObj, { nama: nm, blok: bEl?.value || '', no_rumah: noEl?.value || '', detail: `Pembaruan Data (${sk})`, status_keluarga: sk, status_rumah: sr, nama_suami: nsuEl?.value || '', nama_istri: nisEl?.value || '', alamat_semula: alEl?.value || '', agama: agEl?.value || '', status_ktp: k, jumlah_jiwa: jwEl?.value || '', foto_ktp: ktpB?.value || null, foto_kk: kkB?.value || null });
-                    await setDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid), { jumlah_jiwa: dObj.jumlah_jiwa, foto_ktp: dObj.foto_ktp, foto_kk: dObj.foto_kk }, { merge: true });
+                    
+                    // Simpan juga ke dokumen Profile Users
+                    await setDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid), { 
+                        jumlah_jiwa: dObj.jumlah_jiwa, 
+                        foto_ktp: dObj.foto_ktp, 
+                        foto_kk: dObj.foto_kk,
+                        status_keluarga: dObj.status_keluarga,
+                        status_rumah: dObj.status_rumah,
+                        agama: dObj.agama,
+                        nama_suami: dObj.nama_suami,
+                        nama_istri: dObj.nama_istri,
+                        alamat_asal: dObj.alamat_semula
+                    }, { merge: true });
                 } else if (srv === 'Surat Menyurat') {
                     const kepPilihan = document.getElementById('spKeperluanSelect')?.value || ''; const kepFinal = kepPilihan === 'Lainnya' ? (document.getElementById('spKeperluanLain')?.value || '') : kepPilihan;
                     suratData = { nama: document.getElementById('spNama')?.value.trim() || '', nik: document.getElementById('spNik')?.value.trim() || '', ttl: document.getElementById('spTtl')?.value.trim() || '', jk: document.getElementById('spJk')?.value || '', agama: document.getElementById('spAgama')?.value || '', status_nikah: document.getElementById('spStatusNikah')?.value || '', pekerjaan: document.getElementById('spPekerjaan')?.value.trim() || '', blok: (document.getElementById('spBlok')?.value || '').toUpperCase().trim(), no: document.getElementById('spNo')?.value.trim() || '', keperluan: kepFinal };
@@ -2026,6 +2067,37 @@
             try { const s = await getDocs(query(collection(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'history'), orderBy('timestamp', 'desc'))); let h = ''; const u = window.currentUserData || {}; s.forEach(d => { const item = d.data(); const l = item.layanan; const stat = item.status || 'Menunggu'; const bg = stat === 'Selesai' ? 'bg-emerald-100 text-emerald-700' : stat === 'Diproses' ? 'bg-blue-100 text-blue-700' : 'bg-yellow-100 text-yellow-700'; let btnDownloadPdf = ''; if (l === 'Surat Menyurat' && stat === 'Selesai') { const payloadPdf = safeEncode(Object.assign({ nama: u.nama || 'Warga', blok: u.blok || '-', no: u.no || '-', detail: item.detail, timestamp: item.timestamp, approvedAt: item.approvedAt }, item.suratData || {})); btnDownloadPdf = `<button onclick="cetakSuratPDF('${payloadPdf}')" class="mt-3 w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl shadow flex items-center justify-center gap-2 transition"><i class="fa-solid fa-file-pdf text-sm"></i> Download Surat PDF</button>`; } h += `<div class="p-4 bg-white border border-slate-200 rounded-xl shadow-sm"><div class="flex justify-between items-start gap-2"><h4 class="font-bold text-sm text-slate-800">${l === 'Surat Menyurat' ? 'Surat Pengantar RT' : escapeHtml(l)}</h4><span class="text-[10px] font-bold px-1.5 py-0.5 rounded border shrink-0 ${bg}">${escapeHtml(stat)}</span></div><p class="text-xs text-slate-500 mt-1">${new Date(item.timestamp).toLocaleString('id-ID')}</p>${item.detail ? `<p class="text-xs text-slate-600 mt-2 bg-slate-50 p-2 rounded">${escapeHtml(item.detail)}</p>` : ''}${btnDownloadPdf}</div>`; }); cont.innerHTML = h || '<p class="text-xs text-slate-400 text-center py-5">Belum ada riwayat.</p>'; }
             catch (e) { cont.innerHTML = 'Gagal memuat.'; }
         };
+
+        // FITUR DOUBLE BACK TO EXIT (2x Slide Kiri)
+        let backPressCount = 0;
+        let backPressTimer;
+        history.pushState(null, null, location.href); // Push state awal
+        window.addEventListener('popstate', function(event) {
+            // Jika sedang berada di halaman selain beranda, kita arahkan ke beranda dulu
+            const views = ['chatView', 'riwayatView', 'laporView', 'suratView', 'dataView', 'profilView', 'umkmView', 'iuranView', 'kasView', 'inventarisView', 'sosView', 'adminView', 'pekerjaView', 'pengurusView', 'tamuView'];
+            let isSubPage = false;
+            views.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && !el.classList.contains('hidden')) isSubPage = true;
+            });
+
+            if (isSubPage) {
+                // Kembali ke beranda dulu
+                switchTab('beranda');
+                history.pushState(null, null, location.href);
+            } else {
+                // Jika sudah di beranda, terapkan 2x back to exit
+                backPressCount++;
+                if (backPressCount === 1) {
+                    showToast("Tekan sekali lagi untuk keluar aplikasi", true);
+                    history.pushState(null, null, location.href);
+                    backPressTimer = setTimeout(() => { backPressCount = 0; }, 2000);
+                } else {
+                    clearTimeout(backPressTimer);
+                    // Biarkan keluar
+                }
+            }
+        });
 
         let dPrompt;
         window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); dPrompt = e; if (localStorage.getItem('pwaDismissed') === 'true') return; setTimeout(() => document.getElementById('pwaBanner')?.classList.remove('hidden'), 2000); });
