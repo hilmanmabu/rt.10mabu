@@ -699,170 +699,133 @@ document.addEventListener('touchend', e => {
     isSwiping = false;
 });
 
-// Ganti window.loadBukuKas yang lama dengan ini
-let currentKasFilter = 'semua';
-let globalKasList = [];
+/* ============================ BUKU KAS ============================ */
+window.openKasModal = function () {
+    loadBukuKas();
+    showModal('kasModal', 'kasModalContent');
+};
 
-window.filterKas = function(tipe) {
-    currentKasFilter = tipe;
-    ['semua', 'masuk', 'keluar'].forEach(t => {
-        const btn = document.getElementById('tabKas' + t.charAt(0).toUpperCase() + t.slice(1));
-        if(btn) {
-            if(t === tipe) btn.className = "flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all";
-            else btn.className = "flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all";
-        }
-    });
-    renderKasList();
+window.tambahTransaksiKas = async function () {
+    if (!firebaseReady) return;
+    const jenis = document.getElementById('kasJenisInput')?.value;
+    const nom = Number(document.getElementById('kasNominalInput')?.value);
+    const ket = document.getElementById('kasKetInput')?.value.trim();
+    if (!nom || !ket) return showToast("Nominal dan keterangan wajib diisi!", true);
+    try {
+        await addDoc(collection(db, 'artifacts', appId, 'kas'), {
+            tipeDoc: 'transaksi',
+            jenis, nominal: nom, keterangan: ket,
+            oleh: (window.currentUserData && window.currentUserData.nama) || 'Pengurus RT',
+            timestamp: Date.now()
+        });
+        const nEl = document.getElementById('kasNominalInput');
+        const kEl = document.getElementById('kasKetInput');
+        if (nEl) nEl.value = '';
+        if (kEl) kEl.value = '';
+        showToast("Transaksi Kas disimpan!");
+        loadBukuKas();
+    } catch (e) { showToast("Gagal menyimpan kas.", true); }
+};
+
+window.hapusTransaksiKas = async function (id) {
+    if (!confirm("Hapus catatan transaksi kas ini?")) return;
+    try {
+        await deleteDoc(doc(db, 'artifacts', appId, 'kas', id));
+        showToast("Catatan kas dihapus.");
+        loadBukuKas();
+    } catch (e) { /* silent */ }
+};
+
+window.bukaEditKas = function (id, jenis, nominal, ket) {
+    document.getElementById('eKasId').value = id;
+    document.getElementById('eKasJenis').value = jenis;
+    document.getElementById('eKasNominal').value = nominal;
+    document.getElementById('eKasKet').value = ket;
+    showModal('editKasModal', 'editKasModalContent');
+};
+
+window.simpanEditKas = async function (e) {
+    e.preventDefault();
+    const id = document.getElementById('eKasId').value;
+    const jns = document.getElementById('eKasJenis').value;
+    const nom = Number(document.getElementById('eKasNominal').value);
+    const ket = document.getElementById('eKasKet').value.trim();
+    if (!nom || !ket) return showToast("Semua form wajib diisi!", true);
+    try {
+        await updateDoc(doc(db, 'artifacts', appId, 'kas', id), {
+            jenis: jns, nominal: nom, keterangan: ket,
+            diupdateOleh: (window.currentUserData && window.currentUserData.nama) || 'Pengurus RT',
+            updatedAt: Date.now()
+        });
+        showToast("✅ Transaksi diperbarui!");
+        closeModal('editKasModal', 'editKasModalContent');
+        loadBukuKas();
+    } catch (err) {
+        showToast("Gagal memperbarui kas.", true);
+    }
 };
 
 window.loadBukuKas = async function () {
     const wCont = document.getElementById('kasWargaListContainer');
     const aCont = document.getElementById('adminKasList');
-    if (!firebaseReady || !wCont) return;
-    
-    wCont.innerHTML = '<div class="text-center py-10"><i class="fa-solid fa-spinner fa-spin text-slate-400 text-2xl"></i></div>';
-    
+    if (!firebaseReady) return;
     try {
         const s = await getDocs(collection(db, 'artifacts', appId, 'kas'));
+        const list = [];
         let totalMasuk = 0, totalKeluar = 0;
-        globalKasList = [];
-
         s.forEach(d => {
             if (d.id === 'config_iuran' || d.id === 'config_sos') return;
             const item = d.data();
             if (!item.nominal) return;
-            
             if (item.jenis === 'masuk') totalMasuk += Number(item.nominal);
             else totalKeluar += Number(item.nominal);
-            
-            globalKasList.push({ id: d.id, ...item });
+            list.push({ id: d.id, ...item });
         });
-
-        // Urutkan berdasarkan waktu (terbaru di atas)
-        globalKasList.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-        
-        // Hitung Saldo (Misal Saldo Awal statis 0, atau Anda bisa ubah logicnya)
-        const saldoAwal = 0; 
+        list.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
         const saldoAkhir = totalMasuk - totalKeluar;
 
-        // Update angka di UI
         const elSaldo = document.getElementById('kasTotalSaldo');
         const elMasuk = document.getElementById('kasTotalMasuk');
         const elKeluar = document.getElementById('kasTotalKeluar');
-        const elSaldoAwal = document.getElementById('kasSaldoAwal');
-        
         if (elSaldo) elSaldo.innerText = formatRupiah(saldoAkhir);
-        if (elMasuk) elMasuk.innerText = formatRupiah(totalMasuk);
-        if (elKeluar) elKeluar.innerText = formatRupiah(totalKeluar);
-        if (elSaldoAwal) elSaldoAwal.innerText = formatRupiah(saldoAwal);
+        if (elMasuk) elMasuk.innerText = '+ ' + formatRupiah(totalMasuk);
+        if (elKeluar) elKeluar.innerText = '- ' + formatRupiah(totalKeluar);
 
-        // Render List
-        renderKasList();
-
-        // Render List Admin (Jika sedang buka admin panel)
-        if(aCont) {
-            let hAdmin = '';
-            globalKasList.forEach(x => {
-                const isMasuk = x.jenis === 'masuk';
-                const tgl = x.timestamp ? new Date(x.timestamp).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) : '-';
-                const safeKet = String(x.keterangan || '').replace(/'/g, "\\'");
-                hAdmin += `<div class="bg-white p-2.5 rounded-xl border border-slate-200 flex justify-between items-center mb-2 shadow-sm">
-                    <div class="min-w-0 flex-1 pr-2">
-                        <h4 class="font-bold text-xs text-slate-800 truncate">${escapeHtml(x.keterangan)}</h4>
-                        <p class="text-[10px] ${isMasuk ? 'text-emerald-600' : 'text-red-600'} font-bold">${isMasuk ? '➕' : '➖'} ${formatRupiah(x.nominal)} <span class="text-slate-400 font-normal">(${tgl})</span></p>
-                    </div>
-                    <div class="flex gap-1 shrink-0">
-                        <button onclick="bukaEditKas('${x.id}', '${x.jenis}', ${x.nominal}, '${safeKet}')" class="w-7 h-7 bg-blue-50 text-blue-500 hover:bg-blue-100 rounded-lg text-xs transition"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="hapusTransaksiKas('${x.id}')" class="w-7 h-7 bg-red-50 text-red-500 hover:bg-red-100 rounded-lg text-xs transition"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                </div>`;
-            });
-            aCont.innerHTML = hAdmin || '<p class="text-center text-xs text-slate-400 py-4">Belum ada transaksi.</p>';
-        }
-
-    } catch (e) {
-        console.error(e);
-        wCont.innerHTML = '<p class="text-center text-red-500 text-xs py-5">Gagal memuat laporan.</p>';
-    }
-};
-
-function renderKasList() {
-    const cont = document.getElementById('kasWargaListContainer');
-    if(!cont) return;
-
-    // Filter data berdasarkan tab
-    let filteredList = globalKasList;
-    if (currentKasFilter === 'masuk') filteredList = globalKasList.filter(x => x.jenis === 'masuk');
-    else if (currentKasFilter === 'keluar') filteredList = globalKasList.filter(x => x.jenis === 'keluar');
-
-    if (filteredList.length === 0) {
-        cont.innerHTML = '<p class="text-center text-xs text-slate-400 py-10">Belum ada data transaksi.</p>';
-        return;
-    }
-
-    let hWarga = '';
-    
-    // Grouping by Date
-    let grouped = {};
-    filteredList.forEach(x => {
-        const dateObj = new Date(x.timestamp || Date.now());
-        const dateStr = dateObj.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
-        if(!grouped[dateStr]) grouped[dateStr] = [];
-        grouped[dateStr].push(x);
-    });
-
-    // Build HTML
-    for (const [dateLabel, items] of Object.entries(grouped)) {
-        hWarga += `<div class="mb-3">
-            <h4 class="text-xs font-bold text-slate-800 mb-2 text-center tracking-wide">${dateLabel}</h4>
-            <div class="space-y-2">`;
-
-        items.forEach(x => {
+        let hWarga = '', hAdmin = '';
+        list.forEach(x => {
             const isMasuk = x.jenis === 'masuk';
-            const amtColor = isMasuk ? 'text-emerald-500' : 'text-red-500';
-            const iconColor = isMasuk ? 'text-emerald-500 border-emerald-200' : 'text-red-500 border-red-200';
-            const sign = isMasuk ? '+' : '-';
-            const icon = isMasuk ? 'fa-arrow-down' : 'fa-arrow-up';
-            
-            hWarga += `<div class="bg-white p-3.5 rounded-2xl flex justify-between items-center shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] border border-slate-100">
+            const tgl = x.timestamp ? new Date(x.timestamp).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) : '-';
+            hWarga += `<div class="bg-white p-3.5 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm">
                 <div class="flex items-center gap-3 min-w-0">
-                    <div class="w-9 h-9 rounded-full border flex items-center justify-center shrink-0 ${iconColor}">
-                        <i class="fa-solid ${icon} text-xs"></i>
+                    <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${isMasuk ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'}">
+                        <i class="fa-solid ${isMasuk ? 'fa-arrow-down' : 'fa-arrow-up'} text-xs"></i>
                     </div>
                     <div class="min-w-0">
-                        <h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(x.keterangan)}</h4>
+                        <h4 class="font-bold text-xs text-slate-800 truncate">${escapeHtml(x.keterangan)}</h4>
+                        <p class="text-[10px] text-slate-400">${tgl} • ${escapeHtml(x.oleh || 'RT')}</p>
                     </div>
                 </div>
-                <span class="font-bold text-sm shrink-0 ${amtColor}">${sign} ${formatRupiah(x.nominal)}</span>
+                <span class="font-bold text-xs shrink-0 ${isMasuk ? 'text-emerald-600' : 'text-red-600'}">${isMasuk ? '+' : '-'} ${formatRupiah(x.nominal)}</span>
+            </div>`;
+
+            const safeKet = String(x.keterangan || '').replace(/'/g, "\\'");
+            hAdmin += `<div class="bg-white p-2.5 rounded-xl border border-slate-200 flex justify-between items-center mb-2 shadow-sm">
+                <div class="min-w-0 flex-1 pr-2">
+                    <h4 class="font-bold text-xs text-slate-800 truncate">${escapeHtml(x.keterangan)}</h4>
+                    <p class="text-[10px] ${isMasuk ? 'text-emerald-600' : 'text-red-600'} font-bold">${isMasuk ? '➕' : '➖'} ${formatRupiah(x.nominal)} <span class="text-slate-400 font-normal">(${tgl})</span></p>
+                </div>
+                <div class="flex gap-1 shrink-0">
+                    <button onclick="bukaEditKas('${x.id}', '${x.jenis}', ${x.nominal}, '${safeKet}')" class="w-7 h-7 bg-blue-50 text-blue-500 hover:bg-blue-100 rounded-lg text-xs transition"><i class="fa-solid fa-pen"></i></button>
+                    <button onclick="hapusTransaksiKas('${x.id}')" class="w-7 h-7 bg-red-50 text-red-500 hover:bg-red-100 rounded-lg text-xs transition"><i class="fa-solid fa-trash"></i></button>
+                </div>
             </div>`;
         });
 
-        hWarga += `</div></div>`;
+        if (wCont) wCont.innerHTML = hWarga || '<p class="text-center text-xs text-slate-400 py-6">Belum ada catatan kas.</p>';
+        if (aCont) aCont.innerHTML = hAdmin || '<p class="text-center text-xs text-slate-400 py-4">Belum ada transaksi.</p>';
+    } catch (e) {
+        console.error("[loadBukuKas]", e);
     }
-
-    cont.innerHTML = hWarga;
-}
-
-// Tambahan fitur Download Laporan Kas (Export ke CSV sederhana)
-window.downloadLaporanKas = function() {
-    if(globalKasList.length === 0) return showToast("Tidak ada data untuk diunduh.", true);
-    
-    let csvContent = "Tanggal,Keterangan,Jenis,Nominal\n";
-    globalKasList.forEach(x => {
-        const tgl = new Date(x.timestamp).toLocaleDateString('id-ID');
-        const ket = x.keterangan.replace(/,/g, ''); // Hapus koma agar CSV valid
-        csvContent += `${tgl},${ket},${x.jenis},${x.nominal}\n`;
-    });
-
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute("download", `Laporan_Kas_RT010_${new Date().getTime()}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    showToast("📄 Laporan Kas berhasil diunduh!");
 };
 
 /* ============================ CETAK PDF ============================ */
