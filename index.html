@@ -26,7 +26,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Library Tambahan untuk PDF & Charts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -172,7 +171,6 @@
                 </div>
                 <div class="flex items-center gap-2 shrink-0">
                     <button id="btnHeaderSOS" onclick="bukaHalamanSOS()" class="bg-red-600 text-white px-3 py-1.5 rounded-full text-[11px] font-bold shadow-md flex items-center gap-1 border border-white/20 hover:bg-red-700"><i class="fa-solid fa-triangle-exclamation text-xs"></i> <span>SOS</span></button>
-                    <!-- FOTO PROFIL DI POJOK KANAN ATAS -->
                     <button onclick="switchTab('profil')" class="relative w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white overflow-hidden border border-white/40 shadow-sm transition active:scale-95" title="Profil Saya">
                         <img id="headerProfileImg" src="" class="w-full h-full object-cover hidden">
                         <i id="headerProfileIcon" class="fa-solid fa-user text-base"></i>
@@ -496,7 +494,6 @@
                     <div class="bg-emerald-700 text-white rounded-2xl p-5 shadow-sm overflow-hidden"><div class="relative"><div class="flex justify-between items-start mb-4"><div class="min-w-0"><p class="text-[9px] uppercase tracking-widest text-emerald-200 font-semibold">Pemegang Kartu</p><h3 class="font-bold text-lg leading-tight mt-1 truncate" id="kartuIuranNama">Warga</h3><p class="text-xs text-emerald-100 mt-1" id="kartuIuranBlok">Blok - / No -</p></div><div class="bg-white/10 px-3 py-1.5 rounded-lg text-right shrink-0"><p class="text-[8px] uppercase tracking-wider text-emerald-200">Iuran</p><p class="font-bold text-xs mt-0.5" id="kartuIuranNominalAktif">Rp 50.000</p></div></div><div class="border-t border-emerald-600 pt-3 flex justify-between items-center text-[10px]"><span class="text-emerald-100">Status: <b class="text-white">Resmi RT.010</b></span><span class="text-emerald-100">Ketua: <b class="text-white">Ade Hilman F.</b></span></div></div></div>
                     <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 flex items-center gap-2.5 text-[11px] text-blue-800"><i class="fa-solid fa-shield-halved text-blue-600 text-base shrink-0"></i><span>Status pembayaran diperbarui oleh <b>Bendahara RT</b>.</span></div>
                     
-                    <!-- FITUR BARU: PAYMENT GATEWAY QRIS -->
                     <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm text-center">
                         <h4 class="font-bold text-sm text-slate-800 mb-1">Bayar Iuran Praktis</h4>
                         <p class="text-[11px] text-slate-500 mb-3">Scan QRIS di bawah ini menggunakan BCA, Mandiri, GoPay, OVO, dll.</p>
@@ -521,12 +518,31 @@
                     </div>
                 </div>
                 <div class="flex-1 bg-slate-50 flex flex-col min-h-0 relative max-w-4xl mx-auto w-full -mt-4 rounded-t-3xl pt-5 px-4 pb-4">
+                    
+                    <!-- Tab Kas -->
                     <div class="flex bg-slate-200 p-1 rounded-xl mb-4 shrink-0">
-                        <button onclick="filterKas('semua')" id="tabKasSemua" class="flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all">Semua</button>
-                        <button onclick="filterKas('masuk')" id="tabKasMasuk" class="flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all">Pemasukan</button>
-                        <button onclick="filterKas('keluar')" id="tabKasKeluar" class="flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all">Pengeluaran</button>
+                        <button onclick="switchKasTab('riwayat')" id="tabKasRiwayat" class="flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all">Riwayat Kas</button>
+                        <button onclick="switchKasTab('tagihan')" id="tabKasTagihan" class="flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all">Tagihan Warga</button>
                     </div>
-                    <div id="kasWargaListContainer" class="flex-1 overflow-y-auto space-y-4 pb-10 scroll-smooth pr-1"></div>
+
+                    <!-- Tab Riwayat Kas -->
+                    <div id="kasRiwayatContainer" class="flex-1 flex flex-col min-h-0">
+                        <div class="flex bg-slate-100 p-1 rounded-lg mb-3 shrink-0">
+                            <button onclick="filterKas('semua')" id="tabKasSemua" class="flex-1 py-1.5 text-[10px] font-bold bg-white shadow-sm rounded-md text-emerald-600 transition-all">Semua</button>
+                            <button onclick="filterKas('masuk')" id="tabKasMasuk" class="flex-1 py-1.5 text-[10px] font-semibold text-slate-500 rounded-md transition-all">Masuk</button>
+                            <button onclick="filterKas('keluar')" id="tabKasKeluar" class="flex-1 py-1.5 text-[10px] font-semibold text-slate-500 rounded-md transition-all">Keluar</button>
+                        </div>
+                        <div id="kasWargaListContainer" class="flex-1 overflow-y-auto space-y-4 pb-10 scroll-smooth pr-1"></div>
+                    </div>
+
+                    <!-- Tab Tagihan Warga -->
+                    <div id="kasTagihanContainer" class="flex-1 flex flex-col min-h-0 hidden">
+                        <div class="mb-3">
+                            <select id="kasBulanTagihan" onchange="loadKasTagihanWarga()" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none"></select>
+                        </div>
+                        <div id="kasTagihanList" class="flex-1 overflow-y-auto space-y-2 pb-10"></div>
+                    </div>
+
                 </div>
             </div>
 
@@ -608,7 +624,6 @@
                         </div>
                         
                         <div id="admViewKas" class="hidden">
-                            <!-- FITUR BARU: CHART KEUANGAN -->
                             <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-4">
                                 <h3 class="font-bold text-slate-800 text-sm mb-3">Grafik Arus Kas</h3>
                                 <canvas id="chartKeuangan" height="150"></canvas>
@@ -635,7 +650,6 @@
                             <h3 class="font-bold text-slate-700 text-sm mb-2 border-b border-slate-100 pb-2">Riwayat Transaksi</h3><div id="adminKasList" class="space-y-2"></div>
                         </div>
 
-                        <!-- FITUR BARU: BUKU TAMU DIGITAL -->
                         <div id="admViewTamu" class="hidden">
                             <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-4 space-y-2.5">
                                 <h3 class="font-bold text-blue-900 text-sm">Catat Tamu Masuk</h3>
@@ -673,6 +687,8 @@
             <div class="flex justify-around items-center w-full max-w-md mx-auto px-2">
                 <button id="navBerandaBtn" onclick="switchTab('beranda')" class="flex flex-col items-center text-emerald-600 flex-1 py-1"><i class="fa-solid fa-house text-lg mb-1"></i><span class="text-[10px] font-semibold">Beranda</span></button>
                 <button id="navChatBtn" onclick="switchTab('chat')" class="relative flex flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-comments text-lg mb-1"></i><span class="text-[10px] font-semibold">Obrolan</span><span id="navChatBadge" class="hidden absolute top-0 right-1/4 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span></button>
+                <!-- MENU KAS BARU -->
+                <button id="navKasBtn" onclick="switchTab('kas')" class="flex flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-wallet text-lg mb-1"></i><span class="text-[10px] font-semibold">KAS</span></button>
                 <button id="navRiwayatBtn" onclick="switchTab('riwayat')" class="flex flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-clock-rotate-left text-lg mb-1"></i><span class="text-[10px] font-semibold">Riwayat</span></button>
                 <button onclick="switchTab('profil')" class="flex flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-user text-lg mb-1"></i><span class="text-[10px] font-semibold">Profil</span></button>
                 <button id="navAdminBtn" onclick="switchTab('admin')" class="hidden flex-col items-center text-slate-400 hover:text-emerald-600 flex-1 py-1"><i class="fa-solid fa-users-gear text-lg mb-1"></i><span class="text-[10px] font-semibold">Admin</span></button>
@@ -689,7 +705,7 @@
         const appId = 'layanan-warga-rt10';
         const KETUA_RT_NAMA = "Ade Hilman Fatahillah";
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbydEnQUz9TIKloH_4TUQIP0jYK-SSHvv3OwLN6gR8lUMlUF554nQrhs1EUfxHezmVSJIQ/exec";
-        const WHATSAPP_GATEWAY_TOKEN = "TOKEN_FONNTE_WABLAS_ANDA_DISINI"; // FITUR 1: ISI TOKEN WA GATEWAY
+        const WHATSAPP_GATEWAY_TOKEN = "TOKEN_FONNTE_WABLAS_ANDA_DISINI";
 
         const PILIHAN_NOMINAL_IURAN = [20000, 25000, 30000, 35000, 40000, 45000, 50000, 60000, 70000, 75000, 80000, 90000, 100000, 110000, 120000, 125000, 130000, 140000, 150000, 160000, 170000, 175000, 180000, 190000, 200000];
         const DAFTAR_BULAN_IURAN = ['Okt 2026', 'Nov 2026', 'Des 2026', 'Jan 2027', 'Feb 2027', 'Mar 2027', 'Apr 2027', 'Mei 2027', 'Jun 2027', 'Jul 2027', 'Agu 2027', 'Sep 2027'];
@@ -700,7 +716,7 @@
         let nominalIuranDefault = 50000;
         let pendingUpdateWorker = null;
         let swRegistered = false;
-        let myChart = null; // Variabel untuk Chart.js
+        let myChart = null;
 
         let app, auth, db, secondaryApp, secondaryAuth;
         let firebaseReady = false;
@@ -719,20 +735,9 @@
         function safeEncode(obj) { return encodeURIComponent(JSON.stringify(obj)).replace(/'/g, '%27'); }
         function safeDecode(encoded) { return JSON.parse(decodeURIComponent(encoded)); }
 
-        // FITUR 1: WHATSAPP GATEWAY (SIMULASI)
         window.kirimWhatsApp = async function(nomorHp, pesan) {
             if (!nomorHp) return console.log("Nomor HP kosong, WA tidak dikirim.");
             console.log(`[WA GATEWAY] Mengirim ke ${nomorHp}: ${pesan}`);
-            // Implementasi asli menggunakan fetch ke API Fonnte/Wablas:
-            /*
-            try {
-                await fetch('https://api.fonnte.com/send', {
-                    method: 'POST',
-                    headers: { 'Authorization': WHATSAPP_GATEWAY_TOKEN },
-                    body: new URLSearchParams({ target: nomorHp, message: pesan })
-                });
-            } catch (e) { console.error("WA Error", e); }
-            */
         };
 
         window.showToast = function (msg, isError = false) {
@@ -833,8 +838,6 @@
         window.kirimNotifikasiPesan = function (judul, isi) { try { new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3').play().catch(() => { }); } catch (e) { } showToast(`🔔 ${judul}: ${isi}`); if ('Notification' in window && Notification.permission === 'granted' && 'serviceWorker' in navigator) { navigator.serviceWorker.ready.then(r => r.showNotification(judul, { body: isi, icon: '/icon-192.png', vibrate: [250, 100, 250] })).catch(() => { }); } };
 
         window.bukaHalamanSOS = function () { if (!isFiturSOSEnabled) return showToast("Fitur SOS dinonaktifkan.", true); switchTab('sos'); };
-        
-        // FITUR 4: SOS DENGAN GEOLOCATION
         window.kirimSinyalSOS = async function (jenisBahaya) {
             if (!firebaseReady || !auth.currentUser) return; 
             
@@ -860,7 +863,6 @@
                 bunyikanSireneDarurat(); 
                 showToast(`🚨 Sinyal Darurat ${jenisBahaya} terkirim!`);
                 
-                // Fitur 1: Notif WA ke Ketua RT (Contoh)
                 kirimWhatsApp("08123456789", `DARURAT! ${namaPelapor} (${blokPelapor}) mengirim sinyal ${jenisBahaya}. ${mapsLink}`);
 
             } catch (e) { showToast("Gagal mengirim sinyal SOS.", true); }
@@ -933,18 +935,109 @@
 
         /* KAS & PENGELUARAN RUTIN */
         let currentKasFilter = 'semua'; let globalKasList = [];
+        let currentKasView = 'riwayat'; // 'riwayat' or 'tagihan'
 
-        // FITUR 7: REDESAIN DASHBOARD GRAFIK KEUANGAN
+        window.switchKasTab = function(tipe) {
+            currentKasView = tipe;
+            const btnRiwayat = document.getElementById('tabKasRiwayat');
+            const btnTagihan = document.getElementById('tabKasTagihan');
+            const contRiwayat = document.getElementById('kasRiwayatContainer');
+            const contTagihan = document.getElementById('kasTagihanContainer');
+
+            if(tipe === 'riwayat') {
+                btnRiwayat.className = "flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all";
+                btnTagihan.className = "flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all";
+                contRiwayat.classList.remove('hidden');
+                contTagihan.classList.add('hidden');
+                loadBukuKas();
+            } else {
+                btnTagihan.className = "flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all";
+                btnRiwayat.className = "flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all";
+                contTagihan.classList.remove('hidden');
+                contRiwayat.classList.add('hidden');
+                initDropdownIuran(); // Pastikan bulan terisi
+                loadKasTagihanWarga();
+            }
+        };
+
+        window.loadKasTagihanWarga = async function() {
+            const cont = document.getElementById('kasTagihanList');
+            const bulanSelect = document.getElementById('kasBulanTagihan');
+            if(!cont || !firebaseReady) return;
+            
+            // Isi dropdown bulan jika kosong
+            if (bulanSelect && bulanSelect.options.length === 0) {
+                DAFTAR_BULAN_IURAN.forEach(b => bulanSelect.add(new Option(b, b)));
+            }
+            const selectedBulan = bulanSelect ? bulanSelect.value : DAFTAR_BULAN_IURAN[0];
+
+            cont.innerHTML = '<div class="text-center py-5"><i class="fa-solid fa-spinner fa-spin text-slate-400"></i></div>';
+            try {
+                const s = await getDocs(collection(db, 'artifacts', appId, 'users'));
+                let h = '';
+                s.forEach(d => {
+                    const u = d.data();
+                    const statusIuran = (u.iuran && u.iuran[selectedBulan]) || 'BL';
+                    const isLunas = ['L', 'LK', 'LA', 'LC', 'P', 'T'].includes(statusIuran);
+                    
+                    // Format Blok: V1 no 1 => V1.1
+                    const blokFormat = u.blok ? `${u.blok}${u.no ? '.' + u.no : ''}` : (u.no || '-');
+                    
+                    h += `<div class="bg-white p-3 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm mb-2">
+                            <div>
+                                <h4 class="font-bold text-sm text-slate-800">${escapeHtml(u.nama || 'Warga')}</h4>
+                                <p class="text-xs text-slate-500">Blok ${escapeHtml(blokFormat)}</p>
+                            </div>
+                            ${!isLunas 
+                                ? `<button onclick="bayarKasWarga('${d.id}', '${escapeHtml(u.nama)}', '${escapeHtml(blokFormat)}', '${selectedBulan}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm transition">Tandai Lunas</button>`
+                                : `<span class="bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-emerald-200">LUNAS</span>`
+                            }
+                          </div>`;
+                });
+                cont.innerHTML = h || '<p class="text-center text-xs text-slate-400 py-5">Belum ada data warga.</p>';
+            } catch(e) {
+                cont.innerHTML = '<p class="text-center text-red-500 text-xs py-5">Gagal memuat tagihan.</p>';
+            }
+        };
+
+        window.bayarKasWarga = async function(uid, nama, blok, bulan) {
+            if(!confirm(`Tandai Lunas iuran ${nama} (${blok}) untuk bulan ${bulan}?`)) return;
+            const nominal = nominalIuranDefault;
+            
+            try {
+                // 1. Update status Iuran Warga
+                await updateDoc(doc(db, 'artifacts', appId, 'users', uid), {
+                    [`iuran.${bulan}`]: 'L',
+                    [`iuranNominal.${bulan}`]: nominal
+                });
+
+                // 2. Tambahkan ke Pemasukan Kas
+                await addDoc(collection(db, 'artifacts', appId, 'kas'), {
+                    tipeDoc: 'transaksi',
+                    jenis: 'masuk',
+                    nominal: nominal,
+                    keterangan: `Iuran ${nama} (${blok}) - ${bulan}`,
+                    oleh: (window.currentUserData && window.currentUserData.nama) || 'Admin RT',
+                    timestamp: Date.now()
+                });
+
+                showToast("✅ Iuran Lunas & Kas Ditambahkan!");
+                loadKasTagihanWarga();
+                loadBukuKas(); // Refresh riwayat kas
+            } catch(e) {
+                console.error(e);
+                showToast("Gagal memproses pembayaran.", true);
+            }
+        };
+
         window.renderChartKeuangan = function() {
             const ctx = document.getElementById('chartKeuangan');
             if (!ctx) return;
 
-            // Agregasi data per bulan (6 bulan terakhir)
             let labels = [];
             let dataMasuk = [];
             let dataKeluar = [];
             
-            // Mengambil 6 bulan terakhir dari sekarang
             for (let i = 5; i >= 0; i--) {
                 const d = new Date();
                 d.setMonth(d.getMonth() - i);
@@ -998,7 +1091,7 @@
         };
 
         window.filterKas = function(tipe) {
-            currentKasFilter = tipe; ['semua', 'masuk', 'keluar'].forEach(t => { const btn = document.getElementById('tabKas' + t.charAt(0).toUpperCase() + t.slice(1)); if(btn) { if(t === tipe) btn.className = "flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all"; else btn.className = "flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all"; } }); renderKasList();
+            currentKasFilter = tipe; ['semua', 'masuk', 'keluar'].forEach(t => { const btn = document.getElementById('tabKas' + t.charAt(0).toUpperCase() + t.slice(1)); if(btn) { if(t === tipe) btn.className = "flex-1 py-1.5 text-[10px] font-bold bg-white shadow-sm rounded-md text-emerald-600 transition-all"; else btn.className = "flex-1 py-1.5 text-[10px] font-semibold text-slate-500 rounded-md transition-all"; } }); renderKasList();
         };
         window.tambahTransaksiKas = async function () {
             if (!firebaseReady) return; 
@@ -1046,8 +1139,9 @@
                 const saldoAwal = 0; const saldoAkhir = totalMasuk - totalKeluar;
                 const elSaldo = document.getElementById('kasTotalSaldo'); const elMasuk = document.getElementById('kasTotalMasuk'); const elKeluar = document.getElementById('kasTotalKeluar'); const elSaldoAwal = document.getElementById('kasSaldoAwal');
                 if (elSaldo) elSaldo.innerText = formatRupiah(saldoAkhir); if (elMasuk) elMasuk.innerText = formatRupiah(totalMasuk); if (elKeluar) elKeluar.innerText = formatRupiah(totalKeluar); if (elSaldoAwal) elSaldoAwal.innerText = formatRupiah(saldoAwal);
-                renderKasList();
-                renderChartKeuangan(); // Panggil fungsi render chart
+                
+                if (currentKasView === 'riwayat') renderKasList();
+                renderChartKeuangan();
                 
                 if(aCont) {
                     let hAdmin = '';
@@ -1133,16 +1227,10 @@
 
         window.loadIuranUser = async function () { const cont = document.getElementById('iuranListContainer'); if (!cont || !auth.currentUser || !firebaseReady) return; cont.innerHTML = '<div class="text-center py-10"><i class="fa-solid fa-spinner fa-spin text-slate-400 text-2xl"></i></div>'; try { const s = await getDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid)); const dataIuran = (s.exists() && s.data().iuran) || {}; const dataNominal = (s.exists() && s.data().iuranNominal) || {}; let h = ''; DAFTAR_BULAN_IURAN.forEach(bln => { const status = dataIuran[bln]; const isLunas = ['L', 'LK', 'LA', 'LC', 'P', 'T'].includes(status); const nomBln = dataNominal[bln] || nominalIuranDefault; h += `<div class="p-3.5 border ${isLunas ? 'bg-emerald-50 border-emerald-300' : 'bg-white border-slate-200'} rounded-xl flex justify-between items-center shadow-sm"><div class="flex items-center gap-3 min-w-0"><div class="w-10 h-10 rounded-xl flex justify-center items-center shrink-0 ${isLunas ? 'bg-emerald-600 text-white' : 'bg-red-50 text-red-500'}"><i class="fa-solid ${isLunas ? 'fa-check' : 'fa-clock'} text-lg"></i></div><div class="min-w-0"><h4 class="font-bold text-sm ${isLunas ? 'text-emerald-900' : 'text-slate-800'}">${bln}</h4><p class="text-[11px] ${isLunas ? 'text-emerald-700 font-semibold' : 'text-slate-500'}">Iuran: ${formatRupiah(nomBln)}</p></div></div><span class="px-3 py-1.5 text-xs font-bold rounded-lg shrink-0 ${isLunas ? 'bg-emerald-600 text-white' : 'bg-red-100 text-red-600'}">${isLunas ? '✓ LUNAS' : 'BELUM'}</span></div>`; }); cont.innerHTML = h; } catch (e) { cont.innerHTML = '<p class="text-center text-red-500 text-xs">Gagal memuat kartu iuran.</p>'; } };
         
-        // FITUR 2: PAYMENT GATEWAY (SIMULASI QRIS)
         window.bayarIuranQRIS = function() {
             showToast("Memuat QRIS...");
             setTimeout(() => {
-                lihatGambarModal('Scan QRIS Pembayaran', 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png');
-                // Catatan: Di implementasi nyata, Anda akan memanggil API Midtrans/Xendit untuk generate QR dinamis
-                setTimeout(() => {
-                    showToast("Pembayaran Berhasil dideteksi! (Simulasi)");
-                    // Di sini logika untuk update otomatis database jika API webhook terhubung
-                }, 5000);
+                lihatGambarModal('Scan QRIS Iuran RT.10 Mabu', 'qris.jpg');
             }, 800);
         };
 
@@ -1151,7 +1239,6 @@
         window.loadAdminIuran = async function () { initDropdownIuran(); const blnSelect = document.getElementById('adminBulanIuran'); if (!blnSelect) return; const selectedBln = blnSelect.value; const cont = document.getElementById('adminIuranWargaList'); if (!cont) return; cont.innerHTML = 'Loading...'; try { const s = await getDocs(collection(db, 'artifacts', appId, 'users')); let h = ''; s.forEach(d => { const u = d.data(); const statusSaatIni = (u.iuran && u.iuran[selectedBln]) || 'BL'; const nomTercatat = (u.iuranNominal && u.iuranNominal[selectedBln]) !== undefined ? Number(u.iuranNominal[selectedBln]) : 0; const safeNama = String(u.nama || 'Warga').replace(/'/g, "\\'"); const safeBlok = escapeHtml(u.blok || '-'); const safeNo = escapeHtml(u.no || '-'); let optNominal = ''; for (let i = 0; i <= 135000; i += 5000) optNominal += `<option value="${i}" ${nomTercatat === i ? 'selected' : ''}>${formatRupiah(i)}</option>`; h += `<div class="p-3 border border-slate-200 rounded-xl flex flex-col gap-2 mb-2 bg-white shadow-sm"><div class="flex justify-between items-start"><div class="min-w-0"><h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(u.nama || 'Warga')}</h4><p class="text-[11px] text-slate-500">Blok ${safeBlok}/${safeNo}</p></div><div class="text-right shrink-0"><p class="text-[11px] font-bold px-2 py-0.5 rounded ${statusSaatIni !== 'BL' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}">${escapeHtml(statusSaatIni)}</p><p class="text-[10px] text-slate-500 font-semibold mt-0.5">${formatRupiah(nomTercatat)}</p></div></div><div class="flex items-center justify-between border-t border-slate-100 pt-2 mt-1 gap-2"><select id="stat_${d.id}" onchange="simpanIuranWarga('${d.id}', '${selectedBln}', '${safeNama}', '${safeBlok}', '${safeNo}', true)" class="w-1/2 text-[11px] font-bold border border-slate-200 rounded-lg p-1.5 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 bg-slate-50"><option value="BL" ${statusSaatIni === 'BL' ? 'selected' : ''}>BL - Belum</option><option value="L" ${statusSaatIni === 'L' ? 'selected' : ''}>L - Huni</option><option value="LK" ${statusSaatIni === 'LK' ? 'selected' : ''}>LK - Kosong</option><option value="LA" ${statusSaatIni === 'LA' ? 'selected' : ''}>LA - Non-Air</option><option value="LC" ${statusSaatIni === 'LC' ? 'selected' : ''}>LC - CCTV</option><option value="P" ${statusSaatIni === 'P' ? 'selected' : ''}>P - Pengurus</option><option value="A" ${statusSaatIni === 'A' ? 'selected' : ''}>A - Abai</option><option value="T" ${statusSaatIni === 'T' ? 'selected' : ''}>T - Tdk Mampu</option></select><select id="nom_${d.id}" onchange="simpanIuranWarga('${d.id}', '${selectedBln}', '${safeNama}', '${safeBlok}', '${safeNo}', false)" class="w-1/2 text-[11px] font-bold border border-slate-200 rounded-lg p-1.5 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 bg-slate-50">${optNominal}</select></div></div>`; }); cont.innerHTML = h || '<p class="text-xs text-slate-500 text-center">Data warga kosong.</p>'; } catch (e) { cont.innerHTML = 'Gagal memuat.'; } };
         window.simpanIuranWarga = async function (uid, bulan, nama, blok, no, isStatusChange) { const statEl = document.getElementById('stat_' + uid); const nomEl = document.getElementById('nom_' + uid); if (!statEl || !nomEl) return; let statusCode = statEl.value; let nomValue = Number(nomEl.value); if (isStatusChange) { const DAFTAR_NOMINAL = { 'L': 100000, 'LK': 50000, 'LA': 70000, 'LC': 80000, 'P': 0, 'A': 0, 'BL': 0, 'T': 0 }; if (DAFTAR_NOMINAL[statusCode] !== undefined) { nomValue = DAFTAR_NOMINAL[statusCode]; nomEl.value = nomValue; } } try { await updateDoc(doc(db, 'artifacts', appId, 'users', uid), { [`iuran.${bulan}`]: statusCode, [`iuranNominal.${bulan}`]: nomValue }); const payloadIuran = { action: "update_iuran", nama, blok, no_rumah: no, bulan, nominal: nomValue, status: statusCode, waktu: new Date().toLocaleString('id-ID') }; if (GOOGLE_SCRIPT_URL) fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payloadIuran) }).catch(() => { }); showToast(`Tersimpan: ${statusCode} (${formatRupiah(nomValue)})`); loadAdminIuran(); } catch (e) { showToast("Gagal update iuran.", true); } };
 
-        /* FITUR 3: BUKU TAMU DIGITAL */
         window.simpanBukuTamu = async function() {
             const nm = document.getElementById('tamuNama')?.value.trim();
             const tj = document.getElementById('tamuTujuan')?.value.trim();
@@ -1168,9 +1255,6 @@
                 document.getElementById('tamuKeperluan').value = '';
                 showToast("✅ Data Tamu dicatat!");
                 loadBukuTamu();
-                
-                // Fitur 1: WA Notif ke warga yang dituju (Jika nomor HP diketahui)
-                // Contoh: kirimWhatsApp(nomorHpWarga, `Halo, ada tamu atas nama ${nm} di posko RT.`);
             } catch(e) { showToast("Gagal mencatat tamu.", true); }
         };
 
@@ -1204,7 +1288,6 @@
             try { await deleteDoc(doc(db, 'artifacts', appId, 'tamu', id)); loadBukuTamu(); showToast("Tamu dihapus."); } catch(e) {}
         };
 
-        /* FITUR 6: EXPORT DATA WARGA KE PDF */
         window.exportWargaPDF = async function() {
             if (!firebaseReady) return showToast("Aplikasi belum siap.", true);
             showToast("Menyiapkan PDF...");
@@ -1238,7 +1321,7 @@
                     head: [['No', 'Nama Lengkap', 'Blok', 'No', 'No HP', 'Jabatan']],
                     body: bodyData,
                     styles: { fontSize: 9 },
-                    headStyles: { fillColor: [5, 150, 105] } // Warna hijau emerald
+                    headStyles: { fillColor: [5, 150, 105] }
                 });
 
                 doc.save(`Data_Warga_RT010_${new Date().getTime()}.pdf`);
@@ -1249,7 +1332,6 @@
             }
         };
 
-        /* STATISTIK DEMOGRAFI */
         window.loadStatistik = async function() {
             if (!firebaseReady) return;
             try {
@@ -1311,7 +1393,6 @@
             const nm = (window.currentUserData && window.currentUserData.nama) || 'Warga'; const wN = document.getElementById('welcomeName'); if (wN) wN.innerText = nm.split(' ')[0] + '!'; const pN = document.getElementById('profNama'); if (pN) pN.innerText = nm; const pR = document.getElementById('profRole'); if (pR) pR.innerText = (window.currentUserData && window.currentUserData.role) || 'Warga'; const pE = document.getElementById('profEmail'); if (pE) pE.innerText = (window.currentUserData && window.currentUserData.email) || '-'; const pH = document.getElementById('profHp'); if (pH) pH.innerText = (window.currentUserData && window.currentUserData.hp) || '-'; const pB = document.getElementById('profBlok'); if (pB) pB.innerText = (window.currentUserData && window.currentUserData.blok) || '-'; const pNo = document.getElementById('profNo'); if (pNo) pNo.innerText = (window.currentUserData && window.currentUserData.no) || '-';
             const eN = document.getElementById('editNama'); if (eN) eN.value = (window.currentUserData && window.currentUserData.nama) || ''; const eG = document.getElementById('editGender'); if (eG) eG.value = (window.currentUserData && window.currentUserData.jenis_kelamin) || 'Laki-laki'; const eH = document.getElementById('editHp'); if (eH) eH.value = (window.currentUserData && window.currentUserData.hp) || ''; const eB = document.getElementById('editBlok'); if (eB) eB.value = (window.currentUserData && window.currentUserData.blok) || ''; const eNo = document.getElementById('editNo'); if (eNo) eNo.value = (window.currentUserData && window.currentUserData.no) || '';
             
-            // TAMPILKAN FOTO PROFIL DI HEADER KANAN ATAS
             const hPic = (window.currentUserData && window.currentUserData.photoBase64) || null;
             const hImg = document.getElementById('headerProfileImg');
             const hIco = document.getElementById('headerProfileIcon');
@@ -1461,7 +1542,7 @@
             const views = ['homeView', 'chatView', 'riwayatView', 'laporView', 'suratView', 'dataView', 'profilView', 'umkmView', 'iuranView', 'kasView', 'inventarisView', 'sosView', 'adminView'];
             views.forEach(id => { const el = document.getElementById(id); if (el) { el.classList.add('hidden'); el.classList.remove('flex'); } });
             
-            ['navBerandaBtn', 'navChatBtn', 'navRiwayatBtn'].forEach(id => { const el = document.getElementById(id); if (el) { el.classList.remove('text-emerald-600'); el.classList.add('text-slate-400'); } });
+            ['navBerandaBtn', 'navChatBtn', 'navKasBtn', 'navRiwayatBtn'].forEach(id => { const el = document.getElementById(id); if (el) { el.classList.remove('text-emerald-600'); el.classList.add('text-slate-400'); } });
 
             const show = (id, display = 'block') => { const el = document.getElementById(id); if (el) { el.classList.remove('hidden'); el.classList.add(display); } };
 
@@ -1473,7 +1554,7 @@
             else if (t === 'profil') { show('profilView', 'flex'); perbaruiStatusUI_Fingerprint(); showAppScreen(); }
             else if (t === 'umkm') { show('umkmView', 'flex'); loadUmkmWarga(); }
             else if (t === 'iuran') { show('iuranView', 'flex'); const u = window.currentUserData || {}; const el1 = document.getElementById('kartuIuranNama'); const el2 = document.getElementById('kartuIuranBlok'); const el3 = document.getElementById('kartuIuranNominalAktif'); if (el1) el1.innerText = u.nama || 'Warga'; if (el2) el2.innerText = `Blok ${u.blok || '-'} / No. ${u.no || '-'}`; if (el3) el3.innerText = formatRupiah(nominalIuranDefault) + ' / bln'; loadIuranUser(); }
-            else if (t === 'kas') { show('kasView', 'flex'); loadBukuKas(); }
+            else if (t === 'kas') { show('kasView', 'flex'); const nk = document.getElementById('navKasBtn'); if (nk) { nk.classList.remove('text-slate-400'); nk.classList.add('text-emerald-600'); } switchKasTab('riwayat'); }
             else if (t === 'inventaris') { show('inventarisView', 'flex'); prefillFormData(); loadInventarisWarga(); }
             else if (t === 'sos') { show('sosView', 'flex'); }
             else if (t === 'admin') { show('adminView', 'flex'); switchAdminTab('warga'); }
@@ -1491,7 +1572,6 @@
         window.installPwa = async () => { hidePwaBanner(); if (dPrompt) { dPrompt.prompt(); await dPrompt.userChoice; dPrompt = null; } };
         window.refreshAppUpdate = function () { const banner = document.getElementById('updateBanner'); if (banner) banner.classList.add('hidden'); if (pendingUpdateWorker) { pendingUpdateWorker.postMessage({ action: 'skipWaiting' }); setTimeout(() => window.location.reload(), 600); } else { window.location.reload(); } };
         
-        // FITUR 5: SERVICE WORKER UNTUK OFFLINE MODE (PWA)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 if (swRegistered) return; swRegistered = true;
