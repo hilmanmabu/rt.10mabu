@@ -42,7 +42,6 @@
         .pb-safe-bottom { padding-bottom: max(0.7rem, env(safe-area-inset-bottom)); }
         .fade-transition { transition: opacity 0.3s ease, transform 0.3s ease; }
         ::-webkit-scrollbar { width: 0px; background: transparent; }
-        .custom-radio:checked + div { border-color: #059669; background-color: #ecfdf5; color: #047857; font-weight: 600; }
         .inv-checkbox { accent-color: #059669; cursor: pointer; }
         @keyframes fadeSlideUp { 0% { opacity: 0; transform: translateY(16px); } 100% { opacity: 1; transform: translateY(0); } }
         .animate-fade-slide-up { animation: fadeSlideUp 0.4s ease-out forwards; }
@@ -67,7 +66,7 @@
 </head>
 <body class="w-full h-full text-ink select-none bg-slate-50 flex flex-col">
 
-    <!-- PWA BANNER -->
+    <!-- PWA BANNER (Banner Lama, Tetap Dipertahankan) -->
     <div id="pwaBanner" class="hidden fixed top-0 left-0 right-0 bg-slate-900 text-white p-4 z-[100] shadow-2xl flex justify-between items-center animate-fade-slide-up border-b border-slate-700">
         <div class="flex items-center gap-3">
             <img src="1000531885.png" onerror="this.src='/icon-192.png';" class="w-11 h-11 bg-white rounded-2xl object-contain p-1 shrink-0 shadow-lg" alt="Logo">
@@ -76,6 +75,19 @@
         <div class="flex gap-2 shrink-0">
             <button onclick="hidePwaBanner()" class="px-2.5 py-1.5 text-xs font-semibold bg-slate-800 rounded-lg">Nanti</button>
             <button onclick="installPwa()" class="px-3.5 py-1.5 text-xs font-bold bg-emerald-600 rounded-lg shadow-lg">Install</button>
+        </div>
+    </div>
+
+    <!-- POPUP WAJIB INSTALL (BARU) -->
+    <div id="wajibInstallModal" class="hidden fixed inset-0 bg-slate-950/80 z-[150] flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-7 text-center relative shadow-2xl animate-fade-slide-up">
+            <img src="1000531885.png" onerror="this.src='/icon-192.png';" class="w-20 h-20 mx-auto rounded-2xl object-cover shadow-md mb-4">
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Wajib Install Aplikasi</h3>
+            <p class="text-sm text-slate-600 mb-6">Agar notifikasi darurat, chat, dan fitur lainnya berjalan lancar di HP Anda, silakan install aplikasi ini.</p>
+            <div class="flex flex-col gap-2">
+                <button onclick="installPwa(true)" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg flex items-center justify-center gap-2"><i class="fa-solid fa-download"></i> Install Sekarang</button>
+                <button onclick="tutupWajibInstall()" class="w-full bg-slate-100 text-slate-500 font-bold py-3 rounded-xl text-xs">Nanti Saja</button>
+            </div>
         </div>
     </div>
 
@@ -269,23 +281,35 @@
                 <!-- DEMOGRAFI WARGA -->
                 <div class="px-4 sm:px-6 lg:px-8 pb-4 w-full">
                     <div class="flex items-center justify-between mb-3.5"><h3 class="font-bold text-slate-800 text-xs sm:text-sm uppercase tracking-wider">Demografi & Pertumbuhan Warga</h3></div>
-                    <!-- 1 kolom di HP, 4 kolom di PC -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-                            <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center shrink-0"><i class="fa-solid fa-house text-xl"></i></div>
-                            <div><p class="text-[10px] text-slate-500 font-semibold mb-1 uppercase">Total Rumah</p><p class="text-xl font-bold text-slate-800" id="statRumah">0</p></div>
+                    <!-- Diubah menjadi 1 kolom vertikal (list) yang lebih ringkas di HP -->
+                    <div class="grid grid-cols-1 gap-2">
+                        <div class="bg-white px-4 py-3 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center shrink-0"><i class="fa-solid fa-house text-sm"></i></div>
+                                <span class="text-xs font-semibold text-slate-600 uppercase tracking-wide">Total Rumah</span>
+                            </div>
+                            <span class="text-lg font-bold text-slate-800" id="statRumah">0</span>
                         </div>
-                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-                            <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center shrink-0"><i class="fa-solid fa-users text-xl"></i></div>
-                            <div><p class="text-[10px] text-slate-500 font-semibold mb-1 uppercase">Total Jiwa</p><p class="text-xl font-bold text-slate-800" id="statJiwa">0</p></div>
+                        <div class="bg-white px-4 py-3 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center shrink-0"><i class="fa-solid fa-users text-sm"></i></div>
+                                <span class="text-xs font-semibold text-slate-600 uppercase tracking-wide">Total Jiwa</span>
+                            </div>
+                            <span class="text-lg font-bold text-slate-800" id="statJiwa">0</span>
                         </div>
-                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-                            <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center shrink-0"><i class="fa-solid fa-mars text-xl"></i></div>
-                            <div><p class="text-[10px] text-slate-500 font-semibold mb-1 uppercase">Laki-laki</p><p class="text-xl font-bold text-slate-800" id="statLaki">0</p></div>
+                        <div class="bg-white px-4 py-3 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center shrink-0"><i class="fa-solid fa-mars text-sm"></i></div>
+                                <span class="text-xs font-semibold text-slate-600 uppercase tracking-wide">Laki-laki</span>
+                            </div>
+                            <span class="text-lg font-bold text-slate-800" id="statLaki">0</span>
                         </div>
-                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-                            <div class="w-12 h-12 bg-pink-50 text-pink-600 rounded-full flex items-center justify-center shrink-0"><i class="fa-solid fa-venus text-xl"></i></div>
-                            <div><p class="text-[10px] text-slate-500 font-semibold mb-1 uppercase">Perempuan</p><p class="text-xl font-bold text-slate-800" id="statPerempuan">0</p></div>
+                        <div class="bg-white px-4 py-3 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-pink-50 text-pink-600 rounded-lg flex items-center justify-center shrink-0"><i class="fa-solid fa-venus text-sm"></i></div>
+                                <span class="text-xs font-semibold text-slate-600 uppercase tracking-wide">Perempuan</span>
+                            </div>
+                            <span class="text-lg font-bold text-slate-800" id="statPerempuan">0</span>
                         </div>
                     </div>
                 </div>
@@ -435,19 +459,33 @@
                 <form id="formDataWarga" onsubmit="submitForm(event, 'Isi Data Warga')" class="p-4 md:p-6 space-y-4 flex-1">
                     <div><label class="block text-xs font-semibold text-slate-600 mb-1">Alamat (Otomatis)</label><textarea id="dwAlamatRumah" rows="2" readonly class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-700 text-sm resize-none">Perumahan Mabu Park RT.010/RW.002 Desa Aweh Kalanganyar</textarea></div>
                     
+                    <!-- FIX: Radio Button Status Pernikahan -->
                     <div class="bg-blue-50/60 p-4 rounded-xl border border-blue-100">
                         <label class="block text-xs font-semibold text-slate-700 mb-3">Status Pernikahan</label>
                         <div class="flex gap-6">
-                            <label class="flex items-center gap-2"><input type="radio" name="statusKeluarga" value="Belum Berkeluarga/Single" onchange="toggleKeluargaStatus()" checked class="w-4 h-4 accent-emerald-600"><span class="text-sm">Single</span></label>
-                            <label class="flex items-center gap-2"><input type="radio" name="statusKeluarga" value="Sudah Berkeluarga" onchange="toggleKeluargaStatus()" class="w-4 h-4 accent-emerald-600"><span class="text-sm">Berkeluarga</span></label>
+                            <label for="statusSingle" class="flex items-center gap-2 cursor-pointer p-2 hover:bg-blue-100/50 rounded-lg transition">
+                                <input type="radio" id="statusSingle" name="statusKeluarga" value="Belum Berkeluarga/Single" onchange="toggleKeluargaStatus()" checked class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                <span class="text-sm font-medium text-slate-700">Single</span>
+                            </label>
+                            <label for="statusMenikah" class="flex items-center gap-2 cursor-pointer p-2 hover:bg-blue-100/50 rounded-lg transition">
+                                <input type="radio" id="statusMenikah" name="statusKeluarga" value="Sudah Berkeluarga" onchange="toggleKeluargaStatus()" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                <span class="text-sm font-medium text-slate-700">Berkeluarga</span>
+                            </label>
                         </div>
                     </div>
                     
+                    <!-- FIX: Radio Button Tempat Tinggal -->
                     <div class="bg-emerald-50/60 p-4 rounded-xl border border-emerald-100">
                         <label class="block text-xs font-semibold text-slate-700 mb-3">Tempat Tinggal</label>
                         <div class="flex gap-6">
-                            <label class="flex items-center gap-2"><input type="radio" name="statusRumah" value="Milik Pribadi" checked class="w-4 h-4 accent-emerald-600"><span class="text-sm">Pribadi</span></label>
-                            <label class="flex items-center gap-2"><input type="radio" name="statusRumah" value="Ngontrak" class="w-4 h-4 accent-emerald-600"><span class="text-sm">Ngontrak</span></label>
+                            <label for="statusPribadi" class="flex items-center gap-2 cursor-pointer p-2 hover:bg-emerald-100/50 rounded-lg transition">
+                                <input type="radio" id="statusPribadi" name="statusRumah" value="Milik Pribadi" checked class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                <span class="text-sm font-medium text-slate-700">Pribadi</span>
+                            </label>
+                            <label for="statusNgontrak" class="flex items-center gap-2 cursor-pointer p-2 hover:bg-emerald-100/50 rounded-lg transition">
+                                <input type="radio" id="statusNgontrak" name="statusRumah" value="Ngontrak" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                <span class="text-sm font-medium text-slate-700">Ngontrak</span>
+                            </label>
                         </div>
                     </div>
 
@@ -464,8 +502,14 @@
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-2">Sudah KTP Mabu?</label>
                         <div class="flex gap-3">
-                            <label class="relative flex-1"><input type="radio" name="statusKtp" value="Sudah KTP Mabu" class="peer sr-only custom-radio" checked><div class="rounded-xl border border-slate-200 px-4 py-3 text-center text-sm">Sudah</div></label>
-                            <label class="relative flex-1"><input type="radio" name="statusKtp" value="Belum KTP Mabu" class="peer sr-only custom-radio"><div class="rounded-xl border border-slate-200 px-4 py-3 text-center text-sm">Belum</div></label>
+                            <label for="ktpSudah" class="flex-1 flex items-center gap-2 cursor-pointer border border-slate-200 rounded-xl px-4 py-3 hover:bg-slate-50 transition">
+                                <input type="radio" id="ktpSudah" name="statusKtp" value="Sudah KTP Mabu" checked class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                <span class="text-sm font-medium text-slate-700">Sudah</span>
+                            </label>
+                            <label for="ktpBelum" class="flex-1 flex items-center gap-2 cursor-pointer border border-slate-200 rounded-xl px-4 py-3 hover:bg-slate-50 transition">
+                                <input type="radio" id="ktpBelum" name="statusKtp" value="Belum KTP Mabu" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 border-slate-300 cursor-pointer">
+                                <span class="text-sm font-medium text-slate-700">Belum</span>
+                            </label>
                         </div>
                     </div>
                     
@@ -689,7 +733,7 @@
                     <button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button>
                     <h2 class="font-bold text-lg text-slate-800">Inventaris RT</h2>
                 </div>
-                <form id="formInventaris" onsubmit="submitInventaris(event)" class="p-4 md:p-6 space-y-4 flex-1">
+                <form id="formInventaris" onsubmit="simpanBookingInventaris(event)" class="p-4 md:p-6 space-y-4 flex-1">
                     <div class="space-y-4 p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
                         <div><label class="block text-xs font-semibold text-slate-600 mb-1">Peminjam</label><input type="text" id="invNama" required class="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
                         <div class="flex gap-3"><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Blok</label><input type="text" id="invBlok" required class="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 uppercase text-sm outline-none focus:border-emerald-500"></div><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">No</label><input type="number" id="invNo" required class="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div></div>
@@ -928,6 +972,8 @@
 
         let app, auth, db, secondaryApp, secondaryAuth;
         let firebaseReady = false;
+        
+        let deferredPrompt = null; // Untuk PWA Install
 
         try {
             const firebaseConfig = { apiKey: "AIzaSyDWaFhPioQK36oJmkCadgwKL9CSo8ILWsM", authDomain: "mabu-park-rt-10.firebaseapp.com", projectId: "mabu-park-rt-10", storageBucket: "mabu-park-rt-10.firebasestorage.app", messagingSenderId: "886767560025", appId: "1:886767560025:web:96990fde548a7bae8d5848" };
@@ -949,7 +995,6 @@
             return num;
         }
         
-        // FUNGSI FORMAT TANGGAL LENGKAP UNTUK CHAT
         function formatFullDate(ts) {
             if (!ts) return '';
             return new Date(ts).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
@@ -1042,7 +1087,6 @@
         window.gantiArahKamera = async function () { currentFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment'; if (camTargetConfig) await bukaKameraRealtime(camTargetConfig.prevId, camTargetConfig.icoId, camTargetConfig.hidId, camTargetConfig.textHideId, currentFacingMode); };
         window.tutupKameraRealtime = function () { if (liveStream) { liveStream.getTracks().forEach(t => t.stop()); liveStream = null; } const video = document.getElementById('liveCameraVideo'); if (video) video.srcObject = null; const modal = document.getElementById('liveCameraModal'); if (modal) modal.classList.add('hidden'); };
         
-        // KOMPRESI FOTO KAMERA (Maks 600px, kualitas 0.5)
         window.jepretFotoRealtime = async function () {
             const video = document.getElementById('liveCameraVideo'); if (!video || !liveStream) return;
             const canvas = document.createElement('canvas'); let w = video.videoWidth || 600; let h = video.videoHeight || 600;
@@ -1065,7 +1109,6 @@
         window.tutupPromptNotif = function () { const m = document.getElementById('notifPromptModal'); if (m) m.classList.add('hidden'); };
         window.mintaIzinNotifikasi = async function () { tutupPromptNotif(); if (!('Notification' in window)) return showToast("Tidak mendukung notifikasi.", true); const p = await Notification.requestPermission(); if (p === 'granted') kirimNotifikasiPesan('Aktif', 'Notifikasi berjalan.'); else showToast("Mohon izinkan notifikasi.", true); };
         
-        // NOTIFIKASI VIA SERVICE WORKER (MUNCUL DI OS)
         window.kirimNotifikasiPesan = function (judul, isi) { 
             try { new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3').play().catch(() => { }); } catch (e) { } 
             showToast(`🔔 ${judul}: ${isi}`); 
@@ -1134,8 +1177,6 @@
             document.getElementById('japriContactList')?.classList.add('hidden'); document.getElementById('activeChatHeader')?.classList.remove('hidden'); document.getElementById('chatMessagesBox')?.classList.remove('hidden'); document.getElementById('chatInputForm')?.classList.remove('hidden');
             const at = document.getElementById('activeChatTitle'); if (at) at.innerText = nm; if (autoMsg) { const inp = document.getElementById('chatTextInput'); if (inp) inp.value = autoMsg; } renderChatMessages();
         };
-        
-        // RENDER CHAT DENGAN TANGGAL, EDIT, DAN HAPUS
         function renderChatMessages() {
             const box = document.getElementById('chatMessagesBox'); if (!box || !auth.currentUser) return;
             let fil = allChatMessages.filter(m => m.roomId === currentChatRoom);
@@ -1151,7 +1192,6 @@
                 const tm = m.timestamp ? new Date(m.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : ''; 
                 const currentDate = formatFullDate(m.timestamp);
                 
-                // Tampilkan tanggal jika berbeda dari pesan sebelumnya
                 if (currentDate !== lastDate) {
                     html += `<div class="text-center my-4"><span class="bg-slate-100 text-slate-500 text-[10px] font-semibold px-3 py-1 rounded-full">${currentDate}</span></div>`;
                     lastDate = currentDate;
@@ -1179,7 +1219,6 @@
             box.innerHTML = html; box.scrollTop = box.scrollHeight;
         }
 
-        // FUNGSI OPSI EDIT / HAPUS PESAN
         window.bukaOpsiPesan = function(id, text) {
             if(!id) return;
             const aksi = prompt("Ketik 'EDIT' untuk mengubah pesan, atau 'HAPUS' untuk menghapus pesan ini:", "EDIT");
@@ -1216,7 +1255,6 @@
         window.kirimPesanChat = async function (e) { e.preventDefault(); const inp = document.getElementById('chatTextInput'); if (!inp || !auth.currentUser) return; const t = inp.value.trim(); if (!t) return; inp.value = ''; await kirimPayloadChat({ text: t }); };
         window.kirimStiker = async function (url) { document.getElementById('stickerMenu')?.classList.add('hidden'); await kirimPayloadChat({ text: '', stickerUrl: url }); };
         
-        // KOMPRESI FOTO CHAT
         window.handleChatPhoto = function (e) {
             const f = e.target.files[0]; if (!f) return; showToast("Memproses foto...");
             const r = new FileReader(); r.onload = ev => { const i = new Image(); i.onload = async () => { const c = document.createElement('canvas'); let w = i.width, h = i.height; const maxDim = 600; if (w > h && w > maxDim) { h *= maxDim / w; w = maxDim; } else if (h > maxDim) { w *= maxDim / h; h = maxDim; } c.width = w; c.height = h; c.getContext('2d').drawImage(i, 0, 0, w, h); await kirimPayloadChat({ text: '', imageUrl: c.toDataURL('image/jpeg', 0.5) }); }; i.src = ev.target.result; }; r.readAsDataURL(f); e.target.value = '';
@@ -1855,7 +1893,6 @@
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); const url = URL.createObjectURL(blob); link.setAttribute("href", url); link.setAttribute("download", `Laporan_Kas_RT010_${new Date().getTime()}.csv`); document.body.appendChild(link); link.click(); document.body.removeChild(link); showToast("📄 Laporan Kas diunduh!");
         };
 
-        // FITUR DOWNLOAD PDF LAPORAN KAS (KOP SURAT)
         window.downloadLaporanKasPDF = function() {
             if (globalKasList.length === 0) return showToast("Tidak ada data untuk diunduh.", true);
             if (!window.jspdf || !window.jspdf.jsPDF) return showToast("Library PDF belum siap.", true);
@@ -1863,7 +1900,6 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('p', 'mm', 'a4');
             
-            // Kop Surat
             doc.setFont("helvetica", "bold"); 
             doc.setFontSize(14); 
             doc.text("RUKUN TETANGGA 010 RUKUN WARGA 002", 105, 15, { align: "center" }); 
@@ -1879,7 +1915,6 @@
             doc.setFontSize(12); 
             doc.text("LAPORAN KEUANGAN KAS RT", 105, 42, { align: "center" });
             
-            // Ringkasan
             let totalMasuk = 0, totalKeluar = 0;
             globalKasList.forEach(x => { if(x.jenis === 'masuk') totalMasuk += Number(x.nominal); else totalKeluar += Number(x.nominal); });
             
@@ -1889,7 +1924,6 @@
             doc.text(`Total Pengeluaran: ${formatRupiah(totalKeluar)}`, 15, 56);
             doc.text(`Saldo Akhir: ${formatRupiah(totalMasuk - totalKeluar)}`, 15, 62);
 
-            // Tabel Transaksi
             let bodyData = [];
             globalKasList.forEach((x, i) => {
                 const tgl = new Date(x.timestamp).toLocaleDateString('id-ID');
@@ -1908,12 +1942,9 @@
                 body: bodyData,
                 styles: { fontSize: 9 },
                 headStyles: { fillColor: [5, 150, 105] },
-                columnStyles: {
-                    4: { halign: 'right' }
-                }
+                columnStyles: { 4: { halign: 'right' } }
             });
 
-            // Tanda Tangan
             let finalY = doc.lastAutoTable.finalY + 20;
             const tglIndo = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
             doc.text(`Kalanganyar, ${tglIndo}`, 145, finalY, { align: "center" });
@@ -2083,6 +2114,16 @@
                 hImg.classList.add('hidden'); hIco.classList.remove('hidden');
                 hIco.innerText = nm.charAt(0).toUpperCase();
             }
+
+            // CEK INSTALL PWA (Tampilkan Modal Wajib Install jika belum install)
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+            if (!isStandalone) {
+                // Munculkan setelah 2 detik agar tidak mengganggu loading
+                setTimeout(() => {
+                    const wm = document.getElementById('wajibInstallModal');
+                    if(wm) wm.classList.remove('hidden');
+                }, 2000);
+            }
         }
         function prefillFormData() {
             try {
@@ -2090,7 +2131,7 @@
                 ['tlNama', 'invNama', 'spNama', 'dwNamaSingle'].forEach(id => { const el = document.getElementById(id); if (el && !el.value) el.value = u.nama || ''; });
                 ['tlBlok', 'dwBlok', 'invBlok', 'spBlok'].forEach(id => { const el = document.getElementById(id); if (el && !el.value) el.value = u.blok || ''; });
                 ['tlNo', 'dwNo', 'invNo', 'spNo'].forEach(id => { const el = document.getElementById(id); if (el && !el.value) el.value = u.no || ''; });
-                if (u.status_keluarga === 'Sudah Berkeluarga') { const radioSudah = document.querySelector('input[name="statusKeluarga"][value="Sudah Berkeluarga"]'); if (radioSudah) { radioSudah.checked = true; const nsuEl = document.getElementById('dwNamaSuami'); if (nsuEl) nsuEl.value = u.nama_suami || ''; const nisEl = document.getElementById('dwNamaIstri'); if (nisEl) nisEl.value = u.nama_istri || ''; } } else { const radioSingle = document.querySelector('input[name="statusKeluarga"][value="Belum Berkeluarga/Single"]'); if (radioSingle) radioSingle.checked = true; }
+                if (u.status_keluarga === 'Sudah Berkeluarga') { const radioSudah = document.getElementById('statusMenikah'); if (radioSudah) { radioSudah.checked = true; const nsuEl = document.getElementById('dwNamaSuami'); if (nsuEl) nsuEl.value = u.nama_suami || ''; const nisEl = document.getElementById('dwNamaIstri'); if (nisEl) nisEl.value = u.nama_istri || ''; } } else { const radioSingle = document.getElementById('statusSingle'); if (radioSingle) radioSingle.checked = true; }
                 if (window.toggleKeluargaStatus) window.toggleKeluargaStatus();
             } catch (e) { }
         }
@@ -2100,7 +2141,6 @@
             const id = mailEl.value.trim(); const pw = passEl.value; if (!pw) return showToast("Password wajib diisi.", true);
             btn.disabled = true; let em = id.includes('@') ? id : id.replace(/[^a-z0-9]/gi, '') + '@mabupark.local';
             
-            // PASSWORD RT 777288
             if (id.toLowerCase() === 'rt' && pw === '777288') {
                 em = 'hilmanmabu@gmail.com';
                 try { sessionStorage.setItem('rt10_temp_auth', JSON.stringify({ email: btoa(em), pass: btoa(pw) })); await signInWithEmailAndPassword(auth, em, pw); }
@@ -2130,13 +2170,11 @@
         };
         window.handleLogout = async function () { try { unSubs.forEach(u => { try { u(); } catch (e) { } }); unSubs = []; await signOut(auth); showToast("Logout berhasil."); } catch (e) { showToast("Logout gagal.", true); } };
 
-        // KOMPRESI FOTO DOKUMEN (KTP/KK)
         window.handleDocPhoto = function (e, prevId, icoId, hidId) {
             const f = e.target.files && e.target.files[0]; if (!f) return;
             const r = new FileReader(); r.onload = ev => { const i = new Image(); i.onload = () => { const c = document.createElement('canvas'); let w = i.width, h = i.height; const maxDim = 600; if (w > h && w > maxDim) { h *= maxDim / w; w = maxDim; } else if (h > maxDim) { w *= maxDim / h; h = maxDim; } c.width = w; c.height = h; c.getContext('2d').drawImage(i, 0, 0, w, h); const b64 = c.toDataURL('image/jpeg', 0.5); const prev = document.getElementById(prevId); if (prev) { prev.src = b64; prev.classList.remove('hidden'); } const ico = document.getElementById(icoId); if (ico) ico.classList.add('hidden'); const hid = document.getElementById(hidId); if (hid) hid.value = b64; }; i.src = ev.target.result; }; r.readAsDataURL(f);
         };
 
-        // KOMPRESI FOTO PROFIL (KOTAK)
         window.handleProfilePhoto = function(e) {
             const f = e.target.files && e.target.files[0]; if (!f) return;
             const r = new FileReader();
@@ -2173,7 +2211,6 @@
                     const nm = sk === 'Belum Berkeluarga/Single' ? (nsEl?.value || '') : (nsuEl?.value || ''); const bEl = document.getElementById('dwBlok'); const noEl = document.getElementById('dwNo'); const alEl = document.getElementById('dwAlamat'); const agEl = document.getElementById('dwAgama'); const jwEl = document.getElementById('dwJiwa'); const ktpB = document.getElementById('dwKtpBase64'); const kkB = document.getElementById('dwKkBase64');
                     dObj = Object.assign(dObj, { nama: nm, blok: bEl?.value || '', no_rumah: noEl?.value || '', detail: `Pembaruan Data (${sk})`, status_keluarga: sk, status_rumah: sr, nama_suami: nsuEl?.value || '', nama_istri: nisEl?.value || '', alamat_semula: alEl?.value || '', agama: agEl?.value || '', status_ktp: k, jumlah_jiwa: jwEl?.value || '', foto_ktp: ktpB?.value || null, foto_kk: kkB?.value || null });
                     
-                    // Simpan juga ke dokumen Profile Users
                     await setDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid), { 
                         jumlah_jiwa: dObj.jumlah_jiwa, 
                         foto_ktp: dObj.foto_ktp, 
@@ -2239,7 +2276,6 @@
         async function loadAdminWargaList() {
             const cont = document.getElementById('adminWargaList'); if (!cont || !firebaseReady) return; cont.innerHTML = 'Loading...';
             try { const s = await getDocs(collection(db, 'artifacts', appId, 'users')); let h = ''; s.forEach(d => { const u = d.data(); const dStr = safeEncode({ nama: u.nama || '', hp: u.hp || '', blok: u.blok || '', no: u.no || '', role: u.role || '' }); 
-                // Dropdown Role
                 const roleOptions = ['Warga', 'Admin RT', 'Pengurus RT', 'Sekretaris', 'Bendahara', 'Satpam', 'Petugas Kebersihan', 'Petugas Angkat Sampah', 'Teknisi Air', 'Teknisi Listrik'];
                 let roleSelect = `<select onchange="updateWargaRole('${d.id}', this.value)" class="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-md px-2 py-1 outline-none">`;
                 roleOptions.forEach(r => { roleSelect += `<option value="${r}" ${u.role === r ? 'selected' : ''}>${r}</option>`; });
@@ -2341,9 +2377,8 @@
         // FITUR DOUBLE BACK TO EXIT (2x Slide Kiri)
         let backPressCount = 0;
         let backPressTimer;
-        history.pushState(null, null, location.href); // Push state awal
+        history.pushState(null, null, location.href); 
         window.addEventListener('popstate', function(event) {
-            // Jika sedang berada di halaman selain beranda, kita arahkan ke beranda dulu
             const views = ['chatView', 'riwayatView', 'laporView', 'suratView', 'dataView', 'profilView', 'umkmView', 'iuranView', 'kasView', 'inventarisView', 'sosView', 'adminView', 'pekerjaView', 'pengurusView', 'tamuView'];
             let isSubPage = false;
             views.forEach(id => {
@@ -2352,11 +2387,9 @@
             });
 
             if (isSubPage) {
-                // Kembali ke beranda dulu
                 switchTab('beranda');
                 history.pushState(null, null, location.href);
             } else {
-                // Jika sudah di beranda, terapkan 2x back to exit
                 backPressCount++;
                 if (backPressCount === 1) {
                     showToast("Tekan sekali lagi untuk keluar aplikasi", true);
@@ -2364,15 +2397,46 @@
                     backPressTimer = setTimeout(() => { backPressCount = 0; }, 2000);
                 } else {
                     clearTimeout(backPressTimer);
-                    // Biarkan keluar
                 }
             }
         });
 
-        let dPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); dPrompt = e; if (localStorage.getItem('pwaDismissed') === 'true') return; setTimeout(() => document.getElementById('pwaBanner')?.classList.remove('hidden'), 2000); });
+        // PWA INSTALL LOGIC (BARU)
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // Banner lama
+            if (localStorage.getItem('pwaDismissed') !== 'true') {
+                setTimeout(() => document.getElementById('pwaBanner')?.classList.remove('hidden'), 2000);
+            }
+        });
+
+        window.installPwa = async (fromModal = false) => {
+            if (fromModal) {
+                document.getElementById('wajibInstallModal').classList.add('hidden');
+            } else {
+                hidePwaBanner();
+            }
+            
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    showToast("✅ Aplikasi berhasil diinstall!");
+                }
+                deferredPrompt = null;
+            } else {
+                // Jika browser tidak support prompt otomatis (misal iOS), berikan instruksi manual
+                alert("Untuk menginstall di iPhone/iPad:\n1. Tekan tombol 'Share' (Bagikan) di Safari.\n2. Pilih 'Add to Home Screen' (Tambahkan ke Layar Utama).\n\nUntuk Android (Chrome):\n1. Tekan titik tiga di kanan atas.\n2. Pilih 'Install App' atau 'Tambahkan ke Layar Utama'.");
+            }
+        };
+
+        window.tutupWajibInstall = () => {
+            document.getElementById('wajibInstallModal').classList.add('hidden');
+            localStorage.setItem('pwaDismissed', 'true'); // Tandai sudah ditutup
+        };
+
         window.hidePwaBanner = () => { document.getElementById('pwaBanner')?.classList.add('hidden'); localStorage.setItem('pwaDismissed', 'true'); };
-        window.installPwa = async () => { hidePwaBanner(); if (dPrompt) { dPrompt.prompt(); await dPrompt.userChoice; dPrompt = null; } };
         window.refreshAppUpdate = function () { const banner = document.getElementById('updateBanner'); if (banner) banner.classList.add('hidden'); if (pendingUpdateWorker) { pendingUpdateWorker.postMessage({ action: 'skipWaiting' }); setTimeout(() => window.location.reload(), 600); } else { window.location.reload(); } };
         
         if ('serviceWorker' in navigator) {
