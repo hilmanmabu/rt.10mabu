@@ -25,7 +25,11 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Library Tambahan untuk PDF & Charts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         html, body {
@@ -75,7 +79,7 @@
         </div>
     </div>
 
-    <!-- KAMERA FULL SCREEN -->
+    <!-- MODAL KAMERA -->
     <div id="liveCameraModal" class="hidden fixed inset-0 bg-black z-[130] flex-col justify-between">
         <div class="p-4 flex justify-between items-center text-white bg-black z-10 pt-safe-top w-full">
             <div class="flex items-center gap-2.5 bg-slate-800 px-3 py-1.5 rounded-full"><span class="relative flex w-2.5 h-2.5"><span class="absolute inset-0 rounded-full bg-brand animate-pulse-ring"></span><span class="relative w-2.5 h-2.5 rounded-full bg-brand"></span></span><span class="font-bold text-xs tracking-wide">KAMERA</span></div>
@@ -83,7 +87,7 @@
         </div>
         <div class="flex-1 relative flex items-center justify-center overflow-hidden bg-black p-0">
             <video id="liveCameraVideo" autoplay playsinline muted class="w-full h-full object-cover"></video>
-            <div class="absolute inset-6 border-2 border-white/25 rounded-3xl pointer-events-none flex items-end justify-center pb-4"><span class="text-[10px] text-white/90 bg-black/60 px-3 py-1 rounded-full">Arahkan kamera ke objek</span></div>
+            <div class="absolute inset-6 border-2 border-white/25 rounded-3xl pointer-events-none flex items-end justify-center pb-4"><span class="text-[10px] text-white/90 bg-black/60 px-3 py-1 rounded-full">Arahkan kamera</span></div>
         </div>
         <div class="p-6 pb-safe-bottom bg-black flex justify-around items-center z-10 w-full">
             <button type="button" onclick="gantiArahKamera()" class="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center text-white text-lg"><i class="fa-solid fa-camera-rotate"></i></button>
@@ -111,7 +115,7 @@
         </div>
     </div>
 
-    <!-- ============================== AUTHENTICATION (LOGIN) ============================== -->
+    <!-- ============================== AUTHENTICATION ============================== -->
     <div id="authContainer" class="w-full h-full bg-slate-50 relative flex flex-col items-center justify-center overflow-y-auto p-4 sm:p-6">
         <div class="w-full max-w-md bg-white rounded-none sm:rounded-[2rem] sm:shadow-2xl p-6 sm:p-8 relative">
             <div class="text-center mb-8 relative z-10 w-full">
@@ -168,10 +172,11 @@
                 </div>
                 <div class="flex items-center gap-2 shrink-0">
                     <button id="btnHeaderSOS" onclick="bukaHalamanSOS()" class="bg-red-600 text-white px-3 py-1.5 rounded-full text-[11px] font-bold shadow-md flex items-center gap-1 border border-white/20 hover:bg-red-700"><i class="fa-solid fa-triangle-exclamation text-xs"></i> <span>SOS</span></button>
+                    <!-- FOTO PROFIL DI POJOK KANAN ATAS -->
                     <button onclick="switchTab('profil')" class="relative w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white overflow-hidden border border-white/40 shadow-sm transition active:scale-95" title="Profil Saya">
-    <img id="headerProfileImg" src="" class="w-full h-full object-cover hidden">
-    <i id="headerProfileIcon" class="fa-solid fa-user text-base"></i>
-</button>
+                        <img id="headerProfileImg" src="" class="w-full h-full object-cover hidden">
+                        <i id="headerProfileIcon" class="fa-solid fa-user text-base"></i>
+                    </button>
                 </div>
             </div>
         </header>
@@ -490,6 +495,14 @@
                 <div class="p-4 md:p-6 space-y-4 flex-1">
                     <div class="bg-emerald-700 text-white rounded-2xl p-5 shadow-sm overflow-hidden"><div class="relative"><div class="flex justify-between items-start mb-4"><div class="min-w-0"><p class="text-[9px] uppercase tracking-widest text-emerald-200 font-semibold">Pemegang Kartu</p><h3 class="font-bold text-lg leading-tight mt-1 truncate" id="kartuIuranNama">Warga</h3><p class="text-xs text-emerald-100 mt-1" id="kartuIuranBlok">Blok - / No -</p></div><div class="bg-white/10 px-3 py-1.5 rounded-lg text-right shrink-0"><p class="text-[8px] uppercase tracking-wider text-emerald-200">Iuran</p><p class="font-bold text-xs mt-0.5" id="kartuIuranNominalAktif">Rp 50.000</p></div></div><div class="border-t border-emerald-600 pt-3 flex justify-between items-center text-[10px]"><span class="text-emerald-100">Status: <b class="text-white">Resmi RT.010</b></span><span class="text-emerald-100">Ketua: <b class="text-white">Ade Hilman F.</b></span></div></div></div>
                     <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 flex items-center gap-2.5 text-[11px] text-blue-800"><i class="fa-solid fa-shield-halved text-blue-600 text-base shrink-0"></i><span>Status pembayaran diperbarui oleh <b>Bendahara RT</b>.</span></div>
+                    
+                    <!-- FITUR BARU: PAYMENT GATEWAY QRIS -->
+                    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm text-center">
+                        <h4 class="font-bold text-sm text-slate-800 mb-1">Bayar Iuran Praktis</h4>
+                        <p class="text-[11px] text-slate-500 mb-3">Scan QRIS di bawah ini menggunakan BCA, Mandiri, GoPay, OVO, dll.</p>
+                        <button onclick="bayarIuranQRIS()" class="w-full bg-slate-900 text-white font-bold py-3 rounded-xl shadow-md flex items-center justify-center gap-2"><i class="fa-solid fa-qrcode text-lg"></i> Tampilkan QRIS Pembayaran</button>
+                    </div>
+
                     <div><h4 class="font-bold text-xs text-slate-700 uppercase tracking-wider mb-2.5">Status Iuran Bulanan</h4><div class="space-y-2.5" id="iuranListContainer"><div class="text-center py-8"><i class="fa-solid fa-spinner fa-spin text-slate-400 text-2xl"></i></div></div></div>
                 </div>
             </div>
@@ -543,7 +556,7 @@
                 <div class="p-4 md:p-6 flex-1 flex flex-col justify-center items-center text-center">
                     <div class="w-24 h-24 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-4xl mb-6 shadow-lg animate-pulse"><i class="fa-solid fa-bullhorn"></i></div>
                     <h3 class="text-xl font-bold text-slate-800 mb-2">Pilih Jenis Darurat</h3>
-                    <p class="text-sm text-slate-500 mb-8 max-w-md">Sinyal bahaya & lokasi Blok/No rumah Anda akan dikirimkan beserta bunyi alarm ke seluruh warga RT.010.</p>
+                    <p class="text-sm text-slate-500 mb-8 max-w-md">Sinyal bahaya & <b>Lokasi GPS Anda</b> akan dikirimkan beserta bunyi alarm ke seluruh warga RT.010.</p>
                     <div class="w-full space-y-3">
                         <button onclick="kirimSinyalSOS('KEBAKARAN')" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-2xl shadow-lg flex items-center justify-center gap-3"><i class="fa-solid fa-fire text-2xl"></i> DARURAT KEBAKARAN</button>
                         <button onclick="kirimSinyalSOS('MALING / KEAMANAN')" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 rounded-2xl shadow-lg flex items-center justify-center gap-3"><i class="fa-solid fa-user-shield text-2xl"></i> KEAMANAN / MALING</button>
@@ -565,17 +578,18 @@
                         <button id="tabAdmLaporan" onclick="switchAdminTab('laporan')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Laporan</button>
                         <button id="tabAdmIuran" onclick="switchAdminTab('iuran')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Iuran</button>
                         <button id="tabAdmKas" onclick="switchAdminTab('kas')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Kas</button>
+                        <button id="tabAdmTamu" onclick="switchAdminTab('tamu')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Buku Tamu</button>
                         <button id="tabAdmPolling" onclick="switchAdminTab('polling')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">e-Voting</button>
                         <button id="tabAdmSos" onclick="switchAdminTab('sos')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">SOS</button>
-                        <button id="tabAdmInventaris" onclick="switchAdminTab('inventaris')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Inventaris</button>
                         <button id="tabAdmPengumuman" onclick="switchAdminTab('pengumuman')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Pengumuman</button>
                     </div>
 
                     <div class="relative">
                         <div id="admViewWarga" class="block">
-                            <div class="mb-3 flex gap-2">
+                            <div class="mb-3 flex flex-wrap gap-2">
                                 <button id="btnToggleAddWarga" onclick="toggleAdminAddWarga(true)" class="flex-1 bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2"><i class="fa-solid fa-user-plus"></i> Tambah Warga</button>
-                                <button onclick="exportWargaData()" class="bg-slate-800 text-white font-bold px-3 py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2"><i class="fa-solid fa-file-excel"></i> Export</button>
+                                <button onclick="exportWargaData()" class="bg-slate-800 text-white font-bold px-3 py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+                                <button onclick="exportWargaPDF()" class="bg-red-600 text-white font-bold px-3 py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2"><i class="fa-solid fa-file-pdf"></i> Export PDF</button>
                             </div>
                             <form id="adminAddWargaForm" onsubmit="simpanWargaBaruAdmin(event)" class="hidden bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mt-2 space-y-3 shadow-sm mb-4">
                                 <div class="flex justify-between items-center border-b border-emerald-200 pb-2"><h3 class="font-bold text-emerald-900 text-xs uppercase"><i class="fa-solid fa-user-plus mr-1"></i> Daftarkan Warga</h3><button type="button" onclick="toggleAdminAddWarga(false)" class="text-xs text-slate-500 hover:text-red-500 font-bold"><i class="fa-solid fa-xmark"></i></button></div>
@@ -592,11 +606,16 @@
                             <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mb-4 space-y-3"><div class="flex justify-between items-center"><h3 class="font-bold text-emerald-900 text-sm">Pengaturan Iuran</h3><button onclick="kirimPengingatIuran()" class="bg-amber-500 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg shadow-sm flex items-center gap-1 transition"><i class="fa-solid fa-bell"></i> Ingatkan</button></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"><div><label class="block text-[11px] font-semibold text-emerald-800 mb-1">Bulan Tagihan</label><select id="adminBulanIuran" onchange="loadAdminIuran()" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none"></select></div><div><label class="block text-[11px] font-semibold text-emerald-800 mb-1">Nominal Default</label><select id="adminNominalIuran" onchange="simpanNominalDefault()" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none"></select></div></div></div>
                             <div id="adminIuranWargaList" class="space-y-2"></div>
                         </div>
+                        
                         <div id="admViewKas" class="hidden">
+                            <!-- FITUR BARU: CHART KEUANGAN -->
+                            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-4">
+                                <h3 class="font-bold text-slate-800 text-sm mb-3">Grafik Arus Kas</h3>
+                                <canvas id="chartKeuangan" height="150"></canvas>
+                            </div>
+                            
                             <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mb-4 space-y-2.5">
                                 <h3 class="font-bold text-emerald-900 text-sm">Catat Transaksi Kas</h3>
-                                
-                                <!-- Dropdown Pilihan Pengeluaran Rutin -->
                                 <select id="kasKategoriInput" onchange="autofillKasKet()" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none mb-1 text-slate-700">
                                     <option value="">-- Pilih Pengeluaran Rutin (Opsional) --</option>
                                     <option value="Gaji Satpam">Gaji Satpam</option>
@@ -609,19 +628,28 @@
                                     <option value="Setoran Kas TPU Al-Ikhwan">Setoran Kas TPU Al-Ikhwan</option>
                                     <option value="Lainnya">Lainnya (Ketik Manual)</option>
                                 </select>
-
-                                <div class="grid grid-cols-2 gap-2">
-                                    <select id="kasJenisInput" class="px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none">
-                                        <option value="masuk">➕ Masuk</option>
-                                        <option value="keluar">➖ Keluar</option>
-                                    </select>
-                                    <input type="number" id="kasNominalInput" placeholder="Nominal" class="px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500">
-                                </div>
+                                <div class="grid grid-cols-2 gap-2"><select id="kasJenisInput" class="px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none"><option value="masuk">➕ Masuk</option><option value="keluar">➖ Keluar</option></select><input type="number" id="kasNominalInput" placeholder="Nominal" class="px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div>
                                 <input type="text" id="kasKetInput" placeholder="Keterangan Tambahan (Cth: Bulan Nov)" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500">
                                 <button onclick="tambahTransaksiKas()" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-lg text-xs shadow-md">Simpan</button>
                             </div>
                             <h3 class="font-bold text-slate-700 text-sm mb-2 border-b border-slate-100 pb-2">Riwayat Transaksi</h3><div id="adminKasList" class="space-y-2"></div>
                         </div>
+
+                        <!-- FITUR BARU: BUKU TAMU DIGITAL -->
+                        <div id="admViewTamu" class="hidden">
+                            <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-4 space-y-2.5">
+                                <h3 class="font-bold text-blue-900 text-sm">Catat Tamu Masuk</h3>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <input type="text" id="tamuNama" placeholder="Nama Tamu / Kurir" class="px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-blue-500">
+                                    <input type="text" id="tamuTujuan" placeholder="Tujuan (Cth: Blok A/12)" class="px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-blue-500">
+                                </div>
+                                <input type="text" id="tamuKeperluan" placeholder="Keperluan (Cth: Kirim Paket)" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-blue-500">
+                                <button onclick="simpanBukuTamu()" class="w-full bg-blue-600 text-white font-bold py-2.5 rounded-lg text-xs shadow-md">Simpan Data Tamu</button>
+                            </div>
+                            <h3 class="font-bold text-slate-700 text-sm mb-2 border-b border-slate-100 pb-2">Daftar Tamu Hari Ini</h3>
+                            <div id="adminTamuList" class="space-y-2"></div>
+                        </div>
+
                         <div id="admViewPolling" class="hidden">
                             <div class="bg-purple-50 border border-purple-200 rounded-2xl p-4 mb-5 space-y-2.5"><h3 class="font-bold text-purple-900 text-sm">Buat e-Voting</h3><input type="text" id="pollJudulInput" placeholder="Judul Musyawarah" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white outline-none focus:border-purple-500"><input type="text" id="pollOpsiInput" placeholder="Pilihan (pisahkan dengan koma)" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white outline-none focus:border-purple-500"><button onclick="buatPollingBaru()" class="w-full bg-purple-600 text-white font-bold py-2.5 rounded-lg text-sm shadow-md">Terbitkan</button></div>
                             <h3 class="font-bold text-slate-700 text-sm mb-3 border-b border-slate-100 pb-2">Daftar Polling Aktif</h3><div id="adminPollingList" class="space-y-3"></div>
@@ -629,11 +657,6 @@
                         <div id="admViewSos" class="hidden space-y-4">
                             <div class="bg-red-50 border border-red-200 rounded-2xl p-4 flex items-center justify-between gap-4"><div><h3 class="font-bold text-red-900 text-sm">Fitur SOS Warga</h3><p class="text-xs text-red-700 mt-0.5">Jika dimatikan, tombol SOS disembunyikan.</p></div><label class="flex items-center cursor-pointer relative shrink-0"><input type="checkbox" id="toggleFiturSOSCheckbox" checked onchange="ubahStatusFiturSOS(this.checked)" class="sr-only peer"><div class="w-12 h-6 bg-slate-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div></label></div>
                             <div class="bg-white border border-slate-200 rounded-2xl p-4"><h4 class="font-bold text-slate-800 text-sm mb-1">Status Alarm</h4><p class="text-xs text-slate-500 mb-3" id="adminStatusSOSText">Tidak ada sinyal darurat aktif.</p><button onclick="matikanSinyalSOS()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-xl text-xs transition"><i class="fa-solid fa-bell-slash mr-1"></i> Matikan Sirene</button></div>
-                        </div>
-                        <div id="admViewInventaris" class="hidden">
-                            <div class="bg-teal-50 border border-teal-200 rounded-2xl p-4 mb-5"><h3 class="font-bold text-teal-800 text-sm mb-2">Tambah Barang</h3><input type="text" id="invBaruNama" placeholder="Nama Barang" class="w-full px-3 py-2 rounded-lg border border-slate-200 mb-2 text-sm bg-white outline-none focus:border-teal-500"><input type="text" id="invBaruDetail" placeholder="Keterangan" class="w-full px-3 py-2 rounded-lg border border-slate-200 mb-2 text-sm bg-white outline-none focus:border-teal-500"><button onclick="tambahInventaris()" class="w-full bg-teal-600 text-white font-bold py-2 rounded-lg text-sm shadow-md">Tambah</button></div>
-                            <div class="flex justify-between items-end border-b border-slate-100 pb-2 mb-3"><h3 class="font-bold text-slate-700 text-sm">Daftar Barang</h3><button id="btnMuatBawaan" onclick="muatBarangBawaan()" class="text-[10px] bg-slate-800 text-white px-2.5 py-1 rounded-lg hover:bg-slate-900 transition font-bold">Muat 13 Bawaan</button></div>
-                            <div id="adminInventarisList" class="space-y-2"></div>
                         </div>
                         <div id="admViewPengumuman" class="hidden">
                             <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-5"><h3 class="font-bold text-blue-800 text-sm mb-2">Buat Pengumuman</h3><input type="text" id="pengJudul" placeholder="Judul" class="w-full px-3 py-2 rounded-lg border border-slate-200 mb-2 text-sm bg-white outline-none focus:border-blue-500"><textarea id="pengIsi" rows="3" placeholder="Isi pengumuman..." class="w-full px-3 py-2 rounded-lg border border-slate-200 mb-2 text-sm resize-none bg-white outline-none focus:border-blue-500"></textarea><button onclick="postPengumuman()" class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg text-sm shadow-md">Posting</button></div>
@@ -666,6 +689,7 @@
         const appId = 'layanan-warga-rt10';
         const KETUA_RT_NAMA = "Ade Hilman Fatahillah";
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbydEnQUz9TIKloH_4TUQIP0jYK-SSHvv3OwLN6gR8lUMlUF554nQrhs1EUfxHezmVSJIQ/exec";
+        const WHATSAPP_GATEWAY_TOKEN = "TOKEN_FONNTE_WABLAS_ANDA_DISINI"; // FITUR 1: ISI TOKEN WA GATEWAY
 
         const PILIHAN_NOMINAL_IURAN = [20000, 25000, 30000, 35000, 40000, 45000, 50000, 60000, 70000, 75000, 80000, 90000, 100000, 110000, 120000, 125000, 130000, 140000, 150000, 160000, 170000, 175000, 180000, 190000, 200000];
         const DAFTAR_BULAN_IURAN = ['Okt 2026', 'Nov 2026', 'Des 2026', 'Jan 2027', 'Feb 2027', 'Mar 2027', 'Apr 2027', 'Mei 2027', 'Jun 2027', 'Jul 2027', 'Agu 2027', 'Sep 2027'];
@@ -676,6 +700,7 @@
         let nominalIuranDefault = 50000;
         let pendingUpdateWorker = null;
         let swRegistered = false;
+        let myChart = null; // Variabel untuk Chart.js
 
         let app, auth, db, secondaryApp, secondaryAuth;
         let firebaseReady = false;
@@ -693,6 +718,22 @@
         function escapeHtml(str) { if (str == null) return ''; return String(str).replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s])); }
         function safeEncode(obj) { return encodeURIComponent(JSON.stringify(obj)).replace(/'/g, '%27'); }
         function safeDecode(encoded) { return JSON.parse(decodeURIComponent(encoded)); }
+
+        // FITUR 1: WHATSAPP GATEWAY (SIMULASI)
+        window.kirimWhatsApp = async function(nomorHp, pesan) {
+            if (!nomorHp) return console.log("Nomor HP kosong, WA tidak dikirim.");
+            console.log(`[WA GATEWAY] Mengirim ke ${nomorHp}: ${pesan}`);
+            // Implementasi asli menggunakan fetch ke API Fonnte/Wablas:
+            /*
+            try {
+                await fetch('https://api.fonnte.com/send', {
+                    method: 'POST',
+                    headers: { 'Authorization': WHATSAPP_GATEWAY_TOKEN },
+                    body: new URLSearchParams({ target: nomorHp, message: pesan })
+                });
+            } catch (e) { console.error("WA Error", e); }
+            */
+        };
 
         window.showToast = function (msg, isError = false) {
             const toast = document.createElement('div');
@@ -792,14 +833,36 @@
         window.kirimNotifikasiPesan = function (judul, isi) { try { new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3').play().catch(() => { }); } catch (e) { } showToast(`🔔 ${judul}: ${isi}`); if ('Notification' in window && Notification.permission === 'granted' && 'serviceWorker' in navigator) { navigator.serviceWorker.ready.then(r => r.showNotification(judul, { body: isi, icon: '/icon-192.png', vibrate: [250, 100, 250] })).catch(() => { }); } };
 
         window.bukaHalamanSOS = function () { if (!isFiturSOSEnabled) return showToast("Fitur SOS dinonaktifkan.", true); switchTab('sos'); };
+        
+        // FITUR 4: SOS DENGAN GEOLOCATION
         window.kirimSinyalSOS = async function (jenisBahaya) {
-            if (!firebaseReady || !auth.currentUser) return; switchTab('beranda');
+            if (!firebaseReady || !auth.currentUser) return; 
+            
+            showToast("Mengambil lokasi GPS...", false);
+            let mapsLink = "";
+            
+            try {
+                const pos = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 });
+                });
+                mapsLink = `\nhttps://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
+            } catch (error) {
+                console.warn("Gagal ambil GPS", error);
+                mapsLink = "\n(Lokasi GPS tidak tersedia)";
+            }
+
+            switchTab('beranda');
             const u = window.currentUserData || {}; const namaPelapor = u.nama || 'Warga'; const blokPelapor = `Blok ${u.blok || '-'} / No. ${u.no || '-'}`;
             try {
-                await kirimPayloadChat({ text: `🚨 [SINYAL DARURAT SOS: ${jenisBahaya}] 🚨\nWarga: ${namaPelapor} (${blokPelapor}) membutuhkan pertolongan segera!` });
-                await addDoc(collection(db, 'artifacts', appId, 'laporan'), { userId: auth.currentUser.uid, nama: namaPelapor, blok: u.blok || '-', no: u.no || '-', layanan: `DARURAT SOS: ${jenisBahaya}`, detail: `Panggilan Darurat ${jenisBahaya} di ${blokPelapor}`, timestamp: Date.now() });
-                await setDoc(doc(db, 'artifacts', appId, 'kas', 'config_sos'), { activeSOS: { jenis: jenisBahaya, nama: namaPelapor, blok: blokPelapor, timestamp: Date.now() } }, { merge: true }).catch(() => { });
-                bunyikanSireneDarurat(); showToast(`🚨 Sinyal Darurat ${jenisBahaya} terkirim!`);
+                await kirimPayloadChat({ text: `🚨 [SINYAL DARURAT SOS: ${jenisBahaya}] 🚨\nWarga: ${namaPelapor} (${blokPelapor}) membutuhkan pertolongan segera!${mapsLink}` });
+                await addDoc(collection(db, 'artifacts', appId, 'laporan'), { userId: auth.currentUser.uid, nama: namaPelapor, blok: u.blok || '-', no: u.no || '-', layanan: `DARURAT SOS: ${jenisBahaya}`, detail: `Panggilan Darurat ${jenisBahaya} di ${blokPelapor} ${mapsLink}`, timestamp: Date.now() });
+                await setDoc(doc(db, 'artifacts', appId, 'kas', 'config_sos'), { activeSOS: { jenis: jenisBahaya, nama: namaPelapor, blok: blokPelapor, mapsLink: mapsLink, timestamp: Date.now() } }, { merge: true }).catch(() => { });
+                bunyikanSireneDarurat(); 
+                showToast(`🚨 Sinyal Darurat ${jenisBahaya} terkirim!`);
+                
+                // Fitur 1: Notif WA ke Ketua RT (Contoh)
+                kirimWhatsApp("08123456789", `DARURAT! ${namaPelapor} (${blokPelapor}) mengirim sinyal ${jenisBahaya}. ${mapsLink}`);
+
             } catch (e) { showToast("Gagal mengirim sinyal SOS.", true); }
         };
         window.ubahStatusFiturSOS = async function (aktif) { if (!firebaseReady) return; try { await setDoc(doc(db, 'artifacts', appId, 'kas', 'config_sos'), { enabled: aktif, updatedAt: Date.now() }, { merge: true }); showToast(aktif ? "Tombol SOS Diaktifkan." : "Tombol SOS Dinonaktifkan."); } catch (e) { showToast("Gagal mengubah SOS.", true); } };
@@ -871,6 +934,59 @@
         /* KAS & PENGELUARAN RUTIN */
         let currentKasFilter = 'semua'; let globalKasList = [];
 
+        // FITUR 7: REDESAIN DASHBOARD GRAFIK KEUANGAN
+        window.renderChartKeuangan = function() {
+            const ctx = document.getElementById('chartKeuangan');
+            if (!ctx) return;
+
+            // Agregasi data per bulan (6 bulan terakhir)
+            let labels = [];
+            let dataMasuk = [];
+            let dataKeluar = [];
+            
+            // Mengambil 6 bulan terakhir dari sekarang
+            for (let i = 5; i >= 0; i--) {
+                const d = new Date();
+                d.setMonth(d.getMonth() - i);
+                const monthStr = d.toLocaleDateString('id-ID', { month: 'short', year: '2-digit' });
+                labels.push(monthStr);
+                
+                let masuk = 0;
+                let keluar = 0;
+                globalKasList.forEach(x => {
+                    const txDate = new Date(x.timestamp);
+                    if (txDate.getMonth() === d.getMonth() && txDate.getFullYear() === d.getFullYear()) {
+                        if (x.jenis === 'masuk') masuk += Number(x.nominal);
+                        else keluar += Number(x.nominal);
+                    }
+                });
+                dataMasuk.push(masuk);
+                dataKeluar.push(keluar);
+            }
+
+            if (myChart) myChart.destroy();
+
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'Pemasukan', data: dataMasuk, backgroundColor: '#10B981', borderRadius: 4 },
+                        { label: 'Pengeluaran', data: dataKeluar, backgroundColor: '#EF4444', borderRadius: 4 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { font: { size: 10 }, callback: function(value) { return value >= 1000000 ? (value/1000000)+'jt' : (value/1000)+'rb'; } } },
+                        x: { ticks: { font: { size: 10 } } }
+                    }
+                }
+            });
+        };
+
         window.autofillKasKet = function() {
             const kat = document.getElementById('kasKategoriInput').value;
             const ketInput = document.getElementById('kasKetInput');
@@ -931,6 +1047,8 @@
                 const elSaldo = document.getElementById('kasTotalSaldo'); const elMasuk = document.getElementById('kasTotalMasuk'); const elKeluar = document.getElementById('kasTotalKeluar'); const elSaldoAwal = document.getElementById('kasSaldoAwal');
                 if (elSaldo) elSaldo.innerText = formatRupiah(saldoAkhir); if (elMasuk) elMasuk.innerText = formatRupiah(totalMasuk); if (elKeluar) elKeluar.innerText = formatRupiah(totalKeluar); if (elSaldoAwal) elSaldoAwal.innerText = formatRupiah(saldoAwal);
                 renderKasList();
+                renderChartKeuangan(); // Panggil fungsi render chart
+                
                 if(aCont) {
                     let hAdmin = '';
                     globalKasList.forEach(x => { 
@@ -1014,10 +1132,122 @@
         window.hapusUmkm = async function (id) { if (!confirm("Hapus dagangan ini?")) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'pasar', id)); showToast("Dihapus."); loadUmkmWarga(); } catch (e) { } };
 
         window.loadIuranUser = async function () { const cont = document.getElementById('iuranListContainer'); if (!cont || !auth.currentUser || !firebaseReady) return; cont.innerHTML = '<div class="text-center py-10"><i class="fa-solid fa-spinner fa-spin text-slate-400 text-2xl"></i></div>'; try { const s = await getDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid)); const dataIuran = (s.exists() && s.data().iuran) || {}; const dataNominal = (s.exists() && s.data().iuranNominal) || {}; let h = ''; DAFTAR_BULAN_IURAN.forEach(bln => { const status = dataIuran[bln]; const isLunas = ['L', 'LK', 'LA', 'LC', 'P', 'T'].includes(status); const nomBln = dataNominal[bln] || nominalIuranDefault; h += `<div class="p-3.5 border ${isLunas ? 'bg-emerald-50 border-emerald-300' : 'bg-white border-slate-200'} rounded-xl flex justify-between items-center shadow-sm"><div class="flex items-center gap-3 min-w-0"><div class="w-10 h-10 rounded-xl flex justify-center items-center shrink-0 ${isLunas ? 'bg-emerald-600 text-white' : 'bg-red-50 text-red-500'}"><i class="fa-solid ${isLunas ? 'fa-check' : 'fa-clock'} text-lg"></i></div><div class="min-w-0"><h4 class="font-bold text-sm ${isLunas ? 'text-emerald-900' : 'text-slate-800'}">${bln}</h4><p class="text-[11px] ${isLunas ? 'text-emerald-700 font-semibold' : 'text-slate-500'}">Iuran: ${formatRupiah(nomBln)}</p></div></div><span class="px-3 py-1.5 text-xs font-bold rounded-lg shrink-0 ${isLunas ? 'bg-emerald-600 text-white' : 'bg-red-100 text-red-600'}">${isLunas ? '✓ LUNAS' : 'BELUM'}</span></div>`; }); cont.innerHTML = h; } catch (e) { cont.innerHTML = '<p class="text-center text-red-500 text-xs">Gagal memuat kartu iuran.</p>'; } };
+        
+        // FITUR 2: PAYMENT GATEWAY (SIMULASI QRIS)
+        window.bayarIuranQRIS = function() {
+            showToast("Memuat QRIS...");
+            setTimeout(() => {
+                lihatGambarModal('Scan QRIS Pembayaran', 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png');
+                // Catatan: Di implementasi nyata, Anda akan memanggil API Midtrans/Xendit untuk generate QR dinamis
+                setTimeout(() => {
+                    showToast("Pembayaran Berhasil dideteksi! (Simulasi)");
+                    // Di sini logika untuk update otomatis database jika API webhook terhubung
+                }, 5000);
+            }, 800);
+        };
+
         window.simpanNominalDefault = async function () { const aNom = document.getElementById('adminNominalIuran'); if (!aNom) return; nominalIuranDefault = Number(aNom.value); try { await setDoc(doc(db, 'artifacts', appId, 'kas', 'config_iuran'), { nominalDefault: nominalIuranDefault, updatedAt: Date.now() }, { merge: true }); showToast(`Nominal aktif: ${formatRupiah(nominalIuranDefault)}`); } catch (e) { } };
         window.kirimPengingatIuran = async function () { const bln = document.getElementById('adminBulanIuran')?.value; const nom = document.getElementById('adminNominalIuran')?.value; if (!bln || !nom) return; try { await setDoc(doc(db, 'artifacts', appId, 'kas', 'config_iuran'), { nominalDefault: Number(nom), reminderBulan: bln, reminderNominal: Number(nom), reminderTimestamp: Date.now() }, { merge: true }); showToast(`🔔 Pengingat iuran ${bln} dikirim!`); } catch (e) { showToast("Gagal mengirim pengingat.", true); } };
         window.loadAdminIuran = async function () { initDropdownIuran(); const blnSelect = document.getElementById('adminBulanIuran'); if (!blnSelect) return; const selectedBln = blnSelect.value; const cont = document.getElementById('adminIuranWargaList'); if (!cont) return; cont.innerHTML = 'Loading...'; try { const s = await getDocs(collection(db, 'artifacts', appId, 'users')); let h = ''; s.forEach(d => { const u = d.data(); const statusSaatIni = (u.iuran && u.iuran[selectedBln]) || 'BL'; const nomTercatat = (u.iuranNominal && u.iuranNominal[selectedBln]) !== undefined ? Number(u.iuranNominal[selectedBln]) : 0; const safeNama = String(u.nama || 'Warga').replace(/'/g, "\\'"); const safeBlok = escapeHtml(u.blok || '-'); const safeNo = escapeHtml(u.no || '-'); let optNominal = ''; for (let i = 0; i <= 135000; i += 5000) optNominal += `<option value="${i}" ${nomTercatat === i ? 'selected' : ''}>${formatRupiah(i)}</option>`; h += `<div class="p-3 border border-slate-200 rounded-xl flex flex-col gap-2 mb-2 bg-white shadow-sm"><div class="flex justify-between items-start"><div class="min-w-0"><h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(u.nama || 'Warga')}</h4><p class="text-[11px] text-slate-500">Blok ${safeBlok}/${safeNo}</p></div><div class="text-right shrink-0"><p class="text-[11px] font-bold px-2 py-0.5 rounded ${statusSaatIni !== 'BL' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}">${escapeHtml(statusSaatIni)}</p><p class="text-[10px] text-slate-500 font-semibold mt-0.5">${formatRupiah(nomTercatat)}</p></div></div><div class="flex items-center justify-between border-t border-slate-100 pt-2 mt-1 gap-2"><select id="stat_${d.id}" onchange="simpanIuranWarga('${d.id}', '${selectedBln}', '${safeNama}', '${safeBlok}', '${safeNo}', true)" class="w-1/2 text-[11px] font-bold border border-slate-200 rounded-lg p-1.5 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 bg-slate-50"><option value="BL" ${statusSaatIni === 'BL' ? 'selected' : ''}>BL - Belum</option><option value="L" ${statusSaatIni === 'L' ? 'selected' : ''}>L - Huni</option><option value="LK" ${statusSaatIni === 'LK' ? 'selected' : ''}>LK - Kosong</option><option value="LA" ${statusSaatIni === 'LA' ? 'selected' : ''}>LA - Non-Air</option><option value="LC" ${statusSaatIni === 'LC' ? 'selected' : ''}>LC - CCTV</option><option value="P" ${statusSaatIni === 'P' ? 'selected' : ''}>P - Pengurus</option><option value="A" ${statusSaatIni === 'A' ? 'selected' : ''}>A - Abai</option><option value="T" ${statusSaatIni === 'T' ? 'selected' : ''}>T - Tdk Mampu</option></select><select id="nom_${d.id}" onchange="simpanIuranWarga('${d.id}', '${selectedBln}', '${safeNama}', '${safeBlok}', '${safeNo}', false)" class="w-1/2 text-[11px] font-bold border border-slate-200 rounded-lg p-1.5 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 bg-slate-50">${optNominal}</select></div></div>`; }); cont.innerHTML = h || '<p class="text-xs text-slate-500 text-center">Data warga kosong.</p>'; } catch (e) { cont.innerHTML = 'Gagal memuat.'; } };
         window.simpanIuranWarga = async function (uid, bulan, nama, blok, no, isStatusChange) { const statEl = document.getElementById('stat_' + uid); const nomEl = document.getElementById('nom_' + uid); if (!statEl || !nomEl) return; let statusCode = statEl.value; let nomValue = Number(nomEl.value); if (isStatusChange) { const DAFTAR_NOMINAL = { 'L': 100000, 'LK': 50000, 'LA': 70000, 'LC': 80000, 'P': 0, 'A': 0, 'BL': 0, 'T': 0 }; if (DAFTAR_NOMINAL[statusCode] !== undefined) { nomValue = DAFTAR_NOMINAL[statusCode]; nomEl.value = nomValue; } } try { await updateDoc(doc(db, 'artifacts', appId, 'users', uid), { [`iuran.${bulan}`]: statusCode, [`iuranNominal.${bulan}`]: nomValue }); const payloadIuran = { action: "update_iuran", nama, blok, no_rumah: no, bulan, nominal: nomValue, status: statusCode, waktu: new Date().toLocaleString('id-ID') }; if (GOOGLE_SCRIPT_URL) fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payloadIuran) }).catch(() => { }); showToast(`Tersimpan: ${statusCode} (${formatRupiah(nomValue)})`); loadAdminIuran(); } catch (e) { showToast("Gagal update iuran.", true); } };
+
+        /* FITUR 3: BUKU TAMU DIGITAL */
+        window.simpanBukuTamu = async function() {
+            const nm = document.getElementById('tamuNama')?.value.trim();
+            const tj = document.getElementById('tamuTujuan')?.value.trim();
+            const kp = document.getElementById('tamuKeperluan')?.value.trim();
+            if (!nm || !tj) return showToast("Nama dan Tujuan wajib diisi!", true);
+            try {
+                await addDoc(collection(db, 'artifacts', appId, 'tamu'), {
+                    nama: nm, tujuan: tj, keperluan: kp, 
+                    waktuMasuk: Date.now(), 
+                    oleh: (window.currentUserData && window.currentUserData.nama) || 'Satpam'
+                });
+                document.getElementById('tamuNama').value = '';
+                document.getElementById('tamuTujuan').value = '';
+                document.getElementById('tamuKeperluan').value = '';
+                showToast("✅ Data Tamu dicatat!");
+                loadBukuTamu();
+                
+                // Fitur 1: WA Notif ke warga yang dituju (Jika nomor HP diketahui)
+                // Contoh: kirimWhatsApp(nomorHpWarga, `Halo, ada tamu atas nama ${nm} di posko RT.`);
+            } catch(e) { showToast("Gagal mencatat tamu.", true); }
+        };
+
+        window.loadBukuTamu = async function() {
+            const cont = document.getElementById('adminTamuList'); if (!cont) return;
+            cont.innerHTML = '<div class="text-center py-4"><i class="fa-solid fa-spinner fa-spin text-slate-400"></i></div>';
+            try {
+                const today = new Date(); today.setHours(0,0,0,0);
+                const s = await getDocs(query(collection(db, 'artifacts', appId, 'tamu'), orderBy('waktuMasuk', 'desc')));
+                let h = '';
+                s.forEach(d => {
+                    const t = d.data();
+                    if (t.waktuMasuk >= today.getTime()) {
+                        const jam = new Date(t.waktuMasuk).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
+                        h += `<div class="p-3 bg-white border border-slate-200 rounded-xl flex justify-between items-center mb-2 shadow-sm">
+                                <div>
+                                    <h4 class="font-bold text-sm text-slate-800">${escapeHtml(t.nama)}</h4>
+                                    <p class="text-[11px] text-slate-600">Tujuan: ${escapeHtml(t.tujuan)} • ${jam}</p>
+                                    <p class="text-[10px] text-slate-500 italic">"${escapeHtml(t.keperluan || '-')}"</p>
+                                </div>
+                                <button onclick="hapusTamu('${d.id}')" class="w-7 h-7 bg-red-50 text-red-500 rounded-lg"><i class="fa-solid fa-trash text-xs"></i></button>
+                              </div>`;
+                    }
+                });
+                cont.innerHTML = h || '<p class="text-xs text-slate-500 text-center">Belum ada tamu hari ini.</p>';
+            } catch(e) { cont.innerHTML = '<p class="text-xs text-red-500 text-center">Gagal memuat tamu.</p>'; }
+        };
+
+        window.hapusTamu = async function(id) {
+            if(!confirm("Hapus data tamu ini?")) return;
+            try { await deleteDoc(doc(db, 'artifacts', appId, 'tamu', id)); loadBukuTamu(); showToast("Tamu dihapus."); } catch(e) {}
+        };
+
+        /* FITUR 6: EXPORT DATA WARGA KE PDF */
+        window.exportWargaPDF = async function() {
+            if (!firebaseReady) return showToast("Aplikasi belum siap.", true);
+            showToast("Menyiapkan PDF...");
+            try {
+                const s = await getDocs(collection(db, 'artifacts', appId, 'users'));
+                if (s.empty) return showToast("Tidak ada data warga.", true);
+
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                doc.setFontSize(16);
+                doc.text("Data Warga RT.010 / RW.002 Mabu Park", 14, 20);
+                doc.setFontSize(10);
+                doc.text(`Dicetak pada: ${new Date().toLocaleString('id-ID')}`, 14, 26);
+
+                let bodyData = [];
+                s.forEach((d, index) => {
+                    const u = d.data();
+                    bodyData.push([
+                        index + 1,
+                        u.nama || '-',
+                        u.blok || '-',
+                        u.no || '-',
+                        u.hp || '-',
+                        u.role || 'Warga'
+                    ]);
+                });
+
+                doc.autoTable({
+                    startY: 35,
+                    head: [['No', 'Nama Lengkap', 'Blok', 'No', 'No HP', 'Jabatan']],
+                    body: bodyData,
+                    styles: { fontSize: 9 },
+                    headStyles: { fillColor: [5, 150, 105] } // Warna hijau emerald
+                });
+
+                doc.save(`Data_Warga_RT010_${new Date().getTime()}.pdf`);
+                showToast("✅ PDF berhasil diunduh!");
+            } catch(e) {
+                console.error(e);
+                showToast("Gagal membuat PDF.", true);
+            }
+        };
 
         /* STATISTIK DEMOGRAFI */
         window.loadStatistik = async function() {
@@ -1034,7 +1264,6 @@
                     const jiwa = parseInt(u.jumlah_jiwa) || 1;
                     totalJiwa += jiwa;
 
-                    // Logika Pendataan Gender
                     if (u.jenis_kelamin === 'Laki-laki') totalLaki++;
                     else if (u.jenis_kelamin === 'Perempuan') totalPerempuan++;
                     else {
@@ -1081,6 +1310,17 @@
             const btnAd = document.getElementById('navAdminBtn'); const isRT = window.currentUserData && ['Admin RT', 'Pengurus RT', 'Bendahara', 'Sekretaris'].includes(window.currentUserData.role); if (btnAd) { if (isRT) { btnAd.classList.remove('hidden'); btnAd.classList.add('flex'); } else { btnAd.classList.add('hidden'); btnAd.classList.remove('flex'); } }
             const nm = (window.currentUserData && window.currentUserData.nama) || 'Warga'; const wN = document.getElementById('welcomeName'); if (wN) wN.innerText = nm.split(' ')[0] + '!'; const pN = document.getElementById('profNama'); if (pN) pN.innerText = nm; const pR = document.getElementById('profRole'); if (pR) pR.innerText = (window.currentUserData && window.currentUserData.role) || 'Warga'; const pE = document.getElementById('profEmail'); if (pE) pE.innerText = (window.currentUserData && window.currentUserData.email) || '-'; const pH = document.getElementById('profHp'); if (pH) pH.innerText = (window.currentUserData && window.currentUserData.hp) || '-'; const pB = document.getElementById('profBlok'); if (pB) pB.innerText = (window.currentUserData && window.currentUserData.blok) || '-'; const pNo = document.getElementById('profNo'); if (pNo) pNo.innerText = (window.currentUserData && window.currentUserData.no) || '-';
             const eN = document.getElementById('editNama'); if (eN) eN.value = (window.currentUserData && window.currentUserData.nama) || ''; const eG = document.getElementById('editGender'); if (eG) eG.value = (window.currentUserData && window.currentUserData.jenis_kelamin) || 'Laki-laki'; const eH = document.getElementById('editHp'); if (eH) eH.value = (window.currentUserData && window.currentUserData.hp) || ''; const eB = document.getElementById('editBlok'); if (eB) eB.value = (window.currentUserData && window.currentUserData.blok) || ''; const eNo = document.getElementById('editNo'); if (eNo) eNo.value = (window.currentUserData && window.currentUserData.no) || '';
+            
+            // TAMPILKAN FOTO PROFIL DI HEADER KANAN ATAS
+            const hPic = (window.currentUserData && window.currentUserData.photoBase64) || null;
+            const hImg = document.getElementById('headerProfileImg');
+            const hIco = document.getElementById('headerProfileIcon');
+            if (hPic && hImg && hIco) {
+                hImg.src = hPic; hImg.classList.remove('hidden'); hIco.classList.add('hidden');
+            } else if (hImg && hIco) {
+                hImg.classList.add('hidden'); hIco.classList.remove('hidden');
+                hIco.innerText = nm.charAt(0).toUpperCase();
+            }
         }
         function prefillFormData() {
             try {
@@ -1175,12 +1415,12 @@
         };
 
         window.switchAdminTab = function (t) {
-            ['Warga', 'Laporan', 'Iuran', 'Kas', 'Polling', 'Sos', 'Inventaris', 'Pengumuman'].forEach(x => {
+            ['Warga', 'Laporan', 'Iuran', 'Kas', 'Tamu', 'Polling', 'Sos', 'Pengumuman'].forEach(x => {
                 const v = document.getElementById('admView' + x); const b = document.getElementById('tabAdm' + x);
                 if (x.toLowerCase() === t) { if (v) { v.classList.remove('hidden'); v.classList.add('block'); } if (b) b.className = "py-2 text-[10px] sm:text-xs font-bold bg-emerald-100 text-emerald-700 rounded-xl shadow-sm transition-all"; }
                 else { if (v) { v.classList.add('hidden'); v.classList.remove('block'); } if (b) b.className = "py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all"; }
             });
-            if (t === 'warga') loadAdminWargaList(); else if (t === 'laporan') loadAdminLaporan(); else if (t === 'pengumuman') loadAdminPengumuman(); else if (t === 'inventaris') loadAdminInventaris(); else if (t === 'polling') loadAdminPolling(); else if (t === 'kas') loadBukuKas(); else if (t === 'iuran') loadAdminIuran();
+            if (t === 'warga') loadAdminWargaList(); else if (t === 'laporan') loadAdminLaporan(); else if (t === 'pengumuman') loadAdminPengumuman(); else if (t === 'polling') loadAdminPolling(); else if (t === 'kas') loadBukuKas(); else if (t === 'iuran') loadAdminIuran(); else if (t === 'tamu') loadBukuTamu();
         };
         window.toggleAdminAddWarga = function (show) { const f = document.getElementById('adminAddWargaForm'); const b = document.getElementById('btnToggleAddWarga'); if (!f || !b) return; if (show) { f.classList.remove('hidden'); b.classList.add('hidden'); } else { f.classList.add('hidden'); b.classList.remove('hidden'); f.reset(); const p = document.getElementById('admNewPass'); if (p) p.value = 'warga010'; } };
         window.simpanWargaBaruAdmin = async function (e) {
@@ -1250,12 +1490,14 @@
         window.hidePwaBanner = () => { document.getElementById('pwaBanner')?.classList.add('hidden'); localStorage.setItem('pwaDismissed', 'true'); };
         window.installPwa = async () => { hidePwaBanner(); if (dPrompt) { dPrompt.prompt(); await dPrompt.userChoice; dPrompt = null; } };
         window.refreshAppUpdate = function () { const banner = document.getElementById('updateBanner'); if (banner) banner.classList.add('hidden'); if (pendingUpdateWorker) { pendingUpdateWorker.postMessage({ action: 'skipWaiting' }); setTimeout(() => window.location.reload(), 600); } else { window.location.reload(); } };
+        
+        // FITUR 5: SERVICE WORKER UNTUK OFFLINE MODE (PWA)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 if (swRegistered) return; swRegistered = true;
                 navigator.serviceWorker.register('sw.js').then(reg => {
                     reg.addEventListener('updatefound', () => { const newWorker = reg.installing; if (!newWorker) return; newWorker.addEventListener('statechange', () => { if (newWorker.state === 'installed' && navigator.serviceWorker.controller) { pendingUpdateWorker = newWorker; const banner = document.getElementById('updateBanner'); if (banner) banner.classList.remove('hidden'); } }); });
-                }).catch(err => console.warn("[SW register]", err));
+                }).catch(err => console.warn("[SW register] Pastikan file sw.js ada.", err));
             });
         }
     </script>
