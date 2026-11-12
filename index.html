@@ -169,10 +169,10 @@
         <div class="flex-1 relative flex items-center justify-center overflow-hidden bg-black p-0">
             <video id="liveCameraVideo" autoplay playsinline muted class="w-full h-full object-cover"></video>
             
-            <!-- Bingkai KTP (Hanya muncul jika mode KTP) -->
+            <!-- Bingkai KTP (Hanya muncul jika mode KTP/KK) -->
             <div id="ktpOverlay" class="hidden absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div class="w-[85%] aspect-[1.58] border-2 border-dashed border-emerald-400 rounded-xl relative bg-black/20 shadow-[0_0_0_9999px_rgba(0,0,0,0.6)]">
-                    <span class="absolute -top-8 left-0 right-0 text-center text-xs text-emerald-300 font-bold bg-slate-900/80 px-2 py-1.5 rounded-lg mx-auto w-max">Posisikan KTP di dalam kotak</span>
+                    <span class="absolute -top-8 left-0 right-0 text-center text-xs text-emerald-300 font-bold bg-slate-900/80 px-2 py-1.5 rounded-lg mx-auto w-max">Posisikan di dalam kotak</span>
                     <div class="absolute inset-0 flex items-center justify-center opacity-30"><i class="fa-solid fa-id-card text-6xl text-white"></i></div>
                 </div>
             </div>
@@ -210,7 +210,7 @@
         <div class="bg-white w-full max-w-sm rounded-t-3xl sm:rounded-3xl p-4 shadow-2xl animate-fade-slide-up" onclick="event.stopPropagation()">
             <h3 class="font-bold text-center text-slate-800 mb-4 text-sm">Opsi Pesan</h3>
             <div class="flex flex-col gap-2">
-                <button onclick="prosesEditPesan()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-3 rounded-xl flex items-center justify-center gap-2"><i class="fa-solid fa-pen-to-square text-emerald-600"></i> Edit Pesan</button>
+                <button id="btnEditPesan" onclick="prosesEditPesan()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-3 rounded-xl flex items-center justify-center gap-2"><i class="fa-solid fa-pen-to-square text-emerald-600"></i> Edit Pesan</button>
                 <button onclick="prosesHapusPesan()" class="w-full bg-red-50 hover:bg-red-100 text-red-600 font-bold py-3 rounded-xl flex items-center justify-center gap-2"><i class="fa-solid fa-trash text-red-500"></i> Hapus Pesan</button>
                 <button onclick="document.getElementById('chatActionModal').classList.add('hidden')" class="w-full mt-2 text-slate-500 font-semibold py-2 text-xs">Batal</button>
             </div>
@@ -247,6 +247,51 @@
                     <input type="number" id="formKasNominal" required placeholder="Contoh: 150000" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500">
                 </div>
                 <button type="submit" class="w-full bg-red-600 text-white font-bold py-3 rounded-xl shadow-md mt-2">Simpan Pengeluaran</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DETAIL WARGA (KETUA RT ONLY) -->
+    <div id="detailWargaModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up max-h-[90vh] overflow-y-auto">
+            <button onclick="document.getElementById('detailWargaModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-lg font-bold text-slate-800 mb-4">Detail Data Warga</h3>
+            <div id="detailWargaContent" class="space-y-3"></div>
+        </div>
+    </div>
+
+    <!-- MODAL EDIT WARGA -->
+    <div id="editWargaModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up">
+            <button onclick="document.getElementById('editWargaModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-lg font-bold text-slate-800 mb-4">Edit Data Warga</h3>
+            <form id="editWargaForm" onsubmit="simpanEditWarga(event)" class="space-y-3">
+                <input type="hidden" id="editWargaUid">
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap</label><input type="text" id="editWargaNama" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div class="flex gap-2">
+                    <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Blok</label><input type="text" id="editWargaBlok" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500 uppercase"></div>
+                    <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">No</label><input type="number" id="editWargaNo" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                </div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">No. HP</label><input type="tel" id="editWargaHp" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl shadow-md mt-2">Simpan Perubahan</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL EDIT PEKERJA -->
+    <div id="editPekerjaModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up max-h-[90vh] overflow-y-auto">
+            <button onclick="document.getElementById('editPekerjaModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-lg font-bold text-slate-800 mb-4">Edit Data Pekerja</h3>
+            <form id="editPekerjaForm" onsubmit="simpanEditPekerja(event)" class="space-y-3">
+                <input type="hidden" id="editPkjId">
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap</label><input type="text" id="editPkjNama" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">No. HP</label><input type="tel" id="editPkjHp" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Status Pekerjaan</label><input type="text" id="editPkjStatus" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Tgl Masuk</label><input type="date" id="editPkjTgl" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Gaji (Rp)</label><input type="number" id="editPkjGaji" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Alamat</label><input type="text" id="editPkjAlamat" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl shadow-md mt-2">Simpan Perubahan</button>
             </form>
         </div>
     </div>
@@ -436,6 +481,7 @@
                 <div class="flex justify-between items-center mb-2.5 shrink-0 w-full max-w-5xl gap-2">
                     <div class="flex bg-slate-200 p-1 rounded-xl flex-1"><button id="subTabGrup" onclick="pilihModeChat('grup')" class="flex-1 py-1.5 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600"><i class="fa-solid fa-users mr-1"></i> Grup</button><button id="subTabJapri" onclick="pilihModeChat('japri')" class="flex-1 py-1.5 text-xs font-semibold text-slate-500 rounded-lg"><i class="fa-solid fa-user-group mr-1"></i> Japri</button></div>
                     <button onclick="toggleChatSearch()" class="w-10 h-10 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-500 shadow-sm shrink-0"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <button onclick="toggleMuteChat()" class="w-10 h-10 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-500 shadow-sm shrink-0" title="Bisukan Notifikasi Obrolan"><i id="chatMuteIcon" class="fa-solid fa-bell"></i></button>
                     <button onclick="hapusRiwayatChat()" class="w-10 h-10 bg-red-50 border border-red-200 rounded-xl flex items-center justify-center text-red-500 shadow-sm shrink-0" title="Hapus Riwayat"><i class="fa-solid fa-trash-can"></i></button>
                 </div>
                 <div id="chatSearchContainer" class="hidden w-full max-w-5xl mb-2 shrink-0"><div class="relative w-full"><i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-sm"></i><input type="text" id="chatSearchInput" oninput="searchChat(this.value)" placeholder="Cari pesan..." class="w-full pl-9 pr-8 py-2 rounded-xl border border-slate-300 text-sm outline-none focus:border-emerald-500"><button onclick="toggleChatSearch()" class="absolute right-2 top-2 w-6 h-6 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-xmark text-xs"></i></button></div></div>
@@ -649,22 +695,19 @@
                 </form>
             </div>
 
-            <!-- 7. PROFIL VIEW (FULL PAGE) - DATA WARGA -->
+            <!-- 7. PROFIL VIEW (FULL PAGE) -->
             <div id="profilView" class="hidden flex-col h-full bg-slate-50 w-full max-w-3xl mx-auto overflow-y-auto">
-                <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0">
-                    <button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button>
-                    <h2 class="font-bold text-lg text-slate-800">Data Warga</h2>
-                </div>
-                <div class="p-4 md:p-6 space-y-4 flex-1">
+                <!-- HEADER DIHAPUS SESUAI REQUEST #8 -->
+                <div class="p-4 md:p-6 flex-1">
                     
-                    <!-- KTP DIGITAL DESIGN (ELEGAN) -->
-                    <div class="ktp-card-bg rounded-2xl p-6 shadow-xl border border-slate-200 flex flex-col items-center relative overflow-hidden">
+                    <!-- KTP DIGITAL DESIGN -->
+                    <div class="ktp-card-bg rounded-2xl p-6 shadow-xl border border-slate-200 flex flex-col md:flex-row items-center md:items-start gap-6 relative overflow-hidden">
                         
                         <!-- Ornamen Background -->
                         <div class="ktp-ornament"></div>
 
-                        <!-- Foto (Bisa diklik) -->
-                        <div class="relative w-32 h-32 mb-3 group cursor-pointer z-10" onclick="document.getElementById('editPhotoInput').click()">
+                        <!-- Foto (Kiri pada mode PC/Tablet) -->
+                        <div class="relative w-32 h-32 shrink-0 group cursor-pointer z-10 md:mr-4 md:mb-0 mb-2" onclick="document.getElementById('editPhotoInput').click()">
                             <div class="w-32 h-32 bg-slate-100 rounded-full overflow-hidden border-4 border-emerald-500 shadow-md">
                                 <img id="profPhotoDisplay" src="" class="w-full h-full object-cover hidden">
                                 <i id="profIconDisplay" class="fa-solid fa-user text-5xl text-slate-300 w-full h-full flex items-center justify-center"></i>
@@ -675,54 +718,58 @@
                             <input type="file" id="editPhotoInput" accept="image/*" class="hidden" onchange="handleProfilePhoto(event)">
                         </div>
 
-                        <h3 class="font-bold text-lg text-slate-800 text-center tracking-wide mb-4 w-full relative z-10" id="profNama">Nama Warga</h3>
-                        
-                        <!-- Biodata (Rapat & Seragam) -->
+                        <!-- Biodata (Kanan) -->
                         <div class="w-full space-y-0.5 text-[11px] text-slate-700 relative z-10">
-                            <div class="flex py-1 border-b border-slate-100/50">
+                            <h3 class="font-bold text-lg text-slate-800 mb-2" id="profNama">Nama Warga</h3>
+                            <div class="flex py-0.5 border-b border-slate-100/50">
                                 <span class="w-28 font-medium text-slate-500">NIK</span> <span class="mr-2 text-slate-400">:</span> <span id="profNik" class="font-mono">-</span>
                             </div>
-                            <div class="flex py-1 border-b border-slate-100/50">
+                            <div class="flex py-0.5 border-b border-slate-100/50">
                                 <span class="w-28 font-medium text-slate-500">Tempat/Tgl Lahir</span> <span class="mr-2 text-slate-400">:</span> <span id="profTtl">-</span>
                             </div>
-                            <div class="flex py-1 border-b border-slate-100/50">
+                            <div class="flex py-0.5 border-b border-slate-100/50">
                                 <span class="w-28 font-medium text-slate-500">Jenis Kelamin</span> <span class="mr-2 text-slate-400">:</span> <span id="profJk">-</span>
                             </div>
-                            <div class="flex py-1 border-b border-slate-100/50">
+                            <div class="flex py-0.5 border-b border-slate-100/50">
                                 <span class="w-28 font-medium text-slate-500">Alamat</span> <span class="mr-2 text-slate-400">:</span> <span id="profAlamat">-</span>
                             </div>
-                            <div class="flex py-1 border-b border-slate-100/50">
+                            <div class="flex py-0.5 border-b border-slate-100/50">
                                 <span class="w-28 font-medium text-slate-500">RT/RW</span> <span class="mr-2 text-slate-400">:</span> <span>010 / 002</span>
                             </div>
-                            <div class="flex py-1 border-b border-slate-100/50">
+                            <div class="flex py-0.5 border-b border-slate-100/50">
                                 <span class="w-28 font-medium text-slate-500">Kel/Desa</span> <span class="mr-2 text-slate-400">:</span> <span>Aweh</span>
                             </div>
-                            <div class="flex py-1 border-b border-slate-100/50">
+                            <div class="flex py-0.5 border-b border-slate-100/50">
                                 <span class="w-28 font-medium text-slate-500">Kecamatan</span> <span class="mr-2 text-slate-400">:</span> <span>Kalanganyar</span>
                             </div>
-                            <div class="flex py-1 border-b border-slate-100/50">
+                            <div class="flex py-0.5 border-b border-slate-100/50">
                                 <span class="w-28 font-medium text-slate-500">Agama</span> <span class="mr-2 text-slate-400">:</span> <span id="profAgama">-</span>
                             </div>
-                            <div class="flex py-1 border-b border-slate-100/50">
+                            <div class="flex py-0.5 border-b border-slate-100/50">
                                 <span class="w-28 font-medium text-slate-500">Status Perkawinan</span> <span class="mr-2 text-slate-400">:</span> <span id="profStatusKeluarga">-</span>
                             </div>
-                            <div class="flex py-1 border-b border-slate-100/50">
+                            <div class="flex py-0.5 border-b border-slate-100/50">
                                 <span class="w-28 font-medium text-slate-500">Pekerjaan</span> <span class="mr-2 text-slate-400">:</span> <span id="profPekerjaan">-</span>
                             </div>
-                            <div class="flex py-1 border-b border-slate-100/50">
+                            <div class="flex py-0.5 border-b border-slate-100/50">
                                 <span class="w-28 font-medium text-slate-500">Kewarganegaraan</span> <span class="mr-2 text-slate-400">:</span> <span>WNI</span>
                             </div>
-                            <div class="flex py-1">
+                            <div class="flex py-0.5">
                                 <span class="w-28 font-medium text-slate-500">Berlaku Hingga</span> <span class="mr-2 text-slate-400">:</span> <span>SEUMUR HIDUP</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 flex items-center justify-between gap-3 mt-4">
+                    <!-- Fingerprint (Hanya muncul di HP) -->
+                    <div class="block md:hidden bg-white p-3.5 rounded-xl border border-slate-200 flex items-center justify-between gap-3 mt-4">
                         <div class="flex items-center gap-3"><div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-lg flex justify-center items-center shadow-sm shrink-0"><i class="fa-solid fa-fingerprint text-xl"></i></div><div><p class="text-xs font-bold text-slate-800">Login Fingerprint</p><p id="fpStatusText" class="text-[11px] text-slate-500">Belum diaktifkan</p></div></div>
                         <button id="btnToggleFp" onclick="daftarkanFingerprint()" class="px-3 py-1.5 bg-emerald-600 text-white text-xs font-bold rounded-lg shrink-0 hover:bg-emerald-700">Aktifkan</button>
                     </div>
-                    <button onclick="handleLogout()" class="w-full bg-red-50 hover:bg-red-100 text-red-600 font-bold py-3.5 rounded-xl border border-red-200 flex justify-center items-center gap-2 transition mt-4"><i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar Akun</button>
+
+                    <!-- Tombol Edit Data -->
+                    <button onclick="switchTab('data')" class="w-full bg-white hover:bg-emerald-50 text-emerald-700 font-bold py-3.5 rounded-xl border border-emerald-200 flex justify-center items-center gap-2 transition mt-4 mb-2"><i class="fa-solid fa-user-pen"></i> Edit Data Saya</button>
+                    
+                    <button onclick="handleLogout()" class="w-full bg-red-50 hover:bg-red-100 text-red-600 font-bold py-3.5 rounded-xl border border-red-200 flex justify-center items-center gap-2 transition"><i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar Akun</button>
                 </div>
             </div>
 
@@ -802,6 +849,34 @@
                                 <h2 class="font-bold text-lg flex items-center gap-2">Laporan Keuangan</h2>
                                 <button onclick="switchTab('beranda')" class="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full text-white flex items-center justify-center"><i class="fa-solid fa-arrow-left"></i></button>
                             </div>
+                            
+                            <!-- FILTER BULAN & TAHUN -->
+                            <div class="flex gap-2 mb-4">
+                                <select id="kasFilterBulan" onchange="loadBukuKas()" class="flex-1 bg-emerald-700 border border-emerald-500 text-white text-xs font-bold rounded-lg px-2 py-1.5 outline-none">
+                                    <option value="all">Semua Bulan</option>
+                                    <option value="0">Januari</option>
+                                    <option value="1">Februari</option>
+                                    <option value="2">Maret</option>
+                                    <option value="3">April</option>
+                                    <option value="4">Mei</option>
+                                    <option value="5">Juni</option>
+                                    <option value="6">Juli</option>
+                                    <option value="7">Agustus</option>
+                                    <option value="8">September</option>
+                                    <option value="9">Oktober</option>
+                                    <option value="10">November</option>
+                                    <option value="11">Desember</option>
+                                </select>
+                                <select id="kasFilterTahun" onchange="loadBukuKas()" class="flex-1 bg-emerald-700 border border-emerald-500 text-white text-xs font-bold rounded-lg px-2 py-1.5 outline-none">
+                                    <option value="all">Semua Tahun</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                </select>
+                            </div>
+
                             <div class="space-y-1.5 mb-4">
                                 <div class="flex justify-between items-center"><span class="text-xs opacity-90">Saldo Awal</span><span class="font-bold text-sm" id="kasSaldoAwal">Rp 0</span></div>
                                 <div class="flex justify-between items-center"><span class="text-xs opacity-90">Saldo Akhir</span><span class="font-extrabold text-xl tracking-tight" id="kasTotalSaldo">Rp 0</span></div>
@@ -928,7 +1003,7 @@
                         <button id="tabAdmWarga" onclick="switchAdminTab('warga')" class="py-2 text-[10px] sm:text-xs font-bold bg-emerald-100 text-emerald-700 rounded-xl shadow-sm transition-all">Warga</button>
                         <button id="tabAdmLaporan" onclick="switchAdminTab('laporan')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Laporan</button>
                         <button id="tabAdmPekerja" onclick="switchAdminTab('pekerja')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Pekerja</button>
-                        <button id="tabAdmIuran" onclick="switchAdminTab('iuran')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Iuran</button>
+                        <button id="tabAdmIuran" onclick="switchAdminTab('iuran')" class="hidden py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Iuran</button>
                         <button id="tabAdmKas" onclick="switchAdminTab('kas')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Kas</button>
                         <button id="tabAdmTamu" onclick="switchAdminTab('tamu')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Buku Tamu</button>
                         <button id="tabAdmBooking" onclick="switchAdminTab('booking')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Booking</button>
@@ -1073,60 +1148,6 @@
         </nav>
     </div>
 
-    <!-- MODAL EDIT WARGA (YANG SEMPAT HILANG) -->
-    <div id="editWargaModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-sm rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up">
-            <button onclick="document.getElementById('editWargaModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-lg font-bold text-slate-800 mb-4">Edit Data Warga</h3>
-            <form id="editWargaForm" onsubmit="simpanEditWarga(event)" class="space-y-3">
-                <input type="hidden" id="editWargaUid">
-                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap</label><input type="text" id="editWargaNama" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
-                <div class="flex gap-2">
-                    <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Blok</label><input type="text" id="editWargaBlok" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500 uppercase"></div>
-                    <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">No</label><input type="number" id="editWargaNo" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
-                </div>
-                <div><label class="block text-xs font-semibold text-slate-600 mb-1">No. HP</label><input type="tel" id="editWargaHp" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
-                <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl shadow-md mt-2">Simpan Perubahan</button>
-            </form>
-        </div>
-    </div>
-
-        <!-- MODAL EDIT WARGA (YANG HILANG) -->
-    <div id="editWargaModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-sm rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up">
-            <button onclick="document.getElementById('editWargaModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-lg font-bold text-slate-800 mb-4">Edit Data Warga</h3>
-            <form id="editWargaForm" onsubmit="simpanEditWarga(event)" class="space-y-3">
-                <input type="hidden" id="editWargaUid">
-                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap</label><input type="text" id="editWargaNama" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
-                <div class="flex gap-2">
-                    <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Blok</label><input type="text" id="editWargaBlok" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500 uppercase"></div>
-                    <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">No</label><input type="number" id="editWargaNo" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
-                </div>
-                <div><label class="block text-xs font-semibold text-slate-600 mb-1">No. HP</label><input type="tel" id="editWargaHp" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
-                <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl shadow-md mt-2">Simpan Perubahan</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL EDIT PEKERJA (YANG HILANG) -->
-    <div id="editPekerjaModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-sm rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up max-h-[90vh] overflow-y-auto">
-            <button onclick="document.getElementById('editPekerjaModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-lg font-bold text-slate-800 mb-4">Edit Data Pekerja</h3>
-            <form id="editPekerjaForm" onsubmit="simpanEditPekerja(event)" class="space-y-3">
-                <input type="hidden" id="editPkjId">
-                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap</label><input type="text" id="editPkjNama" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
-                <div><label class="block text-xs font-semibold text-slate-600 mb-1">No. HP</label><input type="tel" id="editPkjHp" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
-                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Status Pekerjaan</label><input type="text" id="editPkjStatus" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
-                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Tgl Masuk</label><input type="date" id="editPkjTgl" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
-                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Gaji (Rp)</label><input type="number" id="editPkjGaji" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
-                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Alamat</label><input type="text" id="editPkjAlamat" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
-                <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl shadow-md mt-2">Simpan Perubahan</button>
-            </form>
-        </div>
-    </div>
-
     <!-- FIREBASE & APP LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -1149,11 +1170,13 @@
         let myChart = null;
         
         let isMutedNotif = localStorage.getItem('rt10_muted_notif') === 'true';
+        let isChatMuted = localStorage.getItem('rt10_chat_muted') === 'true';
         let deferredPrompt = null; 
 
         // Chat Action State
         let activeChatActionId = null;
         let activeChatActionText = null;
+        let activeChatIsMe = false;
 
         let app, auth, db, secondaryApp, secondaryAuth;
         let firebaseReady = false;
@@ -1266,10 +1289,10 @@
             const defaultCamHint = document.getElementById('defaultCamHint');
             const camTitle = document.getElementById('camTitle');
 
-            if (mode === 'KTP') {
+            if (mode === 'KTP' || mode === 'KK') {
                 if(ktpOverlay) ktpOverlay.classList.remove('hidden');
                 if(defaultCamHint) defaultCamHint.classList.add('hidden');
-                if(camTitle) camTitle.innerText = 'SCAN KTP ASLI';
+                if(camTitle) camTitle.innerText = mode === 'KTP' ? 'SCAN KTP ASLI' : 'SCAN KK ASLI';
             } else {
                 if(ktpOverlay) ktpOverlay.classList.add('hidden');
                 if(defaultCamHint) defaultCamHint.classList.remove('hidden');
@@ -1296,18 +1319,35 @@
             const canvas = document.createElement('canvas'); let w = video.videoWidth || 600; let h = video.videoHeight || 600;
             const maxDim = 600;
             if (w > h && w > maxDim) { h *= maxDim / w; w = maxDim; } else if (h > maxDim) { w *= maxDim / h; h = maxDim; }
-            canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(video, 0, 0, w, h); const b64 = canvas.toDataURL('image/jpeg', 0.5);
             
-            // Simulasi Deteksi KTP
+            let b64;
+            // AUTO CROP UNTUK KTP / KK
+            if (camTargetConfig && (camTargetConfig.mode === 'KTP' || camTargetConfig.mode === 'KK')) {
+                const targetRatio = 1.58;
+                let cropW = w * 0.85; // Crop 85% lebar
+                let cropH = cropW / targetRatio;
+                if (cropH > h) {
+                    cropH = h * 0.85;
+                    cropW = cropH * targetRatio;
+                }
+                const cropX = (w - cropW) / 2;
+                const cropY = (h - cropH) / 2;
+                
+                canvas.width = cropW;
+                canvas.height = cropH;
+                canvas.getContext('2d').drawImage(video, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
+                b64 = canvas.toDataURL('image/jpeg', 0.6);
+            } else {
+                canvas.width = w; canvas.height = h;
+                canvas.getContext('2d').drawImage(video, 0, 0, w, h);
+                b64 = canvas.toDataURL('image/jpeg', 0.5);
+            }
+            
+            // Simulasi Deteksi
             if (camTargetConfig && camTargetConfig.mode === 'KTP') {
                 showToast("Memindai KTP...");
-                await new Promise(r => setTimeout(r, 1200)); // Delay simulasi AI
-                if(confirm("Apakah ini foto KTP asli milik Anda? Pastikan NIK terlihat jelas.")) {
-                    // Lanjut
-                } else {
-                    tutupKameraRealtime();
-                    return showToast("Scan dibatalkan. Wajib menggunakan KTP asli.", true);
-                }
+                await new Promise(r => setTimeout(r, 1000));
+                if(confirm("Apakah ini foto KTP asli milik Anda? Pastikan NIK terlihat jelas.")) { /* Lanjut */ } else { tutupKameraRealtime(); return showToast("Scan dibatalkan. Wajib menggunakan KTP asli.", true); }
             }
 
             tutupKameraRealtime();
@@ -1340,8 +1380,16 @@
             isMutedNotif = !isMutedNotif;
             localStorage.setItem('rt10_muted_notif', isMutedNotif);
             updateMuteUI();
-            if(isMutedNotif) showToast("Suara notifikasi dimatikan.");
-            else showToast("Suara notifikasi dinyalakan.");
+            if(isMutedNotif) showToast("Suara notifikasi umum dimatikan.");
+            else showToast("Suara notifikasi umum dinyalakan.");
+        };
+
+        window.toggleMuteChat = function() {
+            isChatMuted = !isChatMuted;
+            localStorage.setItem('rt10_chat_muted', isChatMuted);
+            updateChatMuteUI();
+            if(isChatMuted) showToast("Notifikasi obrolan dibisukan.");
+            else showToast("Notifikasi obrolan dinyalakan.");
         };
         
         function updateMuteUI() {
@@ -1349,6 +1397,14 @@
             if (icon) {
                 if (isMutedNotif) { icon.classList.remove('fa-volume-high'); icon.classList.add('fa-volume-xmark'); } 
                 else { icon.classList.remove('fa-volume-xmark'); icon.classList.add('fa-volume-high'); }
+            }
+        }
+
+        function updateChatMuteUI() {
+            const icon = document.getElementById('chatMuteIcon');
+            if (icon) {
+                if (isChatMuted) { icon.classList.replace('fa-bell', 'fa-bell-slash'); icon.classList.add('text-red-500'); } 
+                else { icon.classList.replace('fa-bell-slash', 'fa-bell'); icon.classList.remove('text-red-500'); }
             }
         }
 
@@ -1407,9 +1463,11 @@
             fil.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
             if (fil.length === 0) { box.innerHTML = `<div class="text-center text-slate-400 py-10 text-xs">${chatSearchQuery ? 'Pesan tidak ditemukan.' : 'Belum ada obrolan.'}</div>`; return; }
             
+            const isKetuaRT = window.currentUserData && window.currentUserData.role === 'Ketua RT';
             let html = ''; let lastDate = '';
             fil.forEach(m => {
                 const isMe = m.senderId === auth.currentUser.uid; 
+                const canShowMenu = isMe || isKetuaRT;
                 const tm = m.timestamp ? new Date(m.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : ''; 
                 const currentDate = formatFullDate(m.timestamp);
                 if (currentDate !== lastDate) { html += `<div class="text-center my-4"><span class="bg-slate-100 text-slate-500 text-[10px] font-semibold px-3 py-1 rounded-full">${currentDate}</span></div>`; lastDate = currentDate; }
@@ -1422,20 +1480,26 @@
                 const editedLabel = m.isEdited ? `<span class="text-[8px] opacity-70 italic ml-1">(Diedit)</span>` : '';
                 let replyQuote = ''; if (m.replyTo) { replyQuote = `<div class="bg-black/10 border-l-4 border-${isMe ? 'white' : 'emerald-500'} pl-2 py-1 rounded mb-1.5 text-left text-[10px] opacity-90"><p class="font-bold ${isMe ? 'text-emerald-100' : 'text-emerald-600'} mb-0.5">${escapeHtml(m.replyTo.senderName)}</p><p class="truncate">${escapeHtml(m.replyTo.text)}</p></div>`; }
                 
-                if (isMe) { html += `<div class="flex justify-end mb-3 chat-bubble-wrapper" data-id="${m.id || ''}" data-sender="Anda" data-text="${safeText}"><div onclick="bukaChatMenu('${m.id}', '${safeText}')" class="max-w-[80%] bg-emerald-600 text-white rounded-2xl rounded-tr-none px-3.5 py-2 shadow-sm relative">${replyQuote}${content}<p class="text-[9px] text-emerald-100 text-right mt-1">${tm} ${editedLabel}</p></div></div>`; }
-                else { html += `<div class="flex justify-start mb-3 chat-bubble-wrapper" data-id="${m.id || ''}" data-sender="${safeSender}" data-text="${safeText}"><div class="max-w-[80%] bg-white border border-slate-200 rounded-2xl rounded-tl-none px-3.5 py-2 shadow-sm"><p class="text-[10px] font-bold text-emerald-600 mb-0.5">${safeSender}</p>${replyQuote}${content}<p class="text-[9px] text-slate-400 text-right mt-1">${tm}</p></div></div>`; }
+                if (isMe) { 
+                    html += `<div class="flex justify-end mb-3 chat-bubble-wrapper" data-id="${m.id || ''}" data-sender="Anda" data-text="${safeText}"><div ${canShowMenu ? `onclick="bukaChatMenu('${m.id}', '${safeText}', true)"` : ''} class="max-w-[80%] bg-emerald-600 text-white rounded-2xl rounded-tr-none px-3.5 py-2 shadow-sm relative">${replyQuote}${content}<p class="text-[9px] text-emerald-100 text-right mt-1">${tm} ${editedLabel}</p></div></div>`; 
+                }
+                else { 
+                    html += `<div class="flex justify-start mb-3 chat-bubble-wrapper" data-id="${m.id || ''}" data-sender="${safeSender}" data-text="${safeText}"><div ${canShowMenu ? `onclick="bukaChatMenu('${m.id}', '${safeText}', false)"` : ''} class="max-w-[80%] bg-white border border-slate-200 rounded-2xl rounded-tl-none px-3.5 py-2 shadow-sm"><p class="text-[10px] font-bold text-emerald-600 mb-0.5">${safeSender}</p>${replyQuote}${content}<p class="text-[9px] text-slate-400 text-right mt-1">${tm}</p></div></div>`; 
+                }
             });
             box.innerHTML = html; box.scrollTop = box.scrollHeight;
         }
 
-        window.bukaChatMenu = function(id, text) {
-            activeChatActionId = id; activeChatActionText = text;
+        window.bukaChatMenu = function(id, text, isMe) {
+            activeChatActionId = id; activeChatActionText = text; activeChatIsMe = isMe;
+            const btnEdit = document.getElementById('btnEditPesan');
+            if (btnEdit) btnEdit.classList.toggle('hidden', !isMe);
             document.getElementById('chatActionModal').classList.remove('hidden');
         };
 
         window.prosesEditPesan = function() {
             document.getElementById('chatActionModal').classList.add('hidden');
-            if(!activeChatActionId) return;
+            if(!activeChatActionId || !activeChatIsMe) return;
             const newText = prompt("Edit pesan Anda:", activeChatActionText);
             if(newText && newText.trim() !== "" && newText !== activeChatActionText) {
                 editPesanChat(activeChatActionId, newText.trim());
@@ -1459,7 +1523,7 @@
         }
 
         window.hapusRiwayatChat = async function() {
-            if(!confirm("Yakin ingin menghapus SEMUA riwayat obrolan di ruangan ini?")) return;
+            // TANPA KONFIRMASI (AUTO HAPUS)
             try {
                 const q = query(collection(db, 'artifacts', appId, 'chats'), where('roomId', '==', currentChatRoom));
                 const snap = await getDocs(q);
@@ -1981,17 +2045,33 @@
             const wCont = document.getElementById('kasWargaListContainer'); const aCont = document.getElementById('adminKasTableBody'); if (!firebaseReady || !wCont) return; wCont.innerHTML = '<div class="text-center py-10"><i class="fa-solid fa-spinner fa-spin text-slate-400 text-2xl"></i></div>';
             try {
                 const s = await getDocs(collection(db, 'artifacts', appId, 'kas')); let totalMasuk = 0, totalKeluar = 0; globalKasList = [];
-                s.forEach(d => { if (d.id === 'config_iuran' || d.id === 'config_sos') return; const item = d.data(); if (!item.nominal) return; if (item.jenis === 'masuk') totalMasuk += Number(item.nominal); else totalKeluar += Number(item.nominal); globalKasList.push({ id: d.id, ...item }); });
+                s.forEach(d => { if (d.id === 'config_iuran' || d.id === 'config_sos') return; const item = d.data(); if (!item.nominal) return; globalKasList.push({ id: d.id, ...item }); });
                 globalKasList.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                
+                // FILTER BULAN & TAHUN
+                const filterBln = document.getElementById('kasFilterBulan')?.value;
+                const filterThn = document.getElementById('kasFilterTahun')?.value;
+                let filteredList = globalKasList;
+                if (filterBln !== 'all' || filterThn !== 'all') {
+                    filteredList = globalKasList.filter(x => {
+                        const d = new Date(x.timestamp);
+                        const matchBln = filterBln === 'all' || d.getMonth().toString() === filterBln;
+                        const matchThn = filterThn === 'all' || d.getFullYear().toString() === filterThn;
+                        return matchBln && matchThn;
+                    });
+                }
+
+                filteredList.forEach(x => { if (x.jenis === 'masuk') totalMasuk += Number(x.nominal); else totalKeluar += Number(x.nominal); });
+                
                 const saldoAwal = 0; const saldoAkhir = totalMasuk - totalKeluar;
                 const elSaldo = document.getElementById('kasTotalSaldo'); const elMasuk = document.getElementById('kasTotalMasuk'); const elKeluar = document.getElementById('kasTotalKeluar'); const elSaldoAwal = document.getElementById('kasSaldoAwal');
                 if (elSaldo) elSaldo.innerText = formatRupiah(saldoAkhir); if (elMasuk) elMasuk.innerText = formatRupiah(totalMasuk); if (elKeluar) elKeluar.innerText = formatRupiah(totalKeluar); if (elSaldoAwal) elSaldoAwal.innerText = formatRupiah(saldoAwal);
                 
-                if (currentKasView === 'riwayat') renderKasList();
+                if (currentKasView === 'riwayat') renderKasList(filteredList);
                 
                 if(aCont) {
                     let hAdmin = '';
-                    globalKasList.forEach(x => { 
+                    filteredList.forEach(x => { 
                         const isMasuk = x.jenis === 'masuk'; 
                         const tgl = x.timestamp ? new Date(x.timestamp).toLocaleDateString('id-ID', { day: '2-digit', month: 'short' }) : '-'; 
                         const safeKet = String(x.keterangan || '').replace(/'/g, "\\'"); 
@@ -2010,9 +2090,10 @@
             } catch (e) { console.error(e); wCont.innerHTML = '<p class="text-center text-red-500 text-xs py-5">Gagal memuat laporan.</p>'; }
         };
 
-        function renderKasList() {
-            const cont = document.getElementById('kasWargaListContainer'); if(!cont) return; let filteredList = globalKasList;
-            if (currentKasFilter === 'masuk') filteredList = globalKasList.filter(x => x.jenis === 'masuk'); else if (currentKasFilter === 'keluar') filteredList = globalKasList.filter(x => x.jenis === 'keluar');
+        function renderKasList(list = globalKasList) {
+            const cont = document.getElementById('kasWargaListContainer'); if(!cont) return;
+            let filteredList = list;
+            if (currentKasFilter === 'masuk') filteredList = list.filter(x => x.jenis === 'masuk'); else if (currentKasFilter === 'keluar') filteredList = list.filter(x => x.jenis === 'keluar');
             if (filteredList.length === 0) { cont.innerHTML = '<p class="text-center text-xs text-slate-400 py-10">Belum ada data transaksi.</p>'; return; }
             let hWarga = ''; let grouped = {};
             
@@ -2046,8 +2127,21 @@
         }
         
         window.downloadLaporanKas = function() {
-            if(globalKasList.length === 0) return showToast("Tidak ada data untuk diunduh.", true); let csvContent = "Tanggal,Kategori,Keterangan,Jenis,Nominal\n";
-            globalKasList.forEach(x => { 
+            const filterBln = document.getElementById('kasFilterBulan')?.value;
+            const filterThn = document.getElementById('kasFilterTahun')?.value;
+            let dataToDl = globalKasList;
+            if (filterBln !== 'all' || filterThn !== 'all') {
+                dataToDl = globalKasList.filter(x => {
+                    const d = new Date(x.timestamp);
+                    const matchBln = filterBln === 'all' || d.getMonth().toString() === filterBln;
+                    const matchThn = filterThn === 'all' || d.getFullYear().toString() === filterThn;
+                    return matchBln && matchThn;
+                });
+            }
+
+            if(dataToDl.length === 0) return showToast("Tidak ada data untuk diunduh.", true); 
+            let csvContent = "Tanggal,Kategori,Keterangan,Jenis,Nominal\n";
+            dataToDl.forEach(x => { 
                 const tgl = new Date(x.timestamp).toLocaleDateString('id-ID'); 
                 const kat = (x.kategori || '-').replace(/,/g, '');
                 const ket = x.keterangan.replace(/,/g, ''); 
@@ -2057,7 +2151,19 @@
         };
 
         window.downloadLaporanKasPDF = function() {
-            if (globalKasList.length === 0) return showToast("Tidak ada data untuk diunduh.", true);
+            const filterBln = document.getElementById('kasFilterBulan')?.value;
+            const filterThn = document.getElementById('kasFilterTahun')?.value;
+            let dataToDl = globalKasList;
+            if (filterBln !== 'all' || filterThn !== 'all') {
+                dataToDl = globalKasList.filter(x => {
+                    const d = new Date(x.timestamp);
+                    const matchBln = filterBln === 'all' || d.getMonth().toString() === filterBln;
+                    const matchThn = filterThn === 'all' || d.getFullYear().toString() === filterThn;
+                    return matchBln && matchThn;
+                });
+            }
+
+            if (dataToDl.length === 0) return showToast("Tidak ada data untuk diunduh.", true);
             if (!window.jspdf || !window.jspdf.jsPDF) return showToast("Library PDF belum siap.", true);
             
             const { jsPDF } = window.jspdf;
@@ -2079,7 +2185,7 @@
             doc.text("LAPORAN KEUANGAN KAS RT", 105, 42, { align: "center" });
             
             let totalMasuk = 0, totalKeluar = 0;
-            globalKasList.forEach(x => { if(x.jenis === 'masuk') totalMasuk += Number(x.nominal); else totalKeluar += Number(x.nominal); });
+            dataToDl.forEach(x => { if(x.jenis === 'masuk') totalMasuk += Number(x.nominal); else totalKeluar += Number(x.nominal); });
             
             doc.setFont("helvetica", "normal");
             doc.setFontSize(10);
@@ -2088,7 +2194,7 @@
             doc.text(`Saldo Akhir: ${formatRupiah(totalMasuk - totalKeluar)}`, 15, 62);
 
             let bodyData = [];
-            globalKasList.forEach((x, i) => {
+            dataToDl.forEach((x, i) => {
                 const tgl = new Date(x.timestamp).toLocaleDateString('id-ID');
                 bodyData.push([
                     i + 1,
@@ -2274,7 +2380,7 @@
             if (!firebaseReady || !db) return; unSubs.forEach(u => { try { u(); } catch (e) { } }); unSubs = []; cekTombolNotifikasi();
             loadMarquee();
             let initL = true; try { unSubs.push(onSnapshot(collection(db, 'artifacts', appId, 'laporan'), (s) => { if (initL) { initL = false; return; } s.docChanges().forEach(c => { if (c.type === 'added' && c.doc.data().userId !== user.uid) { const lap = c.doc.data(); if (lap.layanan && lap.layanan.startsWith('DARURAT SOS')) { bunyikanSireneDarurat(); kirimNotifikasiPesan(`🚨 ${lap.layanan}`, `${lap.nama} (Blok ${lap.blok}/${lap.no}) butuh bantuan!`); } else { kirimNotifikasiPesan(`Laporan Baru`, lap.layanan || 'Laporan'); } const admView = document.getElementById('admViewLaporan'); if (admView && !admView.classList.contains('hidden')) loadAdminLaporan(); } }); }, (e) => console.warn(e))); } catch (e) { }
-            let initC = true; try { unSubs.push(onSnapshot(collection(db, 'artifacts', appId, 'chats'), (s) => { allChatMessages = []; s.forEach(d => allChatMessages.push(Object.assign({ id: d.id }, d.data()))); renderChatMessages(); if (initC) { initC = false; return; } s.docChanges().forEach(c => { const m = c.doc.data(); const isRT = window.currentUserData && window.currentUserData.role === 'Admin RT'; if (c.type === 'added' && m.senderId !== user.uid && (m.roomId === 'GLOBAL' || m.recipientId === user.uid || isRT)) { const msgText = m.text || (m.imageUrl ? '[Foto]' : '[Stiker]'); if (msgText.includes('SINYAL DARURAT SOS')) bunyikanSireneDarurat(); kirimNotifikasiPesan(`Chat: ${m.senderName}`, msgText); const cv = document.getElementById('chatView'); if (cv && cv.classList.contains('hidden')) updateChatBadge(unreadChatCount + 1); } }); }, (e) => console.warn(e))); } catch (e) { }
+            let initC = true; try { unSubs.push(onSnapshot(collection(db, 'artifacts', appId, 'chats'), (s) => { allChatMessages = []; s.forEach(d => allChatMessages.push(Object.assign({ id: d.id }, d.data()))); renderChatMessages(); if (initC) { initC = false; return; } s.docChanges().forEach(c => { const m = c.doc.data(); const isRT = window.currentUserData && window.currentUserData.role === 'Admin RT'; if (c.type === 'added' && m.senderId !== user.uid && (m.roomId === 'GLOBAL' || m.recipientId === user.uid || isRT)) { const msgText = m.text || (m.imageUrl ? '[Foto]' : '[Stiker]'); if (msgText.includes('SINYAL DARURAT SOS')) bunyikanSireneDarurat(); if (!isChatMuted) kirimNotifikasiPesan(`Chat: ${m.senderName}`, msgText); const cv = document.getElementById('chatView'); if (cv && cv.classList.contains('hidden')) updateChatBadge(unreadChatCount + 1); } }); }, (e) => console.warn(e))); } catch (e) { }
             let initP = true; try { unSubs.push(onSnapshot(collection(db, 'artifacts', appId, 'pengumuman'), (s) => { if (initP) { initP = false; return; } s.docChanges().forEach(c => { if (c.type === 'added') { loadPengumumanUtama(); loadMarquee(); const isRT = window.currentUserData && window.currentUserData.role === 'Admin RT'; if (!isRT) kirimNotifikasiPesan(`Pengumuman RT`, c.doc.data().judul); } }); }, (e) => console.warn(e))); } catch (e) { }
             try { unSubs.push(onSnapshot(doc(db, 'artifacts', appId, 'kas', 'config_sos'), (snap) => { const d = snap.exists() ? snap.data() : { enabled: true }; isFiturSOSEnabled = d.enabled !== false; const bHead = document.getElementById('btnHeaderSOS'); const bHome = document.getElementById('btnHomeSOS'); const cbAdmin = document.getElementById('toggleFiturSOSCheckbox'); if (cbAdmin) cbAdmin.checked = isFiturSOSEnabled; if (isFiturSOSEnabled) { if (bHead) bHead.classList.remove('hidden'); if (bHome) bHome.classList.remove('hidden'); } else { if (bHead) bHead.classList.add('hidden'); if (bHome) bHome.classList.add('hidden'); } const alertBanner = document.getElementById('sosActiveAlertBanner'); const statusTxt = document.getElementById('adminStatusSOSText'); const isRT = window.currentUserData && ['Admin RT', 'Pengurus RT', 'Bendahara', 'Sekretaris'].includes(window.currentUserData.role); const btnStopBanner = document.getElementById('btnAdminStopSOSBanner'); if (btnStopBanner) btnStopBanner.classList.toggle('hidden', !isRT); if (d.activeSOS && d.activeSOS.jenis) { if (alertBanner) { const t = document.getElementById('sosAlertTitle'); const desc = document.getElementById('sosAlertDesc'); if (t) t.innerText = `DARURAT: ${d.activeSOS.jenis}!`; if (desc) desc.innerText = `Pelapor: ${d.activeSOS.nama} (${d.activeSOS.blok}) butuh bantuan!`; alertBanner.classList.remove('hidden'); } if (statusTxt) statusTxt.innerText = `🚨 DARURAT AKTIF: ${d.activeSOS.jenis} oleh ${d.activeSOS.nama} (${d.activeSOS.blok})`; } else { if (alertBanner) alertBanner.classList.add('hidden'); if (statusTxt) statusTxt.innerText = "Aman. Tidak ada sinyal darurat aktif."; } }, () => { })); } catch (e) { }
             try { unSubs.push(onSnapshot(doc(db, 'artifacts', appId, 'users', user.uid), (snap) => { if (!snap.exists()) return; window.currentUserData = snap.data(); const iuranMod = document.getElementById('iuranView'); if (iuranMod && !iuranMod.classList.contains('hidden')) loadIuranUser(); loadMarquee(); }, () => { })); } catch (e) { }
@@ -2284,7 +2390,7 @@
 
         if (firebaseReady && auth) {
             onAuthStateChanged(auth, async (user) => {
-                try { if (user) { const snap = await getDoc(doc(db, 'artifacts', appId, 'users', user.uid)); window.currentUserData = snap.exists() ? snap.data() : { nama: user.email.split('@')[0], role: 'Warga' }; showAppScreen(); prefillFormData(); perbaruiStatusUI_Fingerprint(); loadPengumumanUtama(); loadStatistik(); mulaiPantau(user); updateMuteUI(); } else { showAuthScreen(); } }
+                try { if (user) { const snap = await getDoc(doc(db, 'artifacts', appId, 'users', user.uid)); window.currentUserData = snap.exists() ? snap.data() : { nama: user.email.split('@')[0], role: 'Warga' }; showAppScreen(); prefillFormData(); perbaruiStatusUI_Fingerprint(); loadPengumumanUtama(); loadStatistik(); mulaiPantau(user); updateMuteUI(); updateChatMuteUI(); } else { showAuthScreen(); } }
                 catch (e) { console.error(e); showAuthScreen(); }
             });
         } else { setTimeout(() => { if (typeof showToast === 'function') showToast("Gagal memuat aplikasi. Refresh halaman.", true); }, 800); showAuthScreen(); }
@@ -2294,8 +2400,16 @@
         function showAuthScreen() { const m = document.getElementById('mainAppContainer'); if (m) { m.classList.add('hidden'); m.classList.remove('flex'); } const a = document.getElementById('authContainer'); if (a) { a.classList.remove('hidden'); a.classList.add('flex'); } }
         function showAppScreen() {
             const a = document.getElementById('authContainer'); if (a) { a.classList.add('hidden'); a.classList.remove('flex'); } const m = document.getElementById('mainAppContainer'); if (m) { m.classList.remove('hidden'); m.classList.add('flex'); }
+            const isKetuaRT = window.currentUserData && window.currentUserData.role === 'Ketua RT';
             const isRT = window.currentUserData && ['Admin RT', 'Ketua RT', 'Pengurus RT', 'Bendahara', 'Sekretaris'].includes(window.currentUserData.role); 
             
+            // MENU IURAN DI PANEL PENGURUS HANYA UNTUK KETUA RT
+            const tabIuran = document.getElementById('tabAdmIuran');
+            if (tabIuran) {
+                if (isKetuaRT) tabIuran.classList.remove('hidden');
+                else tabIuran.classList.add('hidden');
+            }
+
             const btnAd = document.getElementById('navAdminBtn'); if (btnAd) { if (isRT) { btnAd.classList.remove('hidden'); btnAd.classList.add('flex'); } else { btnAd.classList.add('hidden'); btnAd.classList.remove('flex'); } }
             const navRiwayat = document.getElementById('navRiwayatBtn'); if (navRiwayat) { if (isRT) { navRiwayat.classList.remove('hidden'); navRiwayat.classList.add('flex'); } else { navRiwayat.classList.add('hidden'); navRiwayat.classList.remove('flex'); } }
             const btnMute = document.getElementById('btnToggleMute'); if (btnMute) { if (isRT) btnMute.classList.remove('hidden'); else btnMute.classList.add('hidden'); }
@@ -2489,16 +2603,61 @@
         };
         async function loadAdminWargaList() {
             const cont = document.getElementById('adminWargaList'); if (!cont || !firebaseReady) return; cont.innerHTML = 'Loading...';
-            try { const s = await getDocs(collection(db, 'artifacts', appId, 'users')); let h = ''; s.forEach(d => { const u = d.data(); const dStr = safeEncode({ nama: u.nama || '', hp: u.hp || '', blok: u.blok || '', no: u.no || '', role: u.role || '' }); 
-                const roleOptions = ['Warga', 'Ketua RT', 'Admin RT', 'Pengurus RT', 'Sekretaris', 'Bendahara', 'Satpam', 'Petugas Kebersihan', 'Petugas Angkat Sampah', 'Teknisi Air', 'Teknisi Listrik'];
-                let roleSelect = `<select onchange="updateWargaRole('${d.id}', this.value)" class="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-md px-2 py-1 outline-none">`;
-                roleOptions.forEach(r => { roleSelect += `<option value="${r}" ${u.role === r ? 'selected' : ''}>${r}</option>`; });
-                roleSelect += `</select>`;
+            try { 
+                const s = await getDocs(collection(db, 'artifacts', appId, 'users')); let h = ''; 
+                const isKetuaRT = window.currentUserData && window.currentUserData.role === 'Ketua RT';
+                
+                s.forEach(d => { 
+                    const u = d.data(); const dStr = safeEncode({ nama: u.nama || '', hp: u.hp || '', blok: u.blok || '', no: u.no || '', role: u.role || '' }); 
+                    const roleOptions = ['Warga', 'Ketua RT', 'Admin RT', 'Pengurus RT', 'Sekretaris', 'Bendahara', 'Satpam', 'Petugas Kebersihan', 'Petugas Angkat Sampah', 'Teknisi Air', 'Teknisi Listrik'];
+                    let roleSelect = `<select onchange="updateWargaRole('${d.id}', this.value)" class="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-md px-2 py-1 outline-none">`;
+                    roleOptions.forEach(r => { roleSelect += `<option value="${r}" ${u.role === r ? 'selected' : ''}>${r}</option>`; });
+                    roleSelect += `</select>`;
 
-                h += `<div class="warga-card p-3 border border-slate-200 rounded-xl bg-white flex flex-col gap-2"><div class="flex items-start justify-between"><div class="min-w-0"><h3 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(u.nama || 'Warga')}</h3><p class="text-xs text-slate-500 truncate">Blok ${escapeHtml(u.blok || '-')}/${escapeHtml(u.no || '-')} • HP: ${escapeHtml(u.hp || '-')}</p></div><div class="flex gap-1 shrink-0"><button onclick="openAdminEditModal('${d.id}', '${dStr}')" class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center hover:bg-blue-200 transition"><i class="fa-solid fa-pen text-xs"></i></button><button onclick="hapusLaporanWarga('${d.id}', null, 'warga')" class="w-8 h-8 bg-red-100 text-red-600 rounded-full flex items-center justify-center hover:bg-red-200 transition"><i class="fa-solid fa-trash text-xs"></i></button></div></div><div class="border-t border-slate-100 pt-2 mt-1">${roleSelect}</div></div>`; }); cont.innerHTML = h || '<p class="text-center text-xs text-slate-400 py-4">Belum ada data warga.</p>'; }
+                    let detailBtn = isKetuaRT ? `<button onclick="openDetailWargaModal('${d.id}')" class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center hover:bg-emerald-200 transition mr-1" title="Lihat Detail"><i class="fa-solid fa-eye text-xs"></i></button>` : '';
+
+                    h += `<div class="warga-card p-3 border border-slate-200 rounded-xl bg-white flex flex-col gap-2"><div class="flex items-start justify-between"><div class="min-w-0"><h3 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(u.nama || 'Warga')}</h3><p class="text-xs text-slate-500 truncate">Blok ${escapeHtml(u.blok || '-')}/${escapeHtml(u.no || '-')} • HP: ${escapeHtml(u.hp || '-')}</p></div><div class="flex gap-1 shrink-0">${detailBtn}<button onclick="openAdminEditModal('${d.id}', '${dStr}')" class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center hover:bg-blue-200 transition"><i class="fa-solid fa-pen text-xs"></i></button><button onclick="hapusLaporanWarga('${d.id}', null, 'warga')" class="w-8 h-8 bg-red-100 text-red-600 rounded-full flex items-center justify-center hover:bg-red-200 transition"><i class="fa-solid fa-trash text-xs"></i></button></div></div><div class="border-t border-slate-100 pt-2 mt-1">${roleSelect}</div></div>`; 
+                }); 
+                cont.innerHTML = h || '<p class="text-center text-xs text-slate-400 py-4">Belum ada data warga.</p>'; 
+            }
             catch (e) { cont.innerHTML = 'Gagal memuat.'; }
         }
         
+        window.openDetailWargaModal = async function(uid) {
+            const m = document.getElementById('detailWargaModal');
+            const c = document.getElementById('detailWargaContent');
+            if(!m || !c) return;
+            c.innerHTML = '<div class="text-center py-5"><i class="fa-solid fa-spinner fa-spin text-slate-400"></i></div>';
+            m.classList.remove('hidden');
+            try {
+                const snap = await getDoc(doc(db, 'artifacts', appId, 'users', uid));
+                if(snap.exists()) {
+                    const u = snap.data();
+                    let ktpHtml = u.foto_ktp ? `<img src="${u.foto_ktp}" class="w-full rounded-lg border border-slate-200 mt-1 cursor-pointer" onclick="lihatGambarModal('KTP', '${u.foto_ktp.replace(/'/g, "%27")}')">` : '<p class="text-xs text-red-500 italic">Belum ada foto KTP</p>';
+                    let kkHtml = u.foto_kk ? `<img src="${u.foto_kk}" class="w-full rounded-lg border border-slate-200 mt-1 cursor-pointer" onclick="lihatGambarModal('KK', '${u.foto_kk.replace(/'/g, "%27")}')">` : '<p class="text-xs text-red-500 italic">Belum ada foto KK</p>';
+                    
+                    c.innerHTML = `
+                        <div class="text-sm space-y-1 text-slate-700">
+                            <p><b>Nama:</b> ${escapeHtml(u.nama || '-')}</p>
+                            <p><b>NIK:</b> ${escapeHtml(u.nik || '-')}</p>
+                            <p><b>TTL:</b> ${escapeHtml(u.tempat_lahir || '-')}, ${escapeHtml(u.tgl_lahir || '-')}</p>
+                            <p><b>Alamat:</b> Blok ${escapeHtml(u.blok || '-')} No. ${escapeHtml(u.no || '-')}</p>
+                        </div>
+                        <div class="mt-3">
+                            <p class="text-xs font-bold text-slate-600 mb-1">Foto KTP:</p>
+                            ${ktpHtml}
+                        </div>
+                        <div class="mt-3">
+                            <p class="text-xs font-bold text-slate-600 mb-1">Foto KK:</p>
+                            ${kkHtml}
+                        </div>
+                    `;
+                }
+            } catch(e) {
+                c.innerHTML = '<p class="text-xs text-red-500 text-center">Gagal memuat detail.</p>';
+            }
+        };
+
         window.updateWargaRole = async function(uid, newRole) {
             try {
                 await updateDoc(doc(db, 'artifacts', appId, 'users', uid), { role: newRole });
