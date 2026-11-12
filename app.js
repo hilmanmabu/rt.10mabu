@@ -65,7 +65,163 @@ try {
 } catch (err) {
     console.error("[FIREBASE INIT FAILED]", err);
 }
+/* ==========================================
+   FITUR PENCARIAN CHAT (SEARCH)
+   ========================================== */
+let chatSearchQuery = "";
 
+window.toggleChatSearch = function() {
+    const container = document.getElementById('chatSearchContainer');
+    const input = document.getElementById('chatSearchInput');
+    container.classList.toggle('hidden');
+    if (!container.classList.contains('hidden')) {
+        input.focus();
+    } else {
+        input.value = '';
+        chatSearchQuery = '';
+        renderChatMessages(); // Reset chat ke normal
+    }
+};
+
+window.searchChat = function(query) {
+    chatSearchQuery = query.toLowerCase();
+    renderChatMessages(); // Panggil ulang fungsi render
+};
+
+// Modifikasi fungsi renderChatMessages yang sudah ada di app.js
+// Cari function renderChatMessages() di app.js dan ganti dengan:
+function renderChatMessages() {
+    const box = document.getElementById('chatMessagesBox');
+    if (!box || !auth.currentUser) return;
+    
+    // Filter berdasarkan Room
+    let fil = allChatMessages.filter(m => m.roomId === currentChatRoom);
+    
+    // Filter berdasarkan Pencarian (jika ada teks)
+    if (chatSearchQuery) {
+        fil = fil.filter(m => m.text && m.text.toLowerCase().includes(chatSearchQuery));
+    }
+    
+    fil.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+
+    if (fil.length === 0) {
+        box.innerHTML = `<div class="text-center text-slate-400 py-10 text-xs">${chatSearchQuery ? 'Pesan tidak ditemukan.' : 'Belum ada obrolan.'}</div>`;
+        return;
+    }
+
+    let html = '';
+    fil.forEach(m => {
+        const isMe = m.senderId === auth.currentUser.uid;
+        const tm = m.timestamp ? new Date(m.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : '';
+        let content = '';
+        if (m.text) content += `<p class="text-sm leading-relaxed whitespace-pre-line break-words">${escapeHtml(m.text)}</p>`;
+        if (m.stickerUrl) content += `<img src="${escapeHtml(m.stickerUrl)}" class="w-16 h-16 object-contain my-1 drop-shadow-sm">`;
+        if (m.imageUrl) content += `<img onclick="lihatGambarModal('Foto', '${m.imageUrl.replace(/'/g, "%27")}')" src="${m.imageUrl}" class="w-full max-w-[220px] h-auto rounded-lg my-1.5 cursor-pointer border border-slate-200/50 shadow-sm">`;
+
+        const safeText = escapeHtml(m.text || (m.imageUrl ? '📷 Foto' : '😊 Stiker'));
+        const safeSender = escapeHtml(m.senderName || 'Warga');
+
+        let replyQuote = '';
+        if (m.replyTo) {
+            replyQuote = `<div class="bg-black/10 border-l-4 border-${isMe ? 'white' : 'emerald-500'} pl-2 py-1 rounded mb-1.5 text-left text-[10px] opacity-90">
+                <p class="font-bold ${isMe ? 'text-emerald-100' : 'text-emerald-600'} mb-0.5">${escapeHtml(m.replyTo.senderName)}</p>
+                <p class="truncate">${escapeHtml(m.replyTo.text)}</p>
+            </div>`;
+        }
+
+        if (isMe) {
+            html += `<div class="flex justify-end mb-3 chat-bubble-wrapper" data-id="${m.id || ''}" data-sender="Anda" data-text="${safeText}">
+                <div class="max-w-[80%] bg-emerald-600 text-white rounded-2xl rounded-tr-none px-3.5 py-2 shadow-sm">${replyQuote}${content}<p class="text-[9px] text-emerald-100 text-right mt-1">${tm}</p></div>
+            </div>`;
+        } else {
+            html += `<div class="flex justify-start mb-3 chat-bubble-wrapper" data-id="${m.id || ''}" data-sender="${safeSender}" data-text="${safeText}">
+                <div class="max-w-[80%] bg-white border border-slate-200 rounded-2xl rounded-tl-none px-3.5 py-2 shadow-sm">
+                    <p class="text-[10px] font-bold text-emerald-600 mb-0.5">${safeSender}</p>
+                    ${replyQuote}${content}<p class="text-[9px] text-slate-400 text-right mt-1">${tm}</p>
+                </div>
+            </div>`;
+        }
+    });
+    box.innerHTML = html;
+    box.scrollTop = box.scrollHeight;
+}
+
+/* ==========================================
+   FITUR EXPORT DATA WARGA (EXCEL/CSV)
+   ========================================== */
+window.exportWargaData = async function() {
+    if (!firebaseReady) return;
+    showToast("Menyiapkan data warga...");
+    
+    try {
+        const s = await getDocs(collection(db, 'artifacts', appId, 'users'));
+        if (s.empty) return showToast("Tidak ada data warga untuk diexport.", true);
+        
+        let csvContent = "Nama Lengkap,Blok,No Rumah,No HP,Role Akses,Email/Username\n";
+        
+        s.forEach(d => {
+            const u = d.data();
+            // Bersihkan karakter koma agar CSV tidak rusak
+            const nm = (u.nama || '-').replace(/,/g, '');
+            const blk = (u.blok || '-').replace(/,/g, '');
+            const no = (u.no || '-').replace(/,/g, '');
+            const hp = (u.hp || '-').replace(/,/g, '');
+            const role = (u.role || 'Warga').replace(/,/g, '');
+            const email = (u.email || '-').replace(/,/g, '');
+            
+            csvContent += `${nm},${blk},${no},${hp},${role},${email}\n`;
+        });
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", `Data_Warga_RT010_${new Date().getTime()}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        showToast("✅ Data Warga berhasil diunduh!");
+    } catch(e) {
+        showToast("Gagal mengeksport data.", true);
+    }
+};
+
+/* ==========================================
+   FITUR PUSH NOTIFICATION (FCM CLIENT-SIDE)
+   ========================================== */
+// Pastikan Anda sudah membuat file 'firebase-messaging-sw.js' di root folder
+async function initFCM() {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+    
+    try {
+        // Minta izin notifikasi jika belum
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') return;
+
+        // Registrasi Service Worker Khusus Messaging
+        const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+        
+        // Catatan: Untuk FCM sepenuhnya berjalan, Anda perlu Firebase VAPID Key dari Firebase Console
+        // const messaging = getMessaging(app);
+        // const token = await getToken(messaging, { vapidKey: 'VAPID_KEY_ANDA_DISINI', serviceWorkerRegistration: registration });
+        
+        // Simpan token ke database user jika berhasil
+        // if(token && auth.currentUser) {
+        //     await setDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid), { fcmToken: token }, { merge: true });
+        // }
+        
+        console.log("[FCM] Service Worker Terdaftar. (Memerlukan VAPID Key untuk aktif)");
+    } catch (error) {
+        console.warn("[FCM] Gagal init: ", error);
+    }
+}
+
+// Panggil inisialisasi FCM saat aplikasi berhasil login
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        initFCM();
+    }
+});
 /* ============================ HELPERS ============================ */
 function formatRupiah(angka) {
     try {
