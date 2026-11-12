@@ -36,19 +36,14 @@
     <style>
         html, body {
             font-family: 'Poppins', system-ui, sans-serif;
-            background: radial-gradient(1200px 800px at 100% 0%, #FDE8E8 0%, transparent 50%),
-                        radial-gradient(900px 600px at 0% 100%, #FEF3C7 0%, transparent 50%),
-                        #F9FAFB;
+            background-color: #F9FAFB;
             height: 100dvh;
+            width: 100vw;
             margin: 0; padding: 0;
             overflow: hidden;
             overscroll-behavior-y: none;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-        }
-        .app-shell { height: 100dvh; max-height: 100dvh; }
-        @media (min-width: 768px) {
-            .app-shell { height: 92dvh; max-height: 900px; }
         }
         .pt-safe-top { padding-top: max(0.9rem, env(safe-area-inset-top)); }
         .pb-safe-bottom { padding-bottom: max(0.7rem, env(safe-area-inset-bottom)); }
@@ -72,7 +67,7 @@
         input, textarea, select { -webkit-appearance: none; }
         input::placeholder, textarea::placeholder { color: #9CA3AF; }
         
-        /* Chat bubbles — merah untuk "saya" */
+        /* Chat bubbles */
         .chat-bubble-wrapper.justify-end > div:last-child {
             background: linear-gradient(135deg, #E11D48 0%, #C8102E 100%) !important;
             box-shadow: 0 6px 16px -6px rgba(200, 16, 46, 0.45) !important;
@@ -91,7 +86,7 @@
         .warga-card:hover { box-shadow: 0 8px 24px -8px rgba(200,16,46,0.15); border-color: #FECACA !important; }
     </style>
 </head>
-<body class="flex justify-center md:items-center w-full h-full text-ink select-none">
+<body class="w-full h-full text-ink select-none bg-slate-50 flex flex-col">
 
     <!-- PWA BANNER -->
     <div id="pwaBanner" class="hidden fixed top-0 left-0 right-0 glass-dark text-white p-4 z-[100] shadow-2xl flex justify-between items-center animate-fade-slide-up border-b border-white/10">
@@ -199,77 +194,78 @@
     </div>
 
     <!-- AUTHENTICATION -->
-    <div id="authContainer" class="app-shell w-full bg-white relative flex flex-col items-center justify-center mx-auto overflow-y-auto md:max-w-md md:rounded-[2rem] md:shadow-2xl border-x border-slate-100 md:border-none p-6 grain">
-        <div class="text-center mb-8 relative z-10 w-full">
-            <div class="relative w-28 h-28 mx-auto mb-4">
-                <div class="absolute inset-0 bg-gradient-to-br from-brand to-red-700 rounded-[2rem] blur-xl opacity-30"></div>
-                <img src="1000531885.png" alt="Logo" class="relative w-28 h-28 mx-auto rounded-[2rem] object-cover bg-white border-4 border-white shadow-2xl" onerror="this.src='/icon-192.png';">
+    <div id="authContainer" class="w-full h-full bg-slate-50 relative flex flex-col items-center justify-center overflow-y-auto p-4 sm:p-6 grain">
+        <div class="w-full max-w-md bg-white rounded-none sm:rounded-[2rem] sm:shadow-2xl p-6 sm:p-8 relative">
+            <div class="text-center mb-8 relative z-10 w-full">
+                <div class="relative w-28 h-28 mx-auto mb-4">
+                    <div class="absolute inset-0 bg-gradient-to-br from-brand to-red-700 rounded-[2rem] blur-xl opacity-30"></div>
+                    <img src="1000531885.png" alt="Logo" class="relative w-28 h-28 mx-auto rounded-[2rem] object-cover bg-white border-4 border-white shadow-2xl" onerror="this.src='/icon-192.png';">
+                </div>
+                <h1 class="font-extrabold text-2xl text-slate-900 tracking-tight leading-tight">Layanan Warga</h1>
+                <p class="text-slate-500 text-xs font-semibold mt-1.5 tracking-wide">RT.010 / RW.002 · MABU PARK</p>
             </div>
-            <h1 class="font-extrabold text-2xl text-slate-900 tracking-tight leading-tight">Layanan Warga</h1>
-            <p class="text-slate-500 text-xs font-semibold mt-1.5 tracking-wide">RT.010 / RW.002 · MABU PARK</p>
+
+            <form id="loginForm" onsubmit="handleLogin(event)" class="w-full space-y-4 fade-transition relative z-10">
+                <div class="flex bg-slate-100 p-1 rounded-2xl mb-4">
+                    <button type="button" id="tabWarga" onclick="setLoginRole('warga')" class="flex-1 py-2.5 text-sm font-bold bg-white shadow-sm rounded-xl text-brand transition-all">Warga</button>
+                    <button type="button" id="tabAdmin" onclick="setLoginRole('admin')" class="flex-1 py-2.5 text-sm font-semibold text-slate-500 rounded-xl transition-all">Pengurus RT</button>
+                </div>
+                <div id="loginEmailContainer">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1.5 tracking-wide uppercase">Email / Akun</label>
+                    <input type="text" id="loginEmail" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none bg-slate-50/50 text-sm transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1.5 tracking-wide uppercase">Password</label>
+                    <div class="relative">
+                        <input type="password" id="loginPassword" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none bg-slate-50/50 text-sm pr-12 transition-all">
+                        <button type="button" onclick="togglePasswordVisibility('loginPassword', 'loginEyeIcon')" class="absolute inset-y-0 right-0 px-4 flex items-center text-slate-400 hover:text-brand transition cursor-pointer"><i id="loginEyeIcon" class="fa-regular fa-eye"></i></button>
+                    </div>
+                </div>
+                <div class="flex justify-end"><button type="button" onclick="switchAuthView('forgot')" class="text-xs text-brand font-semibold hover:text-red-700">Lupa Password?</button></div>
+                <button type="submit" id="btnLogin" class="w-full bg-gradient-to-br from-brand to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-brand/30 transition-all active:scale-[0.98]">Masuk</button>
+
+                <div class="relative flex py-1 items-center"><div class="flex-grow border-t border-slate-200"></div><span class="flex-shrink mx-3 text-slate-400 text-[10px] font-semibold uppercase tracking-wider">atau</span><div class="flex-grow border-t border-slate-200"></div></div>
+                <button type="button" id="btnFingerprintLogin" onclick="handleFingerprintLogin()" class="w-full bg-slate-50 hover:bg-brand-light text-slate-700 font-bold py-3 rounded-xl border border-slate-200 hover:border-brand/30 flex items-center justify-center gap-2.5 transition-all shadow-sm">
+                    <i class="fa-solid fa-fingerprint text-2xl text-brand"></i><span class="text-sm">Masuk dengan Fingerprint</span>
+                </button>
+                <p id="regPrompt" class="text-center text-sm text-slate-600 mt-4">Belum punya akun? <button type="button" onclick="switchAuthView('register')" class="text-brand font-bold hover:text-red-700">Daftar Warga</button></p>
+            </form>
+
+            <form id="registerForm" onsubmit="handleRegister(event)" class="w-full space-y-4 fade-transition hidden absolute inset-0 bg-white p-6 sm:p-8 overflow-y-auto z-20">
+                <div class="flex items-center gap-3 mb-6 sticky top-0 bg-white py-2 z-10 border-b border-slate-100">
+                    <button type="button" onclick="switchAuthView('login')" class="w-9 h-9 bg-slate-100 hover:bg-slate-200 rounded-full transition"><i class="fa-solid fa-arrow-left text-slate-600"></i></button>
+                    <h2 class="text-lg font-bold text-slate-800">Registrasi Warga</h2>
+                </div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Nama Lengkap</label><input type="text" id="regNama" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none bg-slate-50/50 text-sm"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Email / Akun</label><input type="text" id="regEmail" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none bg-slate-50/50 text-sm"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">No. WhatsApp (HP)</label><input type="tel" id="regHp" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none bg-slate-50/50 text-sm"></div>
+                <div class="flex gap-3"><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">Blok</label><input type="text" id="regBlok" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none bg-slate-50/50 text-sm uppercase" placeholder="A"></div><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">No</label><input type="number" id="regNo" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none bg-slate-50/50 text-sm" placeholder="12"></div></div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">Password</label>
+                    <div class="relative">
+                        <input type="password" id="regPassword" required minlength="6" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none bg-slate-50/50 text-sm pr-12">
+                        <button type="button" onclick="togglePasswordVisibility('regPassword', 'regEyeIcon')" class="absolute inset-y-0 right-0 px-4 flex items-center text-slate-400 hover:text-brand transition cursor-pointer"><i id="regEyeIcon" class="fa-regular fa-eye"></i></button>
+                    </div>
+                </div>
+                <button type="submit" id="btnRegister" class="w-full bg-gradient-to-br from-brand to-red-700 text-white font-bold py-3.5 rounded-xl mt-4 shadow-lg shadow-brand/30">Daftar Sekarang</button>
+            </form>
+
+            <form id="forgotForm" onsubmit="handleForgot(event)" class="w-full space-y-4 fade-transition hidden absolute inset-0 bg-white p-6 sm:p-8 z-20">
+                <div class="flex items-center gap-3 mb-6"><button type="button" onclick="switchAuthView('login')" class="w-9 h-9 bg-slate-100 hover:bg-slate-200 rounded-full transition"><i class="fa-solid fa-arrow-left text-slate-600"></i></button><h2 class="text-lg font-bold text-slate-800">Lupa Password</h2></div>
+                <p class="text-sm text-slate-600 mb-4 leading-relaxed">Masukkan Email / Akun yang terdaftar. Sistem akan langsung menampilkan password Anda.</p>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Email / Akun</label><input type="text" id="forgotEmail" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none bg-slate-50/50 text-sm"></div>
+                <button type="submit" id="btnForgot" class="w-full bg-gradient-to-br from-brand to-red-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-brand/30">Tampilkan Password</button>
+            </form>
         </div>
-
-        <form id="loginForm" onsubmit="handleLogin(event)" class="w-full space-y-4 fade-transition relative z-10">
-            <div class="flex bg-slate-100 p-1 rounded-2xl mb-4">
-                <button type="button" id="tabWarga" onclick="setLoginRole('warga')" class="flex-1 py-2.5 text-sm font-bold bg-white shadow-sm rounded-xl text-brand transition-all">Warga</button>
-                <button type="button" id="tabAdmin" onclick="setLoginRole('admin')" class="flex-1 py-2.5 text-sm font-semibold text-slate-500 rounded-xl transition-all">Pengurus RT</button>
-            </div>
-            <div id="loginEmailContainer">
-                <label class="block text-xs font-semibold text-slate-600 mb-1.5 tracking-wide uppercase">Email / Akun</label>
-                <input type="text" id="loginEmail" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none bg-slate-50/50 text-sm transition-all">
-            </div>
-            <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1.5 tracking-wide uppercase">Password</label>
-                <div class="relative">
-                    <input type="password" id="loginPassword" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none bg-slate-50/50 text-sm pr-12 transition-all">
-                    <button type="button" onclick="togglePasswordVisibility('loginPassword', 'loginEyeIcon')" class="absolute inset-y-0 right-0 px-4 flex items-center text-slate-400 hover:text-brand transition cursor-pointer"><i id="loginEyeIcon" class="fa-regular fa-eye"></i></button>
-                </div>
-            </div>
-            <div class="flex justify-end"><button type="button" onclick="switchAuthView('forgot')" class="text-xs text-brand font-semibold hover:text-red-700">Lupa Password?</button></div>
-            <button type="submit" id="btnLogin" class="w-full bg-gradient-to-br from-brand to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-brand/30 transition-all active:scale-[0.98]">Masuk</button>
-
-            <div class="relative flex py-1 items-center"><div class="flex-grow border-t border-slate-200"></div><span class="flex-shrink mx-3 text-slate-400 text-[10px] font-semibold uppercase tracking-wider">atau</span><div class="flex-grow border-t border-slate-200"></div></div>
-            <button type="button" id="btnFingerprintLogin" onclick="handleFingerprintLogin()" class="w-full bg-slate-50 hover:bg-brand-light text-slate-700 font-bold py-3 rounded-xl border border-slate-200 hover:border-brand/30 flex items-center justify-center gap-2.5 transition-all shadow-sm">
-                <i class="fa-solid fa-fingerprint text-2xl text-brand"></i><span class="text-sm">Masuk dengan Fingerprint</span>
-            </button>
-            <p id="regPrompt" class="text-center text-sm text-slate-600 mt-4">Belum punya akun? <button type="button" onclick="switchAuthView('register')" class="text-brand font-bold hover:text-red-700">Daftar Warga</button></p>
-        </form>
-
-        <form id="registerForm" onsubmit="handleRegister(event)" class="w-full space-y-4 fade-transition hidden absolute inset-0 bg-white p-6 overflow-y-auto z-20">
-            <div class="flex items-center gap-3 mb-6 sticky top-0 bg-white py-2 z-10 border-b border-slate-100">
-                <button type="button" onclick="switchAuthView('login')" class="w-9 h-9 bg-slate-100 hover:bg-slate-200 rounded-full transition"><i class="fa-solid fa-arrow-left text-slate-600"></i></button>
-                <h2 class="text-lg font-bold text-slate-800">Registrasi Warga</h2>
-            </div>
-            <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Nama Lengkap</label><input type="text" id="regNama" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none bg-slate-50/50 text-sm"></div>
-            <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Email / Akun</label><input type="text" id="regEmail" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none bg-slate-50/50 text-sm"></div>
-            <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">No. WhatsApp (HP)</label><input type="tel" id="regHp" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none bg-slate-50/50 text-sm"></div>
-            <div class="flex gap-3"><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">Blok</label><input type="text" id="regBlok" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none bg-slate-50/50 text-sm uppercase" placeholder="A"></div><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">No</label><input type="number" id="regNo" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none bg-slate-50/50 text-sm" placeholder="12"></div></div>
-            <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1.5">Password</label>
-                <div class="relative">
-                    <input type="password" id="regPassword" required minlength="6" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none bg-slate-50/50 text-sm pr-12">
-                    <button type="button" onclick="togglePasswordVisibility('regPassword', 'regEyeIcon')" class="absolute inset-y-0 right-0 px-4 flex items-center text-slate-400 hover:text-brand transition cursor-pointer"><i id="regEyeIcon" class="fa-regular fa-eye"></i></button>
-                </div>
-            </div>
-            <button type="submit" id="btnRegister" class="w-full bg-gradient-to-br from-brand to-red-700 text-white font-bold py-3.5 rounded-xl mt-4 shadow-lg shadow-brand/30">Daftar Sekarang</button>
-        </form>
-
-        <form id="forgotForm" onsubmit="handleForgot(event)" class="w-full space-y-4 fade-transition hidden absolute inset-0 bg-white p-6 z-20">
-            <div class="flex items-center gap-3 mb-6"><button type="button" onclick="switchAuthView('login')" class="w-9 h-9 bg-slate-100 hover:bg-slate-200 rounded-full transition"><i class="fa-solid fa-arrow-left text-slate-600"></i></button><h2 class="text-lg font-bold text-slate-800">Lupa Password</h2></div>
-            <p class="text-sm text-slate-600 mb-4 leading-relaxed">Masukkan Email / Akun yang terdaftar. Sistem akan langsung menampilkan password Anda.</p>
-            <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Email / Akun</label><input type="text" id="forgotEmail" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-brand focus:ring-4 focus:ring-brand/10 outline-none bg-slate-50/50 text-sm"></div>
-            <button type="submit" id="btnForgot" class="w-full bg-gradient-to-br from-brand to-red-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-brand/30">Tampilkan Password</button>
-        </form>
     </div>
 
-    <!-- MAIN APP -->
-    <div id="mainAppContainer" class="app-shell w-full bg-slate-50 relative hidden flex-col mx-auto overflow-hidden md:max-w-3xl lg:max-w-5xl xl:max-w-6xl md:rounded-[2rem] md:shadow-2xl border-x border-slate-100 md:border-none">
+    <!-- MAIN APP (FULL SCREEN WITHOUT FRAME) -->
+    <div id="mainAppContainer" class="w-full h-[100dvh] bg-slate-50 relative hidden flex-col mx-auto overflow-hidden">
 
         <!-- HEADER -->
-        <header class="relative bg-gradient-to-br from-brand via-red-700 to-red-800 text-white px-4 pb-5 pt-safe-top sm:px-8 lg:px-12 sm:py-5 shrink-0 z-30 shadow-xl w-full overflow-hidden">
-            <div class="absolute -top-16 -right-16 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-            <div class="absolute -bottom-12 -left-12 w-40 h-40 bg-gold/20 rounded-full blur-2xl pointer-events-none"></div>
-            <div class="relative flex items-center justify-between gap-2 max-w-5xl mx-auto w-full">
+        <header class="relative bg-gradient-to-br from-brand via-red-700 to-red-800 text-white px-4 pb-5 pt-safe-top sm:px-8 lg:px-12 sm:py-5 shrink-0 z-30 shadow-xl w-full">
+            <div class="absolute inset-0 bg-white/5 pointer-events-none"></div>
+            <div class="relative flex items-center justify-between gap-2 max-w-6xl mx-auto w-full">
                 <div class="flex items-center gap-3 min-w-0">
                     <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-white shadow-lg flex items-center justify-center overflow-hidden shrink-0 ring-2 ring-white/40">
                         <img src="1000531885.png" class="w-full h-full object-cover" onerror="this.src='/icon-192.png';">
@@ -296,7 +292,7 @@
             <!-- HOME -->
             <div id="homeView" class="pb-6">
                 <!-- SOS BANNER -->
-                <div id="sosActiveAlertBanner" class="px-4 sm:px-8 lg:px-12 pt-4 hidden max-w-5xl mx-auto w-full">
+                <div id="sosActiveAlertBanner" class="px-4 sm:px-8 lg:px-12 pt-4 hidden max-w-6xl mx-auto w-full">
                     <div class="bg-gradient-to-br from-brand to-red-700 text-white rounded-3xl p-4 shadow-xl shadow-brand/30 border border-red-400/50 animate-pulse">
                         <div class="flex items-start gap-3">
                             <div class="w-11 h-11 bg-white text-brand rounded-2xl flex items-center justify-center text-xl shrink-0 shadow-lg"><i class="fa-solid fa-bullhorn"></i></div>
@@ -314,7 +310,7 @@
                 </div>
 
                 <!-- WELCOME CARD -->
-                <div class="px-4 sm:px-8 lg:px-12 pt-4 pb-3 max-w-5xl mx-auto w-full">
+                <div class="px-4 sm:px-8 lg:px-12 pt-4 pb-3 max-w-6xl mx-auto w-full">
                     <div class="relative bg-gradient-to-br from-brand via-red-700 to-red-800 rounded-3xl p-5 shadow-xl shadow-brand/25 overflow-hidden grain">
                         <div class="absolute -top-12 -right-12 w-44 h-44 bg-white/10 rounded-full pointer-events-none"></div>
                         <div class="absolute -bottom-16 -left-8 w-32 h-32 bg-gold/10 rounded-full pointer-events-none"></div>
@@ -337,7 +333,7 @@
                 </div>
 
                 <!-- IURAN REMINDER -->
-                <div id="iuranReminderBanner" class="px-4 sm:px-8 lg:px-12 pb-3 hidden max-w-5xl mx-auto w-full">
+                <div id="iuranReminderBanner" class="px-4 sm:px-8 lg:px-12 pb-3 hidden max-w-6xl mx-auto w-full">
                     <div class="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-3.5 flex items-center justify-between gap-3 shadow-sm">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 bg-gradient-to-br from-gold to-yellow-600 text-white rounded-xl flex items-center justify-center shrink-0 shadow-md shadow-gold/30"><i class="fa-solid fa-bell"></i></div>
@@ -351,7 +347,7 @@
                 </div>
 
                 <!-- PENGUMUMAN -->
-                <div id="pengumumanContainer" class="px-4 sm:px-8 lg:px-12 pb-3 hidden max-w-5xl mx-auto w-full">
+                <div id="pengumumanContainer" class="px-4 sm:px-8 lg:px-12 pb-3 hidden max-w-6xl mx-auto w-full">
                     <div class="bg-gradient-to-br from-red-50 to-brand-light border border-red-200 rounded-2xl p-4 shadow-sm relative overflow-hidden">
                         <div class="absolute -top-8 -right-8 w-24 h-24 bg-red-200/40 rounded-full pointer-events-none"></div>
                         <div class="absolute top-3 right-3 bg-brand text-white text-[9px] font-bold px-2 py-0.5 rounded-md tracking-wider">PENGUMUMAN</div>
@@ -361,7 +357,7 @@
                 </div>
 
                 <!-- POLLING -->
-                <div id="pollingHomeContainer" class="px-4 sm:px-8 lg:px-12 pb-3 hidden max-w-5xl mx-auto w-full">
+                <div id="pollingHomeContainer" class="px-4 sm:px-8 lg:px-12 pb-3 hidden max-w-6xl mx-auto w-full">
                     <div class="bg-purple-50 border border-purple-200 rounded-2xl p-4 shadow-sm relative overflow-hidden">
                         <div class="absolute top-0 right-0 bg-purple-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-bl-lg"><i class="fa-solid fa-check-to-slot mr-1"></i>E-VOTING RT</div>
                         <h3 class="font-bold text-purple-900 text-sm mb-1 pr-20" id="pollHomeTitle">Judul Polling</h3>
@@ -372,24 +368,23 @@
                 </div>
 
                 <!-- MENU LAYANAN -->
-                <div class="px-4 sm:px-8 lg:px-12 pb-4 pt-1 max-w-5xl mx-auto w-full">
+                <div class="px-4 sm:px-8 lg:px-12 pb-4 pt-1 max-w-6xl mx-auto w-full">
                     <div class="flex items-center justify-between mb-3.5">
                         <h3 class="font-bold text-slate-800 text-xs sm:text-sm uppercase tracking-wider">Menu Layanan</h3>
-                        <span class="text-[10px] text-slate-400 font-medium">8 Layanan</span>
+                        <span class="text-[10px] text-slate-400 font-medium">7 Layanan</span>
                     </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 md:gap-4">
-                        <button onclick="openModal('Lapor Keluhan')" class="group bg-white rounded-2xl p-3 sm:p-4 flex flex-col items-center gap-2 text-center active:scale-95 transition-all duration-300 border border-slate-100 shadow-soft hover:shadow-lift hover:-translate-y-1">
-                            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-red-50 to-brand-light flex justify-center items-center group-hover:scale-110 transition-transform duration-300"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Megaphone/3D/megaphone_3d.png" class="w-8 h-8 sm:w-9 sm:h-9 animate-float"></div>
-                            <span class="font-semibold text-[10px] sm:text-[11px] text-slate-700 leading-tight">Lapor Keluhan</span>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 md:gap-4">
+                        <!-- GABUNGAN: LAPOR & TANYA RT -->
+                        <button onclick="openModal('Tanya & Lapor RT')" class="group bg-white rounded-2xl p-3 sm:p-4 flex flex-col items-center gap-2 text-center active:scale-95 transition-all duration-300 border border-slate-100 shadow-soft hover:shadow-lift hover:-translate-y-1">
+                            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-red-50 to-brand-light flex justify-center items-center group-hover:scale-110 transition-transform duration-300"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Speech%20balloon/3D/speech_balloon_3d.png" class="w-8 h-8 sm:w-9 sm:h-9 animate-float"></div>
+                            <span class="font-semibold text-[10px] sm:text-[11px] text-slate-700 leading-tight">Lapor & Tanya RT</span>
                         </button>
+                        
                         <button onclick="openModal('Surat Menyurat')" class="group bg-white rounded-2xl p-3 sm:p-4 flex flex-col items-center gap-2 text-center active:scale-95 transition-all duration-300 border border-slate-100 shadow-soft hover:shadow-lift hover:-translate-y-1">
                             <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 flex justify-center items-center group-hover:scale-110 transition-transform duration-300"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Envelope/3D/envelope_3d.png" class="w-8 h-8 sm:w-9 sm:h-9 animate-float" style="animation-delay: 0.5s;"></div>
                             <span class="font-semibold text-[10px] sm:text-[11px] text-slate-700 leading-tight">Surat Pengantar</span>
                         </button>
-                        <button onclick="openModal('Tanya & Lapor RT')" class="group bg-white rounded-2xl p-3 sm:p-4 flex flex-col items-center gap-2 text-center active:scale-95 transition-all duration-300 border border-slate-100 shadow-soft hover:shadow-lift hover:-translate-y-1">
-                            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-red-50 to-brand-light flex justify-center items-center group-hover:scale-110 transition-transform duration-300"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Speech%20balloon/3D/speech_balloon_3d.png" class="w-8 h-8 sm:w-9 sm:h-9 animate-float" style="animation-delay: 1s;"></div>
-                            <span class="font-semibold text-[10px] sm:text-[11px] text-slate-700 leading-tight">Tanya RT</span>
-                        </button>
+                        
                         <button onclick="openModal('Isi Data Warga')" class="group bg-white rounded-2xl p-3 sm:p-4 flex flex-col items-center gap-2 text-center active:scale-95 transition-all duration-300 border border-slate-100 shadow-soft hover:shadow-lift hover:-translate-y-1">
                             <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-purple-50 to-fuchsia-50 flex justify-center items-center group-hover:scale-110 transition-transform duration-300"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Memo/3D/memo_3d.png" class="w-8 h-8 sm:w-9 sm:h-9 animate-float" style="animation-delay: 1.5s;"></div>
                             <span class="font-semibold text-[10px] sm:text-[11px] text-slate-700 leading-tight">Isi Data Warga</span>
@@ -466,14 +461,14 @@
             </div>
 
             <!-- RIWAYAT -->
-            <div id="riwayatView" class="hidden px-4 sm:px-8 lg:px-12 pt-5 pb-6 fade-transition w-full max-w-5xl mx-auto">
+            <div id="riwayatView" class="hidden px-4 sm:px-8 lg:px-12 pt-5 pb-6 fade-transition w-full max-w-6xl mx-auto">
                 <h3 class="font-bold text-slate-800 mb-4 text-sm uppercase tracking-wider">Riwayat Permohonan</h3>
                 <div id="riwayatListContainer" class="space-y-3"></div>
             </div>
         </main>
 
         <!-- BOTTOM NAV -->
-        <nav id="bottomNav" class="bg-white/95 backdrop-blur-xl border-t border-slate-100 flex justify-center items-center pt-2 pb-safe-bottom shrink-0 z-30 shadow-[0_-4px_24px_-4px_rgba(31,41,55,0.06)]">
+        <nav id="bottomNav" class="bg-white/95 backdrop-blur-xl border-t border-slate-100 flex justify-center items-center pt-2 pb-safe-bottom shrink-0 z-30 shadow-[0_-4px_24px_-4px_rgba(31,41,55,0.06)] w-full">
             <div class="flex justify-around items-center w-full max-w-lg mx-auto px-2">
                 <button id="navBerandaBtn" onclick="switchTab('beranda')" class="flex flex-col items-center text-brand flex-1 py-1 active:scale-95 transition"><i class="fa-solid fa-house text-lg mb-1"></i><span class="text-[10px] sm:text-xs font-semibold">Beranda</span></button>
                 <button id="navChatBtn" onclick="switchTab('chat')" class="relative flex flex-col items-center text-slate-400 flex-1 py-1 active:scale-95 transition"><i class="fa-solid fa-comments text-lg mb-1"></i><span class="text-[10px] sm:text-xs font-semibold">Obrolan</span><span id="navChatBadge" class="hidden absolute top-0 right-1/4 bg-brand text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span></button>
@@ -638,25 +633,25 @@
         </div>
     </div>
 
-    <!-- KAS -->
-    <div id="kasModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-[60] hidden items-end sm:items-center justify-center modal-overlay opacity-0 sm:p-4">
-        <div id="kasModalContent" class="bg-slate-50 w-full max-w-lg rounded-t-[2rem] sm:rounded-3xl flex flex-col max-h-[90dvh] modal-content translate-y-full overflow-hidden shadow-2xl md:max-w-2xl">
-            <div class="bg-white flex justify-between items-center px-6 py-4 border-b border-slate-100 shrink-0">
+    <!-- KAS (FULL SCREEN) -->
+    <div id="kasModal" class="fixed inset-0 bg-slate-50 z-[60] hidden flex-col modal-overlay opacity-0">
+        <div id="kasModalContent" class="w-full h-full bg-slate-50 flex flex-col overflow-hidden">
+            <div class="bg-white flex justify-between items-center px-4 md:px-8 py-4 border-b border-slate-100 shrink-0 sticky top-0 z-10">
                 <div>
-                    <h2 class="font-bold text-xl text-brand flex items-center gap-2"><i class="fa-solid fa-wallet"></i> Laporan Kas</h2>
+                    <h2 class="font-bold text-xl text-brand flex items-center gap-2"><i class="fa-solid fa-wallet"></i> Laporan Kas RT</h2>
                     <p class="text-xs text-slate-500 mt-0.5">Transparansi Keuangan RT.010</p>
                 </div>
                 <button onclick="closeModal('kasModal', 'kasModalContent')" class="w-9 h-9 bg-slate-100 hover:bg-slate-200 rounded-full text-slate-500 transition"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="p-4 flex-1 overflow-y-auto space-y-4">
-                <div class="relative bg-gradient-to-br from-brand via-red-700 to-red-800 text-white p-5 rounded-3xl shadow-2xl shadow-brand/30 overflow-hidden grain">
+            <div class="p-4 md:p-8 flex-1 overflow-y-auto space-y-4 w-full max-w-4xl mx-auto">
+                <div class="relative bg-gradient-to-br from-brand via-red-700 to-red-800 text-white p-5 md:p-8 rounded-3xl shadow-2xl shadow-brand/30 overflow-hidden grain">
                     <div class="absolute -top-12 -right-12 w-40 h-40 bg-white/10 rounded-full pointer-events-none"></div>
                     <div class="relative">
                         <p class="text-[10px] uppercase tracking-widest opacity-80 font-semibold">Total Saldo Kas RT</p>
-                        <h3 class="text-2xl font-extrabold mt-1 mb-4 tracking-tight" id="kasTotalSaldo">Rp 0</h3>
-                        <div class="grid grid-cols-2 gap-2 pt-3 border-t border-white/20 text-xs">
-                            <div><span class="opacity-75 block text-[9px] uppercase tracking-wider">Masuk</span><b id="kasTotalMasuk" class="text-brand-light text-sm">+ Rp 0</b></div>
-                            <div><span class="opacity-75 block text-[9px] uppercase tracking-wider">Keluar</span><b id="kasTotalKeluar" class="text-red-200 text-sm">- Rp 0</b></div>
+                        <h3 class="text-3xl md:text-4xl font-extrabold mt-1 mb-4 tracking-tight" id="kasTotalSaldo">Rp 0</h3>
+                        <div class="grid grid-cols-2 gap-2 pt-4 border-t border-white/20 text-xs md:text-sm">
+                            <div><span class="opacity-75 block text-[9px] md:text-[10px] uppercase tracking-wider">Masuk</span><b id="kasTotalMasuk" class="text-brand-light text-sm md:text-base">+ Rp 0</b></div>
+                            <div><span class="opacity-75 block text-[9px] md:text-[10px] uppercase tracking-wider">Keluar</span><b id="kasTotalKeluar" class="text-red-200 text-sm md:text-base">- Rp 0</b></div>
                         </div>
                     </div>
                 </div>
@@ -860,7 +855,7 @@
         </div>
     </div>
 
-    <!-- ORDER FORM -->
+    <!-- ORDER FORM (LAPOR & TANYA RT DIGABUNG) -->
     <div id="orderModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-[60] hidden items-end sm:items-center justify-center modal-overlay opacity-0 sm:p-4">
         <div id="modalContent" class="bg-white w-full max-w-lg rounded-t-[2rem] sm:rounded-3xl p-6 md:p-8 modal-content translate-y-full max-h-[90dvh] overflow-y-auto shadow-2xl relative flex flex-col md:max-w-2xl">
             <div class="flex justify-between items-center mb-5 sticky top-0 bg-white z-10 pb-3 border-b border-slate-100">
@@ -874,7 +869,7 @@
                 <div id="standardForm" class="space-y-4 md:space-y-5 hidden">
                     <div><label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Nama Lengkap</label><input type="text" id="stdNama" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm outline-none focus:border-brand focus:ring-4 focus:ring-brand/10 transition"></div>
                     <div class="flex gap-3"><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Blok</label><input type="text" id="stdBlok" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 uppercase text-sm outline-none focus:border-brand"></div><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">No</label><input type="number" id="stdNo" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm outline-none focus:border-brand"></div></div>
-                    <div><label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Detail Keluhan</label><textarea id="stdDetail" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 resize-none text-sm outline-none focus:border-brand"></textarea></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Detail Keluhan / Laporan</label><textarea id="stdDetail" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 resize-none text-sm outline-none focus:border-brand"></textarea></div>
                     <div id="fotoBuktiContainer">
                         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Foto Bukti (Kamera)</label>
                         <div class="mt-1 px-4 py-4 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50 text-center">
