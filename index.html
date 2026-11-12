@@ -138,8 +138,11 @@
             <form id="registerForm" onsubmit="handleRegister(event)" class="w-full space-y-4 fade-transition hidden absolute inset-0 bg-white p-6 sm:p-8 overflow-y-auto z-20">
                 <div class="flex items-center gap-3 mb-6 sticky top-0 bg-white py-2 z-10 border-b border-slate-100"><button type="button" onclick="switchAuthView('login')" class="w-9 h-9 bg-slate-100 rounded-full"><i class="fa-solid fa-arrow-left text-slate-600"></i></button><h2 class="text-lg font-bold text-slate-800">Registrasi Warga</h2></div>
                 <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Nama Lengkap</label><input type="text" id="regNama" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"></div>
+                <div class="flex gap-3">
+                    <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">Jenis Kelamin</label><select id="regGender" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"><option value="Laki-laki">Laki-laki</option><option value="Perempuan">Perempuan</option></select></div>
+                    <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">No. WhatsApp</label><input type="tel" id="regHp" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"></div>
+                </div>
                 <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Email / Akun</label><input type="text" id="regEmail" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"></div>
-                <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">No. WhatsApp (HP)</label><input type="tel" id="regHp" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"></div>
                 <div class="flex gap-3"><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">Blok</label><input type="text" id="regBlok" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm uppercase" placeholder="A"></div><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">No</label><input type="number" id="regNo" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm" placeholder="12"></div></div>
                 <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Password</label><div class="relative"><input type="password" id="regPassword" required minlength="6" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm pr-12"><button type="button" onclick="togglePasswordVisibility('regPassword', 'regEyeIcon')" class="absolute inset-y-0 right-0 px-4 flex items-center text-slate-400"><i id="regEyeIcon" class="fa-regular fa-eye"></i></button></div></div>
                 <button type="submit" id="btnRegister" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl mt-4 shadow-lg">Daftar Sekarang</button>
@@ -190,6 +193,33 @@
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                             <div class="min-w-0 flex-1"><p class="text-emerald-50 text-[11px] uppercase tracking-wide">Selamat datang,</p><h2 id="welcomeName" class="text-white font-bold text-lg sm:text-2xl truncate mt-1">Warga!</h2><p class="text-emerald-100 text-[11px] mt-1.5 flex items-center gap-1"><i class="fa-solid fa-location-dot text-[10px]"></i> Blok / No Rumah Anda</p></div>
                             <div class="flex flex-row sm:flex-col gap-1.5 shrink-0 w-full sm:w-auto"><button id="btnHomeSOS" onclick="bukaHalamanSOS()" class="flex-1 sm:flex-none bg-white text-red-600 px-3 py-2 rounded-xl text-[11px] font-bold shadow-sm flex items-center justify-center gap-1.5"><i class="fa-solid fa-triangle-exclamation"></i> Darurat</button><button onclick="switchTab('iuran')" class="flex-1 sm:flex-none bg-emerald-700 text-white px-3 py-2 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1.5"><i class="fa-solid fa-id-card-clip"></i> Iuran</button></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DEMOGRAFI WARGA -->
+                <div class="px-4 sm:px-6 lg:px-8 pb-4 w-full">
+                    <div class="flex items-center justify-between mb-3.5"><h3 class="font-bold text-slate-800 text-xs sm:text-sm uppercase tracking-wider">Demografi & Pertumbuhan Warga</h3></div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center">
+                            <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-2"><i class="fa-solid fa-house"></i></div>
+                            <p class="text-[10px] text-slate-500 font-semibold mb-1 uppercase">Total Rumah</p>
+                            <p class="text-lg font-bold text-slate-800" id="statRumah">0</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center">
+                            <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-2"><i class="fa-solid fa-users"></i></div>
+                            <p class="text-[10px] text-slate-500 font-semibold mb-1 uppercase">Total Jiwa</p>
+                            <p class="text-lg font-bold text-slate-800" id="statJiwa">0</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center">
+                            <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-2"><i class="fa-solid fa-mars"></i></div>
+                            <p class="text-[10px] text-slate-500 font-semibold mb-1 uppercase">Laki-laki</p>
+                            <p class="text-lg font-bold text-slate-800" id="statLaki">0</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm text-center">
+                            <div class="w-10 h-10 bg-pink-50 text-pink-600 rounded-full flex items-center justify-center mx-auto mb-2"><i class="fa-solid fa-venus"></i></div>
+                            <p class="text-[10px] text-slate-500 font-semibold mb-1 uppercase">Perempuan</p>
+                            <p class="text-lg font-bold text-slate-800" id="statPerempuan">0</p>
                         </div>
                     </div>
                 </div>
@@ -413,7 +443,10 @@
                         <h3 class="font-bold text-sm text-slate-800 mb-3">Edit Profil</h3>
                         <form id="formEditProfil" onsubmit="saveProfile(event)" class="space-y-3">
                             <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap</label><input type="text" id="editNama" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
-                            <div><label class="block text-xs font-semibold text-slate-600 mb-1">No. WhatsApp</label><input type="tel" id="editHp" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                            <div class="flex gap-3">
+                                <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Jenis Kelamin</label><select id="editGender" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"><option value="Laki-laki">Laki-laki</option><option value="Perempuan">Perempuan</option></select></div>
+                                <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">No. WhatsApp</label><input type="tel" id="editHp" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                            </div>
                             <div class="flex gap-3"><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Blok</label><input type="text" id="editBlok" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 uppercase text-sm outline-none focus:border-emerald-500"></div><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">No</label><input type="number" id="editNo" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div></div>
                             <div class="pt-2"><button type="submit" class="w-full bg-slate-800 text-white font-bold py-3 rounded-xl shadow-md">Simpan Perubahan</button></div>
                         </form>
@@ -557,7 +590,33 @@
                             <div id="adminIuranWargaList" class="space-y-2"></div>
                         </div>
                         <div id="admViewKas" class="hidden">
-                            <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mb-4 space-y-2.5"><h3 class="font-bold text-emerald-900 text-sm">Catat Transaksi Kas</h3><div class="grid grid-cols-2 gap-2"><select id="kasJenisInput" class="px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none"><option value="masuk">➕ Masuk</option><option value="keluar">➖ Keluar</option></select><input type="number" id="kasNominalInput" placeholder="Nominal" class="px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div><input type="text" id="kasKetInput" placeholder="Keterangan" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"><button onclick="tambahTransaksiKas()" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-lg text-xs shadow-md">Simpan</button></div>
+                            <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mb-4 space-y-2.5">
+                                <h3 class="font-bold text-emerald-900 text-sm">Catat Transaksi Kas</h3>
+                                
+                                <!-- Dropdown Pilihan Pengeluaran Rutin -->
+                                <select id="kasKategoriInput" onchange="autofillKasKet()" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none mb-1 text-slate-700">
+                                    <option value="">-- Pilih Pengeluaran Rutin (Opsional) --</option>
+                                    <option value="Gaji Satpam">Gaji Satpam</option>
+                                    <option value="Gaji Petugas Kebersihan">Gaji Petugas Kebersihan</option>
+                                    <option value="Gaji Petugas Angkut Sampah">Gaji Petugas Angkut Sampah</option>
+                                    <option value="Insentif Bendahara">Insentif Bendahara</option>
+                                    <option value="Insentif Teknisi Air">Insentif Teknisi Air</option>
+                                    <option value="Insentif Teknisi Listrik/Toren">Insentif Teknisi Listrik/Toren</option>
+                                    <option value="Ganti Lampu PJU">Ganti Lampu PJU</option>
+                                    <option value="Setoran Kas TPU Al-Ikhwan">Setoran Kas TPU Al-Ikhwan</option>
+                                    <option value="Lainnya">Lainnya (Ketik Manual)</option>
+                                </select>
+
+                                <div class="grid grid-cols-2 gap-2">
+                                    <select id="kasJenisInput" class="px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none">
+                                        <option value="masuk">➕ Masuk</option>
+                                        <option value="keluar">➖ Keluar</option>
+                                    </select>
+                                    <input type="number" id="kasNominalInput" placeholder="Nominal" class="px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500">
+                                </div>
+                                <input type="text" id="kasKetInput" placeholder="Keterangan Tambahan (Cth: Bulan Nov)" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500">
+                                <button onclick="tambahTransaksiKas()" class="w-full bg-emerald-600 text-white font-bold py-2.5 rounded-lg text-xs shadow-md">Simpan</button>
+                            </div>
                             <h3 class="font-bold text-slate-700 text-sm mb-2 border-b border-slate-100 pb-2">Riwayat Transaksi</h3><div id="adminKasList" class="space-y-2"></div>
                         </div>
                         <div id="admViewPolling" class="hidden">
@@ -806,13 +865,50 @@
             catch (err) { showToast("Gagal kirim pesan.", true); }
         }
 
+        /* KAS & PENGELUARAN RUTIN */
         let currentKasFilter = 'semua'; let globalKasList = [];
+
+        window.autofillKasKet = function() {
+            const kat = document.getElementById('kasKategoriInput').value;
+            const ketInput = document.getElementById('kasKetInput');
+            if (kat && kat !== 'Lainnya') {
+                ketInput.value = kat;
+            } else if (kat === 'Lainnya') {
+                ketInput.value = '';
+            }
+        };
+
         window.filterKas = function(tipe) {
             currentKasFilter = tipe; ['semua', 'masuk', 'keluar'].forEach(t => { const btn = document.getElementById('tabKas' + t.charAt(0).toUpperCase() + t.slice(1)); if(btn) { if(t === tipe) btn.className = "flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all"; else btn.className = "flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all"; } }); renderKasList();
         };
         window.tambahTransaksiKas = async function () {
-            if (!firebaseReady) return; const jenis = document.getElementById('kasJenisInput')?.value; const nom = Number(document.getElementById('kasNominalInput')?.value); const ket = document.getElementById('kasKetInput')?.value.trim(); if (!nom || !ket) return showToast("Nominal dan keterangan wajib diisi!", true);
-            try { await addDoc(collection(db, 'artifacts', appId, 'kas'), { tipeDoc: 'transaksi', jenis, nominal: nom, keterangan: ket, oleh: (window.currentUserData && window.currentUserData.nama) || 'Pengurus RT', timestamp: Date.now() }); const nEl = document.getElementById('kasNominalInput'); const kEl = document.getElementById('kasKetInput'); if (nEl) nEl.value = ''; if (kEl) kEl.value = ''; showToast("Transaksi Kas disimpan!"); loadBukuKas(); }
+            if (!firebaseReady) return; 
+            const kategori = document.getElementById('kasKategoriInput')?.value || '';
+            const jenis = document.getElementById('kasJenisInput')?.value; 
+            const nom = Number(document.getElementById('kasNominalInput')?.value); 
+            const ket = document.getElementById('kasKetInput')?.value.trim() || kategori || 'Tanpa Keterangan'; 
+            
+            if (!nom || !ket) return showToast("Nominal dan keterangan wajib diisi!", true);
+            try { 
+                await addDoc(collection(db, 'artifacts', appId, 'kas'), { 
+                    tipeDoc: 'transaksi', 
+                    kategori: kategori,
+                    jenis: jenis, 
+                    nominal: nom, 
+                    keterangan: ket, 
+                    oleh: (window.currentUserData && window.currentUserData.nama) || 'Pengurus RT', 
+                    timestamp: Date.now() 
+                }); 
+                const nEl = document.getElementById('kasNominalInput'); 
+                const kEl = document.getElementById('kasKetInput'); 
+                const katEl = document.getElementById('kasKategoriInput');
+                if (nEl) nEl.value = ''; 
+                if (kEl) kEl.value = ''; 
+                if (katEl) katEl.value = '';
+                
+                showToast("Transaksi Kas disimpan!"); 
+                loadBukuKas(); 
+            }
             catch (e) { showToast("Gagal menyimpan kas.", true); }
         };
         window.hapusTransaksiKas = async function (id) { if (!confirm("Hapus catatan transaksi kas ini?")) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'kas', id)); showToast("Catatan kas dihapus."); loadBukuKas(); } catch (e) { } };
@@ -834,7 +930,12 @@
                 renderKasList();
                 if(aCont) {
                     let hAdmin = '';
-                    globalKasList.forEach(x => { const isMasuk = x.jenis === 'masuk'; const tgl = x.timestamp ? new Date(x.timestamp).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) : '-'; const safeKet = String(x.keterangan || '').replace(/'/g, "\\'"); hAdmin += `<div class="bg-white p-2.5 rounded-xl border border-slate-200 flex justify-between items-center mb-2 shadow-sm"><div class="min-w-0 flex-1 pr-2"><h4 class="font-bold text-xs text-slate-800 truncate">${escapeHtml(x.keterangan)}</h4><p class="text-[10px] ${isMasuk ? 'text-emerald-600' : 'text-red-600'} font-bold">${isMasuk ? '➕' : '➖'} ${formatRupiah(x.nominal)} <span class="text-slate-400 font-normal">(${tgl})</span></p></div><div class="flex gap-1 shrink-0"><button onclick="bukaEditKas('${x.id}', '${x.jenis}', ${x.nominal}, '${safeKet}')" class="w-7 h-7 bg-blue-50 text-blue-500 hover:bg-blue-100 rounded-lg text-xs transition"><i class="fa-solid fa-pen"></i></button><button onclick="hapusTransaksiKas('${x.id}')" class="w-7 h-7 bg-red-50 text-red-500 hover:bg-red-100 rounded-lg text-xs transition"><i class="fa-solid fa-trash"></i></button></div></div>`; });
+                    globalKasList.forEach(x => { 
+                        const isMasuk = x.jenis === 'masuk'; 
+                        const tgl = x.timestamp ? new Date(x.timestamp).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) : '-'; 
+                        const safeKet = String(x.keterangan || '').replace(/'/g, "\\'"); 
+                        hAdmin += `<div class="bg-white p-2.5 rounded-xl border border-slate-200 flex justify-between items-center mb-2 shadow-sm"><div class="min-w-0 flex-1 pr-2"><h4 class="font-bold text-xs text-slate-800 truncate">${escapeHtml(x.keterangan)}</h4><p class="text-[10px] ${isMasuk ? 'text-emerald-600' : 'text-red-600'} font-bold">${isMasuk ? '➕' : '➖'} ${formatRupiah(x.nominal)} <span class="text-slate-400 font-normal">(${tgl})</span></p></div><div class="flex gap-1 shrink-0"><button onclick="bukaEditKas('${x.id}', '${x.jenis}', ${x.nominal}, '${safeKet}')" class="w-7 h-7 bg-blue-50 text-blue-500 hover:bg-blue-100 rounded-lg text-xs transition"><i class="fa-solid fa-pen"></i></button><button onclick="hapusTransaksiKas('${x.id}')" class="w-7 h-7 bg-red-50 text-red-500 hover:bg-red-100 rounded-lg text-xs transition"><i class="fa-solid fa-trash"></i></button></div></div>`; 
+                    });
                     aCont.innerHTML = hAdmin || '<p class="text-center text-xs text-slate-400 py-4">Belum ada transaksi.</p>';
                 }
             } catch (e) { console.error(e); wCont.innerHTML = '<p class="text-center text-red-500 text-xs py-5">Gagal memuat laporan.</p>'; }
@@ -849,15 +950,29 @@
                 hWarga += `<div class="mb-3"><h4 class="text-xs font-bold text-slate-800 mb-2 text-center tracking-wide">${dateLabel}</h4><div class="space-y-2">`;
                 items.forEach(x => {
                     const isMasuk = x.jenis === 'masuk'; const amtColor = isMasuk ? 'text-emerald-500' : 'text-red-500'; const iconColor = isMasuk ? 'text-emerald-500 border-emerald-200' : 'text-red-500 border-red-200'; const sign = isMasuk ? '+' : '-'; const icon = isMasuk ? 'fa-arrow-down' : 'fa-arrow-up';
-                    hWarga += `<div class="bg-white p-3.5 rounded-2xl flex justify-between items-center shadow-sm border border-slate-100"><div class="flex items-center gap-3 min-w-0"><div class="w-9 h-9 rounded-full border flex items-center justify-center shrink-0 ${iconColor}"><i class="fa-solid ${icon} text-xs"></i></div><div class="min-w-0"><h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(x.keterangan)}</h4></div></div><span class="font-bold text-sm shrink-0 ${amtColor}">${sign} ${formatRupiah(x.nominal)}</span></div>`;
+                    hWarga += `<div class="bg-white p-3.5 rounded-2xl flex justify-between items-center shadow-sm border border-slate-100">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-9 h-9 rounded-full border flex items-center justify-center shrink-0 ${iconColor}"><i class="fa-solid ${icon} text-xs"></i></div>
+                            <div class="min-w-0">
+                                <h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(x.keterangan)}</h4>
+                                ${x.kategori ? `<p class="text-[10px] text-slate-500">${escapeHtml(x.kategori)}</p>` : ''}
+                            </div>
+                        </div>
+                        <span class="font-bold text-sm shrink-0 ${amtColor}">${sign} ${formatRupiah(x.nominal)}</span>
+                    </div>`;
                 });
                 hWarga += `</div></div>`;
             }
             cont.innerHTML = hWarga;
         }
         window.downloadLaporanKas = function() {
-            if(globalKasList.length === 0) return showToast("Tidak ada data untuk diunduh.", true); let csvContent = "Tanggal,Keterangan,Jenis,Nominal\n";
-            globalKasList.forEach(x => { const tgl = new Date(x.timestamp).toLocaleDateString('id-ID'); const ket = x.keterangan.replace(/,/g, ''); csvContent += `${tgl},${ket},${x.jenis},${x.nominal}\n`; });
+            if(globalKasList.length === 0) return showToast("Tidak ada data untuk diunduh.", true); let csvContent = "Tanggal,Kategori,Keterangan,Jenis,Nominal\n";
+            globalKasList.forEach(x => { 
+                const tgl = new Date(x.timestamp).toLocaleDateString('id-ID'); 
+                const kat = (x.kategori || '-').replace(/,/g, '');
+                const ket = x.keterangan.replace(/,/g, ''); 
+                csvContent += `${tgl},${kat},${ket},${x.jenis},${x.nominal}\n`; 
+            });
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); const url = URL.createObjectURL(blob); link.setAttribute("href", url); link.setAttribute("download", `Laporan_Kas_RT010_${new Date().getTime()}.csv`); document.body.appendChild(link); link.click(); document.body.removeChild(link); showToast("📄 Laporan Kas diunduh!");
         };
 
@@ -901,6 +1016,41 @@
         window.loadAdminIuran = async function () { initDropdownIuran(); const blnSelect = document.getElementById('adminBulanIuran'); if (!blnSelect) return; const selectedBln = blnSelect.value; const cont = document.getElementById('adminIuranWargaList'); if (!cont) return; cont.innerHTML = 'Loading...'; try { const s = await getDocs(collection(db, 'artifacts', appId, 'users')); let h = ''; s.forEach(d => { const u = d.data(); const statusSaatIni = (u.iuran && u.iuran[selectedBln]) || 'BL'; const nomTercatat = (u.iuranNominal && u.iuranNominal[selectedBln]) !== undefined ? Number(u.iuranNominal[selectedBln]) : 0; const safeNama = String(u.nama || 'Warga').replace(/'/g, "\\'"); const safeBlok = escapeHtml(u.blok || '-'); const safeNo = escapeHtml(u.no || '-'); let optNominal = ''; for (let i = 0; i <= 135000; i += 5000) optNominal += `<option value="${i}" ${nomTercatat === i ? 'selected' : ''}>${formatRupiah(i)}</option>`; h += `<div class="p-3 border border-slate-200 rounded-xl flex flex-col gap-2 mb-2 bg-white shadow-sm"><div class="flex justify-between items-start"><div class="min-w-0"><h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(u.nama || 'Warga')}</h4><p class="text-[11px] text-slate-500">Blok ${safeBlok}/${safeNo}</p></div><div class="text-right shrink-0"><p class="text-[11px] font-bold px-2 py-0.5 rounded ${statusSaatIni !== 'BL' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}">${escapeHtml(statusSaatIni)}</p><p class="text-[10px] text-slate-500 font-semibold mt-0.5">${formatRupiah(nomTercatat)}</p></div></div><div class="flex items-center justify-between border-t border-slate-100 pt-2 mt-1 gap-2"><select id="stat_${d.id}" onchange="simpanIuranWarga('${d.id}', '${selectedBln}', '${safeNama}', '${safeBlok}', '${safeNo}', true)" class="w-1/2 text-[11px] font-bold border border-slate-200 rounded-lg p-1.5 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 bg-slate-50"><option value="BL" ${statusSaatIni === 'BL' ? 'selected' : ''}>BL - Belum</option><option value="L" ${statusSaatIni === 'L' ? 'selected' : ''}>L - Huni</option><option value="LK" ${statusSaatIni === 'LK' ? 'selected' : ''}>LK - Kosong</option><option value="LA" ${statusSaatIni === 'LA' ? 'selected' : ''}>LA - Non-Air</option><option value="LC" ${statusSaatIni === 'LC' ? 'selected' : ''}>LC - CCTV</option><option value="P" ${statusSaatIni === 'P' ? 'selected' : ''}>P - Pengurus</option><option value="A" ${statusSaatIni === 'A' ? 'selected' : ''}>A - Abai</option><option value="T" ${statusSaatIni === 'T' ? 'selected' : ''}>T - Tdk Mampu</option></select><select id="nom_${d.id}" onchange="simpanIuranWarga('${d.id}', '${selectedBln}', '${safeNama}', '${safeBlok}', '${safeNo}', false)" class="w-1/2 text-[11px] font-bold border border-slate-200 rounded-lg p-1.5 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 bg-slate-50">${optNominal}</select></div></div>`; }); cont.innerHTML = h || '<p class="text-xs text-slate-500 text-center">Data warga kosong.</p>'; } catch (e) { cont.innerHTML = 'Gagal memuat.'; } };
         window.simpanIuranWarga = async function (uid, bulan, nama, blok, no, isStatusChange) { const statEl = document.getElementById('stat_' + uid); const nomEl = document.getElementById('nom_' + uid); if (!statEl || !nomEl) return; let statusCode = statEl.value; let nomValue = Number(nomEl.value); if (isStatusChange) { const DAFTAR_NOMINAL = { 'L': 100000, 'LK': 50000, 'LA': 70000, 'LC': 80000, 'P': 0, 'A': 0, 'BL': 0, 'T': 0 }; if (DAFTAR_NOMINAL[statusCode] !== undefined) { nomValue = DAFTAR_NOMINAL[statusCode]; nomEl.value = nomValue; } } try { await updateDoc(doc(db, 'artifacts', appId, 'users', uid), { [`iuran.${bulan}`]: statusCode, [`iuranNominal.${bulan}`]: nomValue }); const payloadIuran = { action: "update_iuran", nama, blok, no_rumah: no, bulan, nominal: nomValue, status: statusCode, waktu: new Date().toLocaleString('id-ID') }; if (GOOGLE_SCRIPT_URL) fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payloadIuran) }).catch(() => { }); showToast(`Tersimpan: ${statusCode} (${formatRupiah(nomValue)})`); loadAdminIuran(); } catch (e) { showToast("Gagal update iuran.", true); } };
 
+        /* STATISTIK DEMOGRAFI */
+        window.loadStatistik = async function() {
+            if (!firebaseReady) return;
+            try {
+                const s = await getDocs(collection(db, 'artifacts', appId, 'users'));
+                let totalRumah = s.size;
+                let totalJiwa = 0;
+                let totalLaki = 0;
+                let totalPerempuan = 0;
+
+                s.forEach(d => {
+                    const u = d.data();
+                    const jiwa = parseInt(u.jumlah_jiwa) || 1;
+                    totalJiwa += jiwa;
+
+                    // Logika Pendataan Gender
+                    if (u.jenis_kelamin === 'Laki-laki') totalLaki++;
+                    else if (u.jenis_kelamin === 'Perempuan') totalPerempuan++;
+                    else {
+                        if (u.nama_suami) totalLaki++;
+                        if (u.nama_istri) totalPerempuan++;
+                        if (!u.nama_suami && !u.nama_istri && u.status_keluarga === 'Belum Berkeluarga/Single') totalLaki++; 
+                    }
+                });
+
+                document.getElementById('statRumah').innerText = totalRumah;
+                document.getElementById('statJiwa').innerText = totalJiwa;
+                document.getElementById('statLaki').innerText = totalLaki;
+                document.getElementById('statPerempuan').innerText = totalPerempuan;
+
+            } catch (e) {
+                console.error("Gagal memuat statistik", e);
+            }
+        };
+
         function mulaiPantau(user) {
             if (!firebaseReady || !db) return; unSubs.forEach(u => { try { u(); } catch (e) { } }); unSubs = []; cekTombolNotifikasi();
             let initL = true; try { unSubs.push(onSnapshot(collection(db, 'artifacts', appId, 'laporan'), (s) => { if (initL) { initL = false; return; } s.docChanges().forEach(c => { if (c.type === 'added' && c.doc.data().userId !== user.uid) { const lap = c.doc.data(); if (lap.layanan && lap.layanan.startsWith('DARURAT SOS')) { bunyikanSireneDarurat(); kirimNotifikasiPesan(`🚨 ${lap.layanan}`, `${lap.nama} (Blok ${lap.blok}/${lap.no}) butuh bantuan!`); } else { kirimNotifikasiPesan(`Laporan Baru`, lap.layanan || 'Laporan'); } const admView = document.getElementById('admViewLaporan'); if (admView && !admView.classList.contains('hidden')) loadAdminLaporan(); } }); }, (e) => console.warn(e))); } catch (e) { }
@@ -915,7 +1065,7 @@
 
         if (firebaseReady && auth) {
             onAuthStateChanged(auth, async (user) => {
-                try { if (user) { const snap = await getDoc(doc(db, 'artifacts', appId, 'users', user.uid)); window.currentUserData = snap.exists() ? snap.data() : { nama: user.email.split('@')[0], role: 'Warga' }; showAppScreen(); prefillFormData(); perbaruiStatusUI_Fingerprint(); loadPengumumanUtama(); loadPollingUtama(); mulaiPantau(user); } else { showAuthScreen(); } }
+                try { if (user) { const snap = await getDoc(doc(db, 'artifacts', appId, 'users', user.uid)); window.currentUserData = snap.exists() ? snap.data() : { nama: user.email.split('@')[0], role: 'Warga' }; showAppScreen(); prefillFormData(); perbaruiStatusUI_Fingerprint(); loadPengumumanUtama(); loadPollingUtama(); loadStatistik(); mulaiPantau(user); } else { showAuthScreen(); } }
                 catch (e) { console.error(e); showAuthScreen(); }
             });
         } else { setTimeout(() => { if (typeof showToast === 'function') showToast("Gagal memuat aplikasi. Refresh halaman.", true); }, 800); showAuthScreen(); }
@@ -927,7 +1077,7 @@
             const a = document.getElementById('authContainer'); if (a) { a.classList.add('hidden'); a.classList.remove('flex'); } const m = document.getElementById('mainAppContainer'); if (m) { m.classList.remove('hidden'); m.classList.add('flex'); }
             const btnAd = document.getElementById('navAdminBtn'); const isRT = window.currentUserData && ['Admin RT', 'Pengurus RT', 'Bendahara', 'Sekretaris'].includes(window.currentUserData.role); if (btnAd) { if (isRT) { btnAd.classList.remove('hidden'); btnAd.classList.add('flex'); } else { btnAd.classList.add('hidden'); btnAd.classList.remove('flex'); } }
             const nm = (window.currentUserData && window.currentUserData.nama) || 'Warga'; const wN = document.getElementById('welcomeName'); if (wN) wN.innerText = nm.split(' ')[0] + '!'; const pN = document.getElementById('profNama'); if (pN) pN.innerText = nm; const pR = document.getElementById('profRole'); if (pR) pR.innerText = (window.currentUserData && window.currentUserData.role) || 'Warga'; const pE = document.getElementById('profEmail'); if (pE) pE.innerText = (window.currentUserData && window.currentUserData.email) || '-'; const pH = document.getElementById('profHp'); if (pH) pH.innerText = (window.currentUserData && window.currentUserData.hp) || '-'; const pB = document.getElementById('profBlok'); if (pB) pB.innerText = (window.currentUserData && window.currentUserData.blok) || '-'; const pNo = document.getElementById('profNo'); if (pNo) pNo.innerText = (window.currentUserData && window.currentUserData.no) || '-';
-            const eN = document.getElementById('editNama'); if (eN) eN.value = (window.currentUserData && window.currentUserData.nama) || ''; const eH = document.getElementById('editHp'); if (eH) eH.value = (window.currentUserData && window.currentUserData.hp) || ''; const eB = document.getElementById('editBlok'); if (eB) eB.value = (window.currentUserData && window.currentUserData.blok) || ''; const eNo = document.getElementById('editNo'); if (eNo) eNo.value = (window.currentUserData && window.currentUserData.no) || '';
+            const eN = document.getElementById('editNama'); if (eN) eN.value = (window.currentUserData && window.currentUserData.nama) || ''; const eG = document.getElementById('editGender'); if (eG) eG.value = (window.currentUserData && window.currentUserData.jenis_kelamin) || 'Laki-laki'; const eH = document.getElementById('editHp'); if (eH) eH.value = (window.currentUserData && window.currentUserData.hp) || ''; const eB = document.getElementById('editBlok'); if (eB) eB.value = (window.currentUserData && window.currentUserData.blok) || ''; const eNo = document.getElementById('editNo'); if (eNo) eNo.value = (window.currentUserData && window.currentUserData.no) || '';
         }
         function prefillFormData() {
             try {
@@ -961,7 +1111,7 @@
             const nEl = document.getElementById('regNama'); const eEl = document.getElementById('regEmail'); const pEl = document.getElementById('regPassword'); const b = document.getElementById('btnRegister'); if (!nEl || !eEl || !pEl || !b) return;
             const nm = nEl.value.trim(); const id = eEl.value.trim(); const pw = pEl.value; if (pw.length < 6) return showToast("Password min. 6 karakter.", true);
             b.disabled = true; let em = id.includes('@') ? id : id.replace(/[^a-z0-9]/gi, '') + '@mabupark.local';
-            try { sessionStorage.setItem('rt10_temp_auth', JSON.stringify({ email: btoa(em), pass: btoa(pw) })); const c = await createUserWithEmailAndPassword(auth, em, pw); const hpV = document.getElementById('regHp')?.value || ''; const blkV = (document.getElementById('regBlok')?.value || '').toUpperCase(); const noV = document.getElementById('regNo')?.value || ''; await setDoc(doc(db, 'artifacts', appId, 'users', c.user.uid), { nama: nm, email: id, hp: hpV, blok: blkV, no: noV, role: 'Warga', password: pw }); showToast("Daftar sukses!"); }
+            try { sessionStorage.setItem('rt10_temp_auth', JSON.stringify({ email: btoa(em), pass: btoa(pw) })); const c = await createUserWithEmailAndPassword(auth, em, pw); const hpV = document.getElementById('regHp')?.value || ''; const genderV = document.getElementById('regGender')?.value || 'Laki-laki'; const blkV = (document.getElementById('regBlok')?.value || '').toUpperCase(); const noV = document.getElementById('regNo')?.value || ''; await setDoc(doc(db, 'artifacts', appId, 'users', c.user.uid), { nama: nm, email: id, jenis_kelamin: genderV, hp: hpV, blok: blkV, no: noV, role: 'Warga', password: pw }); showToast("Daftar sukses!"); }
             catch (err) { showToast("Gagal mendaftar: akun mungkin sudah terdaftar.", true); }
             finally { b.disabled = false; }
         };
@@ -978,7 +1128,7 @@
             const r = new FileReader(); r.onload = ev => { const i = new Image(); i.onload = () => { const c = document.createElement('canvas'); let w = i.width, h = i.height; if (w > h && w > 800) { h *= 800 / w; w = 800; } else if (h > 800) { w *= 800 / h; h = 800; } c.width = w; c.height = h; c.getContext('2d').drawImage(i, 0, 0, w, h); const b64 = c.toDataURL('image/jpeg', 0.6); const prev = document.getElementById(prevId); if (prev) { prev.src = b64; prev.classList.remove('hidden'); } const ico = document.getElementById(icoId); if (ico) ico.classList.add('hidden'); const hid = document.getElementById(hidId); if (hid) hid.value = b64; }; i.src = ev.target.result; }; r.readAsDataURL(f);
         };
         window.saveProfile = async function (e) {
-            e.preventDefault(); try { const nV = document.getElementById('editNama')?.value.trim() || ''; const hV = document.getElementById('editHp')?.value.trim() || ''; const bV = (document.getElementById('editBlok')?.value || '').toUpperCase(); const noV = document.getElementById('editNo')?.value || ''; const u = { nama: nV, hp: hV, blok: bV, no: noV }; await setDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid), u, { merge: true }); window.currentUserData = Object.assign({}, window.currentUserData, u); showAppScreen(); showToast("Tersimpan."); } catch (e) { showToast("Gagal menyimpan.", true); }
+            e.preventDefault(); try { const nV = document.getElementById('editNama')?.value.trim() || ''; const gV = document.getElementById('editGender')?.value || 'Laki-laki'; const hV = document.getElementById('editHp')?.value.trim() || ''; const bV = (document.getElementById('editBlok')?.value || '').toUpperCase(); const noV = document.getElementById('editNo')?.value || ''; const u = { nama: nV, jenis_kelamin: gV, hp: hV, blok: bV, no: noV }; await setDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid), u, { merge: true }); window.currentUserData = Object.assign({}, window.currentUserData, u); showAppScreen(); loadStatistik(); showToast("Tersimpan."); } catch (e) { showToast("Gagal menyimpan.", true); }
         };
 
         window.submitForm = async function (e, srv) {
@@ -991,7 +1141,7 @@
                     const nsEl = document.getElementById('dwNamaSingle'); const nsuEl = document.getElementById('dwNamaSuami'); const nisEl = document.getElementById('dwNamaIstri');
                     const nm = sk === 'Belum Berkeluarga/Single' ? (nsEl?.value || '') : (nsuEl?.value || ''); const bEl = document.getElementById('dwBlok'); const noEl = document.getElementById('dwNo'); const alEl = document.getElementById('dwAlamat'); const agEl = document.getElementById('dwAgama'); const jwEl = document.getElementById('dwJiwa'); const ktpB = document.getElementById('dwKtpBase64'); const kkB = document.getElementById('dwKkBase64');
                     dObj = Object.assign(dObj, { nama: nm, blok: bEl?.value || '', no_rumah: noEl?.value || '', detail: `Pembaruan Data (${sk})`, status_keluarga: sk, status_rumah: sr, nama_suami: nsuEl?.value || '', nama_istri: nisEl?.value || '', alamat_semula: alEl?.value || '', agama: agEl?.value || '', status_ktp: k, jumlah_jiwa: jwEl?.value || '', foto_ktp: ktpB?.value || null, foto_kk: kkB?.value || null });
-                    await setDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid), { foto_ktp: dObj.foto_ktp, foto_kk: dObj.foto_kk }, { merge: true });
+                    await setDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid), { jumlah_jiwa: dObj.jumlah_jiwa, foto_ktp: dObj.foto_ktp, foto_kk: dObj.foto_kk }, { merge: true });
                 } else if (srv === 'Surat Menyurat') {
                     const kepPilihan = document.getElementById('spKeperluanSelect')?.value || ''; const kepFinal = kepPilihan === 'Lainnya' ? (document.getElementById('spKeperluanLain')?.value || '') : kepPilihan;
                     suratData = { nama: document.getElementById('spNama')?.value.trim() || '', nik: document.getElementById('spNik')?.value.trim() || '', ttl: document.getElementById('spTtl')?.value.trim() || '', jk: document.getElementById('spJk')?.value || '', agama: document.getElementById('spAgama')?.value || '', status_nikah: document.getElementById('spStatusNikah')?.value || '', pekerjaan: document.getElementById('spPekerjaan')?.value.trim() || '', blok: (document.getElementById('spBlok')?.value || '').toUpperCase().trim(), no: document.getElementById('spNo')?.value.trim() || '', keperluan: kepFinal };
@@ -1003,7 +1153,7 @@
                 if (GOOGLE_SCRIPT_URL) fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(dObj) }).catch(() => { });
                 await addDoc(collection(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'history'), { layanan: srv, timestamp: Date.now(), detail: dObj.detail, suratData, foto_bukti: dObj.foto_bukti || null, foto_ktp: dObj.foto_ktp || null, foto_kk: dObj.foto_kk || null, status: 'Menunggu' });
                 await addDoc(collection(db, 'artifacts', appId, 'laporan'), { userId: auth.currentUser.uid, nama: dObj.nama, blok: dObj.blok, no: dObj.no_rumah, layanan: srv, detail: dObj.detail, timestamp: Date.now() });
-                showToast("Permohonan terkirim!"); switchTab('beranda'); if (e.target) e.target.reset(); prefillFormData();
+                showToast("Permohonan terkirim!"); switchTab('beranda'); if (e.target) e.target.reset(); prefillFormData(); loadStatistik();
             } catch (e) { showToast("Gagal mengirim laporan.", true); } finally { if (b) b.disabled = false; }
         };
         window.submitInventaris = async function (e) {
@@ -1032,8 +1182,8 @@
         window.toggleAdminAddWarga = function (show) { const f = document.getElementById('adminAddWargaForm'); const b = document.getElementById('btnToggleAddWarga'); if (!f || !b) return; if (show) { f.classList.remove('hidden'); b.classList.add('hidden'); } else { f.classList.add('hidden'); b.classList.remove('hidden'); f.reset(); const p = document.getElementById('admNewPass'); if (p) p.value = 'warga010'; } };
         window.simpanWargaBaruAdmin = async function (e) {
             e.preventDefault(); if (!firebaseReady) return showToast("Aplikasi belum siap.", true); const nm = document.getElementById('admNewNama')?.value.trim(); const hp = document.getElementById('admNewHp')?.value.trim(); const blok = (document.getElementById('admNewBlok')?.value || '').toUpperCase().trim(); const no = document.getElementById('admNewNo')?.value.trim(); const role = document.getElementById('admNewRole')?.value || 'Warga'; const rawId = document.getElementById('admNewEmail')?.value.trim(); const pw = document.getElementById('admNewPass')?.value; const btn = document.getElementById('btnSubmitNewWarga'); if (!nm || !rawId || !pw || pw.length < 6) return showToast("Lengkapi data & password min. 6 karakter!", true); if (btn) { btn.disabled = true; btn.innerText = "Mendaftarkan..."; } const emailFinal = rawId.includes('@') ? rawId : rawId.replace(/[^a-z0-9]/gi, '') + '@mabupark.local';
-            try { const cred = await createUserWithEmailAndPassword(secondaryAuth, emailFinal, pw); const newUid = cred.user.uid; await signOut(secondaryAuth).catch(() => { }); await setDoc(doc(db, 'artifacts', appId, 'users', newUid), { nama: nm, email: rawId, hp, blok, no, role, createdAt: Date.now(), password: pw }); showToast(`✅ Warga "${nm}" berhasil ditambahkan!`); toggleAdminAddWarga(false); loadAdminWargaList(); }
-            catch (err) { if (err.code === 'auth/email-already-in-use') { const customId = 'warga_' + Date.now(); try { await setDoc(doc(db, 'artifacts', appId, 'users', customId), { nama: nm, email: rawId, hp, blok, no, role, createdAt: Date.now(), password: pw }); showToast(`✅ Data warga "${nm}" ditambahkan.`); toggleAdminAddWarga(false); loadAdminWargaList(); } catch (e2) { showToast("Gagal menambah warga.", true); } } else { showToast("Gagal: " + (err.message || 'Periksa input'), true); } }
+            try { const cred = await createUserWithEmailAndPassword(secondaryAuth, emailFinal, pw); const newUid = cred.user.uid; await signOut(secondaryAuth).catch(() => { }); await setDoc(doc(db, 'artifacts', appId, 'users', newUid), { nama: nm, email: rawId, hp, blok, no, role, createdAt: Date.now(), password: pw }); showToast(`✅ Warga "${nm}" berhasil ditambahkan!`); toggleAdminAddWarga(false); loadAdminWargaList(); loadStatistik(); }
+            catch (err) { if (err.code === 'auth/email-already-in-use') { const customId = 'warga_' + Date.now(); try { await setDoc(doc(db, 'artifacts', appId, 'users', customId), { nama: nm, email: rawId, hp, blok, no, role, createdAt: Date.now(), password: pw }); showToast(`✅ Data warga "${nm}" ditambahkan.`); toggleAdminAddWarga(false); loadAdminWargaList(); loadStatistik(); } catch (e2) { showToast("Gagal menambah warga.", true); } } else { showToast("Gagal: " + (err.message || 'Periksa input'), true); } }
             finally { if (btn) { btn.disabled = false; btn.innerText = "Simpan & Buat Akun Warga"; } }
         };
         async function loadAdminWargaList() {
@@ -1053,7 +1203,7 @@
             catch (e) { cont.innerHTML = '<p class="text-xs text-red-500 text-center">Gagal memuat laporan.</p>'; }
         }
         window.toggleVerifikasiAdmin = async function (userId, docId, isChecked) { const statusBaru = isChecked ? 'Selesai' : 'Diproses'; try { await updateDoc(doc(db, 'artifacts', appId, 'users', userId, 'history', docId), { status: statusBaru, approvedBy: KETUA_RT_NAMA, approvedAt: Date.now() }); showToast(isChecked ? "✅ Diverifikasi!" : "Verifikasi dibatalkan."); loadAdminLaporan(); } catch (err) { showToast("Gagal memperbarui status.", true); loadAdminLaporan(); } };
-        window.hapusLaporanWarga = async (uid, did, type) => { if (!confirm("Yakin hapus?")) return; try { if (type === 'laporan') await deleteDoc(doc(db, 'artifacts', appId, 'users', uid, 'history', did)); else await deleteDoc(doc(db, 'artifacts', appId, 'users', uid)); showToast("Dihapus."); if (type === 'laporan') loadAdminLaporan(); else loadAdminWargaList(); } catch (e) { } };
+        window.hapusLaporanWarga = async (uid, did, type) => { if (!confirm("Yakin hapus?")) return; try { if (type === 'laporan') await deleteDoc(doc(db, 'artifacts', appId, 'users', uid, 'history', did)); else await deleteDoc(doc(db, 'artifacts', appId, 'users', uid)); showToast("Dihapus."); if (type === 'laporan') loadAdminLaporan(); else { loadAdminWargaList(); loadStatistik(); } } catch (e) { } };
         window.loadAdminPengumuman = async function () { const cont = document.getElementById('adminPengumumanList'); if (!cont) return; try { const s = await getDocs(query(collection(db, 'artifacts', appId, 'pengumuman'), orderBy('timestamp', 'desc'))); let h = ''; s.forEach(d => { h += `<div class="p-2.5 border border-slate-200 rounded-xl bg-white flex justify-between items-start mb-2 gap-2"><div class="min-w-0"><h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(d.data().judul)}</h4><p class="text-xs text-slate-500 line-clamp-2">${escapeHtml(d.data().isi)}</p></div><button onclick="hapusPengumuman('${d.id}')" class="text-red-500 shrink-0 w-8 h-8 bg-red-50 rounded-lg flex items-center justify-center"><i class="fa-solid fa-trash text-xs"></i></button></div>`; }); cont.innerHTML = h || '<p class="text-xs text-slate-400 text-center py-3">Belum ada pengumuman.</p>'; } catch (e) { } };
         window.postPengumuman = async function () { try { const jEl = document.getElementById('pengJudul'); const iEl = document.getElementById('pengIsi'); const judul = jEl?.value.trim(); const isi = iEl?.value.trim(); if (!judul || !isi) return showToast("Judul & isi wajib diisi.", true); await addDoc(collection(db, 'artifacts', appId, 'pengumuman'), { judul, isi, timestamp: Date.now() }); showToast("Diposting."); if (jEl) jEl.value = ''; if (iEl) iEl.value = ''; loadAdminPengumuman(); loadPengumumanUtama(); } catch (e) { showToast("Gagal memposting.", true); } };
         window.hapusPengumuman = async function (id) { try { await deleteDoc(doc(db, 'artifacts', appId, 'pengumuman', id)); showToast("Dihapus."); loadAdminPengumuman(); loadPengumumanUtama(); } catch (e) { } };
@@ -1084,7 +1234,7 @@
             else if (t === 'inventaris') { show('inventarisView', 'flex'); prefillFormData(); loadInventarisWarga(); }
             else if (t === 'sos') { show('sosView', 'flex'); }
             else if (t === 'admin') { show('adminView', 'flex'); switchAdminTab('warga'); }
-            else { show('homeView'); const nb = document.getElementById('navBerandaBtn'); if (nb) { nb.classList.remove('text-slate-400'); nb.classList.add('text-emerald-600'); } }
+            else { show('homeView'); const nb = document.getElementById('navBerandaBtn'); if (nb) { nb.classList.remove('text-slate-400'); nb.classList.add('text-emerald-600'); } loadStatistik(); }
         };
         window.loadRiwayat = async function () {
             const cont = document.getElementById('riwayatListContainer'); if (!cont || !auth.currentUser) return; cont.innerHTML = 'Loading...';
