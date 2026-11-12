@@ -254,24 +254,18 @@
                     </div>
                 </div>
 
-                <div id="pollingHomeContainer" class="px-4 sm:px-6 lg:px-8 pb-3 hidden w-full">
-                    <div class="bg-purple-50 border border-purple-200 rounded-2xl p-4 shadow-sm relative overflow-hidden">
-                        <div class="absolute top-0 right-0 bg-purple-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-bl-lg"><i class="fa-solid fa-check-to-slot mr-1"></i>E-VOTING</div>
-                        <h3 class="font-bold text-purple-900 text-sm mb-1 pr-20" id="pollHomeTitle">Judul Polling</h3><p class="text-[11px] text-purple-700 mb-3" id="pollHomeSub">Pilih salah satu opsi di bawah ini:</p><div id="pollHomeOptions" class="space-y-2"></div><p class="text-[10px] text-purple-500 mt-2.5 font-semibold text-right" id="pollHomeTotal">Total: 0 suara</p>
-                    </div>
-                </div>
-
                 <div class="px-4 sm:px-6 lg:px-8 pb-4 pt-1 w-full">
                     <div class="flex items-center justify-between mb-3.5"><h3 class="font-bold text-slate-800 text-xs sm:text-sm uppercase tracking-wider">Menu Layanan</h3><span class="text-[10px] text-slate-400 font-medium">8 Layanan</span></div>
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-3">
                         <button onclick="switchTab('lapor')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-emerald-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Speech%20balloon/3D/speech_balloon_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Lapor & Tanya RT</span></button>
                         <button onclick="switchTab('surat')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-blue-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Envelope/3D/envelope_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Surat Pengantar</span></button>
                         <button onclick="switchTab('data')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-purple-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Memo/3D/memo_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Isi Data Warga</span></button>
+                        <button onclick="switchTab('tamu')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-rose-50 flex justify-center items-center"><i class="fa-solid fa-address-book text-2xl text-rose-500"></i></div><span class="font-semibold text-[10px] text-slate-700">Buku Tamu</span></button>
                         <button onclick="switchTab('umkm')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-orange-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Shopping%20bags/3D/shopping_bags_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Pasar UMKM</span></button>
                         <button onclick="switchTab('iuran')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-yellow-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Credit%20card/3D/credit_card_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Kartu Iuran</span></button>
                         <button onclick="switchTab('kas')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-teal-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Money%20bag/3D/money_bag_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Laporan Kas</span></button>
                         <button onclick="switchTab('inventaris')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-cyan-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Package/3D/package_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Inventaris</span></button>
-                        <button onclick="switchTab('pekerja')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-rose-50 flex justify-center items-center"><i class="fa-solid fa-users-rectangle text-2xl text-rose-500"></i></div><span class="font-semibold text-[10px] text-slate-700">Data Pekerja</span></button>
+                        <button onclick="switchTab('pekerja')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-indigo-50 flex justify-center items-center"><i class="fa-solid fa-users-rectangle text-2xl text-indigo-500"></i></div><span class="font-semibold text-[10px] text-slate-700">Data Pekerja</span></button>
                     </div>
                 </div>
             </div>
@@ -329,6 +323,18 @@
                         </select>
                     </div>
                     <div><label class="block text-xs font-semibold text-slate-600 mb-1">Keterangan / Pesan</label><textarea id="tlDetail" rows="4" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm resize-none outline-none focus:border-emerald-500"></textarea></div>
+                    <!-- FITUR UPLOAD DOKUMEN / KAMERA -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Foto / Dokumen Bukti (Opsional)</label>
+                        <div class="mt-1 flex items-center gap-2">
+                            <img id="tlBuktiPreview" class="hidden w-16 h-16 rounded-lg object-cover border border-slate-200">
+                            <button type="button" onclick="bukaKameraRealtime('tlBuktiPreview', 'tlBuktiIcon', 'tlBuktiBase64')" class="bg-emerald-600 text-white px-3 py-2 rounded-lg text-xs font-bold shadow-sm flex items-center gap-1.5"><i class="fa-solid fa-camera"></i> Kamera</button>
+                            <button type="button" onclick="document.getElementById('tlBuktiInput').click()" class="bg-slate-100 text-slate-700 px-3 py-2 rounded-lg text-xs font-semibold border border-slate-200 flex items-center gap-1.5"><i class="fa-regular fa-file-image"></i> Galeri / File</button>
+                            <i id="tlBuktiIcon" class="fa-solid fa-image text-slate-400 hidden"></i>
+                            <input type="file" id="tlBuktiInput" accept="image/*" class="hidden" onchange="handleDocPhoto(event, 'tlBuktiPreview', 'tlBuktiIcon', 'tlBuktiBase64')">
+                            <input type="hidden" id="tlBuktiBase64">
+                        </div>
+                    </div>
                     <div class="pt-2"><button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-md">Kirim Laporan</button></div>
                 </form>
             </div>
@@ -447,7 +453,10 @@
                 </div>
                 <div class="p-4 md:p-6 space-y-4 flex-1">
                     <div class="bg-emerald-600 p-5 rounded-2xl shadow-sm overflow-hidden flex items-center gap-4">
-                        <div class="w-16 h-16 bg-white text-emerald-600 rounded-xl flex items-center justify-center text-2xl font-bold overflow-hidden shrink-0 shadow-sm"><img id="profPhotoDisplay" src="" class="w-full h-full object-cover hidden"><i id="profIconDisplay" class="fa-solid fa-user"></i></div>
+                        <div class="w-16 h-16 bg-white text-emerald-600 rounded-xl flex items-center justify-center text-2xl font-bold overflow-hidden shrink-0 shadow-sm relative group">
+                            <img id="profPhotoDisplay" src="" class="w-full h-full object-cover hidden">
+                            <i id="profIconDisplay" class="fa-solid fa-user"></i>
+                        </div>
                         <div class="flex-1 overflow-hidden min-w-0"><p id="profNama" class="font-bold text-lg text-white truncate">Nama</p><p id="profRole" class="text-[10px] text-emerald-700 font-bold uppercase bg-white px-2 py-0.5 rounded-md inline-block mt-1.5">Role</p></div>
                     </div>
                     <div class="bg-white p-4 rounded-xl space-y-3 text-sm border border-slate-200">
@@ -457,8 +466,22 @@
                     </div>
                     
                     <div class="bg-white p-4 rounded-xl border border-slate-200">
-                        <h3 class="font-bold text-sm text-slate-800 mb-3">Edit Profil</h3>
+                        <h3 class="font-bold text-sm text-slate-800 mb-3">Edit Profil & Foto</h3>
                         <form id="formEditProfil" onsubmit="saveProfile(event)" class="space-y-3">
+                            <div class="flex flex-col items-center mb-3">
+                                <div class="relative w-20 h-20 mb-2">
+                                    <div class="w-20 h-20 bg-slate-100 rounded-xl flex justify-center items-center text-3xl overflow-hidden shadow-inner border border-slate-200">
+                                        <img id="editPhotoPreview" class="w-full h-full object-cover hidden">
+                                        <i id="editIconPreview" class="fa-solid fa-user text-slate-400"></i>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button type="button" onclick="bukaKameraRealtime('editPhotoPreview', 'editIconPreview', 'editPhotoBase64', null, 'user')" class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-[11px] font-bold shadow-sm flex items-center gap-1.5"><i class="fa-solid fa-camera"></i> Kamera</button>
+                                    <button type="button" onclick="document.getElementById('editPhotoInput').click()" class="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-lg text-[11px] font-semibold border border-slate-200 hover:bg-slate-200 transition flex items-center gap-1.5"><i class="fa-regular fa-image"></i> Galeri</button>
+                                    <input type="file" id="editPhotoInput" accept="image/*" class="hidden" onchange="handleProfilePhoto(event)">
+                                    <input type="hidden" id="editPhotoBase64">
+                                </div>
+                            </div>
                             <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap</label><input type="text" id="editNama" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
                             <div class="flex gap-3">
                                 <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Jenis Kelamin</label><select id="editGender" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"><option value="Laki-laki">Laki-laki</option><option value="Perempuan">Perempuan</option></select></div>
@@ -477,7 +500,35 @@
                 </div>
             </div>
 
-            <!-- 8. UMKM VIEW (FULL PAGE) -->
+            <!-- 8. BUKU TAMU VIEW (WARGA) -->
+            <div id="tamuView" class="hidden flex-col h-full bg-slate-50 w-full max-w-3xl mx-auto overflow-y-auto">
+                <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0">
+                    <button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button>
+                    <h2 class="font-bold text-lg text-slate-800">Buku Tamu Warga</h2>
+                </div>
+                <form id="formTamu" onsubmit="simpanBukuTamu(event)" class="p-4 md:p-6 space-y-4 flex-1">
+                    <div class="bg-blue-50 border border-blue-200 p-3 rounded-xl text-xs text-blue-800 leading-relaxed mb-2"><i class="fa-solid fa-info-circle mr-1"></i> Catat data tamu yang berkunjung ke rumah Anda. Data ini akan dikirimkan ke Pengurus RT.</div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nama Tamu</label><input type="text" id="tamuNama" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">No HP Tamu</label><input type="tel" id="tamuHp" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">Tujuan (Blok/No)</label><input type="text" id="tamuTujuan" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">Keperluan</label><input type="text" id="tamuKeperluan" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">Lama Berkunjung (Jam)</label><input type="number" id="tamuLama" required placeholder="Contoh: 2" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Foto Tamu (Close Up)</label>
+                        <div class="flex items-center gap-2">
+                            <img id="tamuFotoPreview" class="hidden w-12 h-12 rounded-lg object-cover border border-slate-200">
+                            <button type="button" onclick="bukaKameraRealtime('tamuFotoPreview', 'tamuFotoIcon', 'tamuFotoBase64', null, 'user')" class="bg-emerald-600 text-white px-3 py-2 rounded-lg text-xs font-bold shadow-sm flex items-center gap-1.5"><i class="fa-solid fa-camera"></i> Kamera</button>
+                            <button type="button" onclick="document.getElementById('tamuFotoInput').click()" class="bg-slate-100 text-slate-700 px-3 py-2 rounded-lg text-xs font-semibold border border-slate-200 flex items-center gap-1.5"><i class="fa-regular fa-image"></i> Galeri</button>
+                            <i id="tamuFotoIcon" class="fa-solid fa-user text-slate-400"></i>
+                            <input type="file" id="tamuFotoInput" accept="image/*" class="hidden" onchange="handleDocPhoto(event, 'tamuFotoPreview', 'tamuFotoIcon', 'tamuFotoBase64')">
+                            <input type="hidden" id="tamuFotoBase64">
+                        </div>
+                    </div>
+                    <div class="pt-2"><button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-md">Kirim Data Tamu</button></div>
+                </form>
+            </div>
+
+            <!-- 9. UMKM VIEW (FULL PAGE) -->
             <div id="umkmView" class="hidden flex-col h-full bg-slate-50 w-full max-w-5xl mx-auto overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0">
                     <button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button>
@@ -495,7 +546,7 @@
                 </div>
             </div>
 
-            <!-- 9. IURAN VIEW (FULL PAGE) -->
+            <!-- 10. IURAN VIEW (FULL PAGE) -->
             <div id="iuranView" class="hidden flex-col h-full bg-slate-50 w-full max-w-3xl mx-auto overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0">
                     <button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button>
@@ -515,19 +566,20 @@
                 </div>
             </div>
 
-            <!-- 10. KAS VIEW (FULL PAGE) -->
+            <!-- 11. KAS VIEW (FULL PAGE STICKY TABS) -->
             <div id="kasView" class="hidden flex-col h-full bg-slate-50 w-full overflow-y-auto">
-                <div class="bg-emerald-600 text-white pt-safe-top px-4 pb-4 shadow-md shrink-0 w-full sticky top-0 z-10">
+                <!-- Header Laporan Keuangan (Scrollable) -->
+                <div class="bg-emerald-600 text-white pt-safe-top px-4 pb-6 shadow-md shrink-0 w-full">
                     <div class="max-w-4xl mx-auto w-full">
-                        <div class="flex justify-between items-center mb-3">
+                        <div class="flex justify-between items-center mb-4">
                             <h2 class="font-bold text-lg flex items-center gap-2">Laporan Keuangan</h2>
                             <button onclick="switchTab('beranda')" class="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full text-white flex items-center justify-center"><i class="fa-solid fa-arrow-left"></i></button>
                         </div>
-                        <div class="space-y-1.5 mb-3">
+                        <div class="space-y-1.5 mb-4">
                             <div class="flex justify-between items-center"><span class="text-xs opacity-90">Saldo Awal</span><span class="font-bold text-sm" id="kasSaldoAwal">Rp 0</span></div>
                             <div class="flex justify-between items-center"><span class="text-xs opacity-90">Saldo Akhir</span><span class="font-extrabold text-xl tracking-tight" id="kasTotalSaldo">Rp 0</span></div>
                         </div>
-                        <div class="grid grid-cols-2 gap-2 mb-3">
+                        <div class="grid grid-cols-2 gap-2 mb-4">
                             <div class="bg-emerald-700/50 border border-emerald-500/30 rounded-lg p-2 flex items-center gap-2">
                                 <div class="w-6 h-6 rounded-full border border-emerald-300/50 flex items-center justify-center shrink-0"><i class="fa-solid fa-arrow-down text-[10px]"></i></div>
                                 <div class="min-w-0"><p class="text-[8px] uppercase tracking-wider opacity-80">Pemasukan</p><p class="font-bold text-xs truncate" id="kasTotalMasuk">Rp 0</p></div>
@@ -540,11 +592,13 @@
                         <button onclick="downloadLaporanKas()" class="w-full bg-white text-emerald-700 font-bold py-2 rounded-lg shadow-sm text-xs flex items-center justify-center gap-1.5"><i class="fa-solid fa-download"></i> Download Laporan</button>
                     </div>
                 </div>
-                <div class="flex-1 bg-slate-50 flex flex-col min-h-0 relative max-w-4xl mx-auto w-full -mt-4 rounded-t-3xl pt-4 px-4 pb-4">
+                
+                <!-- Content (Sticky Tab & List) -->
+                <div class="flex-1 bg-slate-50 flex flex-col min-h-0 relative max-w-4xl mx-auto w-full -mt-4 rounded-t-3xl pt-4 px-4 pb-4 sticky top-0 z-20">
                     
-                    <div id="kasTabsContainer" class="flex bg-slate-200 p-1 rounded-xl mb-4 shrink-0">
-                        <button onclick="switchKasTab('riwayat')" id="tabKasRiwayat" class="flex-1 py-1.5 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all">Riwayat Kas</button>
-                        <button onclick="switchKasTab('tagihan')" id="tabKasTagihan" class="hidden flex-1 py-1.5 text-xs font-semibold text-slate-500 rounded-lg transition-all">Tagihan Warga</button>
+                    <div id="kasTabsContainer" class="flex bg-slate-200 p-1 rounded-xl mb-4 shrink-0 shadow-sm">
+                        <button onclick="switchKasTab('riwayat')" id="tabKasRiwayat" class="flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all">Riwayat Kas</button>
+                        <button onclick="switchKasTab('tagihan')" id="tabKasTagihan" class="hidden flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all">Tagihan Warga</button>
                     </div>
 
                     <div id="kasRiwayatContainer" class="flex-1 flex flex-col min-h-0">
@@ -566,7 +620,7 @@
                 </div>
             </div>
 
-            <!-- 11. INVENTARIS VIEW (FULL PAGE) -->
+            <!-- 12. INVENTARIS VIEW (FULL PAGE) -->
             <div id="inventarisView" class="hidden flex-col h-full bg-slate-50 w-full max-w-3xl mx-auto overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0">
                     <button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button>
@@ -577,13 +631,13 @@
                         <div><label class="block text-xs font-semibold text-slate-600 mb-1">Peminjam</label><input type="text" id="invNama" required class="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
                         <div class="flex gap-3"><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Blok</label><input type="text" id="invBlok" required class="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 uppercase text-sm outline-none focus:border-emerald-500"></div><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">No</label><input type="number" id="invNo" required class="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div></div>
                     </div>
-                    <h3 class="font-bold text-sm mb-3 text-slate-700">Daftar Barang</h3>
+                    <h3 class="font-bold text-sm mb-3 text-slate-700">Daftar Barang (Dapat pilih lebih dari 1)</h3>
                     <div id="inventarisDynamicList" class="space-y-2 mb-4"></div>
                     <div class="pt-2"><button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-md">Kirim Permintaan</button></div>
                 </form>
             </div>
 
-            <!-- 12. SOS VIEW (FULL PAGE) -->
+            <!-- 13. SOS VIEW (FULL PAGE) -->
             <div id="sosView" class="hidden flex-col h-full bg-slate-50 w-full max-w-3xl mx-auto overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0">
                     <button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button>
@@ -601,7 +655,7 @@
                 </div>
             </div>
 
-            <!-- 13. DATA PEKERJA VIEW (FULL PAGE) -->
+            <!-- 14. DATA PEKERJA VIEW (FULL PAGE) -->
             <div id="pekerjaView" class="hidden flex-col h-full bg-slate-50 w-full max-w-3xl mx-auto overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0">
                     <button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button>
@@ -612,7 +666,7 @@
                 </div>
             </div>
 
-            <!-- 14. ADMIN VIEW (FULL PAGE) -->
+            <!-- 15. ADMIN VIEW (FULL PAGE) -->
             <div id="adminView" class="hidden flex-col h-full bg-slate-50 w-full max-w-6xl mx-auto overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0">
                     <button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button>
@@ -627,7 +681,6 @@
                         <button id="tabAdmIuran" onclick="switchAdminTab('iuran')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Iuran</button>
                         <button id="tabAdmKas" onclick="switchAdminTab('kas')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Kas</button>
                         <button id="tabAdmTamu" onclick="switchAdminTab('tamu')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Buku Tamu</button>
-                        <button id="tabAdmPolling" onclick="switchAdminTab('polling')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">e-Voting</button>
                         <button id="tabAdmSos" onclick="switchAdminTab('sos')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">SOS</button>
                         <button id="tabAdmPengumuman" onclick="switchAdminTab('pengumuman')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Pengumuman</button>
                     </div>
@@ -725,25 +778,13 @@
                             <h3 class="font-bold text-slate-700 text-sm mb-2 border-b border-slate-100 pb-2">Riwayat Transaksi</h3><div id="adminKasList" class="space-y-2"></div>
                         </div>
 
-                        <!-- VIEW TAMU -->
+                        <!-- VIEW TAMU (Hanya Lihat) -->
                         <div id="admViewTamu" class="hidden">
-                            <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-4 space-y-2.5">
-                                <h3 class="font-bold text-blue-900 text-sm">Catat Tamu Masuk</h3>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <input type="text" id="tamuNama" placeholder="Nama Tamu / Kurir" class="px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-blue-500">
-                                    <input type="text" id="tamuTujuan" placeholder="Tujuan (Cth: Blok A/12)" class="px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-blue-500">
-                                </div>
-                                <input type="text" id="tamuKeperluan" placeholder="Keperluan (Cth: Kirim Paket)" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-blue-500">
-                                <button onclick="simpanBukuTamu()" class="w-full bg-blue-600 text-white font-bold py-2.5 rounded-lg text-xs shadow-md">Simpan Data Tamu</button>
+                            <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-4">
+                                <h3 class="font-bold text-blue-900 text-sm">Daftar Tamu Warga</h3>
+                                <p class="text-xs text-blue-700 mt-1">Data tamu ini diinput oleh warga melalui menu Buku Tamu di Beranda.</p>
                             </div>
-                            <h3 class="font-bold text-slate-700 text-sm mb-2 border-b border-slate-100 pb-2">Daftar Tamu Hari Ini</h3>
                             <div id="adminTamuList" class="space-y-2"></div>
-                        </div>
-
-                        <!-- VIEW POLLING -->
-                        <div id="admViewPolling" class="hidden">
-                            <div class="bg-purple-50 border border-purple-200 rounded-2xl p-4 mb-5 space-y-2.5"><h3 class="font-bold text-purple-900 text-sm">Buat e-Voting</h3><input type="text" id="pollJudulInput" placeholder="Judul Musyawarah" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white outline-none focus:border-purple-500"><input type="text" id="pollOpsiInput" placeholder="Pilihan (pisahkan dengan koma)" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white outline-none focus:border-purple-500"><button onclick="buatPollingBaru()" class="w-full bg-purple-600 text-white font-bold py-2.5 rounded-lg text-sm shadow-md">Terbitkan</button></div>
-                            <h3 class="font-bold text-slate-700 text-sm mb-3 border-b border-slate-100 pb-2">Daftar Polling Aktif</h3><div id="adminPollingList" class="space-y-3"></div>
                         </div>
 
                         <!-- VIEW SOS -->
@@ -769,7 +810,7 @@
                 <button id="navBerandaBtn" onclick="switchTab('beranda')" class="flex flex-col items-center text-emerald-600 flex-1 py-1"><i class="fa-solid fa-house text-lg mb-1"></i><span class="text-[10px] font-semibold">Beranda</span></button>
                 <button id="navChatBtn" onclick="switchTab('chat')" class="relative flex flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-comments text-lg mb-1"></i><span class="text-[10px] font-semibold">Obrolan</span><span id="navChatBadge" class="hidden absolute top-0 right-1/4 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span></button>
                 <button id="navKasBtn" onclick="switchTab('kas')" class="flex flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-wallet text-lg mb-1"></i><span class="text-[10px] font-semibold">KAS</span></button>
-                <button id="navRiwayatBtn" onclick="switchTab('riwayat')" class="flex flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-clock-rotate-left text-lg mb-1"></i><span class="text-[10px] font-semibold">Riwayat</span></button>
+                <button id="navRiwayatBtn" onclick="switchTab('riwayat')" class="hidden flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-clock-rotate-left text-lg mb-1"></i><span class="text-[10px] font-semibold">Riwayat</span></button>
                 <button onclick="switchTab('profil')" class="flex flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-user text-lg mb-1"></i><span class="text-[10px] font-semibold">Profil</span></button>
                 <button id="navAdminBtn" onclick="switchTab('admin')" class="hidden flex-col items-center text-slate-400 hover:text-emerald-600 flex-1 py-1"><i class="fa-solid fa-users-gear text-lg mb-1"></i><span class="text-[10px] font-semibold">Admin</span></button>
             </div>
@@ -1038,7 +1079,7 @@
                     pekerja.push({ id: d.id, ...p, type: 'Pekerja' });
                 });
 
-                let allData = [...pengurus, ...pekerja].slice(0, 5); // Batasi 5 di beranda
+                let allData = [...pengurus, ...pekerja].slice(0, 5);
                 let h = '';
                 allData.forEach(x => {
                     const foto = x.fotoBase64 || x.photoBase64 || "https://ui-avatars.com/api/?name=" + (x.nama || 'W') + "&background=random";
@@ -1107,7 +1148,10 @@
                 toggleAdminAddPekerja(false);
                 loadAdminPekerjaList();
                 loadDataPekerjaHome();
-            } catch(err) { showToast("Gagal menyimpan data.", true); }
+            } catch(err) {
+                console.error(err);
+                showToast("Gagal menyimpan data pekerja: " + err.message, true);
+            }
             finally { btn.disabled = false; }
         };
 
@@ -1140,6 +1184,68 @@
         window.hapusPekerja = async function(id) {
             if(!confirm("Hapus data pekerja ini?")) return;
             try { await deleteDoc(doc(db, 'artifacts', appId, 'pekerja', id)); showToast("Data pekerja dihapus."); loadAdminPekerjaList(); loadDataPekerjaHome(); } catch(e) {}
+        };
+
+        /* FITUR BUKU TAMU WARGA */
+        window.simpanBukuTamu = async function(e) {
+            e.preventDefault();
+            const nm = document.getElementById('tamuNama').value.trim();
+            const hp = document.getElementById('tamuHp').value.trim();
+            const tj = document.getElementById('tamuTujuan').value.trim();
+            const kp = document.getElementById('tamuKeperluan').value.trim();
+            const lama = document.getElementById('tamuLama').value;
+            const foto = document.getElementById('tamuFotoBase64').value;
+            
+            try {
+                await addDoc(collection(db, 'artifacts', appId, 'tamu'), {
+                    nama: nm, hp, tujuan: tj, keperluan: kp, lama, fotoBase64: foto,
+                    waktuMasuk: Date.now(), 
+                    oleh: (window.currentUserData && window.currentUserData.nama) || 'Warga'
+                });
+                document.getElementById('formTamu').reset();
+                document.getElementById('tamuFotoPreview').classList.add('hidden');
+                document.getElementById('tamuFotoIcon').classList.remove('hidden');
+                document.getElementById('tamuFotoBase64').value = '';
+                showToast("✅ Data Tamu terkirim ke RT!");
+                switchTab('beranda');
+            } catch(err) { 
+                console.error(err);
+                showToast("Gagal menyimpan data.", true); 
+            }
+        };
+
+        window.loadBukuTamu = async function() {
+            const cont = document.getElementById('adminTamuList'); if (!cont) return;
+            cont.innerHTML = '<div class="text-center py-4"><i class="fa-solid fa-spinner fa-spin text-slate-400"></i></div>';
+            try {
+                const today = new Date(); today.setHours(0,0,0,0);
+                const s = await getDocs(query(collection(db, 'artifacts', appId, 'tamu'), orderBy('waktuMasuk', 'desc')));
+                let h = '';
+                s.forEach(d => {
+                    const t = d.data();
+                    if (t.waktuMasuk >= today.getTime()) {
+                        const jam = new Date(t.waktuMasuk).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
+                        const foto = t.fotoBase64 || "https://ui-avatars.com/api/?name=" + (t.nama || 'T') + "&background=random";
+                        h += `<div class="p-3 bg-white border border-slate-200 rounded-xl flex gap-3 items-start mb-2 shadow-sm">
+                                <img src="${foto}" class="w-10 h-10 rounded-lg object-cover border border-slate-200 shrink-0">
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="font-bold text-sm text-slate-800">${escapeHtml(t.nama)}</h4>
+                                    <p class="text-[11px] text-slate-600">No HP: ${escapeHtml(t.hp || '-')}</p>
+                                    <p class="text-[11px] text-slate-600">Tujuan: ${escapeHtml(t.tujuan)} • ${jam}</p>
+                                    <p class="text-[10px] text-slate-500 italic">Keperluan: "${escapeHtml(t.keperluan || '-')}"</p>
+                                    <p class="text-[10px] font-bold text-emerald-600">Berkunjung: ${escapeHtml(t.lama || '-')} Jam</p>
+                                </div>
+                                <button onclick="hapusTamu('${d.id}')" class="w-7 h-7 bg-red-50 text-red-500 rounded-lg shrink-0"><i class="fa-solid fa-trash text-xs"></i></button>
+                              </div>`;
+                    }
+                });
+                cont.innerHTML = h || '<p class="text-xs text-slate-500 text-center">Belum ada tamu hari ini.</p>';
+            } catch(e) { cont.innerHTML = '<p class="text-xs text-red-500 text-center">Gagal memuat tamu.</p>'; }
+        };
+
+        window.hapusTamu = async function(id) {
+            if(!confirm("Hapus data tamu ini?")) return;
+            try { await deleteDoc(doc(db, 'artifacts', appId, 'tamu', id)); loadBukuTamu(); showToast("Tamu dihapus."); } catch(e) {}
         };
 
         /* KAS & PENGELUARAN RUTIN */
@@ -1454,23 +1560,6 @@
             } catch (err) { showToast("Gagal membuat PDF.", true); }
         };
 
-        let activePollDoc = null;
-        window.loadPollingUtama = async function () {
-            const cont = document.getElementById('pollingHomeContainer'); if (!cont || !auth.currentUser || !firebaseReady) return;
-            try {
-                const s = await getDocs(query(collection(db, 'artifacts', appId, 'polling'), orderBy('timestamp', 'desc'))); if (s.empty) { cont.classList.add('hidden'); return; }
-                activePollDoc = { id: s.docs[0].id, ...s.docs[0].data() }; cont.classList.remove('hidden'); const tEl = document.getElementById('pollHomeTitle'); if (tEl) tEl.innerText = activePollDoc.judul || 'Musyawarah Warga';
-                const opsiList = activePollDoc.opsi || []; const votesMap = activePollDoc.votes || {}; const myVote = votesMap[auth.currentUser.uid]; const totalSuara = Object.keys(votesMap).length; const totEl = document.getElementById('pollHomeTotal'); if (totEl) totEl.innerText = `Total Partisipasi: ${totalSuara} suara`;
-                let h = '';
-                opsiList.forEach((op, idx) => { const countOpsi = Object.values(votesMap).filter(v => v === op).length; const persen = totalSuara > 0 ? Math.round((countOpsi / totalSuara) * 100) : 0; const isMyChoice = myVote === op; h += `<div onclick="kirimSuaraPolling('${idx}')" class="bg-white border ${isMyChoice ? 'border-purple-600 ring-2 ring-purple-200' : 'border-purple-200'} rounded-xl p-2.5 cursor-pointer hover:bg-purple-50/40 transition"><div class="flex justify-between items-center text-xs font-semibold text-slate-800 mb-1"><span>${isMyChoice ? '<i class="fa-solid fa-circle-check text-purple-600 mr-1"></i>' : ''}${escapeHtml(op)}</span><span class="text-[11px] font-bold text-purple-700">${persen}% (${countOpsi})</span></div><div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden"><div class="bg-purple-600 h-full transition-all duration-500" style="width: ${persen}%"></div></div></div>`; });
-                const opt = document.getElementById('pollHomeOptions'); if (opt) opt.innerHTML = h;
-            } catch (e) { cont.classList.add('hidden'); }
-        };
-        window.kirimSuaraPolling = async function (opsiIdx) { if (!activePollDoc || !auth.currentUser) return; const pilihan = activePollDoc.opsi[Number(opsiIdx)]; if (!pilihan) return; try { const fieldVote = `votes.${auth.currentUser.uid}`; await updateDoc(doc(db, 'artifacts', appId, 'polling', activePollDoc.id), { [fieldVote]: pilihan }); showToast(`🗳️ Suara tercatat: "${pilihan}"`); loadPollingUtama(); } catch (e) { showToast("Gagal menyimpan suara.", true); } };
-        window.buatPollingBaru = async function () { const jEl = document.getElementById('pollJudulInput'); const oEl = document.getElementById('pollOpsiInput'); const judul = jEl ? jEl.value.trim() : ''; const opsiRaw = oEl ? oEl.value.split(',').map(s => s.trim()).filter(Boolean) : []; if (!judul || opsiRaw.length < 2) return showToast("Isi judul & minimal 2 pilihan!", true); try { await addDoc(collection(db, 'artifacts', appId, 'polling'), { judul, opsi: opsiRaw, votes: {}, timestamp: Date.now() }); if (jEl) jEl.value = ''; if (oEl) oEl.value = ''; showToast("e-Voting diterbitkan!"); loadAdminPolling(); loadPollingUtama(); } catch (e) { showToast("Gagal membuat polling.", true); } };
-        window.loadAdminPolling = async function () { const cont = document.getElementById('adminPollingList'); if (!cont) return; cont.innerHTML = 'Loading...'; try { const s = await getDocs(query(collection(db, 'artifacts', appId, 'polling'), orderBy('timestamp', 'desc'))); let h = ''; s.forEach(d => { const p = d.data(); const total = p.votes ? Object.keys(p.votes).length : 0; h += `<div class="p-3 border border-slate-200 rounded-xl bg-white flex justify-between items-center"><div class="min-w-0"><h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(p.judul)}</h4><p class="text-[11px] text-slate-500 truncate">Opsi: ${escapeHtml((p.opsi || []).join(', '))} • <b>${total} Suara</b></p></div><button onclick="hapusPolling('${d.id}')" class="w-8 h-8 bg-red-50 text-red-500 rounded-full flex items-center justify-center shrink-0"><i class="fa-solid fa-trash text-xs"></i></button></div>`; }); cont.innerHTML = h || '<p class="text-xs text-slate-500 text-center">Belum ada e-Voting aktif.</p>'; } catch (e) { cont.innerHTML = 'Gagal memuat.'; } };
-        window.hapusPolling = async function (id) { if (!confirm("Hapus polling ini?")) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'polling', id)); showToast("Polling dihapus."); loadAdminPolling(); loadPollingUtama(); } catch (e) { } };
-
         window.toggleUmkmForm = (show) => { const f = document.getElementById('umkmForm'); if (!f) return; if (show) f.classList.remove('hidden'); else { f.classList.add('hidden'); f.reset(); document.getElementById('umkmImgPreview')?.classList.add('hidden'); document.getElementById('umkmImgIcon')?.classList.remove('hidden'); document.getElementById('umkmImgText')?.classList.remove('hidden'); const b = document.getElementById('umkmBase64'); if (b) b.value = ''; } };
         window.submitUmkm = async function (e) { e.preventDefault(); if (!auth.currentUser) return; const nm = document.getElementById('umkmNamaBarang')?.value; const hrg = document.getElementById('umkmHarga')?.value; const desk = document.getElementById('umkmDeskripsi')?.value || ''; const img = document.getElementById('umkmBase64')?.value || ''; try { const u = window.currentUserData || {}; await addDoc(collection(db, 'artifacts', appId, 'pasar'), { sellerId: auth.currentUser.uid, sellerName: u.nama || 'Warga', sellerBlok: `${u.blok || '-'}/${u.no || '-'}`, namaBarang: nm, harga: hrg, deskripsi: desk, imageBase64: img, timestamp: Date.now() }); showToast("Dagangan diposting!"); toggleUmkmForm(false); loadUmkmWarga(); } catch (err) { showToast("Gagal memposting dagangan.", true); } };
         window.loadUmkmWarga = async function () { const cont = document.getElementById('umkmListContainer'); if (!cont || !firebaseReady) return; cont.innerHTML = '<div class="col-span-2 text-center py-5 text-slate-400"><i class="fa-solid fa-spinner fa-spin"></i></div>'; try { const s = await getDocs(query(collection(db, 'artifacts', appId, 'pasar'), orderBy('timestamp', 'desc'))); let h = ''; s.forEach(d => { const b = d.data(); const isMe = auth.currentUser && b.sellerId === auth.currentUser.uid; const isAdmin = window.currentUserData && window.currentUserData.role === 'Admin RT'; const hrgFmt = formatRupiah(b.harga || 0); const safeSeller = String(b.sellerName || 'Warga').replace(/'/g, "\\'"); const safeBarang = String(b.namaBarang || 'Produk').replace(/'/g, "\\'"); h += `<div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm flex flex-col relative">${(isMe || isAdmin) ? `<button onclick="hapusUmkm('${d.id}')" class="absolute top-2 right-2 w-7 h-7 bg-red-500 text-white rounded-full text-xs shadow z-10"><i class="fa-solid fa-trash"></i></button>` : ''}<div class="h-32 bg-slate-100 w-full overflow-hidden flex justify-center items-center">${b.imageBase64 ? `<img onclick="lihatGambarModal('${safeBarang}', '${b.imageBase64.replace(/'/g, "%27")}')" src="${b.imageBase64}" class="w-full h-full object-cover cursor-pointer">` : `<i class="fa-solid fa-store text-3xl text-slate-300"></i>`}</div><div class="p-3 flex-1 flex flex-col"><h4 class="font-bold text-sm text-slate-800 leading-tight mb-1 line-clamp-2">${escapeHtml(b.namaBarang)}</h4><p class="text-orange-600 font-bold text-sm mb-2">${hrgFmt}</p><p class="text-[10px] text-slate-500 mb-2 flex-1 line-clamp-2">${escapeHtml(b.deskripsi)}</p><div class="flex items-center justify-between mt-auto pt-2 border-t border-slate-100"><div class="flex items-center gap-1.5 min-w-0"><div class="w-5 h-5 bg-orange-100 text-orange-600 rounded-full flex justify-center items-center text-[10px] font-bold shrink-0">${escapeHtml((b.sellerName || 'W').charAt(0))}</div><span class="text-[10px] font-medium text-slate-600 truncate max-w-[70px]">${escapeHtml(b.sellerName || 'Warga')}</span></div>${!isMe ? `<button onclick="bukaRuangJapri('${b.sellerId}', '${safeSeller}', '${escapeHtml(b.sellerBlok || '-')}', 'Halo, saya mau pesan ${safeBarang} (${hrgFmt}).')" class="bg-emerald-600 text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-emerald-700 transition shrink-0">Beli</button>` : `<span class="text-[10px] bg-slate-100 px-2 py-1 rounded text-slate-500">Lapak Anda</span>`}</div></div></div>`; }); cont.innerHTML = h || '<div class="col-span-2 text-center text-slate-500 py-5 text-sm">Belum ada dagangan warga.</div>'; } catch (e) { cont.innerHTML = '<div class="col-span-2 text-center text-red-500 py-5 text-xs">Gagal memuat.</div>'; } };
@@ -1489,55 +1578,6 @@
         window.kirimPengingatIuran = async function () { const bln = document.getElementById('adminBulanIuran')?.value; const nom = document.getElementById('adminNominalIuran')?.value; if (!bln || !nom) return; try { await setDoc(doc(db, 'artifacts', appId, 'kas', 'config_iuran'), { nominalDefault: Number(nom), reminderBulan: bln, reminderNominal: Number(nom), reminderTimestamp: Date.now() }, { merge: true }); showToast(`🔔 Pengingat iuran ${bln} dikirim!`); } catch (e) { showToast("Gagal mengirim pengingat.", true); } };
         window.loadAdminIuran = async function () { initDropdownIuran(); const blnSelect = document.getElementById('adminBulanIuran'); if (!blnSelect) return; const selectedBln = blnSelect.value; const cont = document.getElementById('adminIuranWargaList'); if (!cont) return; cont.innerHTML = 'Loading...'; try { const s = await getDocs(collection(db, 'artifacts', appId, 'users')); let h = ''; s.forEach(d => { const u = d.data(); const statusSaatIni = (u.iuran && u.iuran[selectedBln]) || 'BL'; const nomTercatat = (u.iuranNominal && u.iuranNominal[selectedBln]) !== undefined ? Number(u.iuranNominal[selectedBln]) : 0; const safeNama = String(u.nama || 'Warga').replace(/'/g, "\\'"); const safeBlok = escapeHtml(u.blok || '-'); const safeNo = escapeHtml(u.no || '-'); let optNominal = ''; for (let i = 0; i <= 135000; i += 5000) optNominal += `<option value="${i}" ${nomTercatat === i ? 'selected' : ''}>${formatRupiah(i)}</option>`; h += `<div class="p-3 border border-slate-200 rounded-xl flex flex-col gap-2 mb-2 bg-white shadow-sm"><div class="flex justify-between items-start"><div class="min-w-0"><h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(u.nama || 'Warga')}</h4><p class="text-[11px] text-slate-500">Blok ${safeBlok}/${safeNo}</p></div><div class="text-right shrink-0"><p class="text-[11px] font-bold px-2 py-0.5 rounded ${statusSaatIni !== 'BL' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}">${escapeHtml(statusSaatIni)}</p><p class="text-[10px] text-slate-500 font-semibold mt-0.5">${formatRupiah(nomTercatat)}</p></div></div><div class="flex items-center justify-between border-t border-slate-100 pt-2 mt-1 gap-2"><select id="stat_${d.id}" onchange="simpanIuranWarga('${d.id}', '${selectedBln}', '${safeNama}', '${safeBlok}', '${safeNo}', true)" class="w-1/2 text-[11px] font-bold border border-slate-200 rounded-lg p-1.5 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 bg-slate-50"><option value="BL" ${statusSaatIni === 'BL' ? 'selected' : ''}>BL - Belum</option><option value="L" ${statusSaatIni === 'L' ? 'selected' : ''}>L - Huni</option><option value="LK" ${statusSaatIni === 'LK' ? 'selected' : ''}>LK - Kosong</option><option value="LA" ${statusSaatIni === 'LA' ? 'selected' : ''}>LA - Non-Air</option><option value="LC" ${statusSaatIni === 'LC' ? 'selected' : ''}>LC - CCTV</option><option value="P" ${statusSaatIni === 'P' ? 'selected' : ''}>P - Pengurus</option><option value="A" ${statusSaatIni === 'A' ? 'selected' : ''}>A - Abai</option><option value="T" ${statusSaatIni === 'T' ? 'selected' : ''}>T - Tdk Mampu</option></select><select id="nom_${d.id}" onchange="simpanIuranWarga('${d.id}', '${selectedBln}', '${safeNama}', '${safeBlok}', '${safeNo}', false)" class="w-1/2 text-[11px] font-bold border border-slate-200 rounded-lg p-1.5 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 bg-slate-50">${optNominal}</select></div></div>`; }); cont.innerHTML = h || '<p class="text-xs text-slate-500 text-center">Data warga kosong.</p>'; } catch (e) { cont.innerHTML = 'Gagal memuat.'; } };
         window.simpanIuranWarga = async function (uid, bulan, nama, blok, no, isStatusChange) { const statEl = document.getElementById('stat_' + uid); const nomEl = document.getElementById('nom_' + uid); if (!statEl || !nomEl) return; let statusCode = statEl.value; let nomValue = Number(nomEl.value); if (isStatusChange) { const DAFTAR_NOMINAL = { 'L': 100000, 'LK': 50000, 'LA': 70000, 'LC': 80000, 'P': 0, 'A': 0, 'BL': 0, 'T': 0 }; if (DAFTAR_NOMINAL[statusCode] !== undefined) { nomValue = DAFTAR_NOMINAL[statusCode]; nomEl.value = nomValue; } } try { await updateDoc(doc(db, 'artifacts', appId, 'users', uid), { [`iuran.${bulan}`]: statusCode, [`iuranNominal.${bulan}`]: nomValue }); const payloadIuran = { action: "update_iuran", nama, blok, no_rumah: no, bulan, nominal: nomValue, status: statusCode, waktu: new Date().toLocaleString('id-ID') }; if (GOOGLE_SCRIPT_URL) fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payloadIuran) }).catch(() => { }); showToast(`Tersimpan: ${statusCode} (${formatRupiah(nomValue)})`); loadAdminIuran(); } catch (e) { showToast("Gagal update iuran.", true); } };
-
-        window.simpanBukuTamu = async function() {
-            const nm = document.getElementById('tamuNama')?.value.trim();
-            const tj = document.getElementById('tamuTujuan')?.value.trim();
-            const kp = document.getElementById('tamuKeperluan')?.value.trim();
-            if (!nm || !tj) return showToast("Nama dan Tujuan wajib diisi!", true);
-            try {
-                await addDoc(collection(db, 'artifacts', appId, 'tamu'), {
-                    nama: nm, tujuan: tj, keperluan: kp, 
-                    waktuMasuk: Date.now(), 
-                    oleh: (window.currentUserData && window.currentUserData.nama) || 'Satpam'
-                });
-                document.getElementById('tamuNama').value = '';
-                document.getElementById('tamuTujuan').value = '';
-                document.getElementById('tamuKeperluan').value = '';
-                showToast("✅ Data Tamu dicatat!");
-                loadBukuTamu();
-            } catch(e) { showToast("Gagal mencatat tamu.", true); }
-        };
-
-        window.loadBukuTamu = async function() {
-            const cont = document.getElementById('adminTamuList'); if (!cont) return;
-            cont.innerHTML = '<div class="text-center py-4"><i class="fa-solid fa-spinner fa-spin text-slate-400"></i></div>';
-            try {
-                const today = new Date(); today.setHours(0,0,0,0);
-                const s = await getDocs(query(collection(db, 'artifacts', appId, 'tamu'), orderBy('waktuMasuk', 'desc')));
-                let h = '';
-                s.forEach(d => {
-                    const t = d.data();
-                    if (t.waktuMasuk >= today.getTime()) {
-                        const jam = new Date(t.waktuMasuk).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
-                        h += `<div class="p-3 bg-white border border-slate-200 rounded-xl flex justify-between items-center mb-2 shadow-sm">
-                                <div>
-                                    <h4 class="font-bold text-sm text-slate-800">${escapeHtml(t.nama)}</h4>
-                                    <p class="text-[11px] text-slate-600">Tujuan: ${escapeHtml(t.tujuan)} • ${jam}</p>
-                                    <p class="text-[10px] text-slate-500 italic">"${escapeHtml(t.keperluan || '-')}"</p>
-                                </div>
-                                <button onclick="hapusTamu('${d.id}')" class="w-7 h-7 bg-red-50 text-red-500 rounded-lg"><i class="fa-solid fa-trash text-xs"></i></button>
-                              </div>`;
-                    }
-                });
-                cont.innerHTML = h || '<p class="text-xs text-slate-500 text-center">Belum ada tamu hari ini.</p>';
-            } catch(e) { cont.innerHTML = '<p class="text-xs text-red-500 text-center">Gagal memuat tamu.</p>'; }
-        };
-
-        window.hapusTamu = async function(id) {
-            if(!confirm("Hapus data tamu ini?")) return;
-            try { await deleteDoc(doc(db, 'artifacts', appId, 'tamu', id)); loadBukuTamu(); showToast("Tamu dihapus."); } catch(e) {}
-        };
 
         window.exportWargaPDF = async function() {
             if (!firebaseReady) return showToast("Aplikasi belum siap.", true);
@@ -1621,7 +1661,6 @@
             let initL = true; try { unSubs.push(onSnapshot(collection(db, 'artifacts', appId, 'laporan'), (s) => { if (initL) { initL = false; return; } s.docChanges().forEach(c => { if (c.type === 'added' && c.doc.data().userId !== user.uid) { const lap = c.doc.data(); if (lap.layanan && lap.layanan.startsWith('DARURAT SOS')) { bunyikanSireneDarurat(); kirimNotifikasiPesan(`🚨 ${lap.layanan}`, `${lap.nama} (Blok ${lap.blok}/${lap.no}) butuh bantuan!`); } else { kirimNotifikasiPesan(`Laporan Baru`, lap.layanan || 'Laporan'); } const admView = document.getElementById('admViewLaporan'); if (admView && !admView.classList.contains('hidden')) loadAdminLaporan(); } }); }, (e) => console.warn(e))); } catch (e) { }
             let initC = true; try { unSubs.push(onSnapshot(collection(db, 'artifacts', appId, 'chats'), (s) => { allChatMessages = []; s.forEach(d => allChatMessages.push(Object.assign({ id: d.id }, d.data()))); renderChatMessages(); if (initC) { initC = false; return; } s.docChanges().forEach(c => { const m = c.doc.data(); const isRT = window.currentUserData && window.currentUserData.role === 'Admin RT'; if (c.type === 'added' && m.senderId !== user.uid && (m.roomId === 'GLOBAL' || m.recipientId === user.uid || isRT)) { const msgText = m.text || (m.imageUrl ? '[Foto]' : '[Stiker]'); if (msgText.includes('SINYAL DARURAT SOS')) bunyikanSireneDarurat(); kirimNotifikasiPesan(`Chat: ${m.senderName}`, msgText); const cv = document.getElementById('chatView'); if (cv && cv.classList.contains('hidden')) updateChatBadge(unreadChatCount + 1); } }); }, (e) => console.warn(e))); } catch (e) { }
             let initP = true; try { unSubs.push(onSnapshot(collection(db, 'artifacts', appId, 'pengumuman'), (s) => { if (initP) { initP = false; return; } s.docChanges().forEach(c => { if (c.type === 'added') { loadPengumumanUtama(); const isRT = window.currentUserData && window.currentUserData.role === 'Admin RT'; if (!isRT) kirimNotifikasiPesan(`Pengumuman RT`, c.doc.data().judul); } }); }, (e) => console.warn(e))); } catch (e) { }
-            try { unSubs.push(onSnapshot(collection(db, 'artifacts', appId, 'polling'), () => { loadPollingUtama(); }, () => { })); } catch (e) { }
             try { unSubs.push(onSnapshot(doc(db, 'artifacts', appId, 'kas', 'config_sos'), (snap) => { const d = snap.exists() ? snap.data() : { enabled: true }; isFiturSOSEnabled = d.enabled !== false; const bHead = document.getElementById('btnHeaderSOS'); const bHome = document.getElementById('btnHomeSOS'); const cbAdmin = document.getElementById('toggleFiturSOSCheckbox'); if (cbAdmin) cbAdmin.checked = isFiturSOSEnabled; if (isFiturSOSEnabled) { if (bHead) bHead.classList.remove('hidden'); if (bHome) bHome.classList.remove('hidden'); } else { if (bHead) bHead.classList.add('hidden'); if (bHome) bHome.classList.add('hidden'); } const alertBanner = document.getElementById('sosActiveAlertBanner'); const statusTxt = document.getElementById('adminStatusSOSText'); const isRT = window.currentUserData && ['Admin RT', 'Pengurus RT', 'Bendahara', 'Sekretaris'].includes(window.currentUserData.role); const btnStopBanner = document.getElementById('btnAdminStopSOSBanner'); if (btnStopBanner) btnStopBanner.classList.toggle('hidden', !isRT); if (d.activeSOS && d.activeSOS.jenis) { if (alertBanner) { const t = document.getElementById('sosAlertTitle'); const desc = document.getElementById('sosAlertDesc'); if (t) t.innerText = `DARURAT: ${d.activeSOS.jenis}!`; if (desc) desc.innerText = `Pelapor: ${d.activeSOS.nama} (${d.activeSOS.blok}) butuh bantuan!`; alertBanner.classList.remove('hidden'); } if (statusTxt) statusTxt.innerText = `🚨 DARURAT AKTIF: ${d.activeSOS.jenis} oleh ${d.activeSOS.nama} (${d.activeSOS.blok})`; } else { if (alertBanner) alertBanner.classList.add('hidden'); if (statusTxt) statusTxt.innerText = "Aman. Tidak ada sinyal darurat aktif."; } }, () => { })); } catch (e) { }
             try { unSubs.push(onSnapshot(doc(db, 'artifacts', appId, 'users', user.uid), (snap) => { if (!snap.exists()) return; window.currentUserData = snap.data(); const iuranMod = document.getElementById('iuranView'); if (iuranMod && !iuranMod.classList.contains('hidden')) loadIuranUser(); }, () => { })); } catch (e) { }
             let initK = true; try { unSubs.push(onSnapshot(doc(db, 'artifacts', appId, 'kas', 'config_iuran'), (snap) => { if (!snap.exists()) return; const d = snap.data(); if (d.nominalDefault) nominalIuranDefault = d.nominalDefault; if (d.reminderBulan) { const myIuran = (window.currentUserData && window.currentUserData.iuran) || {}; const sudahLunas = ['L', 'LK', 'LA', 'LC', 'P', 'T'].includes(myIuran[d.reminderBulan]); const banner = document.getElementById('iuranReminderBanner'); if (!sudahLunas && banner) { const t = document.getElementById('iuranReminderTitle'); const txt = document.getElementById('iuranReminderText'); if (t) t.innerText = `Pengingat Iuran ${d.reminderBulan}`; if (txt) txt.innerText = `Iuran ${formatRupiah(d.reminderNominal || nominalIuranDefault)} belum tercatat lunas.`; banner.classList.remove('hidden'); if (!initK) kirimNotifikasiPesan(`Pengingat Iuran ${d.reminderBulan}`, `Mohon cek Kartu Iuran Anda.`); } else if (banner) { banner.classList.add('hidden'); } } initK = false; }, () => { })); } catch (e) { }
@@ -1630,7 +1669,7 @@
 
         if (firebaseReady && auth) {
             onAuthStateChanged(auth, async (user) => {
-                try { if (user) { const snap = await getDoc(doc(db, 'artifacts', appId, 'users', user.uid)); window.currentUserData = snap.exists() ? snap.data() : { nama: user.email.split('@')[0], role: 'Warga' }; showAppScreen(); prefillFormData(); perbaruiStatusUI_Fingerprint(); loadPengumumanUtama(); loadPollingUtama(); loadStatistik(); loadDataPekerjaHome(); mulaiPantau(user); } else { showAuthScreen(); } }
+                try { if (user) { const snap = await getDoc(doc(db, 'artifacts', appId, 'users', user.uid)); window.currentUserData = snap.exists() ? snap.data() : { nama: user.email.split('@')[0], role: 'Warga' }; showAppScreen(); prefillFormData(); perbaruiStatusUI_Fingerprint(); loadPengumumanUtama(); loadStatistik(); loadDataPekerjaHome(); mulaiPantau(user); } else { showAuthScreen(); } }
                 catch (e) { console.error(e); showAuthScreen(); }
             });
         } else { setTimeout(() => { if (typeof showToast === 'function') showToast("Gagal memuat aplikasi. Refresh halaman.", true); }, 800); showAuthScreen(); }
@@ -1641,6 +1680,14 @@
         function showAppScreen() {
             const a = document.getElementById('authContainer'); if (a) { a.classList.add('hidden'); a.classList.remove('flex'); } const m = document.getElementById('mainAppContainer'); if (m) { m.classList.remove('hidden'); m.classList.add('flex'); }
             const btnAd = document.getElementById('navAdminBtn'); const isRT = window.currentUserData && ['Admin RT', 'Pengurus RT', 'Bendahara', 'Sekretaris'].includes(window.currentUserData.role); if (btnAd) { if (isRT) { btnAd.classList.remove('hidden'); btnAd.classList.add('flex'); } else { btnAd.classList.add('hidden'); btnAd.classList.remove('flex'); } }
+            
+            // HANYA ADMIN YANG BISA LIHAT MENU RIWAYAT
+            const navRiwayat = document.getElementById('navRiwayatBtn');
+            if (navRiwayat) {
+                if (isRT) { navRiwayat.classList.remove('hidden'); navRiwayat.classList.add('flex'); } 
+                else { navRiwayat.classList.add('hidden'); navRiwayat.classList.remove('flex'); }
+            }
+
             const nm = (window.currentUserData && window.currentUserData.nama) || 'Warga'; const wN = document.getElementById('welcomeName'); if (wN) wN.innerText = nm.split(' ')[0] + '!'; const pN = document.getElementById('profNama'); if (pN) pN.innerText = nm; const pR = document.getElementById('profRole'); if (pR) pR.innerText = (window.currentUserData && window.currentUserData.role) || 'Warga'; const pE = document.getElementById('profEmail'); if (pE) pE.innerText = (window.currentUserData && window.currentUserData.email) || '-'; const pH = document.getElementById('profHp'); if (pH) pH.innerText = (window.currentUserData && window.currentUserData.hp) || '-'; const pB = document.getElementById('profBlok'); if (pB) pB.innerText = (window.currentUserData && window.currentUserData.blok) || '-'; const pNo = document.getElementById('profNo'); if (pNo) pNo.innerText = (window.currentUserData && window.currentUserData.no) || '-';
             const eN = document.getElementById('editNama'); if (eN) eN.value = (window.currentUserData && window.currentUserData.nama) || ''; const eG = document.getElementById('editGender'); if (eG) eG.value = (window.currentUserData && window.currentUserData.jenis_kelamin) || 'Laki-laki'; const eH = document.getElementById('editHp'); if (eH) eH.value = (window.currentUserData && window.currentUserData.hp) || ''; const eB = document.getElementById('editBlok'); if (eB) eB.value = (window.currentUserData && window.currentUserData.blok) || ''; const eNo = document.getElementById('editNo'); if (eNo) eNo.value = (window.currentUserData && window.currentUserData.no) || '';
             
@@ -1702,8 +1749,30 @@
             const f = e.target.files && e.target.files[0]; if (!f) return;
             const r = new FileReader(); r.onload = ev => { const i = new Image(); i.onload = () => { const c = document.createElement('canvas'); let w = i.width, h = i.height; if (w > h && w > 800) { h *= 800 / w; w = 800; } else if (h > 800) { w *= 800 / h; h = 800; } c.width = w; c.height = h; c.getContext('2d').drawImage(i, 0, 0, w, h); const b64 = c.toDataURL('image/jpeg', 0.6); const prev = document.getElementById(prevId); if (prev) { prev.src = b64; prev.classList.remove('hidden'); } const ico = document.getElementById(icoId); if (ico) ico.classList.add('hidden'); const hid = document.getElementById(hidId); if (hid) hid.value = b64; }; i.src = ev.target.result; }; r.readAsDataURL(f);
         };
+
+        window.handleProfilePhoto = function(e) {
+            const f = e.target.files && e.target.files[0]; if (!f) return;
+            const r = new FileReader();
+            r.onload = ev => {
+                const i = new Image();
+                i.onload = () => {
+                    const c = document.createElement('canvas');
+                    const size = Math.min(i.width, i.height);
+                    c.width = 400; c.height = 400;
+                    c.getContext('2d').drawImage(i, (i.width-size)/2, (i.height-size)/2, size, size, 0, 0, 400, 400);
+                    const b64 = c.toDataURL('image/jpeg', 0.7);
+                    const prev = document.getElementById('editPhotoPreview');
+                    if (prev) { prev.src = b64; prev.classList.remove('hidden'); }
+                    const ico = document.getElementById('editIconPreview');
+                    if (ico) ico.classList.add('hidden');
+                    const hid = document.getElementById('editPhotoBase64');
+                    if (hid) hid.value = b64;
+                }; i.src = ev.target.result;
+            }; r.readAsDataURL(f);
+        };
+
         window.saveProfile = async function (e) {
-            e.preventDefault(); try { const nV = document.getElementById('editNama')?.value.trim() || ''; const gV = document.getElementById('editGender')?.value || 'Laki-laki'; const hV = document.getElementById('editHp')?.value.trim() || ''; const bV = (document.getElementById('editBlok')?.value || '').toUpperCase(); const noV = document.getElementById('editNo')?.value || ''; const u = { nama: nV, jenis_kelamin: gV, hp: hV, blok: bV, no: noV }; await setDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid), u, { merge: true }); window.currentUserData = Object.assign({}, window.currentUserData, u); showAppScreen(); loadStatistik(); showToast("Tersimpan."); } catch (e) { showToast("Gagal menyimpan.", true); }
+            e.preventDefault(); try { const nV = document.getElementById('editNama')?.value.trim() || ''; const gV = document.getElementById('editGender')?.value || 'Laki-laki'; const hV = document.getElementById('editHp')?.value.trim() || ''; const bV = (document.getElementById('editBlok')?.value || '').toUpperCase(); const noV = document.getElementById('editNo')?.value || ''; const pbV = document.getElementById('editPhotoBase64')?.value || ''; const u = { nama: nV, jenis_kelamin: gV, hp: hV, blok: bV, no: noV, photoBase64: pbV }; await setDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid), u, { merge: true }); window.currentUserData = Object.assign({}, window.currentUserData, u); showAppScreen(); loadStatistik(); showToast("Tersimpan."); } catch (e) { showToast("Gagal menyimpan.", true); }
         };
 
         window.submitForm = async function (e, srv) {
@@ -1722,8 +1791,8 @@
                     suratData = { nama: document.getElementById('spNama')?.value.trim() || '', nik: document.getElementById('spNik')?.value.trim() || '', ttl: document.getElementById('spTtl')?.value.trim() || '', jk: document.getElementById('spJk')?.value || '', agama: document.getElementById('spAgama')?.value || '', status_nikah: document.getElementById('spStatusNikah')?.value || '', pekerjaan: document.getElementById('spPekerjaan')?.value.trim() || '', blok: (document.getElementById('spBlok')?.value || '').toUpperCase().trim(), no: document.getElementById('spNo')?.value.trim() || '', keperluan: kepFinal };
                     dObj = Object.assign(dObj, { nama: suratData.nama, blok: suratData.blok, no_rumah: suratData.no, detail: `Surat Pengantar: ${kepFinal} (NIK: ${suratData.nik})` });
                 } else if (srv === 'Tanya & Lapor RT') {
-                    const nEl = document.getElementById('tlNama'); const bEl = document.getElementById('tlBlok'); const noEl = document.getElementById('tlNo'); const jEl = document.getElementById('tlJenis'); const dEl = document.getElementById('tlDetail');
-                    dObj = Object.assign(dObj, { nama: nEl?.value || '', blok: bEl?.value || '', no_rumah: noEl?.value || '', jenis_laporan: jEl?.value || '', detail: (jEl?.value || '') + ' - ' + (dEl?.value || '') });
+                    const nEl = document.getElementById('tlNama'); const bEl = document.getElementById('tlBlok'); const noEl = document.getElementById('tlNo'); const jEl = document.getElementById('tlJenis'); const dEl = document.getElementById('tlDetail'); const fEl = document.getElementById('tlBuktiBase64');
+                    dObj = Object.assign(dObj, { nama: nEl?.value || '', blok: bEl?.value || '', no_rumah: noEl?.value || '', jenis_laporan: jEl?.value || '', detail: (jEl?.value || '') + ' - ' + (dEl?.value || ''), foto_bukti: fEl?.value || null });
                 }
                 if (GOOGLE_SCRIPT_URL) fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(dObj) }).catch(() => { });
                 await addDoc(collection(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'history'), { layanan: srv, timestamp: Date.now(), detail: dObj.detail, suratData, foto_bukti: dObj.foto_bukti || null, foto_ktp: dObj.foto_ktp || null, foto_kk: dObj.foto_kk || null, status: 'Menunggu' });
@@ -1747,12 +1816,12 @@
         };
 
         window.switchAdminTab = function (t) {
-            ['Warga', 'Laporan', 'Pekerja', 'Iuran', 'Kas', 'Tamu', 'Polling', 'Sos', 'Pengumuman'].forEach(x => {
+            ['Warga', 'Laporan', 'Pekerja', 'Iuran', 'Kas', 'Tamu', 'Sos', 'Pengumuman'].forEach(x => {
                 const v = document.getElementById('admView' + x); const b = document.getElementById('tabAdm' + x);
                 if (x.toLowerCase() === t) { if (v) { v.classList.remove('hidden'); v.classList.add('block'); } if (b) b.className = "py-2 text-[10px] sm:text-xs font-bold bg-emerald-100 text-emerald-700 rounded-xl shadow-sm transition-all"; }
                 else { if (v) { v.classList.add('hidden'); v.classList.remove('block'); } if (b) b.className = "py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all"; }
             });
-            if (t === 'warga') loadAdminWargaList(); else if (t === 'laporan') loadAdminLaporan(); else if (t === 'pengumuman') loadAdminPengumuman(); else if (t === 'polling') loadAdminPolling(); else if (t === 'kas') loadBukuKas(); else if (t === 'iuran') loadAdminIuran(); else if (t === 'tamu') loadBukuTamu(); else if (t === 'pekerja') loadAdminPekerjaList();
+            if (t === 'warga') loadAdminWargaList(); else if (t === 'laporan') loadAdminLaporan(); else if (t === 'pengumuman') loadAdminPengumuman(); else if (t === 'kas') loadBukuKas(); else if (t === 'iuran') loadAdminIuran(); else if (t === 'tamu') loadBukuTamu(); else if (t === 'pekerja') loadAdminPekerjaList();
         };
         window.toggleAdminAddWarga = function (show) { const f = document.getElementById('adminAddWargaForm'); const b = document.getElementById('btnToggleAddWarga'); if (!f || !b) return; if (show) { f.classList.remove('hidden'); b.classList.add('hidden'); } else { f.classList.add('hidden'); b.classList.remove('hidden'); f.reset(); const p = document.getElementById('admNewPass'); if (p) p.value = 'warga010'; } };
         window.simpanWargaBaruAdmin = async function (e) {
@@ -1790,7 +1859,7 @@
         window.loadInventarisWarga = async function () { const cont = document.getElementById('inventarisDynamicList'); if (!cont) return; cont.innerHTML = '<div class="text-center py-4"><i class="fa-solid fa-spinner fa-spin text-slate-400"></i></div>'; try { const s = await getDocs(query(collection(db, 'artifacts', appId, 'inventaris'), orderBy('timestamp', 'asc'))); let h = '', i = 1; s.forEach(d => { const data = d.data(); h += `<label class="flex items-center justify-between p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-emerald-50 transition bg-white"><div class="min-w-0"><span class="font-medium text-sm text-slate-800 block truncate">${i}. ${escapeHtml(data.nama)}</span>${data.detail ? `<span class="text-[10px] text-slate-500 mt-0.5 block truncate">${escapeHtml(data.detail)}</span>` : ''}</div><input type="checkbox" value="${escapeHtml(data.nama)}" class="w-5 h-5 border-slate-300 rounded inv-checkbox shrink-0 ml-2"></label>`; i++; }); cont.innerHTML = h || '<p class="text-sm text-center text-slate-500 py-4">Belum ada barang.</p>'; } catch (e) { cont.innerHTML = '<p class="text-xs text-center text-red-500 py-4">Gagal memuat.</p>'; } };
 
         window.switchTab = function (t) {
-            const views = ['homeView', 'chatView', 'riwayatView', 'laporView', 'suratView', 'dataView', 'profilView', 'umkmView', 'iuranView', 'kasView', 'inventarisView', 'sosView', 'adminView', 'pekerjaView'];
+            const views = ['homeView', 'chatView', 'riwayatView', 'laporView', 'suratView', 'dataView', 'profilView', 'umkmView', 'iuranView', 'kasView', 'inventarisView', 'sosView', 'adminView', 'pekerjaView', 'tamuView'];
             views.forEach(id => { const el = document.getElementById(id); if (el) { el.classList.add('hidden'); el.classList.remove('flex'); } });
             
             ['navBerandaBtn', 'navChatBtn', 'navKasBtn', 'navRiwayatBtn'].forEach(id => { const el = document.getElementById(id); if (el) { el.classList.remove('text-emerald-600'); el.classList.add('text-slate-400'); } });
@@ -1803,6 +1872,7 @@
             else if (t === 'surat') { show('suratView', 'flex'); prefillFormData(); }
             else if (t === 'data') { show('dataView', 'flex'); prefillFormData(); }
             else if (t === 'profil') { show('profilView', 'flex'); perbaruiStatusUI_Fingerprint(); showAppScreen(); }
+            else if (t === 'tamu') { show('tamuView', 'flex'); }
             else if (t === 'umkm') { show('umkmView', 'flex'); loadUmkmWarga(); }
             else if (t === 'iuran') { show('iuranView', 'flex'); const u = window.currentUserData || {}; const el1 = document.getElementById('kartuIuranNama'); const el2 = document.getElementById('kartuIuranBlok'); const el3 = document.getElementById('kartuIuranNominalAktif'); if (el1) el1.innerText = u.nama || 'Warga'; if (el2) el2.innerText = `Blok ${u.blok || '-'} / No. ${u.no || '-'}`; if (el3) el3.innerText = formatRupiah(nominalIuranDefault) + ' / bln'; loadIuranUser(); }
             else if (t === 'kas') { show('kasView', 'flex'); const nk = document.getElementById('navKasBtn'); if (nk) { nk.classList.remove('text-slate-400'); nk.classList.add('text-emerald-600'); } switchKasTab('riwayat'); }
