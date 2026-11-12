@@ -66,7 +66,7 @@
 </head>
 <body class="w-full h-full text-ink select-none bg-slate-50 flex flex-col">
 
-    <!-- PWA BANNER (Banner Lama, Tetap Dipertahankan) -->
+    <!-- PWA BANNER -->
     <div id="pwaBanner" class="hidden fixed top-0 left-0 right-0 bg-slate-900 text-white p-4 z-[100] shadow-2xl flex justify-between items-center animate-fade-slide-up border-b border-slate-700">
         <div class="flex items-center gap-3">
             <img src="1000531885.png" onerror="this.src='/icon-192.png';" class="w-11 h-11 bg-white rounded-2xl object-contain p-1 shrink-0 shadow-lg" alt="Logo">
@@ -95,25 +95,21 @@
         </div>
     </div>
 
-    <!-- MODAL QRIS -->
-    <div id="qrisModal" class="hidden fixed inset-0 bg-slate-950/80 z-[150] flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center relative animate-fade-slide-up">
-            <button onclick="document.getElementById('qrisModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500 z-10"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="font-bold text-lg text-slate-800 mb-1">QRIS Pembayaran Iuran</h3>
-            <p class="text-xs text-slate-500 mb-4">Scan menggunakan Mobile Banking atau Dompet Digital.</p>
+    <!-- MODAL QRIS (FIX) -->
+    <div id="qrisModal" class="hidden fixed inset-0 bg-slate-950/80 z-[150] flex items-center justify-center p-4 cursor-pointer" onclick="document.getElementById('qrisModal').classList.add('hidden')">
+        <div class="bg-white rounded-3xl p-5 max-w-sm w-full text-center relative animate-fade-slide-up cursor-default max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+            <button onclick="document.getElementById('qrisModal').classList.add('hidden')" class="absolute top-3 right-3 w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center text-slate-500 z-10"><i class="fa-solid fa-xmark"></i></button>
+            
+            <h3 class="font-bold text-lg text-slate-800 mb-1 mt-2">QRIS Pembayaran</h3>
+            <p class="text-xs text-slate-500 mb-3">Scan menggunakan Mobile Banking / e-Wallet.</p>
             
             <div class="bg-slate-100 p-2 rounded-xl mb-3 relative group">
-                <img id="qrisImage" src="qris.jpg" class="w-full rounded-lg object-contain" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png';">
-                <div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg pointer-events-none">
-                    <span class="text-white text-xs font-bold bg-slate-900/80 px-3 py-1.5 rounded-full"><i class="fa-solid fa-download mr-1"></i> Tekan Lama</span>
-                </div>
+                <img id="qrisImage" src="qris.jpg" class="w-full max-h-[40vh] object-contain rounded-lg" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png';">
             </div>
             
-            <p class="text-[11px] text-amber-600 font-semibold mb-4 bg-amber-50 p-2 rounded-lg leading-tight"><i class="fa-solid fa-circle-info mr-1"></i> Tekan lama pada gambar QRIS di atas jika ingin menyimpannya ke galeri.</p>
+            <p class="text-[10px] text-amber-600 font-semibold mb-4 bg-amber-50 p-2 rounded-lg leading-tight"><i class="fa-solid fa-circle-info mr-1"></i> Tekan lama pada gambar QRIS untuk menyimpan ke galeri.</p>
             
-            <div class="flex flex-col gap-2">
-                <button onclick="pindaiQRIS()" class="w-full bg-slate-900 text-white font-bold py-3 rounded-xl shadow-md flex items-center justify-center gap-2"><i class="fa-solid fa-camera"></i> Pindai via Aplikasi Bank</button>
-            </div>
+            <button onclick="pindaiQRIS()" class="w-full bg-slate-900 text-white font-bold py-3 rounded-xl shadow-md flex items-center justify-center gap-2"><i class="fa-solid fa-camera"></i> Pindai via Aplikasi Bank</button>
         </div>
     </div>
 
@@ -283,7 +279,7 @@
         </header>
 
         <!-- RUNNING TEXT (MARQUEE) -->
-        <div class="bg-amber-500 text-white text-[11px] font-semibold py-1.5 px-4 overflow-hidden relative shadow-sm w-full z-20">
+        <div class="bg-emerald-600 text-white text-[11px] font-semibold py-1.5 px-4 overflow-hidden relative shadow-sm w-full z-20 border-t border-emerald-500">
             <marquee scrollamount="4" class="cursor-default w-full">
                 <span id="marqueeContent" class="inline-block w-full">Memuat informasi...</span>
             </marquee>
@@ -584,28 +580,62 @@
                 </form>
             </div>
 
-            <!-- 7. PROFIL VIEW (FULL PAGE) -->
+            <!-- 7. PROFIL VIEW (FULL PAGE) - KTP DIGITAL -->
             <div id="profilView" class="hidden flex-col h-full bg-slate-50 w-full max-w-3xl mx-auto overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0">
                     <button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button>
-                    <h2 class="font-bold text-lg text-slate-800">Profil Saya</h2>
+                    <h2 class="font-bold text-lg text-slate-800">Profil & KTP Digital</h2>
                 </div>
                 <div class="p-4 md:p-6 space-y-4 flex-1">
-                    <div class="bg-emerald-600 p-5 rounded-2xl shadow-sm overflow-hidden flex items-center gap-4">
-                        <div class="w-16 h-16 bg-white text-emerald-600 rounded-xl flex items-center justify-center text-2xl font-bold overflow-hidden shrink-0 shadow-sm relative group">
-                            <img id="profPhotoDisplay" src="" class="w-full h-full object-cover hidden">
-                            <i id="profIconDisplay" class="fa-solid fa-user"></i>
+                    
+                    <!-- KTP DIGITAL DESIGN -->
+                    <div class="bg-gradient-to-br from-blue-700 to-blue-900 text-white rounded-2xl p-5 shadow-lg overflow-hidden relative">
+                        <div class="absolute -right-4 -bottom-4 opacity-10"><i class="fa-solid fa-id-card text-9xl"></i></div>
+                        
+                        <div class="text-center pb-2 border-b border-blue-500/50 mb-3 relative z-10">
+                            <h3 class="font-bold text-sm uppercase tracking-widest text-blue-200">Kartu Tanda Penduduk Digital</h3>
+                            <p class="text-[9px] text-blue-300">RT.010 / RW.002 MABU PARK</p>
                         </div>
-                        <div class="flex-1 overflow-hidden min-w-0"><p id="profNama" class="font-bold text-lg text-white truncate">Nama</p><p id="profRole" class="text-[10px] text-emerald-700 font-bold uppercase bg-white px-2 py-0.5 rounded-md inline-block mt-1.5">Role</p></div>
-                    </div>
-                    <div class="bg-white p-4 rounded-xl space-y-3 text-sm border border-slate-200">
-                        <p class="flex justify-between text-slate-500"><span class="font-medium">Email</span> <span id="profEmail" class="font-semibold text-slate-800 text-right truncate pl-4 max-w-[60%]"></span></p>
-                        <p class="flex justify-between text-slate-500"><span class="font-medium">No HP</span> <span id="profHp" class="font-semibold text-slate-800"></span></p>
-                        <p class="flex justify-between text-slate-500"><span class="font-medium">Blok / No</span> <span class="font-semibold text-slate-800"><span id="profBlok"></span> / <span id="profNo"></span></span></p>
-                        <div class="border-t border-slate-100 pt-2 mt-2 space-y-2">
-                            <p class="flex justify-between text-slate-500"><span class="font-medium">Status Keluarga</span> <span id="profStatusKeluarga" class="font-semibold text-slate-800">-</span></p>
-                            <p class="flex justify-between text-slate-500"><span class="font-medium">Jumlah Jiwa</span> <span id="profJiwa" class="font-semibold text-slate-800">-</span></p>
-                            <p class="flex justify-between text-slate-500"><span class="font-medium">Agama</span> <span id="profAgama" class="font-semibold text-slate-800">-</span></p>
+
+                        <div class="flex gap-4 relative z-10">
+                            <!-- Foto -->
+                            <div class="w-20 h-28 bg-slate-200 rounded-lg overflow-hidden shrink-0 shadow-sm border border-white/20">
+                                <img id="profPhotoDisplay" src="" class="w-full h-full object-cover hidden">
+                                <i id="profIconDisplay" class="fa-solid fa-user text-4xl text-slate-400 w-full h-full flex items-center justify-center"></i>
+                            </div>
+                            <!-- Data Utama -->
+                            <div class="flex-1 min-w-0 flex flex-col justify-center">
+                                <p class="text-[9px] text-blue-300 uppercase">Nama Lengkap</p>
+                                <h3 id="profNama" class="font-bold text-lg text-white truncate leading-tight">Nama Warga</h3>
+                                
+                                <div class="mt-2 space-y-1">
+                                    <p class="text-[9px] text-blue-300 uppercase">Blok / No Rumah</p>
+                                    <p class="font-bold text-sm text-white"><span id="profBlok"></span> / <span id="profNo"></span></p>
+                                </div>
+                                <div class="mt-1">
+                                    <p class="text-[9px] text-blue-300 uppercase">Email</p>
+                                    <p id="profEmail" class="font-semibold text-[11px] text-white truncate"></p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-blue-500/50 relative z-10">
+                            <div>
+                                <p class="text-[9px] text-blue-300 uppercase">Status Keluarga</p>
+                                <p id="profStatusKeluarga" class="font-bold text-xs text-white">-</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-blue-300 uppercase">Agama</p>
+                                <p id="profAgama" class="font-bold text-xs text-white">-</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-blue-300 uppercase">No HP</p>
+                                <p id="profHp" class="font-bold text-xs text-white">-</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-blue-300 uppercase">Role / Jabatan</p>
+                                <p id="profRole" class="font-bold text-xs text-white uppercase">Warga</p>
+                            </div>
                         </div>
                     </div>
                     
@@ -710,7 +740,7 @@
                 </div>
             </div>
 
-            <!-- 11. KAS VIEW (FULL PAGE — SINGLE SCROLL CONTAINER) -->
+            <!-- 11. KAS VIEW (FULL PAGE) -->
             <div id="kasView" class="hidden flex-col h-full bg-slate-50 w-full overflow-hidden">
                 <div id="kasScrollContainer" class="flex-1 overflow-y-auto scroll-smooth">
                     <!-- Header KAS -->
@@ -752,7 +782,7 @@
 
                         <div class="px-4 pb-6">
                             <div id="kasRiwayatContainer">
-                                <div class="flex bg-slate-100 p-1 rounded-lg mb-3">
+                                <div id="kasFilterContainer" class="flex bg-slate-100 p-1 rounded-lg mb-3">
                                     <button onclick="filterKas('semua')" id="tabKasSemua" class="flex-1 py-1.5 text-[10px] font-bold bg-white shadow-sm rounded-md text-emerald-600 transition-all">Semua</button>
                                     <button onclick="filterKas('masuk')" id="tabKasMasuk" class="flex-1 py-1.5 text-[10px] font-semibold text-slate-500 rounded-md transition-all">Masuk</button>
                                     <button onclick="filterKas('keluar')" id="tabKasKeluar" class="flex-1 py-1.5 text-[10px] font-semibold text-slate-500 rounded-md transition-all">Keluar</button>
@@ -2144,18 +2174,23 @@
                     return;
                 }
 
-                // 2. Jika tidak ada pengumuman, cek Iuran Warga
+                // 2. Jika tidak ada pengumuman, cek Iuran Warga (HANYA BULAN INI)
                 if (!auth.currentUser) return;
                 const userDoc = await getDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid));
                 if (userDoc.exists()) {
                     const u = userDoc.data();
                     const iuran = u.iuran || {};
-                    const unpaidMonths = DAFTAR_BULAN_IURAN.filter(bln => !['L', 'LK', 'LA', 'LC', 'P', 'T'].includes(iuran[bln]));
                     
-                    if (unpaidMonths.length > 0) {
-                        el.innerHTML = `🔔 <b>PENGINGAT IURAN:</b> Mohon maaf Bapak/Ibu ${escapeHtml(u.nama || 'Warga')}, Iuran bulan <b>${unpaidMonths.join(', ')}</b> belum tercatat lunas. Silakan cek menu Kartu Iuran.`;
+                    const now = new Date();
+                    const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+                    const currentMonthStr = `${monthNames[now.getMonth()]} ${now.getFullYear()}`;
+                    
+                    const isCurrentMonthPaid = ['L', 'LK', 'LA', 'LC', 'P', 'T'].includes(iuran[currentMonthStr]);
+                    
+                    if (!isCurrentMonthPaid) {
+                        el.innerHTML = `🔔 <b>PENGINGAT IURAN:</b> Mohon maaf Bapak/Ibu ${escapeHtml(u.nama || 'Warga')}, Iuran bulan <b>${currentMonthStr}</b> belum tercatat lunas. Silakan cek menu Kartu Iuran.`;
                     } else {
-                        el.innerHTML = `✅ <b>INFORMASI:</b> Terima kasih, iuran Anda sudah lunas. Selamat beraktivitas!`;
+                        el.innerHTML = `✅ <b>INFORMASI:</b> Terima kasih, iuran Anda untuk bulan ${currentMonthStr} sudah lunas.`;
                     }
                 } else {
                     el.innerHTML = `Selamat datang di Aplikasi Layanan Warga RT.010 / RW.002 Mabu Park.`;
@@ -2462,7 +2497,24 @@
             else if (t === 'tamu') { show('tamuView', 'flex'); }
             else if (t === 'umkm') { show('umkmView', 'flex'); loadUmkmWarga(); }
             else if (t === 'iuran') { show('iuranView', 'flex'); const ni = document.getElementById('navIuranBtn'); if(ni){ ni.classList.remove('text-slate-400'); ni.classList.add('text-emerald-600'); } const u = window.currentUserData || {}; const el1 = document.getElementById('kartuIuranNama'); const el2 = document.getElementById('kartuIuranBlok'); const el3 = document.getElementById('kartuIuranNominalAktif'); if (el1) el1.innerText = u.nama || 'Warga'; if (el2) el2.innerText = `Blok ${u.blok || '-'} / No. ${u.no || '-'}`; if (el3) el3.innerText = formatRupiah(nominalIuranDefault) + ' / bln'; loadIuranUser(); }
-            else if (t === 'kas') { show('kasView', 'flex'); const nk = document.getElementById('navKasBtn'); if (nk) { nk.classList.remove('text-slate-400'); nk.classList.add('text-emerald-600'); } switchKasTab('riwayat'); }
+            else if (t === 'kas') { 
+                show('kasView', 'flex'); 
+                const nk = document.getElementById('navKasBtn'); if (nk) { nk.classList.remove('text-slate-400'); nk.classList.add('text-emerald-600'); } 
+                
+                // LOGIKA TAMPILAN KAS UNTUK WARGA VS ADMIN
+                const isRT = window.currentUserData && ['Admin RT', 'Pengurus RT', 'Bendahara', 'Sekretaris'].includes(window.currentUserData.role);
+                if (!isRT) {
+                    document.getElementById('kasTabsContainer').classList.add('hidden');
+                    document.getElementById('kasFilterContainer').classList.add('hidden');
+                    currentKasFilter = 'keluar'; // Hanya pengeluaran
+                } else {
+                    document.getElementById('kasTabsContainer').classList.remove('hidden');
+                    document.getElementById('kasFilterContainer').classList.remove('hidden');
+                    currentKasFilter = 'semua';
+                }
+                
+                switchKasTab('riwayat'); 
+            }
             else if (t === 'inventaris') { show('inventarisView', 'flex'); prefillFormData(); loadInventarisWarga(); }
             else if (t === 'sos') { show('sosView', 'flex'); }
             else if (t === 'pekerja') { show('pekerjaView', 'flex'); loadDataPekerjaWarga(); }
