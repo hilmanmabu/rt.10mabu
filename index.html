@@ -1140,7 +1140,7 @@
     e.preventDefault();
     const btn = document.getElementById('btnSubmitNewPekerja');
     
-    // 1. Ambil semua data
+    // 1. Ambil data
     const nama = document.getElementById('pkjNama').value;
     const hp = document.getElementById('pkjHp').value;
     const tglMasuk = document.getElementById('pkjTgl').value;
@@ -1148,7 +1148,7 @@
     const alamat = document.getElementById('pkjAlamat').value;
     const foto = document.getElementById('pkjFotoBase64').value;
 
-    // 2. Validasi simpel (wajib isi)
+    // 2. Validasi simpel
     if(!nama || !hp || !tglMasuk || !gaji || !alamat) {
         return showToast("Lengkapi semua data!", true);
     }
@@ -1157,7 +1157,7 @@
     btn.innerText = "Menyimpan...";
 
     try {
-        // 3. Simpan ke database (PERSIS SEPERTI SIMPAN WARGA)
+        // 3. Simpan ke database (persis seperti simpan warga)
         await addDoc(collection(db, 'artifacts', appId, 'pekerja'), {
             nama: nama,
             hp: hp,
@@ -1175,7 +1175,6 @@
         loadDataPekerjaHome();
         
     } catch (error) {
-        // Jika gagal, tampilkan error aslinya
         console.error(error);
         showToast("Gagal menyimpan: " + error.message, true);
     } finally {
