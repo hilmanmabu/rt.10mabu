@@ -1137,66 +1137,52 @@
 
         /* ═══════════ FIX: SIMPAN PEKERJA (defensif & tervalidasi) ═══════════ */
         window.simpanPekerjaBaruAdmin = async function(e) {
-            e.preventDefault();
+    e.preventDefault();
+    const btn = document.getElementById('btnSubmitNewPekerja');
+    
+    // 1. Ambil semua data
+    const nama = document.getElementById('pkjNama').value;
+    const hp = document.getElementById('pkjHp').value;
+    const tglMasuk = document.getElementById('pkjTgl').value;
+    const gaji = Number(document.getElementById('pkjGaji').value);
+    const alamat = document.getElementById('pkjAlamat').value;
+    const foto = document.getElementById('pkjFotoBase64').value;
 
-            if (!firebaseReady || !auth || !auth.currentUser) {
-                return showToast("Sesi login habis. Silakan login ulang.", true);
-            }
+    // 2. Validasi simpel (wajib isi)
+    if(!nama || !hp || !tglMasuk || !gaji || !alamat) {
+        return showToast("Lengkapi semua data!", true);
+    }
 
-            const nmEl     = document.getElementById('pkjNama');
-            const hpEl     = document.getElementById('pkjHp');
-            const tglEl    = document.getElementById('pkjTgl');
-            const gajiEl   = document.getElementById('pkjGaji');
-            const alamatEl = document.getElementById('pkjAlamat');
-            const fotoEl   = document.getElementById('pkjFotoBase64');
-            const btn      = document.getElementById('btnSubmitNewPekerja');
+    btn.disabled = true; 
+    btn.innerText = "Menyimpan...";
 
-            if (!nmEl || !hpEl || !tglEl || !gajiEl || !alamatEl) {
-                return showToast("Form tidak ditemukan. Refresh halaman.", true);
-            }
-
-            const nm      = (nmEl.value || '').trim();
-            const hp      = (hpEl.value || '').trim();
-            const tgl     = tglEl.value || '';
-            const gajiRaw = String(gajiEl.value || '').replace(/[^0-9]/g, '');
-            const gaji    = Number(gajiRaw);
-            const alamat  = (alamatEl.value || '').trim();
-            const foto    = fotoEl ? String(fotoEl.value || '') : '';
-
-            if (!nm)                          return showToast("Nama lengkap wajib diisi!", true);
-            if (!hp)                          return showToast("No. HP wajib diisi!", true);
-            if (!tgl)                         return showToast("Tanggal masuk wajib diisi!", true);
-            if (!gajiRaw || isNaN(gaji) || gaji <= 0)
-                                              return showToast("Gaji harus angka lebih dari 0!", true);
-            if (!alamat)                      return showToast("Alamat wajib diisi!", true);
-
-            if (btn) { btn.disabled = true; btn.innerText = "Menyimpan..."; }
-
-            try {
-                const docRef = await addDoc(collection(db, 'artifacts', appId, 'pekerja'), {
-                    nama: nm,
-                    hp: hp,
-                    tglMasuk: tgl,
-                    gaji: gaji,
-                    alamat: alamat,
-                    fotoBase64: foto,
-                    createdAt: Date.now(),
-                    createdBy: auth.currentUser.uid
-                });
-                console.log("[Pekerja] Berhasil disimpan, ID:", docRef.id);
-                showToast("✅ Data Pekerja berhasil disimpan!");
-
-                try { toggleAdminAddPekerja(false); } catch (x) { console.warn("toggle form:", x); }
-                try { await loadAdminPekerjaList(); } catch (x) { console.warn("load list:", x); }
-                try { loadDataPekerjaHome(); } catch (x) { console.warn("load home:", x); }
-            } catch (err) {
-                console.error("[Pekerja] Gagal menyimpan:", err);
-                const msg = err.message || err.code || 'Tidak diketahui';
-                showToast("Gagal menyimpan: " + msg, true);
-            } finally {
-                if (btn) { btn.disabled = false; btn.innerText = "Simpan"; }
-            }
-        };
+    try {
+        // 3. Simpan ke database (PERSIS SEPERTI SIMPAN WARGA)
+        await addDoc(collection(db, 'artifacts', appId, 'pekerja'), {
+            nama: nama,
+            hp: hp,
+            tglMasuk: tglMasuk,
+            gaji: gaji,
+            alamat: alamat,
+            fotoBase64: foto,
+            createdAt: Date.now()
+        });
+        
+        // 4. Jika berhasil
+        showToast("✅ Data Pekerja berhasil disimpan!");
+        toggleAdminAddPekerja(false);
+        loadAdminPekerjaList();
+        loadDataPekerjaHome();
+        
+    } catch (error) {
+        // Jika gagal, tampilkan error aslinya
+        console.error(error);
+        showToast("Gagal menyimpan: " + error.message, true);
+    } finally {
+        btn.disabled = false; 
+        btn.innerText = "Simpan";
+    }
+};
 
         async function loadAdminPekerjaList() {
             const cont = document.getElementById('adminPekerjaList');
