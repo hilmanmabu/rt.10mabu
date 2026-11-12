@@ -170,7 +170,6 @@
                     <div class="truncate">
                         <h1 class="font-bold text-sm sm:text-lg leading-tight truncate">Layanan Warga</h1>
                         <p class="text-[10px] sm:text-xs text-emerald-100 mt-0.5 truncate font-medium">RT.010 / RW.002 · MABU PARK</p>
-                        <!-- TANGGAL HARI INI -->
                         <p class="text-[9px] sm:text-[10px] text-emerald-200 mt-0.5 truncate font-normal" id="headerDate">Memuat tanggal...</p>
                     </div>
                 </div>
@@ -206,6 +205,12 @@
                             <div class="flex flex-row sm:flex-col gap-1.5 shrink-0 w-full sm:w-auto"><button id="btnHomeSOS" onclick="bukaHalamanSOS()" class="flex-1 sm:flex-none bg-white text-red-600 px-3 py-2 rounded-xl text-[11px] font-bold shadow-sm flex items-center justify-center gap-1.5"><i class="fa-solid fa-triangle-exclamation"></i> Darurat</button><button onclick="switchTab('iuran')" class="flex-1 sm:flex-none bg-emerald-700 text-white px-3 py-2 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1.5"><i class="fa-solid fa-id-card-clip"></i> Iuran</button></div>
                         </div>
                     </div>
+                </div>
+
+                <!-- TAMPILAN PENGURUS & PETUGAS -->
+                <div class="px-4 sm:px-6 lg:px-8 pb-4 w-full">
+                    <div class="flex items-center justify-between mb-3.5"><h3 class="font-bold text-slate-800 text-xs sm:text-sm uppercase tracking-wider">Pengurus & Petugas</h3></div>
+                    <div id="pengurusHomeContainer" class="flex overflow-x-auto gap-3 pb-2 snap-x scroll-smooth"></div>
                 </div>
 
                 <!-- DEMOGRAFI WARGA -->
@@ -257,8 +262,8 @@
                 </div>
 
                 <div class="px-4 sm:px-6 lg:px-8 pb-4 pt-1 w-full">
-                    <div class="flex items-center justify-between mb-3.5"><h3 class="font-bold text-slate-800 text-xs sm:text-sm uppercase tracking-wider">Menu Layanan</h3><span class="text-[10px] text-slate-400 font-medium">7 Layanan</span></div>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
+                    <div class="flex items-center justify-between mb-3.5"><h3 class="font-bold text-slate-800 text-xs sm:text-sm uppercase tracking-wider">Menu Layanan</h3><span class="text-[10px] text-slate-400 font-medium">8 Layanan</span></div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-3">
                         <button onclick="switchTab('lapor')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-emerald-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Speech%20balloon/3D/speech_balloon_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Lapor & Tanya RT</span></button>
                         <button onclick="switchTab('surat')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-blue-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Envelope/3D/envelope_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Surat Pengantar</span></button>
                         <button onclick="switchTab('data')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-purple-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Memo/3D/memo_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Isi Data Warga</span></button>
@@ -266,6 +271,7 @@
                         <button onclick="switchTab('iuran')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-yellow-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Credit%20card/3D/credit_card_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Kartu Iuran</span></button>
                         <button onclick="switchTab('kas')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-teal-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Money%20bag/3D/money_bag_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Laporan Kas</span></button>
                         <button onclick="switchTab('inventaris')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-cyan-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Package/3D/package_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Inventaris</span></button>
+                        <button onclick="switchTab('pekerja')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-rose-50 flex justify-center items-center"><i class="fa-solid fa-users-rectangle text-2xl text-rose-500"></i></div><span class="font-semibold text-[10px] text-slate-700">Data Pekerja</span></button>
                     </div>
                 </div>
             </div>
@@ -511,7 +517,6 @@
 
             <!-- 10. KAS VIEW (FULL PAGE) -->
             <div id="kasView" class="hidden flex-col h-full bg-slate-50 w-full overflow-y-auto">
-                <!-- HEADER LAPORAN KEUANGAN (DIPERKECIL) -->
                 <div class="bg-emerald-600 text-white pt-safe-top px-4 pb-4 shadow-md shrink-0 w-full sticky top-0 z-10">
                     <div class="max-w-4xl mx-auto w-full">
                         <div class="flex justify-between items-center mb-3">
@@ -537,13 +542,11 @@
                 </div>
                 <div class="flex-1 bg-slate-50 flex flex-col min-h-0 relative max-w-4xl mx-auto w-full -mt-4 rounded-t-3xl pt-4 px-4 pb-4">
                     
-                    <!-- Tab Kas (Disembunyikan untuk Warga Biasa) -->
                     <div id="kasTabsContainer" class="flex bg-slate-200 p-1 rounded-xl mb-4 shrink-0">
                         <button onclick="switchKasTab('riwayat')" id="tabKasRiwayat" class="flex-1 py-1.5 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all">Riwayat Kas</button>
                         <button onclick="switchKasTab('tagihan')" id="tabKasTagihan" class="hidden flex-1 py-1.5 text-xs font-semibold text-slate-500 rounded-lg transition-all">Tagihan Warga</button>
                     </div>
 
-                    <!-- Tab Riwayat Kas -->
                     <div id="kasRiwayatContainer" class="flex-1 flex flex-col min-h-0">
                         <div class="flex bg-slate-100 p-1 rounded-lg mb-3 shrink-0">
                             <button onclick="filterKas('semua')" id="tabKasSemua" class="flex-1 py-1.5 text-[10px] font-bold bg-white shadow-sm rounded-md text-emerald-600 transition-all">Semua</button>
@@ -553,7 +556,6 @@
                         <div id="kasWargaListContainer" class="flex-1 overflow-y-auto space-y-4 pb-10 scroll-smooth pr-1"></div>
                     </div>
 
-                    <!-- Tab Tagihan Warga (Hanya muncul untuk RT) -->
                     <div id="kasTagihanContainer" class="flex-1 flex flex-col min-h-0 hidden">
                         <div class="mb-3">
                             <select id="kasBulanTagihan" onchange="loadKasTagihanWarga()" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none"></select>
@@ -599,16 +601,29 @@
                 </div>
             </div>
 
-            <!-- 13. ADMIN VIEW (FULL PAGE) -->
+            <!-- 13. DATA PEKERJA VIEW (FULL PAGE) -->
+            <div id="pekerjaView" class="hidden flex-col h-full bg-slate-50 w-full max-w-3xl mx-auto overflow-y-auto">
+                <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0">
+                    <button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button>
+                    <h2 class="font-bold text-lg text-slate-800">Data Pekerja</h2>
+                </div>
+                <div class="p-4 md:p-6 flex-1">
+                    <div id="pekerjaWargaList" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <!-- 14. ADMIN VIEW (FULL PAGE) -->
             <div id="adminView" class="hidden flex-col h-full bg-slate-50 w-full max-w-6xl mx-auto overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0">
                     <button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button>
                     <h2 class="font-bold text-lg text-slate-800 flex items-center gap-2"><i class="fa-solid fa-users-gear text-emerald-600"></i> Panel Pengurus</h2>
                 </div>
                 <div class="p-4 md:p-6 flex-1">
+                    <!-- Grid Tabs Admin -->
                     <div class="grid grid-cols-4 gap-2 mb-6 shrink-0">
                         <button id="tabAdmWarga" onclick="switchAdminTab('warga')" class="py-2 text-[10px] sm:text-xs font-bold bg-emerald-100 text-emerald-700 rounded-xl shadow-sm transition-all">Warga</button>
                         <button id="tabAdmLaporan" onclick="switchAdminTab('laporan')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Laporan</button>
+                        <button id="tabAdmPekerja" onclick="switchAdminTab('pekerja')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Pekerja</button>
                         <button id="tabAdmIuran" onclick="switchAdminTab('iuran')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Iuran</button>
                         <button id="tabAdmKas" onclick="switchAdminTab('kas')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Kas</button>
                         <button id="tabAdmTamu" onclick="switchAdminTab('tamu')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Buku Tamu</button>
@@ -618,6 +633,7 @@
                     </div>
 
                     <div class="relative">
+                        <!-- VIEW WARGA -->
                         <div id="admViewWarga" class="block">
                             <div class="mb-3 flex flex-wrap gap-2">
                                 <button id="btnToggleAddWarga" onclick="toggleAdminAddWarga(true)" class="flex-1 bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2"><i class="fa-solid fa-user-plus"></i> Tambah Warga</button>
@@ -627,19 +643,56 @@
                             <form id="adminAddWargaForm" onsubmit="simpanWargaBaruAdmin(event)" class="hidden bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mt-2 space-y-3 shadow-sm mb-4">
                                 <div class="flex justify-between items-center border-b border-emerald-200 pb-2"><h3 class="font-bold text-emerald-900 text-xs uppercase"><i class="fa-solid fa-user-plus mr-1"></i> Daftarkan Warga</h3><button type="button" onclick="toggleAdminAddWarga(false)" class="text-xs text-slate-500 hover:text-red-500 font-bold"><i class="fa-solid fa-xmark"></i></button></div>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"><div><label class="block text-[11px] font-semibold text-slate-700 mb-1">Nama Lengkap *</label><input type="text" id="admNewNama" required placeholder="Budi" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div><div><label class="block text-[11px] font-semibold text-slate-700 mb-1">No. HP *</label><input type="tel" id="admNewHp" required placeholder="0812xxx" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div></div>
-                                <div class="grid grid-cols-3 gap-2"><div><label class="block text-[11px] font-semibold text-slate-700 mb-1">Blok *</label><input type="text" id="admNewBlok" required placeholder="A" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs uppercase outline-none focus:border-emerald-500"></div><div><label class="block text-[11px] font-semibold text-slate-700 mb-1">No *</label><input type="number" id="admNewNo" required placeholder="12" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div><div><label class="block text-[11px] font-semibold text-slate-700 mb-1">Role</label><select id="admNewRole" class="w-full px-2.5 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"><option value="Warga">Warga</option><option value="Pengurus RT">Pengurus RT</option><option value="Sekretaris">Sekretaris</option><option value="Bendahara">Bendahara</option><option value="Admin RT">Admin RT</option></select></div></div>
+                                <div class="grid grid-cols-3 gap-2"><div><label class="block text-[11px] font-semibold text-slate-700 mb-1">Blok *</label><input type="text" id="admNewBlok" required placeholder="A" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs uppercase outline-none focus:border-emerald-500"></div><div><label class="block text-[11px] font-semibold text-slate-700 mb-1">No *</label><input type="number" id="admNewNo" required placeholder="12" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div><div><label class="block text-[11px] font-semibold text-slate-700 mb-1">Role</label><select id="admNewRole" class="w-full px-2.5 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"><option value="Warga">Warga</option><option value="Pengurus RT">Pengurus RT</option><option value="Sekretaris">Sekretaris</option><option value="Bendahara">Bendahara</option><option value="Admin RT">Admin RT</option><option value="Satpam">Satpam</option></select></div></div>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1 border-t border-emerald-200"><div><label class="block text-[11px] font-semibold text-slate-700 mb-1">Email/Username *</label><input type="text" id="admNewEmail" required placeholder="budi" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div><div><label class="block text-[11px] font-semibold text-slate-700 mb-1">Password Awal *</label><input type="text" id="admNewPass" required minlength="6" value="warga010" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-mono outline-none focus:border-emerald-500"></div></div>
                                 <div class="flex gap-2 pt-1"><button type="button" onclick="toggleAdminAddWarga(false)" class="flex-1 bg-white border border-slate-300 text-slate-700 font-bold py-2 rounded-lg text-xs">Batal</button><button type="submit" id="btnSubmitNewWarga" class="flex-1 bg-emerald-600 text-white font-bold py-2 rounded-lg text-xs shadow-sm">Simpan</button></div>
                             </form>
                             <div class="relative mb-4"><i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400"></i><input type="text" id="searchWarga" onkeyup="filterWarga()" placeholder="Cari warga..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 outline-none bg-white text-sm shadow-sm"></div>
                             <div id="adminWargaList" class="space-y-3"></div>
                         </div>
+
+                        <!-- VIEW LAPORAN -->
                         <div id="admViewLaporan" class="hidden"><div id="adminLaporanList" class="space-y-3"></div></div>
+                        
+                        <!-- VIEW PEKERJA -->
+                        <div id="admViewPekerja" class="hidden">
+                            <div class="mb-3">
+                                <button id="btnToggleAddPekerja" onclick="toggleAdminAddPekerja(true)" class="w-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2"><i class="fa-solid fa-user-plus"></i> Tambah Data Pekerja</button>
+                            </div>
+                            <form id="adminAddPekerjaForm" onsubmit="simpanPekerjaBaruAdmin(event)" class="hidden bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mt-2 space-y-3 shadow-sm mb-4">
+                                <div class="flex justify-between items-center border-b border-emerald-200 pb-2"><h3 class="font-bold text-emerald-900 text-xs uppercase"><i class="fa-solid fa-user-plus mr-1"></i> Daftarkan Pekerja</h3><button type="button" onclick="toggleAdminAddPekerja(false)" class="text-xs text-slate-500 hover:text-red-500 font-bold"><i class="fa-solid fa-xmark"></i></button></div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                    <div><label class="block text-[11px] font-semibold text-slate-700 mb-1">Nama Lengkap *</label><input type="text" id="pkjNama" required placeholder="Budi" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div>
+                                    <div><label class="block text-[11px] font-semibold text-slate-700 mb-1">No. HP *</label><input type="tel" id="pkjHp" required placeholder="0812xxx" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2.5">
+                                    <div><label class="block text-[11px] font-semibold text-slate-700 mb-1">Tgl Masuk *</label><input type="date" id="pkjTgl" required class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div>
+                                    <div><label class="block text-[11px] font-semibold text-slate-700 mb-1">Gaji (Rp) *</label><input type="number" id="pkjGaji" required placeholder="1500000" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div>
+                                </div>
+                                <div><label class="block text-[11px] font-semibold text-slate-700 mb-1">Alamat *</label><input type="text" id="pkjAlamat" required placeholder="Alamat lengkap" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div>
+                                <div>
+                                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">Foto Close Up *</label>
+                                    <div class="flex items-center gap-2">
+                                        <img id="pkjFotoPreview" class="hidden w-12 h-12 rounded-lg object-cover border border-slate-200">
+                                        <button type="button" onclick="bukaKameraRealtime('pkjFotoPreview', 'pkjFotoIcon', 'pkjFotoBase64', null, 'user')" class="bg-emerald-600 text-white px-3 py-2 rounded-lg text-[11px] font-bold shadow-sm flex items-center gap-1.5"><i class="fa-solid fa-camera"></i> Ambil Foto</button>
+                                        <button type="button" onclick="document.getElementById('pkjFotoInput').click()" class="bg-slate-100 text-slate-700 px-3 py-2 rounded-lg text-[11px] font-semibold border border-slate-200 flex items-center gap-1.5"><i class="fa-regular fa-image"></i> Galeri</button>
+                                        <i id="pkjFotoIcon" class="fa-solid fa-user text-slate-400"></i>
+                                        <input type="file" id="pkjFotoInput" accept="image/*" class="hidden" onchange="handleDocPhoto(event, 'pkjFotoPreview', 'pkjFotoIcon', 'pkjFotoBase64')">
+                                        <input type="hidden" id="pkjFotoBase64">
+                                    </div>
+                                </div>
+                                <div class="flex gap-2 pt-1"><button type="button" onclick="toggleAdminAddPekerja(false)" class="flex-1 bg-white border border-slate-300 text-slate-700 font-bold py-2 rounded-lg text-xs">Batal</button><button type="submit" id="btnSubmitNewPekerja" class="flex-1 bg-emerald-600 text-white font-bold py-2 rounded-lg text-xs shadow-sm">Simpan</button></div>
+                            </form>
+                            <div id="adminPekerjaList" class="space-y-3"></div>
+                        </div>
+
+                        <!-- VIEW IURAN -->
                         <div id="admViewIuran" class="hidden">
                             <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mb-4 space-y-3"><div class="flex justify-between items-center"><h3 class="font-bold text-emerald-900 text-sm">Pengaturan Iuran</h3><button onclick="kirimPengingatIuran()" class="bg-amber-500 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg shadow-sm flex items-center gap-1 transition"><i class="fa-solid fa-bell"></i> Ingatkan</button></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"><div><label class="block text-[11px] font-semibold text-emerald-800 mb-1">Bulan Tagihan</label><select id="adminBulanIuran" onchange="loadAdminIuran()" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none"></select></div><div><label class="block text-[11px] font-semibold text-emerald-800 mb-1">Nominal Default</label><select id="adminNominalIuran" onchange="simpanNominalDefault()" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none"></select></div></div></div>
                             <div id="adminIuranWargaList" class="space-y-2"></div>
                         </div>
                         
+                        <!-- VIEW KAS -->
                         <div id="admViewKas" class="hidden">
                             <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-4">
                                 <h3 class="font-bold text-slate-800 text-sm mb-3">Grafik Arus Kas</h3>
@@ -649,7 +702,12 @@
                             <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mb-4 space-y-2.5">
                                 <h3 class="font-bold text-emerald-900 text-sm">Catat Transaksi Kas</h3>
                                 <select id="kasKategoriInput" onchange="autofillKasKet()" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none mb-1 text-slate-700">
-                                    <option value="">-- Pilih Pengeluaran Rutin (Opsional) --</option>
+                                    <option value="">-- Pilih Kategori (Opsional) --</option>
+                                    <option value="Belanja">Belanja</option>
+                                    <option value="Gaji">Gaji</option>
+                                    <option value="Bayar">Bayar</option>
+                                    <option value="Perbaikan">Perbaikan</option>
+                                    <option value="Kasbon">Kasbon</option>
                                     <option value="Gaji Satpam">Gaji Satpam</option>
                                     <option value="Gaji Petugas Kebersihan">Gaji Petugas Kebersihan</option>
                                     <option value="Gaji Petugas Angkut Sampah">Gaji Petugas Angkut Sampah</option>
@@ -667,6 +725,7 @@
                             <h3 class="font-bold text-slate-700 text-sm mb-2 border-b border-slate-100 pb-2">Riwayat Transaksi</h3><div id="adminKasList" class="space-y-2"></div>
                         </div>
 
+                        <!-- VIEW TAMU -->
                         <div id="admViewTamu" class="hidden">
                             <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-4 space-y-2.5">
                                 <h3 class="font-bold text-blue-900 text-sm">Catat Tamu Masuk</h3>
@@ -681,14 +740,19 @@
                             <div id="adminTamuList" class="space-y-2"></div>
                         </div>
 
+                        <!-- VIEW POLLING -->
                         <div id="admViewPolling" class="hidden">
                             <div class="bg-purple-50 border border-purple-200 rounded-2xl p-4 mb-5 space-y-2.5"><h3 class="font-bold text-purple-900 text-sm">Buat e-Voting</h3><input type="text" id="pollJudulInput" placeholder="Judul Musyawarah" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white outline-none focus:border-purple-500"><input type="text" id="pollOpsiInput" placeholder="Pilihan (pisahkan dengan koma)" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white outline-none focus:border-purple-500"><button onclick="buatPollingBaru()" class="w-full bg-purple-600 text-white font-bold py-2.5 rounded-lg text-sm shadow-md">Terbitkan</button></div>
                             <h3 class="font-bold text-slate-700 text-sm mb-3 border-b border-slate-100 pb-2">Daftar Polling Aktif</h3><div id="adminPollingList" class="space-y-3"></div>
                         </div>
+
+                        <!-- VIEW SOS -->
                         <div id="admViewSos" class="hidden space-y-4">
                             <div class="bg-red-50 border border-red-200 rounded-2xl p-4 flex items-center justify-between gap-4"><div><h3 class="font-bold text-red-900 text-sm">Fitur SOS Warga</h3><p class="text-xs text-red-700 mt-0.5">Jika dimatikan, tombol SOS disembunyikan.</p></div><label class="flex items-center cursor-pointer relative shrink-0"><input type="checkbox" id="toggleFiturSOSCheckbox" checked onchange="ubahStatusFiturSOS(this.checked)" class="sr-only peer"><div class="w-12 h-6 bg-slate-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div></label></div>
                             <div class="bg-white border border-slate-200 rounded-2xl p-4"><h4 class="font-bold text-slate-800 text-sm mb-1">Status Alarm</h4><p class="text-xs text-slate-500 mb-3" id="adminStatusSOSText">Tidak ada sinyal darurat aktif.</p><button onclick="matikanSinyalSOS()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-xl text-xs transition"><i class="fa-solid fa-bell-slash mr-1"></i> Matikan Sirene</button></div>
                         </div>
+
+                        <!-- VIEW PENGUMUMAN -->
                         <div id="admViewPengumuman" class="hidden">
                             <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-5"><h3 class="font-bold text-blue-800 text-sm mb-2">Buat Pengumuman</h3><input type="text" id="pengJudul" placeholder="Judul" class="w-full px-3 py-2 rounded-lg border border-slate-200 mb-2 text-sm bg-white outline-none focus:border-blue-500"><textarea id="pengIsi" rows="3" placeholder="Isi pengumuman..." class="w-full px-3 py-2 rounded-lg border border-slate-200 mb-2 text-sm resize-none bg-white outline-none focus:border-blue-500"></textarea><button onclick="postPengumuman()" class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg text-sm shadow-md">Posting</button></div>
                             <h3 class="font-bold text-slate-700 text-sm mb-3 border-b border-slate-100 pb-2">Riwayat</h3><div id="adminPengumumanList" class="space-y-3"></div>
@@ -750,7 +814,6 @@
         function safeEncode(obj) { return encodeURIComponent(JSON.stringify(obj)).replace(/'/g, '%27'); }
         function safeDecode(encoded) { return JSON.parse(decodeURIComponent(encoded)); }
 
-        // Fungsi Tanggal Header
         function updateHeaderDate() {
             const el = document.getElementById('headerDate');
             if (el) {
@@ -952,6 +1015,133 @@
             catch (err) { showToast("Gagal kirim pesan.", true); }
         }
 
+        /* FITUR BARU: DATA PEKERJA */
+        async function loadDataPekerjaHome() {
+            const cont = document.getElementById('pengurusHomeContainer');
+            if (!cont || !firebaseReady) return;
+            try {
+                const sUsers = await getDocs(collection(db, 'artifacts', appId, 'users'));
+                const sPekerja = await getDocs(collection(db, 'artifacts', appId, 'pekerja'));
+                
+                let pengurus = [];
+                let pekerja = [];
+
+                sUsers.forEach(d => {
+                    const u = d.data();
+                    if (['Admin RT', 'Pengurus RT', 'Sekretaris'].includes(u.role)) {
+                        pengurus.push({ id: d.id, ...u, type: 'Pengurus' });
+                    }
+                });
+
+                sPekerja.forEach(d => {
+                    const p = d.data();
+                    pekerja.push({ id: d.id, ...p, type: 'Pekerja' });
+                });
+
+                let allData = [...pengurus, ...pekerja].slice(0, 5); // Batasi 5 di beranda
+                let h = '';
+                allData.forEach(x => {
+                    const foto = x.fotoBase64 || x.photoBase64 || "https://ui-avatars.com/api/?name=" + (x.nama || 'W') + "&background=random";
+                    const roleLabel = x.type === 'Pekerja' ? 'Petugas' : x.role;
+                    h += `<div class="flex-shrink-0 w-32 bg-white rounded-2xl p-3 border border-slate-200 shadow-sm text-center flex flex-col items-center snap-center">
+                            <img src="${foto}" class="w-16 h-16 rounded-full object-cover mb-2 border-2 border-emerald-100 shadow-sm">
+                            <h4 class="font-bold text-xs text-slate-800 truncate w-full">${escapeHtml(x.nama || 'Nama')}</h4>
+                            <p class="text-[9px] text-emerald-600 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md mt-1">${escapeHtml(roleLabel)}</p>
+                        </div>`;
+                });
+                cont.innerHTML = h || '<p class="text-xs text-slate-500">Belum ada data pengurus/pekerja.</p>';
+            } catch(e) { console.error(e); cont.innerHTML = ''; }
+        }
+
+        window.loadDataPekerjaWarga = async function() {
+            const cont = document.getElementById('pekerjaWargaList');
+            if (!cont) return;
+            cont.innerHTML = '<div class="text-center py-5"><i class="fa-solid fa-spinner fa-spin text-slate-400"></i></div>';
+            try {
+                const s = await getDocs(collection(db, 'artifacts', appId, 'pekerja'));
+                let h = '';
+                s.forEach(d => {
+                    const p = d.data();
+                    const foto = p.fotoBase64 || "https://ui-avatars.com/api/?name=" + (p.nama || 'P') + "&background=random";
+                    const tgl = p.tglMasuk ? new Date(p.tglMasuk).toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'}) : '-';
+                    
+                    h += `<div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex gap-4 items-start">
+                            <img src="${foto}" class="w-16 h-16 rounded-xl object-cover border border-slate-200 shadow-sm shrink-0">
+                            <div class="min-w-0 flex-1">
+                                <h4 class="font-bold text-sm text-slate-800">${escapeHtml(p.nama || 'Nama')}</h4>
+                                <p class="text-xs text-slate-500 flex items-center gap-1.5 mt-0.5"><i class="fa-solid fa-phone text-[10px]"></i> ${escapeHtml(p.hp || '-')}</p>
+                                <p class="text-xs text-slate-500 flex items-center gap-1.5 mt-0.5"><i class="fa-solid fa-calendar text-[10px]"></i> Masuk: ${tgl}</p>
+                                <p class="text-xs text-slate-500 flex items-center gap-1.5 mt-0.5"><i class="fa-solid fa-location-dot text-[10px]"></i> ${escapeHtml(p.alamat || '-')}</p>
+                            </div>
+                          </div>`;
+                });
+                cont.innerHTML = h || '<p class="text-center text-xs text-slate-400">Belum ada data pekerja.</p>';
+            } catch(e) { cont.innerHTML = '<p class="text-center text-red-500 text-xs">Gagal memuat data.</p>'; }
+        };
+
+        window.toggleAdminAddPekerja = function(show) {
+            const f = document.getElementById('adminAddPekerjaForm');
+            const b = document.getElementById('btnToggleAddPekerja');
+            if(!f || !b) return;
+            if(show) { f.classList.remove('hidden'); b.classList.add('hidden'); }
+            else { f.classList.add('hidden'); b.classList.remove('hidden'); f.reset(); document.getElementById('pkjFotoPreview').classList.add('hidden'); document.getElementById('pkjFotoBase64').value=''; }
+        };
+
+        window.simpanPekerjaBaruAdmin = async function(e) {
+            e.preventDefault();
+            const nm = document.getElementById('pkjNama').value.trim();
+            const hp = document.getElementById('pkjHp').value.trim();
+            const tgl = document.getElementById('pkjTgl').value;
+            const gaji = Number(document.getElementById('pkjGaji').value);
+            const alamat = document.getElementById('pkjAlamat').value.trim();
+            const foto = document.getElementById('pkjFotoBase64').value;
+            const btn = document.getElementById('btnSubmitNewPekerja');
+            
+            if(!nm || !hp || !tgl || !gaji || !alamat) return showToast("Lengkapi semua data!", true);
+            btn.disabled = true;
+            try {
+                await addDoc(collection(db, 'artifacts', appId, 'pekerja'), {
+                    nama: nm, hp, tglMasuk: tgl, gaji, alamat, fotoBase64: foto, createdAt: Date.now()
+                });
+                showToast("✅ Data Pekerja berhasil disimpan!");
+                toggleAdminAddPekerja(false);
+                loadAdminPekerjaList();
+                loadDataPekerjaHome();
+            } catch(err) { showToast("Gagal menyimpan data.", true); }
+            finally { btn.disabled = false; }
+        };
+
+        async function loadAdminPekerjaList() {
+            const cont = document.getElementById('adminPekerjaList');
+            if(!cont) return;
+            cont.innerHTML = '<div class="text-center py-5"><i class="fa-solid fa-spinner fa-spin text-slate-400"></i></div>';
+            try {
+                const s = await getDocs(collection(db, 'artifacts', appId, 'pekerja'));
+                let h = '';
+                s.forEach(d => {
+                    const p = d.data();
+                    const foto = p.fotoBase64 || "https://ui-avatars.com/api/?name=" + (p.nama || 'P') + "&background=random";
+                    const tgl = p.tglMasuk ? new Date(p.tglMasuk).toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'}) : '-';
+                    
+                    h += `<div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3 mb-2">
+                            <img src="${foto}" class="w-12 h-12 rounded-lg object-cover border border-slate-200 shadow-sm shrink-0">
+                            <div class="min-w-0 flex-1">
+                                <h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(p.nama || 'Nama')}</h4>
+                                <p class="text-[11px] text-slate-500 truncate">${escapeHtml(p.hp || '-')} • ${tgl}</p>
+                                <p class="text-[11px] text-emerald-600 font-bold">Gaji: ${formatRupiah(p.gaji)}</p>
+                            </div>
+                            <button onclick="hapusPekerja('${d.id}')" class="w-8 h-8 bg-red-50 text-red-500 rounded-full flex items-center justify-center shrink-0"><i class="fa-solid fa-trash text-xs"></i></button>
+                          </div>`;
+                });
+                cont.innerHTML = h || '<p class="text-center text-xs text-slate-400">Belum ada data pekerja.</p>';
+            } catch(e) { cont.innerHTML = '<p class="text-center text-red-500 text-xs">Gagal memuat data.</p>'; }
+        }
+
+        window.hapusPekerja = async function(id) {
+            if(!confirm("Hapus data pekerja ini?")) return;
+            try { await deleteDoc(doc(db, 'artifacts', appId, 'pekerja', id)); showToast("Data pekerja dihapus."); loadAdminPekerjaList(); loadDataPekerjaHome(); } catch(e) {}
+        };
+
         /* KAS & PENGELUARAN RUTIN */
         let currentKasFilter = 'semua'; let globalKasList = [];
         let currentKasView = 'riwayat';
@@ -974,7 +1164,7 @@
                 btnRiwayat.className = "flex-1 py-1.5 text-xs font-semibold text-slate-500 rounded-lg transition-all";
                 contTagihan.classList.remove('hidden');
                 contRiwayat.classList.add('hidden');
-                initDropdownIuran(); // Pastikan bulan terisi
+                initDropdownIuran();
                 loadKasTagihanWarga();
             }
         };
@@ -984,7 +1174,6 @@
             const bulanSelect = document.getElementById('kasBulanTagihan');
             if(!cont || !firebaseReady) return;
             
-            // Sembunyikan kontainer tab jika bukan admin
             const isAdmin = window.currentUserData && ['Admin RT', 'Pengurus RT', 'Bendahara', 'Sekretaris'].includes(window.currentUserData.role);
             const tabContainer = document.getElementById('tabKasTagihan');
             if(!isAdmin) {
@@ -1012,14 +1201,12 @@
                     
                     let btnHtml = '';
                     if (isAdmin) {
-                        // Tombol Toggle
                         if (isLunas) {
                             btnHtml = `<button onclick="toggleBayarKasWarga('${d.id}', '${escapeHtml(u.nama)}', '${escapeHtml(blokFormat)}', '${selectedBulan}', false)" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm transition">Lunas</button>`;
                         } else {
                             btnHtml = `<button onclick="toggleBayarKasWarga('${d.id}', '${escapeHtml(u.nama)}', '${escapeHtml(blokFormat)}', '${selectedBulan}', true)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm transition">Belum Lunas</button>`;
                         }
                     } else {
-                        // Tampilan Warga
                         btnHtml = isLunas 
                             ? `<span class="bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-emerald-200">LUNAS</span>`
                             : `<span class="bg-red-100 text-red-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-red-200">BELUM LUNAS</span>`;
@@ -1045,7 +1232,6 @@
             
             try {
                 if (isLunas) {
-                    // Proses Lunas
                     await updateDoc(doc(db, 'artifacts', appId, 'users', uid), {
                         [`iuran.${bulan}`]: 'L',
                         [`iuranNominal.${bulan}`]: nominal
@@ -1061,13 +1247,11 @@
                     });
                     showToast("✅ Status: LUNAS");
                 } else {
-                    // Proses Batal Lunas
                     await updateDoc(doc(db, 'artifacts', appId, 'users', uid), {
                         [`iuran.${bulan}`]: 'BL',
                         [`iuranNominal.${bulan}`]: 0
                     });
                     
-                    // Hapus dari Kas
                     const q = query(collection(db, 'artifacts', appId, 'kas'));
                     const s = await getDocs(q);
                     let txIdToDelete = null;
@@ -1446,7 +1630,7 @@
 
         if (firebaseReady && auth) {
             onAuthStateChanged(auth, async (user) => {
-                try { if (user) { const snap = await getDoc(doc(db, 'artifacts', appId, 'users', user.uid)); window.currentUserData = snap.exists() ? snap.data() : { nama: user.email.split('@')[0], role: 'Warga' }; showAppScreen(); prefillFormData(); perbaruiStatusUI_Fingerprint(); loadPengumumanUtama(); loadPollingUtama(); loadStatistik(); mulaiPantau(user); } else { showAuthScreen(); } }
+                try { if (user) { const snap = await getDoc(doc(db, 'artifacts', appId, 'users', user.uid)); window.currentUserData = snap.exists() ? snap.data() : { nama: user.email.split('@')[0], role: 'Warga' }; showAppScreen(); prefillFormData(); perbaruiStatusUI_Fingerprint(); loadPengumumanUtama(); loadPollingUtama(); loadStatistik(); loadDataPekerjaHome(); mulaiPantau(user); } else { showAuthScreen(); } }
                 catch (e) { console.error(e); showAuthScreen(); }
             });
         } else { setTimeout(() => { if (typeof showToast === 'function') showToast("Gagal memuat aplikasi. Refresh halaman.", true); }, 800); showAuthScreen(); }
@@ -1563,12 +1747,12 @@
         };
 
         window.switchAdminTab = function (t) {
-            ['Warga', 'Laporan', 'Iuran', 'Kas', 'Tamu', 'Polling', 'Sos', 'Pengumuman'].forEach(x => {
+            ['Warga', 'Laporan', 'Pekerja', 'Iuran', 'Kas', 'Tamu', 'Polling', 'Sos', 'Pengumuman'].forEach(x => {
                 const v = document.getElementById('admView' + x); const b = document.getElementById('tabAdm' + x);
                 if (x.toLowerCase() === t) { if (v) { v.classList.remove('hidden'); v.classList.add('block'); } if (b) b.className = "py-2 text-[10px] sm:text-xs font-bold bg-emerald-100 text-emerald-700 rounded-xl shadow-sm transition-all"; }
                 else { if (v) { v.classList.add('hidden'); v.classList.remove('block'); } if (b) b.className = "py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all"; }
             });
-            if (t === 'warga') loadAdminWargaList(); else if (t === 'laporan') loadAdminLaporan(); else if (t === 'pengumuman') loadAdminPengumuman(); else if (t === 'polling') loadAdminPolling(); else if (t === 'kas') loadBukuKas(); else if (t === 'iuran') loadAdminIuran(); else if (t === 'tamu') loadBukuTamu();
+            if (t === 'warga') loadAdminWargaList(); else if (t === 'laporan') loadAdminLaporan(); else if (t === 'pengumuman') loadAdminPengumuman(); else if (t === 'polling') loadAdminPolling(); else if (t === 'kas') loadBukuKas(); else if (t === 'iuran') loadAdminIuran(); else if (t === 'tamu') loadBukuTamu(); else if (t === 'pekerja') loadAdminPekerjaList();
         };
         window.toggleAdminAddWarga = function (show) { const f = document.getElementById('adminAddWargaForm'); const b = document.getElementById('btnToggleAddWarga'); if (!f || !b) return; if (show) { f.classList.remove('hidden'); b.classList.add('hidden'); } else { f.classList.add('hidden'); b.classList.remove('hidden'); f.reset(); const p = document.getElementById('admNewPass'); if (p) p.value = 'warga010'; } };
         window.simpanWargaBaruAdmin = async function (e) {
@@ -1606,7 +1790,7 @@
         window.loadInventarisWarga = async function () { const cont = document.getElementById('inventarisDynamicList'); if (!cont) return; cont.innerHTML = '<div class="text-center py-4"><i class="fa-solid fa-spinner fa-spin text-slate-400"></i></div>'; try { const s = await getDocs(query(collection(db, 'artifacts', appId, 'inventaris'), orderBy('timestamp', 'asc'))); let h = '', i = 1; s.forEach(d => { const data = d.data(); h += `<label class="flex items-center justify-between p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-emerald-50 transition bg-white"><div class="min-w-0"><span class="font-medium text-sm text-slate-800 block truncate">${i}. ${escapeHtml(data.nama)}</span>${data.detail ? `<span class="text-[10px] text-slate-500 mt-0.5 block truncate">${escapeHtml(data.detail)}</span>` : ''}</div><input type="checkbox" value="${escapeHtml(data.nama)}" class="w-5 h-5 border-slate-300 rounded inv-checkbox shrink-0 ml-2"></label>`; i++; }); cont.innerHTML = h || '<p class="text-sm text-center text-slate-500 py-4">Belum ada barang.</p>'; } catch (e) { cont.innerHTML = '<p class="text-xs text-center text-red-500 py-4">Gagal memuat.</p>'; } };
 
         window.switchTab = function (t) {
-            const views = ['homeView', 'chatView', 'riwayatView', 'laporView', 'suratView', 'dataView', 'profilView', 'umkmView', 'iuranView', 'kasView', 'inventarisView', 'sosView', 'adminView'];
+            const views = ['homeView', 'chatView', 'riwayatView', 'laporView', 'suratView', 'dataView', 'profilView', 'umkmView', 'iuranView', 'kasView', 'inventarisView', 'sosView', 'adminView', 'pekerjaView'];
             views.forEach(id => { const el = document.getElementById(id); if (el) { el.classList.add('hidden'); el.classList.remove('flex'); } });
             
             ['navBerandaBtn', 'navChatBtn', 'navKasBtn', 'navRiwayatBtn'].forEach(id => { const el = document.getElementById(id); if (el) { el.classList.remove('text-emerald-600'); el.classList.add('text-slate-400'); } });
@@ -1624,8 +1808,9 @@
             else if (t === 'kas') { show('kasView', 'flex'); const nk = document.getElementById('navKasBtn'); if (nk) { nk.classList.remove('text-slate-400'); nk.classList.add('text-emerald-600'); } switchKasTab('riwayat'); }
             else if (t === 'inventaris') { show('inventarisView', 'flex'); prefillFormData(); loadInventarisWarga(); }
             else if (t === 'sos') { show('sosView', 'flex'); }
+            else if (t === 'pekerja') { show('pekerjaView', 'flex'); loadDataPekerjaWarga(); }
             else if (t === 'admin') { show('adminView', 'flex'); switchAdminTab('warga'); }
-            else { show('homeView'); const nb = document.getElementById('navBerandaBtn'); if (nb) { nb.classList.remove('text-slate-400'); nb.classList.add('text-emerald-600'); } loadStatistik(); }
+            else { show('homeView'); const nb = document.getElementById('navBerandaBtn'); if (nb) { nb.classList.remove('text-slate-400'); nb.classList.add('text-emerald-600'); } loadStatistik(); loadDataPekerjaHome(); }
         };
         window.loadRiwayat = async function () {
             const cont = document.getElementById('riwayatListContainer'); if (!cont || !auth.currentUser) return; cont.innerHTML = 'Loading...';
