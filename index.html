@@ -62,21 +62,6 @@
         }
         #kasWargaListContainer::-webkit-scrollbar { width: 4px; }
         #kasWargaListContainer::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        
-        /* Styling Khusus KTP Digital */
-        .ktp-bg {
-            background: linear-gradient(135deg, #a2c8f2 0%, #d0e2f5 100%);
-            position: relative;
-        }
-        .ktp-bg::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background-image: radial-gradient(circle, rgba(255,255,255,0.4) 1px, transparent 1px);
-            background-size: 10px 10px;
-            opacity: 0.5;
-            pointer-events: none;
-        }
     </style>
 </head>
 <body class="w-full h-full text-ink select-none bg-slate-50 flex flex-col">
@@ -613,81 +598,70 @@
                 <div class="p-4 md:p-6 space-y-4 flex-1">
                     
                     <!-- KTP DIGITAL DESIGN -->
-                    <div class="bg-[#b8d4f0] text-black rounded-xl p-4 shadow-lg overflow-hidden relative border border-blue-300 ktp-bg">
+                    <div class="bg-white rounded-2xl p-6 shadow-xl border border-slate-200 flex flex-col items-center relative overflow-hidden">
                         
-                        <!-- Header KTP -->
-                        <div class="text-center pb-1 border-b-2 border-black/20 mb-2 relative z-10">
-                            <h3 class="font-bold text-[13px] md:text-sm uppercase tracking-wide leading-tight">WARGA PERUMAHAN MABU PARK</h3>
+                        <!-- Foto (Bisa diklik) -->
+                        <div class="relative w-32 h-32 mb-4 group cursor-pointer" onclick="document.getElementById('editPhotoInput').click()">
+                            <div class="w-32 h-32 bg-slate-100 rounded-full overflow-hidden border-4 border-emerald-500 shadow-md">
+                                <img id="profPhotoDisplay" src="" class="w-full h-full object-cover hidden">
+                                <i id="profIconDisplay" class="fa-solid fa-user text-5xl text-slate-300 w-full h-full flex items-center justify-center"></i>
+                            </div>
+                            <div class="absolute bottom-0 right-0 bg-emerald-600 text-white w-8 h-8 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
+                                <i class="fa-solid fa-camera text-xs"></i>
+                            </div>
+                            <input type="file" id="editPhotoInput" accept="image/*" class="hidden" onchange="handleProfilePhoto(event)">
                         </div>
 
-                        <div class="flex gap-3 relative z-10 mt-2">
-                            <!-- Foto (Bisa diklik) -->
-                            <div class="w-[80px] h-[110px] bg-red-600 rounded-md overflow-hidden shrink-0 shadow-sm border border-black/20 relative group cursor-pointer" onclick="document.getElementById('editPhotoInput').click()">
-                                <img id="profPhotoDisplay" src="" class="w-full h-full object-cover hidden">
-                                <i id="profIconDisplay" class="fa-solid fa-user text-4xl text-slate-300 w-full h-full flex items-center justify-center"></i>
-                                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                                    <i class="fa-solid fa-camera text-white"></i>
-                                </div>
-                            </div>
-                            
-                            <!-- Biodata -->
-                            <div class="flex-1 min-w-0 flex flex-col justify-center text-[11px] leading-tight font-medium">
-                                <table class="w-full">
-                                    <tr><td class="w-12 align-top">NIK</td><td class="w-2 align-top">:</td><td class="truncate font-mono text-[10px]"><span id="profNik">-</span></td></tr>
-                                    <tr><td class="align-top">Nama</td><td class="align-top">:</td><td class="font-bold text-[12px] leading-tight truncate"><span id="profNama">-</span></td></tr>
-                                    <tr><td class="align-top">Ttl</td><td class="align-top">:</td><td class="truncate"><span id="profTtl">-</span></td></tr>
-                                    <tr><td class="align-top">J.Kelamin</td><td class="align-top">:</td><td class="truncate"><span id="profJk">-</span></td></tr>
-                                    <tr><td class="align-top">Alamat</td><td class="align-top">:</td><td class="truncate"><span id="profAlamat">-</span></td></tr>
-                                    <tr><td class="align-top">RT/RW</td><td class="align-top">:</td><td class="truncate">010 / 002</td></tr>
-                                    <tr><td class="align-top">Kel/Desa</td><td class="align-top">:</td><td class="truncate">Aweh</td></tr>
-                                    <tr><td class="align-top">Kecamatan</td><td class="align-top">:</td><td class="truncate">Kalanganyar</td></tr>
-                                    <tr><td class="align-top">Agama</td><td class="align-top">:</td><td class="truncate"><span id="profAgama">-</span></td></tr>
-                                    <tr><td class="align-top">Status</td><td class="align-top">:</td><td class="truncate"><span id="profStatusKeluarga">-</span></td></tr>
-                                    <tr><td class="align-top">Pekerjaan</td><td class="align-top">:</td><td class="truncate"><span id="profPekerjaan">-</span></td></tr>
-                                    <tr><td class="align-top">Kewarganegaraan</td><td class="align-top">:</td><td class="truncate">WNI</td></tr>
-                                    <tr><td class="align-top">Berlaku Hingga</td><td class="align-top">:</td><td class="truncate">SEUMUR HIDUP</td></tr>
-                                </table>
-                            </div>
-                        </div>
+                        <h3 class="font-bold text-lg text-slate-800 text-center uppercase tracking-wide border-b-2 border-slate-100 pb-2 mb-4 w-full" id="profNama">Nama Warga</h3>
                         
-                        <!-- Footer KTP -->
-                        <div class="mt-3 pt-2 flex justify-between items-end relative z-10 border-t border-black/20">
-                            <div class="text-[9px] font-bold text-black/70">
-                                <p>MABU PARK</p>
-                                <p id="profTglCetak">-</p>
+                        <div class="w-full space-y-2 text-sm text-slate-700">
+                            <div class="flex border-b border-slate-50 pb-1">
+                                <span class="w-32 font-semibold text-slate-500 text-xs">NIK</span> <span class="mr-2 text-slate-400">:</span> <span id="profNik" class="font-mono font-medium">-</span>
                             </div>
-                            <div class="text-center w-24">
-                                <p class="text-[8px] font-semibold text-black/70">Jabatan</p>
-                                <p id="profRole" class="font-bold text-[10px] uppercase text-black truncate">Warga</p>
+                            <div class="flex border-b border-slate-50 pb-1">
+                                <span class="w-32 font-semibold text-slate-500 text-xs">Tempat/Tgl Lahir</span> <span class="mr-2 text-slate-400">:</span> <span id="profTtl" class="font-medium">-</span>
+                            </div>
+                            <div class="flex border-b border-slate-50 pb-1">
+                                <span class="w-32 font-semibold text-slate-500 text-xs">Jenis Kelamin</span> <span class="mr-2 text-slate-400">:</span> <span id="profJk" class="font-medium">-</span>
+                            </div>
+                            <div class="flex border-b border-slate-50 pb-1">
+                                <span class="w-32 font-semibold text-slate-500 text-xs">Alamat</span> <span class="mr-2 text-slate-400">:</span> <span id="profAlamat" class="font-medium">-</span>
+                            </div>
+                            <div class="flex border-b border-slate-50 pb-1">
+                                <span class="w-32 font-semibold text-slate-500 text-xs">RT/RW</span> <span class="mr-2 text-slate-400">:</span> <span class="font-medium">010 / 002</span>
+                            </div>
+                            <div class="flex border-b border-slate-50 pb-1">
+                                <span class="w-32 font-semibold text-slate-500 text-xs">Kel/Desa</span> <span class="mr-2 text-slate-400">:</span> <span class="font-medium">Aweh</span>
+                            </div>
+                            <div class="flex border-b border-slate-50 pb-1">
+                                <span class="w-32 font-semibold text-slate-500 text-xs">Kecamatan</span> <span class="mr-2 text-slate-400">:</span> <span class="font-medium">Kalanganyar</span>
+                            </div>
+                            <div class="flex border-b border-slate-50 pb-1">
+                                <span class="w-32 font-semibold text-slate-500 text-xs">Agama</span> <span class="mr-2 text-slate-400">:</span> <span id="profAgama" class="font-medium">-</span>
+                            </div>
+                            <div class="flex border-b border-slate-50 pb-1">
+                                <span class="w-32 font-semibold text-slate-500 text-xs">Status Perkawinan</span> <span class="mr-2 text-slate-400">:</span> <span id="profStatusKeluarga" class="font-medium">-</span>
+                            </div>
+                            <div class="flex border-b border-slate-50 pb-1">
+                                <span class="w-32 font-semibold text-slate-500 text-xs">Pekerjaan</span> <span class="mr-2 text-slate-400">:</span> <span id="profPekerjaan" class="font-medium">-</span>
+                            </div>
+                            <div class="flex border-b border-slate-50 pb-1">
+                                <span class="w-32 font-semibold text-slate-500 text-xs">Kewarganegaraan</span> <span class="mr-2 text-slate-400">:</span> <span class="font-medium">WNI</span>
+                            </div>
+                            <div class="flex border-b border-slate-50 pb-1">
+                                <span class="w-32 font-semibold text-slate-500 text-xs">Berlaku Hingga</span> <span class="mr-2 text-slate-400">:</span> <span class="font-medium">SEUMUR HIDUP</span>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="bg-white p-4 rounded-xl border border-slate-200 mt-4">
-                        <h3 class="font-bold text-sm text-slate-800 mb-3">Edit Profil & Foto</h3>
-                        <form id="formEditProfil" onsubmit="saveProfile(event)" class="space-y-3">
-                            <div class="flex flex-col items-center mb-3">
-                                <div class="relative w-20 h-20 mb-2">
-                                    <div class="w-20 h-20 bg-slate-100 rounded-xl flex justify-center items-center text-3xl overflow-hidden shadow-inner border border-slate-200">
-                                        <img id="editPhotoPreview" class="w-full h-full object-cover hidden">
-                                        <i id="editIconPreview" class="fa-solid fa-user text-slate-400"></i>
-                                    </div>
-                                </div>
-                                <div class="flex gap-2">
-                                    <button type="button" onclick="bukaKameraRealtime('editPhotoPreview', 'editIconPreview', 'editPhotoBase64', null, 'user')" class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-[11px] font-bold shadow-sm flex items-center gap-1.5"><i class="fa-solid fa-camera"></i> Kamera</button>
-                                    <button type="button" onclick="document.getElementById('editPhotoInput').click()" class="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-lg text-[11px] font-semibold border border-slate-200 hover:bg-slate-200 transition flex items-center gap-1.5"><i class="fa-regular fa-image"></i> Galeri</button>
-                                    <input type="file" id="editPhotoInput" accept="image/*" class="hidden" onchange="handleProfilePhoto(event)">
-                                    <input type="hidden" id="editPhotoBase64">
-                                </div>
+
+                        <div class="mt-4 pt-4 border-t border-slate-100 w-full flex justify-between items-end">
+                            <div class="text-xs text-slate-500">
+                                <p>Dicetak: <span id="profTglCetak">-</span></p>
                             </div>
-                            <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap</label><input type="text" id="editNama" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
-                            <div class="flex gap-3">
-                                <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Jenis Kelamin</label><select id="editGender" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"><option value="Laki-laki">Laki-laki</option><option value="Perempuan">Perempuan</option></select></div>
-                                <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">No. WhatsApp</label><input type="tel" id="editHp" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                            <div class="text-center w-32">
+                                <p class="text-[10px] font-semibold text-slate-500">Jabatan</p>
+                                <p id="profRole" class="font-bold text-xs uppercase text-emerald-700">Warga</p>
                             </div>
-                            <div class="flex gap-3"><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Blok</label><input type="text" id="editBlok" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 uppercase text-sm outline-none focus:border-emerald-500"></div><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">No</label><input type="number" id="editNo" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div></div>
-                            <div class="pt-2"><button type="submit" class="w-full bg-slate-800 text-white font-bold py-3 rounded-xl shadow-md">Simpan Perubahan</button></div>
-                        </form>
+                        </div>
                     </div>
 
                     <div class="bg-white p-3.5 rounded-xl border border-slate-200 flex items-center justify-between gap-3 mt-4">
@@ -2297,8 +2271,6 @@
             const pR = document.getElementById('profRole'); if (pR) pR.innerText = (window.currentUserData && window.currentUserData.role) || 'Warga'; 
             const pE = document.getElementById('profEmail'); if (pE) pE.innerText = (window.currentUserData && window.currentUserData.email) || '-'; 
             const pH = document.getElementById('profHp'); if (pH) pH.innerText = (window.currentUserData && window.currentUserData.hp) || '-'; 
-            const pB = document.getElementById('profBlok'); if (pB) pB.innerText = (window.currentUserData && window.currentUserData.blok) || '-'; 
-            const pNo = document.getElementById('profNo'); if (pNo) pNo.innerText = (window.currentUserData && window.currentUserData.no) || '-';
             
             const pNik = document.getElementById('profNik'); if (pNik) pNik.innerText = (window.currentUserData && window.currentUserData.nik) || '-';
             const pTtl = document.getElementById('profTtl'); if (pTtl) pTtl.innerText = `${window.currentUserData?.tempat_lahir || '-'}, ${window.currentUserData?.tgl_lahir || '-'}`;
@@ -2309,8 +2281,6 @@
             const pPkj = document.getElementById('profPekerjaan'); if (pPkj) pPkj.innerText = (window.currentUserData && window.currentUserData.pekerjaan) || '-';
             const pTgl = document.getElementById('profTglCetak'); if (pTgl) pTgl.innerText = new Date().toLocaleDateString('id-ID', {day:'2-digit', month:'2-digit', year:'numeric'});
 
-            const eN = document.getElementById('editNama'); if (eN) eN.value = (window.currentUserData && window.currentUserData.nama) || ''; const eG = document.getElementById('editGender'); if (eG) eG.value = (window.currentUserData && window.currentUserData.jenis_kelamin) || 'Laki-laki'; const eH = document.getElementById('editHp'); if (eH) eH.value = (window.currentUserData && window.currentUserData.hp) || ''; const eB = document.getElementById('editBlok'); if (eB) eB.value = (window.currentUserData && window.currentUserData.blok) || ''; const eNo = document.getElementById('editNo'); if (eNo) eNo.value = (window.currentUserData && window.currentUserData.no) || '';
-            
             const hPic = (window.currentUserData && window.currentUserData.photoBase64) || null;
             const hImg = document.getElementById('headerProfileImg');
             const hIco = document.getElementById('headerProfileIcon');
@@ -2340,16 +2310,37 @@
                 }, 2000);
             }
         }
+        
         function prefillFormData() {
             try {
                 const u = window.currentUserData; if (!u) return;
                 ['tlNama', 'invNama', 'spNama', 'dwNamaSingle'].forEach(id => { const el = document.getElementById(id); if (el && !el.value) el.value = u.nama || ''; });
                 ['tlBlok', 'dwBlok', 'invBlok', 'spBlok'].forEach(id => { const el = document.getElementById(id); if (el && !el.value) el.value = u.blok || ''; });
                 ['tlNo', 'dwNo', 'invNo', 'spNo'].forEach(id => { const el = document.getElementById(id); if (el && !el.value) el.value = u.no || ''; });
-                if (u.status_keluarga === 'Kawin' || u.status_keluarga === 'Sudah Berkeluarga') { const radioKawin = document.getElementById('statusKawin'); if (radioKawin) { radioKawin.checked = true; const nsuEl = document.getElementById('dwNamaSuami'); if (nsuEl) nsuEl.value = u.nama_suami || ''; const nisEl = document.getElementById('dwNamaIstri'); if (nisEl) nisEl.value = u.nama_istri || ''; } } else { const radioSingle = document.getElementById('statusBelumKawin'); if (radioSingle) radioSingle.checked = true; }
+                
+                if (u.status_keluarga === 'Kawin' || u.status_keluarga === 'Sudah Berkeluarga') { 
+                    const radioKawin = document.getElementById('statusKawin'); if (radioKawin) { radioKawin.checked = true; const nsuEl = document.getElementById('dwNamaSuami'); if (nsuEl) nsuEl.value = u.nama_suami || ''; const nisEl = document.getElementById('dwNamaIstri'); if (nisEl) nisEl.value = u.nama_istri || ''; } 
+                } else { 
+                    const radioSingle = document.getElementById('statusBelumKawin'); if (radioSingle) radioSingle.checked = true; 
+                }
                 if (window.toggleKeluargaStatus) window.toggleKeluargaStatus();
+                
+                if (u.status_rumah === 'Ngontrak') { const r = document.getElementById('statusNgontrak'); if (r) r.checked = true; }
+                else { const r = document.getElementById('statusPribadi'); if (r) r.checked = true; }
+
+                const dwNik = document.getElementById('dwNik'); if (dwNik) dwNik.value = u.nik || '';
+                const dwTmpt = document.getElementById('dwTempatLahir'); if (dwTmpt) dwTmpt.value = u.tempat_lahir || '';
+                const dwTgl = document.getElementById('dwTglLahir'); if (dwTgl) dwTgl.value = u.tgl_lahir || '';
+                const dwPkj = document.getElementById('dwPekerjaan'); if (dwPkj) dwPkj.value = u.pekerjaan || '';
+                const dwAgama = document.getElementById('dwAgama'); if (dwAgama) dwAgama.value = u.agama || 'Islam';
+                const dwJiwa = document.getElementById('dwJiwa'); if (dwJiwa) dwJiwa.value = u.jumlah_jiwa || '1';
+                const dwAlm = document.getElementById('dwAlamat'); if (dwAlm) dwAlm.value = u.alamat_asal || '';
+
+                if (u.foto_ktp) { const el = document.getElementById('dwKtpPreview'); if(el){el.src = u.foto_ktp; el.classList.remove('hidden');} const ic=document.getElementById('dwKtpIcon'); if(ic) ic.classList.add('hidden'); const hd=document.getElementById('dwKtpBase64'); if(hd) hd.value = u.foto_ktp; }
+                if (u.foto_kk) { const el = document.getElementById('dwKkPreview'); if(el){el.src = u.foto_kk; el.classList.remove('hidden');} const ic=document.getElementById('dwKkIcon'); if(ic) ic.classList.add('hidden'); const hd=document.getElementById('dwKkBase64'); if(hd) hd.value = u.foto_kk; }
             } catch (e) { }
         }
+        
         window.handleLogin = async function (e) {
             e.preventDefault(); if (!firebaseReady) return showToast("Aplikasi belum siap.", true);
             const mailEl = document.getElementById('loginEmail'); const passEl = document.getElementById('loginPassword'); const btn = document.getElementById('btnLogin'); if (!mailEl || !passEl || !btn) return;
@@ -2407,12 +2398,18 @@
                     if (ico) ico.classList.add('hidden');
                     const hid = document.getElementById('editPhotoBase64');
                     if (hid) hid.value = b64;
+                    
+                    // Langsung simpan ke database saat foto dipilih
+                    setDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid), { photoBase64: b64 }, { merge: true }).then(() => {
+                        showAppScreen();
+                        showToast("✅ Foto profil diperbarui!");
+                    }).catch(err => showToast("Gagal menyimpan foto.", true));
                 }; i.src = ev.target.result;
             }; r.readAsDataURL(f);
         };
 
         window.saveProfile = async function (e) {
-            e.preventDefault(); try { const nV = document.getElementById('editNama')?.value.trim() || ''; const gV = document.getElementById('editGender')?.value || 'Laki-laki'; const hV = document.getElementById('editHp')?.value.trim() || ''; const bV = (document.getElementById('editBlok')?.value || '').toUpperCase(); const noV = document.getElementById('editNo')?.value || ''; const pbV = document.getElementById('editPhotoBase64')?.value || ''; const u = { nama: nV, jenis_kelamin: gV, hp: hV, blok: bV, no: noV, photoBase64: pbV }; await setDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid), u, { merge: true }); window.currentUserData = Object.assign({}, window.currentUserData, u); showAppScreen(); loadStatistik(); showToast("Tersimpan."); } catch (e) { showToast("Gagal menyimpan.", true); }
+            e.preventDefault(); try { const nV = document.getElementById('editNama')?.value.trim() || ''; const gV = document.getElementById('editGender')?.value || 'Laki-laki'; const hV = document.getElementById('editHp')?.value.trim() || ''; const bV = (document.getElementById('editBlok')?.value || '').toUpperCase(); const noV = document.getElementById('editNo')?.value || ''; const pbV = document.getElementById('editPhotoBase64')?.value || ''; const u = { nama: nV, jenis_kelamin: gV, hp: hV, blok: bV, no: noV }; if(pbV) u.photoBase64 = pbV; await setDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid), u, { merge: true }); window.currentUserData = Object.assign({}, window.currentUserData, u); showAppScreen(); loadStatistik(); showToast("Tersimpan."); } catch (e) { showToast("Gagal menyimpan.", true); }
         };
 
         window.submitForm = async function (e, srv) {
