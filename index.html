@@ -186,6 +186,21 @@
         </div>
     </div>
 
+    <!-- MODAL CROP FOTO PROFIL -->
+    <div id="cropModal" class="hidden fixed inset-0 bg-slate-950/90 z-[160] flex flex-col items-center justify-center p-4">
+        <div class="bg-white rounded-2xl p-4 w-full max-w-sm">
+            <h3 class="font-bold text-slate-800 mb-3 text-center">Sesuaikan Foto Profil</h3>
+            <div class="relative w-full aspect-square bg-slate-200 rounded-full overflow-hidden mb-4" id="cropContainer">
+                <img id="cropImage" src="" class="absolute top-0 left-0 w-full h-full object-contain cursor-move" style="transform-origin: center;">
+            </div>
+            <input type="range" id="cropZoom" min="1" max="3" step="0.1" value="1" class="w-full mb-4">
+            <div class="flex gap-2">
+                <button onclick="batalCrop()" class="flex-1 bg-slate-100 font-bold py-2 rounded-xl text-sm text-slate-700">Batal</button>
+                <button onclick="simpanCrop()" class="flex-1 bg-emerald-600 text-white font-bold py-2 rounded-xl text-sm">Simpan</button>
+            </div>
+        </div>
+    </div>
+
     <!-- PREVIEW GAMBAR FULL SCREEN -->
     <div id="imgPreviewModal" onclick="this.classList.add('hidden')" class="fixed inset-0 bg-slate-950/90 z-[110] hidden flex-col items-center justify-center p-4 cursor-pointer">
         <div class="w-full h-full flex flex-col" onclick="event.stopPropagation()">
@@ -468,7 +483,7 @@
                         <button onclick="switchTab('data')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-purple-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Memo/3D/memo_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Isi Data Warga</span></button>
                         <button onclick="switchTab('tamu')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-rose-50 flex justify-center items-center"><i class="fa-solid fa-address-book text-2xl text-rose-500"></i></div><span class="font-semibold text-[10px] text-slate-700">Buku Tamu</span></button>
                         <button onclick="switchTab('umkm')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-orange-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Shopping%20bags/3D/shopping_bags_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Pasar UMKM</span></button>
-                        <button onclick="switchTab('kas')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-teal-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Money%20bag/3D/money_bag_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Laporan Kas</span></button>
+                        <button onclick="switchTab('kas')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-teal-50 flex justify-center items-center"><i class="fa-solid fa-chart-line text-2xl text-teal-600"></i></div><span class="font-semibold text-[10px] text-slate-700">Laporan Kas</span></button>
                         <button onclick="switchTab('inventaris')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-cyan-50 flex justify-center items-center"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Package/3D/package_3d.png" class="w-8 h-8"></div><span class="font-semibold text-[10px] text-slate-700">Inventaris</span></button>
                         <button onclick="switchTab('pekerja')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-indigo-50 flex justify-center items-center"><i class="fa-solid fa-users-rectangle text-2xl text-indigo-500"></i></div><span class="font-semibold text-[10px] text-slate-700">Data Pekerja</span></button>
                         <button onclick="switchTab('pengurus')" class="bg-white rounded-2xl p-3 flex flex-col items-center gap-2 text-center border border-slate-200 shadow-sm hover:border-emerald-400"><div class="w-12 h-12 rounded-xl bg-slate-100 flex justify-center items-center"><i class="fa-solid fa-users-gear text-2xl text-slate-700"></i></div><span class="font-semibold text-[10px] text-slate-700">Pengurus RT</span></button>
@@ -697,9 +712,12 @@
 
             <!-- 7. PROFIL VIEW (FULL PAGE) -->
             <div id="profilView" class="hidden flex-col h-full bg-slate-50 w-full max-w-3xl mx-auto overflow-y-auto">
-                <!-- HEADER DIHAPUS SESUAI REQUEST #8 -->
                 <div class="p-4 md:p-6 flex-1">
-                    
+                    <!-- LOGOUT DI POJOK KANAN ATAS -->
+                    <div class="flex justify-end mb-4">
+                        <button onclick="handleLogout()" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold py-2 px-4 rounded-xl border border-red-200 flex justify-center items-center gap-2 transition text-sm shadow-sm"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
+                    </div>
+
                     <!-- KTP DIGITAL DESIGN -->
                     <div class="ktp-card-bg rounded-2xl p-6 shadow-xl border border-slate-200 flex flex-col md:flex-row items-center md:items-start gap-6 relative overflow-hidden">
                         
@@ -751,12 +769,11 @@
                             <div class="flex py-0.5 border-b border-slate-100/50">
                                 <span class="w-28 font-medium text-slate-500">Pekerjaan</span> <span class="mr-2 text-slate-400">:</span> <span id="profPekerjaan">-</span>
                             </div>
-                            <div class="flex py-0.5 border-b border-slate-100/50">
-                                <span class="w-28 font-medium text-slate-500">Kewarganegaraan</span> <span class="mr-2 text-slate-400">:</span> <span>WNI</span>
-                            </div>
-                            <div class="flex py-0.5">
-                                <span class="w-28 font-medium text-slate-500">Berlaku Hingga</span> <span class="mr-2 text-slate-400">:</span> <span>SEUMUR HIDUP</span>
-                            </div>
+                        </div>
+
+                        <!-- Tombol Edit Data (Kanan Bawah) -->
+                        <div class="w-full md:w-auto mt-4 md:mt-0 md:self-end md:ml-auto shrink-0 z-10">
+                            <button onclick="switchTab('data')" class="w-full md:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded-xl flex justify-center items-center gap-2 transition text-sm shadow-sm"><i class="fa-solid fa-user-pen"></i> Edit Data Saya</button>
                         </div>
                     </div>
 
@@ -765,11 +782,6 @@
                         <div class="flex items-center gap-3"><div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-lg flex justify-center items-center shadow-sm shrink-0"><i class="fa-solid fa-fingerprint text-xl"></i></div><div><p class="text-xs font-bold text-slate-800">Login Fingerprint</p><p id="fpStatusText" class="text-[11px] text-slate-500">Belum diaktifkan</p></div></div>
                         <button id="btnToggleFp" onclick="daftarkanFingerprint()" class="px-3 py-1.5 bg-emerald-600 text-white text-xs font-bold rounded-lg shrink-0 hover:bg-emerald-700">Aktifkan</button>
                     </div>
-
-                    <!-- Tombol Edit Data -->
-                    <button onclick="switchTab('data')" class="w-full bg-white hover:bg-emerald-50 text-emerald-700 font-bold py-3.5 rounded-xl border border-emerald-200 flex justify-center items-center gap-2 transition mt-4 mb-2"><i class="fa-solid fa-user-pen"></i> Edit Data Saya</button>
-                    
-                    <button onclick="handleLogout()" class="w-full bg-red-50 hover:bg-red-100 text-red-600 font-bold py-3.5 rounded-xl border border-red-200 flex justify-center items-center gap-2 transition"><i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar Akun</button>
                 </div>
             </div>
 
@@ -921,8 +933,12 @@
                             </div>
 
                             <div id="kasTagihanContainer" class="hidden">
-                                <div class="mb-3">
-                                    <select id="kasBulanTagihan" onchange="loadKasTagihanWarga()" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none"></select>
+                                <div class="mb-3 flex gap-2">
+                                    <select id="kasBulanTagihan" onchange="loadKasTagihanWarga()" class="flex-1 px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none"></select>
+                                    <div class="relative flex-1">
+                                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                                        <input type="text" id="searchTagihanWarga" oninput="filterTagihanWarga()" placeholder="Cari warga..." class="w-full pl-8 pr-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500">
+                                    </div>
                                 </div>
                                 <div id="kasTagihanList" class="space-y-2 pb-10"></div>
                             </div>
@@ -1946,7 +1962,7 @@
                             : `<span class="bg-red-100 text-red-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-red-200">BELUM LUNAS</span>`;
                     }
 
-                    h += `<div class="bg-white p-3 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm mb-2">
+                    h += `<div class="tagihan-warga-card bg-white p-3 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm mb-2" data-nama="${escapeHtml(u.nama || 'Warga')}" data-blok="${escapeHtml(blokFormat)}">
                             <div>
                                 <h4 class="font-bold text-sm text-slate-800">${escapeHtml(u.nama || 'Warga')}</h4>
                                 <p class="text-xs text-slate-500">Blok ${escapeHtml(blokFormat)}</p>
@@ -1958,6 +1974,19 @@
             } catch(e) {
                 cont.innerHTML = '<p class="text-center text-red-500 text-xs py-5">Gagal memuat tagihan.</p>';
             }
+        };
+
+        window.filterTagihanWarga = function() {
+            const input = document.getElementById('searchTagihanWarga')?.value.toLowerCase() || '';
+            document.querySelectorAll('.tagihan-warga-card').forEach(card => {
+                const nama = card.dataset.nama?.toLowerCase() || '';
+                const blok = card.dataset.blok?.toLowerCase() || '';
+                if (nama.includes(input) || blok.includes(input)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
         };
 
         window.toggleBayarKasWarga = async function(uid, nama, blok, bulan, isLunas) {
@@ -2234,7 +2263,15 @@
                 const tglSkrg = d.approvedAt ? new Date(d.approvedAt) : new Date(); const noUrut = String(d.timestamp || Date.now()).slice(-4); const blnRomawi = ["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"][tglSkrg.getMonth()]; docPdf.setFont("helvetica", "normal"); docPdf.setFontSize(10); docPdf.text(`Nomor: ${noUrut}/SP-RT.010/RW.002/${blnRomawi}/${tglSkrg.getFullYear()}`, 105, 52, { align: "center" }); docPdf.setFontSize(11); const pembuka = "Yang bertanda tangan di bawah ini Ketua RT. 010 RW. 002 Perumahan Mabu Park, Desa Aweh, Kecamatan Kalanganyar, Kabupaten Lebak, dengan ini menerangkan bahwa:"; docPdf.text(docPdf.splitTextToSize(pembuka, 170), 20, 64);
                 let yPos = 78; const rows = [["Nama Lengkap", d.nama || "-"],["NIK / No. KTP", d.nik || "-"],["Tempat, Tanggal Lahir", d.ttl || "-"],["Jenis Kelamin", d.jk || "-"],["Agama", d.agama || "-"],["Status Perkawinan", d.status_nikah || "-"],["Pekerjaan", d.pekerjaan || "-"],["Alamat Domisili", `Perumahan Mabu Park Blok ${d.blok || '-'} No. ${d.no || '-'}, RT.010/RW.002, Desa Aweh, Kec. Kalanganyar, Kab. Lebak`],["Keperluan Surat", d.keperluan || d.detail || "-"]];
                 rows.forEach(r => { docPdf.setFont("helvetica", "normal"); docPdf.text(r[0], 25, yPos); docPdf.text(":", 73, yPos); docPdf.setFont("helvetica", (r[0] === "Nama Lengkap" || r[0] === "Keperluan Surat") ? "bold" : "normal"); const valLines = docPdf.splitTextToSize(String(r[1]), 112); docPdf.text(valLines, 77, yPos); yPos += (valLines.length * 6.5) + 1.5; });
-                yPos += 4; docPdf.setFont("helvetica", "normal"); const penutup = "Orang tersebut di atas adalah benar warga kami yang berdomisili di lingkungan RT. 010 RW. 002 Perumahan Mabu Park. Demikian surat pengantar ini dibuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya."; docPdf.text(docPdf.splitTextToSize(penutup, 170), 20, yPos); yPos += 25; const tglIndo = tglSkrg.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }); docPdf.text(`Kalanganyar, ${tglIndo}`, 145, yPos, { align: "center" }); docPdf.text("Ketua RT. 010 / RW. 002", 145, yPos + 6, { align: "center" }); docPdf.setDrawColor(0, 138, 15); docPdf.setTextColor(0, 138, 15); docPdf.setLineWidth(0.6); docPdf.circle(122, yPos + 18, 12, 'S'); docPdf.setLineWidth(0.2); docPdf.circle(122, yPos + 18, 10.5, 'S'); docPdf.setFont("helvetica", "bold"); docPdf.setFontSize(6.5); docPdf.text("PENGURUS RT. 010", 122, yPos + 15.5, { align: "center" }); docPdf.text("RW. 002 MABU PARK", 122, yPos + 18.5, { align: "center" }); docPdf.text("TERVERIFIKASI", 122, yPos + 21.5, { align: "center" }); docPdf.setTextColor(0, 0, 0); docPdf.setFont("helvetica", "bold"); docPdf.setFontSize(11); docPdf.text(KETUA_RT_NAMA, 145, yPos + 30, { align: "center" }); docPdf.setLineWidth(0.4); docPdf.setDrawColor(0, 0, 0); docPdf.line(118, yPos + 31, 172, yPos + 31);
+                yPos += 4; docPdf.setFont("helvetica", "normal"); const penutup = "Berdasarkan keterangan tersebut, nama yang bersangkutan benar merupakan warga kami yang berdomisili di lingkungan RT. 010 RW. 002 Perumahan Mabu Park. Demikian surat pengantar ini dibuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya."; docPdf.text(docPdf.splitTextToSize(penutup, 170), 20, yPos); yPos += 25; const tglIndo = tglSkrg.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }); docPdf.text(`Kalanganyar, ${tglIndo}`, 145, yPos, { align: "center" }); docPdf.text("Ketua RT. 010 / RW. 002", 145, yPos + 6, { align: "center" }); 
+                
+                // STAMPEL DIHILANGKAN, DIGANTI TEKS
+                docPdf.setTextColor(0, 0, 0);
+                docPdf.setFont("helvetica", "italic");
+                docPdf.setFontSize(8);
+                docPdf.text("(Silahkan hubungi RT untuk stempel dan tanda tangan)", 145, yPos + 18, { align: "center" });
+
+                docPdf.setTextColor(0, 0, 0); docPdf.setFont("helvetica", "bold"); docPdf.setFontSize(11); docPdf.text(KETUA_RT_NAMA, 145, yPos + 30, { align: "center" }); docPdf.setLineWidth(0.4); docPdf.setDrawColor(0, 0, 0); docPdf.line(118, yPos + 31, 172, yPos + 31);
                 const fileName = `Surat_Pengantar_RT010_${(d.nama || 'Warga').replace(/[^a-z0-9]/gi, '_')}.pdf`; docPdf.save(fileName); showToast("📄 Surat PDF berhasil diunduh!");
             } catch (err) { showToast("Gagal membuat PDF.", true); }
         };
@@ -2518,29 +2555,95 @@
             const r = new FileReader(); r.onload = ev => { const i = new Image(); i.onload = () => { const c = document.createElement('canvas'); let w = i.width, h = i.height; const maxDim = 600; if (w > h && w > maxDim) { h *= maxDim / w; w = maxDim; } else if (h > maxDim) { w *= maxDim / h; h = maxDim; } c.width = w; c.height = h; c.getContext('2d').drawImage(i, 0, 0, w, h); const b64 = c.toDataURL('image/jpeg', 0.5); const prev = document.getElementById(prevId); if (prev) { prev.src = b64; prev.classList.remove('hidden'); } const ico = document.getElementById(icoId); if (ico) ico.classList.add('hidden'); const hid = document.getElementById(hidId); if (hid) hid.value = b64; }; i.src = ev.target.result; }; r.readAsDataURL(f);
         };
 
+        let cropImg = null;
+        let cropScale = 1;
+        let cropX = 0, cropY = 0;
+        let isDragging = false;
+        let startX, startY;
+
         window.handleProfilePhoto = function(e) {
             const f = e.target.files && e.target.files[0]; if (!f) return;
             const r = new FileReader();
             r.onload = ev => {
-                const i = new Image();
-                i.onload = () => {
-                    const c = document.createElement('canvas');
-                    const size = Math.min(i.width, i.height);
-                    c.width = 400; c.height = 400;
-                    c.getContext('2d').drawImage(i, (i.width-size)/2, (i.height-size)/2, size, size, 0, 0, 400, 400);
-                    const b64 = c.toDataURL('image/jpeg', 0.6);
-                    const prev = document.getElementById('editPhotoPreview');
-                    if (prev) { prev.src = b64; prev.classList.remove('hidden'); }
-                    const ico = document.getElementById('editIconPreview');
-                    if (ico) ico.classList.add('hidden');
-                    const hid = document.getElementById('editPhotoBase64');
-                    if (hid) hid.value = b64;
-                    
-                    setDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid), { photoBase64: b64 }, { merge: true }).then(() => {
-                        showAppScreen(); showToast("✅ Foto profil diperbarui!");
-                    }).catch(err => showToast("Gagal menyimpan foto.", true));
-                }; i.src = ev.target.result;
-            }; r.readAsDataURL(f);
+                document.getElementById('cropImage').src = ev.target.result;
+                document.getElementById('cropModal').classList.remove('hidden');
+                cropScale = 1; cropX = 0; cropY = 0;
+                updateCropTransform();
+            };
+            r.readAsDataURL(f);
+        };
+
+        function updateCropTransform() {
+            const img = document.getElementById('cropImage');
+            img.style.transform = `translate(${cropX}px, ${cropY}px) scale(${cropScale})`;
+        }
+
+        document.getElementById('cropZoom')?.addEventListener('input', (e) => {
+            cropScale = parseFloat(e.target.value);
+            updateCropTransform();
+        });
+
+        // Drag logic
+        const cropContainer = document.getElementById('cropContainer');
+        cropContainer?.addEventListener('mousedown', (e) => { isDragging = true; startX = e.clientX - cropX; startY = e.clientY - cropY; });
+        cropContainer?.addEventListener('touchstart', (e) => { isDragging = true; startX = e.touches[0].clientX - cropX; startY = e.touches[0].clientY - cropY; });
+        window.addEventListener('mousemove', (e) => { if (!isDragging) return; cropX = e.clientX - startX; cropY = e.clientY - startY; updateCropTransform(); });
+        window.addEventListener('touchmove', (e) => { if (!isDragging) return; cropX = e.touches[0].clientX - startX; cropY = e.touches[0].clientY - startY; updateCropTransform(); });
+        window.addEventListener('mouseup', () => isDragging = false);
+        window.addEventListener('touchend', () => isDragging = false);
+
+        window.batalCrop = function() {
+            document.getElementById('cropModal').classList.add('hidden');
+            document.getElementById('editPhotoInput').value = '';
+        };
+
+        window.simpanCrop = function() {
+            const img = document.getElementById('cropImage');
+            const container = document.getElementById('cropContainer');
+            const size = container.offsetWidth; // container is square
+
+            const canvas = document.createElement('canvas');
+            canvas.width = 400; canvas.height = 400;
+            const ctx = canvas.getContext('2d');
+
+            const containerRect = container.getBoundingClientRect();
+            const imgRect = img.getBoundingClientRect();
+
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = containerRect.width;
+            tempCanvas.height = containerRect.height;
+            const tempCtx = tempCanvas.getContext('2d');
+
+            // Draw the image with transform
+            tempCtx.save();
+            tempCtx.translate(containerRect.width / 2 + cropX, containerRect.height / 2 + cropY);
+            tempCtx.scale(cropScale, cropScale);
+            // The image is object-contain, so we need to calculate its actual size.
+            const imgAspect = img.naturalWidth / img.naturalHeight;
+            let drawW, drawH;
+            if (imgAspect > 1) {
+                drawW = containerRect.width;
+                drawH = containerRect.width / imgAspect;
+            } else {
+                drawH = containerRect.height;
+                drawW = containerRect.height * imgAspect;
+            }
+            tempCtx.drawImage(img, -drawW/2, -drawH/2, drawW, drawH);
+            tempCtx.restore();
+
+            // Now crop the center square (the circle area)
+            const cropSize = Math.min(containerRect.width, containerRect.height);
+            const cropXPos = (containerRect.width - cropSize) / 2;
+            const cropYPos = (containerRect.height - cropSize) / 2;
+
+            ctx.drawImage(tempCanvas, cropXPos, cropYPos, cropSize, cropSize, 0, 0, 400, 400);
+
+            const b64 = canvas.toDataURL('image/jpeg', 0.7);
+
+            setDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid), { photoBase64: b64 }, { merge: true }).then(() => {
+                document.getElementById('cropModal').classList.add('hidden');
+                showAppScreen(); showToast("✅ Foto profil diperbarui!");
+            }).catch(err => showToast("Gagal menyimpan foto.", true));
         };
 
         window.submitForm = async function (e, srv) {
