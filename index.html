@@ -44,7 +44,6 @@
         .matrix-cell-btn{width:100%;padding:5px 1px;font-size:10px;font-weight:700;transition:all .15s;position:relative;min-height:24px}
         .kas-global-thead th{position:sticky;top:0;z-index:20;background:#059669}
         .kas-global-thead th.matrix-header-blok{z-index:30;background:#059669}
-        /* === NEW: Resize kolom & seleksi matrix === */
         .th-resizable{position:relative;user-select:none}
         .th-resizer{position:absolute;right:-3px;top:0;width:8px;height:100%;cursor:col-resize;z-index:25}
         .th-resizer::after{content:'';position:absolute;left:4px;top:20%;height:60%;width:1px;background:rgba(255,255,255,.35)}
@@ -482,8 +481,6 @@
                     <div><h4 class="font-bold text-xs text-slate-700 uppercase tracking-wider mb-2.5">Status Iuran Bulanan (Tahun Berjalan)</h4><div class="space-y-2.5" id="iuranListContainer"><div class="text-center py-8"><i class="fa-solid fa-spinner fa-spin text-slate-400 text-2xl"></i></div></div></div>
                 </div>
             </div>
-
-            <!-- ================= KAS VIEW (DIROMBAK) ================= -->
             <div id="kasView" class="hidden flex-col h-full bg-slate-50 w-full overflow-hidden">
                 <div id="kasScrollContainer" class="flex-1 overflow-y-auto scroll-smooth">
                     <div class="bg-emerald-600 text-white pt-safe-top px-4 pb-16 shadow-md w-full">
@@ -521,7 +518,6 @@
                     </div>
                 </div>
             </div>
-
             <div id="kasGlobalView" class="hidden flex-col h-full bg-slate-50 w-full overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0"><button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button><h2 class="font-bold text-lg text-emerald-700 flex items-center gap-2 flex-1"><i class="fa-solid fa-calendar-check"></i> Kas Global</h2></div>
                 <div class="p-3 md:p-5 w-full max-w-7xl mx-auto">
@@ -549,7 +545,6 @@
                     <p class="text-[10px] text-slate-500 text-center italic mt-2 admin-only-hint hidden">Klik sel untuk edit status & nominal.</p>
                 </div>
             </div>
-
             <div id="inventarisView" class="hidden flex-col h-full bg-slate-50 w-full max-w-3xl mx-auto overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0"><button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button><h2 class="font-bold text-lg text-slate-800">Inventaris RT</h2></div>
                 <form id="formInventaris" onsubmit="simpanBookingInventaris(event)" class="p-4 md:p-6 space-y-4 flex-1">
@@ -1208,9 +1203,6 @@
             } catch(e) { console.error(e); body.innerHTML = '<tr><td colspan="13" class="text-center text-xs text-red-500 py-5">Gagal memuat.</td></tr>'; }
         };
 
-        /* ══════════════════════════════════════════════════════════════════
-           FITUR BARU 1: RESIZE KOLOM + SELEKSI MATRIX (COPY/PASTE EXCEL)
-        ══════════════════════════════════════════════════════════════════ */
         let matrixSelection = { active: false, startR: 0, startC: 0, endR: 0, endC: 0, tableId: null };
         let currentGlobalMonths = [];
 
@@ -1470,8 +1462,7 @@
         window.hapusTransaksiKas = async function (id) { if (!confirm("Hapus transaksi ini?")) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'kas', id)); showToast("Dihapus."); loadBukuKas(); } catch(e) {} };
 
         window.loadBukuKas = async function () {
-            const wc = document.getElementById('kasWargaListContainer');
-            if (!firebaseReady || !wc) return;
+            if (!firebaseReady) return;
             try {
                 const s = await getDocs(collection(db, 'artifacts', appId, 'kas')); let tm = 0, tk = 0; globalKasList = [];
                 s.forEach(d => { if (d.id === 'config_iuran' || d.id === 'config_sos') return; const it = d.data(); if (!it.nominal) return; globalKasList.push({ id: d.id, ...it }); });
@@ -1483,7 +1474,7 @@
                 const sa = tm - tk;
                 const elS = document.getElementById('kasTotalSaldo'), elM = document.getElementById('kasTotalMasuk'), elK = document.getElementById('kasTotalKeluar'), elA = document.getElementById('kasSaldoAwal');
                 if (elS) elS.innerText = formatRupiah(sa); if (elM) elM.innerText = formatRupiah(tm); if (elK) elK.innerText = formatRupiah(tk); if (elA) elA.innerText = formatRupiah(0);
-            } catch (e) { if (wc) wc.innerHTML = '<p class="text-center text-red-500 text-xs py-5">Gagal memuat.</p>'; }
+            } catch (e) { console.error('loadBukuKas error:', e); }
         };
 
         function renderKasList(list = globalKasList) {
@@ -1531,9 +1522,6 @@
             doc.save(`Laporan_Kas_RT010_${Date.now()}.pdf`); showToast("📄 PDF diunduh!");
         };
 
-        /* ══════════════════════════════════════════════════════════════════
-           FITUR BARU 2: GAJI & INSENTIF
-        ══════════════════════════════════════════════════════════════════ */
         const BULAN_IDX_GAJI = { 'Januari':0,'Februari':1,'Maret':2,'April':3,'Mei':4,'Juni':5,'Juli':6,'Agustus':7,'September':8,'Oktober':9,'November':10,'Desember':11 };
         let currentGajiData = { pekerja: [], kas: [], gaji: new Map(), bulan: 'Januari', tahun: 2026 };
 
@@ -1572,7 +1560,8 @@
                 let html = '';
                 pekerja.forEach(w => {
                     const rec = gajiMap.get(w.id);
-                    const gajiPokok = rec?.gajiPokok ?? Number(w.gaji) || 0;
+                    // ⚡ FIX: Menambahkan kurung ( ) agar tidak SyntaxError
+                    const gajiPokok = (rec?.gajiPokok) ?? (Number(w.gaji) || 0);
                     const insentif = rec?.insentif ?? 0;
                     const status = rec?.status || 'BELUM';
                     const namaLower = (w.nama || '').toLowerCase();
@@ -1660,7 +1649,8 @@
             if (!w) return;
             const num = Number(value) || 0;
             const rec = currentGajiData.gaji.get(pekerjaId);
-            const gajiPokok = field === 'gajiPokok' ? num : (rec?.gajiPokok ?? Number(w.gaji) || 0);
+            // ⚡ FIX: Menambahkan kurung ( )
+            const gajiPokok = field === 'gajiPokok' ? num : ((rec?.gajiPokok) ?? (Number(w.gaji) || 0));
             const insentif = field === 'insentif' ? num : (rec?.insentif ?? 0);
             const totalKasbon = rec?.totalKasbon || 0;
             const sisa = gajiPokok + insentif - totalKasbon;
