@@ -226,7 +226,7 @@
         </div>
     </div>
 
-    <!-- MODAL DETAIL WARGA (KETUA RT ONLY) -->
+    <!-- MODAL DETAIL WARGA -->
     <div id="detailWargaModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4" onclick="document.getElementById('detailWargaModal').classList.add('hidden')">
         <div class="bg-white w-full max-w-md rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('detailWargaModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
@@ -235,7 +235,7 @@
         </div>
     </div>
 
-    <!-- MODAL EDIT WARGA (ADMIN) -->
+    <!-- MODAL EDIT WARGA -->
     <div id="editWargaModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4" onclick="document.getElementById('editWargaModal').classList.add('hidden')">
         <div class="bg-white w-full max-w-sm rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('editWargaModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
@@ -275,6 +275,53 @@
         </div>
     </div>
 
+    <!-- MODAL UBAH PASSWORD (SENDIRI) -->
+    <div id="ubahPasswordModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4" onclick="document.getElementById('ubahPasswordModal').classList.add('hidden')">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up" onclick="event.stopPropagation()">
+            <button onclick="document.getElementById('ubahPasswordModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-lg font-bold text-slate-800 mb-1">Ubah Password</h3>
+            <p class="text-xs text-slate-500 mb-4">Masukkan password lama untuk verifikasi.</p>
+            <form id="ubahPasswordForm" onsubmit="submitUbahPassword(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Password Lama</label>
+                    <div class="relative"><input type="password" id="ubahPwLama" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500 pr-10"><button type="button" onclick="togglePasswordVisibility('ubahPwLama', 'ubahPwLamaIcon')" class="absolute inset-y-0 right-0 px-3 flex items-center text-slate-400"><i id="ubahPwLamaIcon" class="fa-regular fa-eye"></i></button></div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Password Baru (min. 6 karakter)</label>
+                    <div class="relative"><input type="password" id="ubahPwBaru" required minlength="6" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500 pr-10"><button type="button" onclick="togglePasswordVisibility('ubahPwBaru', 'ubahPwBaruIcon')" class="absolute inset-y-0 right-0 px-3 flex items-center text-slate-400"><i id="ubahPwBaruIcon" class="fa-regular fa-eye"></i></button></div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Konfirmasi Password Baru</label>
+                    <input type="password" id="ubahPwKonfirmasi" required minlength="6" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500">
+                </div>
+                <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl shadow-md mt-2">Simpan Password Baru</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL RESET PASSWORD WARGA (OLEH ADMIN) -->
+    <div id="resetPasswordModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4" onclick="document.getElementById('resetPasswordModal').classList.add('hidden')">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up" onclick="event.stopPropagation()">
+            <button onclick="document.getElementById('resetPasswordModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-lg font-bold text-slate-800 mb-1">Reset Password Warga</h3>
+            <p class="text-xs text-slate-500 mb-3">Pengurus RT dapat mengubah password warga ini.</p>
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4">
+                <p class="text-[11px] font-semibold text-amber-800"><i class="fa-solid fa-user mr-1"></i> Target: <span id="resetPwNamaDisplay" class="text-slate-900 font-bold"></span></p>
+            </div>
+            <form id="resetPasswordForm" onsubmit="submitResetPassword(event)" class="space-y-3">
+                <input type="hidden" id="resetPwUid">
+                <input type="hidden" id="resetPwEmail">
+                <input type="hidden" id="resetPwOldPass">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Password Baru (min. 6 karakter)</label>
+                    <div class="relative"><input type="password" id="resetPwBaru" required minlength="6" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500 pr-10"><button type="button" onclick="togglePasswordVisibility('resetPwBaru', 'resetPwBaruIcon')" class="absolute inset-y-0 right-0 px-3 flex items-center text-slate-400"><i id="resetPwBaruIcon" class="fa-regular fa-eye"></i></button></div>
+                </div>
+                <p class="text-[10px] text-slate-500 italic leading-relaxed"><i class="fa-solid fa-circle-info mr-1"></i> Password baru akan ditampilkan setelah berhasil. Beritahu warga via WhatsApp / pesan.</p>
+                <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-xl shadow-md mt-2">Reset Password</button>
+            </form>
+        </div>
+    </div>
+
     <!-- ============================== AUTHENTICATION ============================== -->
     <div id="authContainer" class="w-full h-[100dvh] bg-slate-50 relative flex flex-col items-center justify-start sm:justify-center overflow-y-auto p-4 sm:p-6 py-10">
         <div class="w-full max-w-4xl bg-white rounded-none sm:rounded-[2rem] sm:shadow-2xl flex flex-col md:flex-row overflow-hidden relative">
@@ -297,12 +344,15 @@
                         <button type="button" id="tabWarga" onclick="setLoginRole('warga')" class="flex-1 py-2.5 text-sm font-bold bg-white shadow-sm rounded-xl text-emerald-600 transition-all">Warga</button>
                         <button type="button" id="tabAdmin" onclick="setLoginRole('admin')" class="flex-1 py-2.5 text-sm font-semibold text-slate-500 rounded-xl transition-all">Pengurus RT</button>
                     </div>
+                    <div id="loginPengurusHint" class="hidden bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-[11px] text-emerald-800 leading-relaxed">
+                        <i class="fa-solid fa-shield-halved mr-1"></i> <b>Login Khusus Pengurus RT.</b> Cukup masukkan <b>password</b> Anda. Ketua RT bisa pakai password bootstrap <code class="bg-emerald-100 px-1.5 py-0.5 rounded font-mono font-bold">777288</code> untuk login pertama kali.
+                    </div>
                     <div id="loginEmailContainer"><label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase">Email / Akun</label><input type="text" id="loginEmail" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 outline-none bg-slate-50/50 text-sm"></div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase">Password</label>
                         <div class="relative"><input type="password" id="loginPassword" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 outline-none bg-slate-50/50 text-sm pr-12"><button type="button" onclick="togglePasswordVisibility('loginPassword', 'loginEyeIcon')" class="absolute inset-y-0 right-0 px-4 flex items-center text-slate-400 hover:text-emerald-600"><i id="loginEyeIcon" class="fa-regular fa-eye"></i></button></div>
                     </div>
-                    <div class="flex justify-end"><button type="button" onclick="switchAuthView('forgot')" class="text-xs text-emerald-600 font-semibold">Lupa Password?</button></div>
+                    <div id="loginLupaPasswordContainer" class="flex justify-end"><button type="button" onclick="switchAuthView('forgot')" class="text-xs text-emerald-600 font-semibold">Lupa Password?</button></div>
                     <button type="submit" id="btnLogin" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl shadow-lg">Masuk</button>
                     <div class="relative flex py-1 items-center"><div class="flex-grow border-t border-slate-200"></div><span class="flex-shrink mx-3 text-slate-400 text-[10px] font-semibold uppercase">atau</span><div class="flex-grow border-t border-slate-200"></div></div>
                     <button type="button" id="btnFingerprintLogin" onclick="handleFingerprintLogin()" class="w-full bg-slate-50 hover:bg-emerald-50 text-slate-700 font-bold py-3 rounded-xl border border-slate-200 flex items-center justify-center gap-2.5"><i class="fa-solid fa-fingerprint text-2xl text-emerald-600"></i><span class="text-sm">Masuk dengan Fingerprint</span></button>
@@ -361,7 +411,7 @@
         </div>
 
         <main class="flex-1 overflow-y-auto overflow-x-hidden bg-slate-50 flex flex-col relative w-full">
-            
+
             <!-- HOME -->
             <div id="homeView" class="pb-6 max-w-7xl mx-auto w-full">
                 <div id="sosActiveAlertBanner" class="px-4 sm:px-6 lg:px-8 pt-4 hidden w-full">
@@ -657,9 +707,12 @@
                         </div>
                     </div>
 
-                    <div class="mt-4 flex gap-2 w-full">
-                        <button onclick="clearAllAppCache()" class="flex-1 bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition text-sm shadow-sm"><i class="fa-solid fa-broom"></i> Hapus Cache</button>
-                        <button onclick="handleLogout()" class="flex-1 bg-red-50 hover:bg-red-100 text-red-600 font-bold py-3 rounded-xl border border-red-200 flex justify-center items-center gap-2 transition text-sm shadow-sm"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
+                    <div class="mt-4 flex flex-col gap-2 w-full">
+                        <button onclick="openUbahPasswordModal()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition text-sm shadow-sm"><i class="fa-solid fa-key"></i> Ubah Password</button>
+                        <div class="flex gap-2 w-full">
+                            <button onclick="clearAllAppCache()" class="flex-1 bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition text-sm shadow-sm"><i class="fa-solid fa-broom"></i> Hapus Cache</button>
+                            <button onclick="handleLogout()" class="flex-1 bg-red-50 hover:bg-red-100 text-red-600 font-bold py-3 rounded-xl border border-red-200 flex justify-center items-center gap-2 transition text-sm shadow-sm"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -713,7 +766,7 @@
                 </div>
             </div>
 
-            <!-- IURAN (KARTU IURAN WARGA) -->
+            <!-- IURAN -->
             <div id="iuranView" class="hidden flex-col h-full bg-slate-50 w-full max-w-3xl mx-auto overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0">
                     <button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button>
@@ -731,7 +784,7 @@
                 </div>
             </div>
 
-            <!-- KAS (Laporan Keuangan) -->
+            <!-- KAS -->
             <div id="kasView" class="hidden flex-col h-full bg-slate-50 w-full overflow-hidden">
                 <div id="kasScrollContainer" class="flex-1 overflow-y-auto scroll-smooth">
                     <div class="bg-emerald-600 text-white pt-safe-top px-4 pb-8 shadow-md w-full">
@@ -820,7 +873,7 @@
                 </div>
             </div>
 
-            <!-- KAS GLOBAL (Viewer Matriks Tahunan) -->
+            <!-- KAS GLOBAL -->
             <div id="kasGlobalView" class="hidden flex-col h-full bg-slate-50 w-full overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0">
                     <button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button>
@@ -947,7 +1000,7 @@
                         </div>
 
                         <div id="admViewLaporan" class="hidden"><div id="adminLaporanList" class="space-y-3"></div></div>
-                        
+
                         <div id="admViewPekerja" class="hidden">
                             <div class="mb-3"><button id="btnToggleAddPekerja" onclick="toggleAdminAddPekerja(true)" class="w-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2"><i class="fa-solid fa-user-plus"></i> Tambah Data Pekerja</button></div>
                             <form id="adminAddPekerjaForm" onsubmit="simpanPekerjaBaruAdmin(event)" class="hidden bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mt-2 space-y-3 shadow-sm mb-4">
@@ -991,7 +1044,7 @@
                             </div>
                             <div id="adminIuranWargaList" class="space-y-2"></div>
                         </div>
-                        
+
                         <div id="admViewKas" class="hidden">
                             <div class="flex justify-between items-center mb-3">
                                 <h3 class="font-bold text-slate-700 text-sm">Rincian Transaksi</h3>
@@ -1048,7 +1101,7 @@
 	    <!-- FIREBASE & APP LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, inMemoryPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, inMemoryPersistence, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, collection, getDocs, updateDoc, deleteDoc, addDoc, query, orderBy, onSnapshot, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const appId = 'layanan-warga-rt10';
@@ -1059,7 +1112,6 @@
         function getBulanList(tahun) { return NAMA_BULAN.map(m => `${m} ${tahun}`); }
         function getTahunBerjalan() { return new Date().getFullYear(); }
         const DAFTAR_BULAN_IURAN = getBulanList(getTahunBerjalan());
-
         const PILIHAN_NOMINAL_IURAN = [0,20000,25000,30000,35000,40000,45000,50000,60000,70000,75000,80000,90000,100000,110000,120000,125000,130000,140000,150000,160000,170000,175000,180000,190000,200000];
 
         const DATA_WARGA_DEFAULT = [
@@ -1190,6 +1242,7 @@
         };
 
         window.currentUserData = null;
+        window.currentLoginRole = 'warga';
         let unSubs = []; let isFiturSOSEnabled = true; let nominalIuranDefault = 125000;
         let pendingUpdateWorker = null; let swRegistered = false; let myChart = null;
         let isMutedNotif = localStorage.getItem('rt10_muted_notif') === 'true';
@@ -1214,6 +1267,8 @@
         function formatWaNumber(hp) { if (!hp) return ''; let num = String(hp).replace(/[^0-9]/g, ''); if (num.startsWith('0')) num = '62' + num.substring(1); return num; }
         function formatFullDate(ts) { if (!ts) return ''; return new Date(ts).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); }
         function isLunasStatus(st) { return st === 'L' || st === 'K'; }
+        function isAdminRole() { return window.currentUserData && ['Admin RT', 'Ketua RT', 'Pengurus RT', 'Bendahara', 'Sekretaris'].includes(window.currentUserData.role); }
+        function getAuthEmail(userEmail) { if (!userEmail) return null; return userEmail.includes('@') ? userEmail.toLowerCase() : userEmail.replace(/[^a-z0-9]/gi, '').toLowerCase() + '@mabupark.local'; }
 
         function updateHeaderDate() { const el = document.getElementById('headerDate'); if (el) el.innerText = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }); }
         setInterval(updateHeaderDate, 1000); updateHeaderDate();
@@ -1408,19 +1463,11 @@
         /* ===== PENGURUS & PEKERJA ===== */
         window.loadDataPengurusWarga = async function() {
             const cont = document.getElementById('pengurusWargaList'); if (!cont) return; cont.innerHTML = '<div class="col-span-2 text-center py-5"><i class="fa-solid fa-spinner fa-spin text-slate-400"></i></div>';
-            try {
-                const s = await getDocs(collection(db, 'artifacts', appId, 'users')); let h = '';
-                s.forEach(d => { const u = d.data(); if(['Admin RT', 'Ketua RT', 'Pengurus RT', 'Bendahara', 'Sekretaris'].includes(u.role)) { const foto = u.photoBase64 || "https://ui-avatars.com/api/?name=" + (u.nama || 'P') + "&background=random"; const hp = u.hp || ''; h += `<div class="bg-white p-3 md:p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center text-center"><img src="${foto}" class="w-16 h-16 md:w-20 md:h-20 rounded-2xl object-cover mb-2 border border-slate-100 shadow-sm"><h4 class="font-bold text-sm text-slate-800 line-clamp-1">${escapeHtml(u.nama || 'Nama')}</h4><span class="text-[9px] md:text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md mt-1 mb-2">${escapeHtml(u.role)}</span>${hp ? `<div class="w-full flex justify-center gap-2 mt-auto pt-2 border-t border-slate-100"><a href="tel:${hp}" class="flex-1 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center py-1.5 hover:bg-blue-100 transition"><i class="fa-solid fa-phone text-xs"></i></a><a href="https://wa.me/${formatWaNumber(hp)}" target="_blank" class="flex-1 bg-green-50 text-green-600 rounded-lg flex items-center justify-center py-1.5 hover:bg-green-100 transition"><i class="fa-brands fa-whatsapp text-sm"></i></a></div>` : ''}</div>`; } });
-                cont.innerHTML = h || '<p class="text-center text-xs text-slate-400 col-span-2">Belum ada data pengurus.</p>';
-            } catch(e) { cont.innerHTML = '<p class="text-center text-red-500 text-xs col-span-2">Gagal memuat data.</p>'; }
+            try { const s = await getDocs(collection(db, 'artifacts', appId, 'users')); let h = ''; s.forEach(d => { const u = d.data(); if(['Admin RT', 'Ketua RT', 'Pengurus RT', 'Bendahara', 'Sekretaris'].includes(u.role)) { const foto = u.photoBase64 || "https://ui-avatars.com/api/?name=" + (u.nama || 'P') + "&background=random"; const hp = u.hp || ''; h += `<div class="bg-white p-3 md:p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center text-center"><img src="${foto}" class="w-16 h-16 md:w-20 md:h-20 rounded-2xl object-cover mb-2 border border-slate-100 shadow-sm"><h4 class="font-bold text-sm text-slate-800 line-clamp-1">${escapeHtml(u.nama || 'Nama')}</h4><span class="text-[9px] md:text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md mt-1 mb-2">${escapeHtml(u.role)}</span>${hp ? `<div class="w-full flex justify-center gap-2 mt-auto pt-2 border-t border-slate-100"><a href="tel:${hp}" class="flex-1 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center py-1.5 hover:bg-blue-100 transition"><i class="fa-solid fa-phone text-xs"></i></a><a href="https://wa.me/${formatWaNumber(hp)}" target="_blank" class="flex-1 bg-green-50 text-green-600 rounded-lg flex items-center justify-center py-1.5 hover:bg-green-100 transition"><i class="fa-brands fa-whatsapp text-sm"></i></a></div>` : ''}</div>`; } }); cont.innerHTML = h || '<p class="text-center text-xs text-slate-400 col-span-2">Belum ada data pengurus.</p>'; } catch(e) { cont.innerHTML = '<p class="text-center text-red-500 text-xs col-span-2">Gagal memuat data.</p>'; }
         };
         window.loadDataPekerjaWarga = async function() {
             const cont = document.getElementById('pekerjaWargaList'); if (!cont) return; cont.innerHTML = '<div class="col-span-2 text-center py-5"><i class="fa-solid fa-spinner fa-spin text-slate-400"></i></div>';
-            try {
-                const s = await getDocs(collection(db, 'artifacts', appId, 'pekerja')); let h = '';
-                s.forEach(d => { const p = d.data(); const foto = p.fotoBase64 || "https://ui-avatars.com/api/?name=" + (p.nama || 'P') + "&background=random"; const hp = p.hp || ''; h += `<div class="bg-white p-3 md:p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center text-center"><img src="${foto}" class="w-16 h-16 md:w-20 md:h-20 rounded-2xl object-cover mb-2 border border-slate-100 shadow-sm"><h4 class="font-bold text-sm text-slate-800 line-clamp-1">${escapeHtml(p.nama || 'Nama')}</h4><span class="text-[9px] md:text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md mt-1 mb-2">${escapeHtml(p.statusPekerjaan || 'Petugas')}</span>${hp ? `<div class="w-full flex justify-center gap-2 mt-auto pt-2 border-t border-slate-100"><a href="tel:${hp}" class="flex-1 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center py-1.5 hover:bg-blue-100 transition"><i class="fa-solid fa-phone text-xs"></i></a><a href="https://wa.me/${formatWaNumber(hp)}" target="_blank" class="flex-1 bg-green-50 text-green-600 rounded-lg flex items-center justify-center py-1.5 hover:bg-green-100 transition"><i class="fa-brands fa-whatsapp text-sm"></i></a></div>` : ''}</div>`; });
-                cont.innerHTML = h || '<p class="text-center text-xs text-slate-400 col-span-2">Belum ada data pekerja.</p>';
-            } catch(e) { cont.innerHTML = '<p class="text-center text-red-500 text-xs col-span-2">Gagal memuat data.</p>'; }
+            try { const s = await getDocs(collection(db, 'artifacts', appId, 'pekerja')); let h = ''; s.forEach(d => { const p = d.data(); const foto = p.fotoBase64 || "https://ui-avatars.com/api/?name=" + (p.nama || 'P') + "&background=random"; const hp = p.hp || ''; h += `<div class="bg-white p-3 md:p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center text-center"><img src="${foto}" class="w-16 h-16 md:w-20 md:h-20 rounded-2xl object-cover mb-2 border border-slate-100 shadow-sm"><h4 class="font-bold text-sm text-slate-800 line-clamp-1">${escapeHtml(p.nama || 'Nama')}</h4><span class="text-[9px] md:text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md mt-1 mb-2">${escapeHtml(p.statusPekerjaan || 'Petugas')}</span>${hp ? `<div class="w-full flex justify-center gap-2 mt-auto pt-2 border-t border-slate-100"><a href="tel:${hp}" class="flex-1 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center py-1.5 hover:bg-blue-100 transition"><i class="fa-solid fa-phone text-xs"></i></a><a href="https://wa.me/${formatWaNumber(hp)}" target="_blank" class="flex-1 bg-green-50 text-green-600 rounded-lg flex items-center justify-center py-1.5 hover:bg-green-100 transition"><i class="fa-brands fa-whatsapp text-sm"></i></a></div>` : ''}</div>`; }); cont.innerHTML = h || '<p class="text-center text-xs text-slate-400 col-span-2">Belum ada data pekerja.</p>'; } catch(e) { cont.innerHTML = '<p class="text-center text-red-500 text-xs col-span-2">Gagal memuat data.</p>'; }
         };
         window.toggleAdminAddPekerja = function(show) { const f = document.getElementById('adminAddPekerjaForm'); const b = document.getElementById('btnToggleAddPekerja'); if(!f || !b) return; if(show) { f.classList.remove('hidden'); b.classList.add('hidden'); } else { f.classList.add('hidden'); b.classList.remove('hidden'); f.reset(); const prev = document.getElementById('pkjFotoPreview'); if (prev) prev.classList.add('hidden'); const ico = document.getElementById('pkjFotoIcon'); if (ico) ico.classList.remove('hidden'); const hid = document.getElementById('pkjFotoBase64'); if (hid) hid.value = ''; } };
         window.simpanPekerjaBaruAdmin = async function(e) {
@@ -1460,13 +1507,10 @@
             else { btnR.className = "flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all"; btnT.className = "flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all"; cR.classList.remove('hidden'); cT.classList.add('hidden'); loadBukuKas(); }
         };
 
-        function isAdminRole() { return window.currentUserData && ['Admin RT', 'Ketua RT', 'Pengurus RT', 'Bendahara', 'Sekretaris'].includes(window.currentUserData.role); }
-
         window.loadKasTagihanWarga = async function() {
             const body = document.getElementById('kasTagihanMatrixBody'); const sumCont = document.getElementById('kasTagihanSummary');
             if (!body || !firebaseReady) return;
-            const isAdmin = isAdminRole();
-            const months = getBulanList(getTahunBerjalan());
+            const isAdmin = isAdminRole(); const months = getBulanList(getTahunBerjalan());
             document.querySelectorAll('.admin-only-col').forEach(el => el.classList.toggle('hidden', !isAdmin));
             document.querySelectorAll('.admin-only-hint').forEach(el => el.classList.toggle('hidden', !isAdmin));
             document.querySelectorAll('.warga-only-hint').forEach(el => el.classList.toggle('hidden', isAdmin));
@@ -1505,7 +1549,6 @@
             } catch(e) { console.error(e); body.innerHTML = '<tr><td colspan="14" class="text-center text-xs text-red-500 py-5">Gagal memuat data.</td></tr>'; }
         };
 
-        /* Toggle cell: L → K → BL → L */
         window.toggleIuranCell = async function(blokVal, noVal, bulan, nama) {
             if (!isAdminRole()) return showToast("Hanya pengurus yang bisa mengubah.", true);
             const cycle = { 'L': 'K', 'K': 'BL', 'BL': 'L' };
@@ -1540,7 +1583,6 @@
             document.querySelectorAll('.tagihan-row').forEach(row => { const s = (row.dataset.search || '').toLowerCase(); const match = s.includes(input) || s.includes(normInput); row.style.display = match ? 'table-row' : 'none'; });
         };
 
-        /* ===== KAS GLOBAL ===== */
         window.loadKasGlobalView = function() {
             const sel = document.getElementById('kasGlobalTahunSelect'); const body = document.getElementById('kasGlobalBody'); const sumCont = document.getElementById('kasGlobalSummary');
             if (!sel || !body) return;
@@ -1663,14 +1705,13 @@
         window.loadUmkmWarga = async function () { const cont = document.getElementById('umkmListContainer'); if (!cont || !firebaseReady) return; cont.innerHTML = '<div class="col-span-2 text-center py-5 text-slate-400"><i class="fa-solid fa-spinner fa-spin"></i></div>'; try { const s = await getDocs(query(collection(db, 'artifacts', appId, 'pasar'), orderBy('timestamp', 'desc'))); let h = ''; s.forEach(d => { const b = d.data(); const isMe = auth.currentUser && b.sellerId === auth.currentUser.uid; const isAdmin = window.currentUserData && window.currentUserData.role === 'Admin RT'; const hrgFmt = formatRupiah(b.harga || 0); const sS = String(b.sellerName || 'Warga').replace(/'/g, "\\'"); const sB = String(b.namaBarang || 'Produk').replace(/'/g, "\\'"); let btn = ''; if (!isMe) { if (b.sellerWa) btn = `<a href="https://wa.me/${formatWaNumber(b.sellerWa)}?text=Halo ${sS}, pesan ${sB} (${hrgFmt})." target="_blank" class="bg-emerald-600 text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-emerald-700 transition shrink-0"><i class="fa-brands fa-whatsapp mr-1"></i> Beli</a>`; else btn = `<button onclick="bukaRuangJapri('${b.sellerId}', '${sS}', '${escapeHtml(b.sellerBlok || '-')}', 'Halo, pesan ${sB}.')" class="bg-emerald-600 text-white px-3 py-1 rounded-lg text-xs font-bold shrink-0">Beli</button>`; } else btn = `<span class="text-[10px] bg-slate-100 px-2 py-1 rounded text-slate-500">Lapak Anda</span>`; h += `<div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm flex flex-col relative">${(isMe || isAdmin) ? `<button onclick="hapusUmkm('${d.id}')" class="absolute top-2 right-2 w-7 h-7 bg-red-500 text-white rounded-full text-xs shadow z-10"><i class="fa-solid fa-trash"></i></button>` : ''}<div class="h-32 bg-slate-100 w-full overflow-hidden flex justify-center items-center">${b.imageBase64 ? `<img onclick="lihatGambarModal('${sB}', '${b.imageBase64.replace(/'/g, "%27")}')" src="${b.imageBase64}" class="w-full h-full object-cover cursor-pointer">` : `<i class="fa-solid fa-store text-3xl text-slate-300"></i>`}</div><div class="p-3 flex-1 flex flex-col"><h4 class="font-bold text-sm text-slate-800 leading-tight mb-1 line-clamp-2">${escapeHtml(b.namaBarang)}</h4><p class="text-orange-600 font-bold text-sm mb-2">${hrgFmt}</p><p class="text-[10px] text-slate-500 mb-2 flex-1 line-clamp-2">${escapeHtml(b.deskripsi)}</p><div class="flex items-center justify-between mt-auto pt-2 border-t border-slate-100"><div class="flex items-center gap-1.5 min-w-0"><div class="w-5 h-5 bg-orange-100 text-orange-600 rounded-full flex justify-center items-center text-[10px] font-bold shrink-0">${escapeHtml((b.sellerName || 'W').charAt(0))}</div><span class="text-[10px] font-medium text-slate-600 truncate max-w-[70px]">${escapeHtml(b.sellerName || 'Warga')}</span></div>${btn}</div></div></div>`; }); cont.innerHTML = h || '<div class="col-span-2 text-center text-slate-500 py-5 text-sm">Belum ada dagangan warga.</div>'; } catch (e) { cont.innerHTML = '<div class="col-span-2 text-center text-red-500 py-5 text-xs">Gagal memuat.</div>'; } };
         window.hapusUmkm = async function (id) { if (!confirm("Hapus dagangan ini?")) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'pasar', id)); showToast("Dihapus."); loadUmkmWarga(); } catch (e) { } };
 
-        /* ===== KARTU IURAN WARGA (Jan-Des tahun berjalan) ===== */
         window.loadIuranUser = async function () {
             const cont = document.getElementById('iuranListContainer'); if (!cont || !auth.currentUser || !firebaseReady) return; cont.innerHTML = '<div class="text-center py-10"><i class="fa-solid fa-spinner fa-spin text-slate-400 text-2xl"></i></div>';
             try {
                 const s = await getDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid));
                 const dataIuran = (s.exists() && s.data().iuran) || {}; let h = '';
                 getBulanList(getTahunBerjalan()).forEach(bln => {
-                    const status = dataIuran[bln] || 'BL'; const isLunas = status === 'L' || status === 'K';
+                    const status = dataIuran[bln] || 'BL';
                     const lbl = status === 'L' ? 'LUNAS' : status === 'K' ? 'KOSONG' : 'BELUM';
                     const cls = status === 'L' ? 'bg-emerald-50 border-emerald-300' : status === 'K' ? 'bg-yellow-50 border-yellow-300' : 'bg-white border-slate-200';
                     const icoBg = status === 'L' ? 'bg-emerald-600 text-white' : status === 'K' ? 'bg-yellow-500 text-white' : 'bg-red-50 text-red-500';
@@ -1778,7 +1819,32 @@
             });
         } else { setTimeout(() => { if (typeof showToast === 'function') showToast("Gagal memuat aplikasi. Refresh halaman.", true); }, 800); showAuthScreen(); }
 
-        window.setLoginRole = function (role) { const w = document.getElementById('tabWarga'); const a = document.getElementById('tabAdmin'); const e = document.getElementById('loginEmailContainer'); const m = document.getElementById('loginEmail'); if (role === 'admin') { if (a) a.className = "flex-1 py-2.5 text-sm font-bold bg-white shadow-sm rounded-xl text-emerald-600 transition-all"; if (w) w.className = "flex-1 py-2.5 text-sm font-semibold text-slate-500 rounded-xl transition-all"; if (e) e.classList.add('hidden'); if (m) m.value = 'rt'; } else { if (w) w.className = "flex-1 py-2.5 text-sm font-bold bg-white shadow-sm rounded-xl text-emerald-600 transition-all"; if (a) a.className = "flex-1 py-2.5 text-sm font-semibold text-slate-500 rounded-xl transition-all"; if (e) e.classList.remove('hidden'); if (m) m.value = ''; } };
+        /* ===== LOGIN & AUTH FLOW ===== */
+        window.setLoginRole = function (role) {
+            window.currentLoginRole = role;
+            const w = document.getElementById('tabWarga'); const a = document.getElementById('tabAdmin');
+            const e = document.getElementById('loginEmailContainer'); const m = document.getElementById('loginEmail');
+            const hint = document.getElementById('loginPengurusHint');
+            const lupa = document.getElementById('loginLupaPasswordContainer');
+            const btn = document.getElementById('btnLogin');
+            if (role === 'admin') {
+                if (a) a.className = "flex-1 py-2.5 text-sm font-bold bg-white shadow-sm rounded-xl text-emerald-600 transition-all";
+                if (w) w.className = "flex-1 py-2.5 text-sm font-semibold text-slate-500 rounded-xl transition-all";
+                if (e) e.classList.add('hidden');
+                if (m) m.value = '';
+                if (hint) hint.classList.remove('hidden');
+                if (lupa) lupa.classList.add('hidden');
+                if (btn) btn.innerText = 'Masuk sebagai Pengurus';
+            } else {
+                if (w) w.className = "flex-1 py-2.5 text-sm font-bold bg-white shadow-sm rounded-xl text-emerald-600 transition-all";
+                if (a) a.className = "flex-1 py-2.5 text-sm font-semibold text-slate-500 rounded-xl transition-all";
+                if (e) e.classList.remove('hidden');
+                if (m) m.value = '';
+                if (hint) hint.classList.add('hidden');
+                if (lupa) lupa.classList.remove('hidden');
+                if (btn) btn.innerText = 'Masuk';
+            }
+        };
         window.switchAuthView = function (view) { ['loginForm', 'registerForm', 'forgotForm'].forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('hidden'); }); const v = document.getElementById(view + 'Form'); if (v) v.classList.remove('hidden'); };
         function showAuthScreen() { const m = document.getElementById('mainAppContainer'); if (m) { m.classList.add('hidden'); m.classList.remove('flex'); } const a = document.getElementById('authContainer'); if (a) { a.classList.remove('hidden'); a.classList.add('flex'); } }
         function showAppScreen() {
@@ -1813,19 +1879,84 @@
             try { const u = window.currentUserData; if (!u) return; ['tlNama', 'invNama', 'spNama', 'dwNamaSingle'].forEach(id => { const el = document.getElementById(id); if (el && !el.value) el.value = u.nama || ''; }); ['tlBlok', 'dwBlok', 'invBlok', 'spBlok'].forEach(id => { const el = document.getElementById(id); if (el && !el.value) el.value = u.blok || ''; }); ['tlNo', 'dwNo', 'invNo', 'spNo'].forEach(id => { const el = document.getElementById(id); if (el && !el.value) el.value = u.no || ''; }); if (u.status_keluarga === 'Kawin' || u.status_keluarga === 'Sudah Berkeluarga') { const rK = document.getElementById('statusKawin'); if (rK) { rK.checked = true; const nsu = document.getElementById('dwNamaSuami'); if (nsu) nsu.value = u.nama_suami || ''; const nis = document.getElementById('dwNamaIstri'); if (nis) nis.value = u.nama_istri || ''; } } else { const rS = document.getElementById('statusBelumKawin'); if (rS) rS.checked = true; } if (window.toggleKeluargaStatus) window.toggleKeluargaStatus(); if (u.status_rumah === 'Ngontrak') { const r = document.getElementById('statusNgontrak'); if (r) r.checked = true; } else { const r = document.getElementById('statusPribadi'); if (r) r.checked = true; } const dwNik = document.getElementById('dwNik'); if (dwNik) dwNik.value = u.nik || ''; const dwT = document.getElementById('dwTempatLahir'); if (dwT) dwT.value = u.tempat_lahir || ''; const dwTgl = document.getElementById('dwTglLahir'); if (dwTgl) dwTgl.value = u.tgl_lahir || ''; const dwP = document.getElementById('dwPekerjaan'); if (dwP) dwP.value = u.pekerjaan || ''; const dwA = document.getElementById('dwAgama'); if (dwA) dwA.value = u.agama || 'Islam'; const dwJ = document.getElementById('dwJiwa'); if (dwJ) dwJ.value = u.jumlah_jiwa || '1'; const dwAl = document.getElementById('dwAlamat'); if (dwAl) dwAl.value = u.alamat_asal || ''; if (u.foto_ktp) { const el = document.getElementById('dwKtpPreview'); if(el){el.src = u.foto_ktp; el.classList.remove('hidden');} const ic=document.getElementById('dwKtpIcon'); if(ic) ic.classList.add('hidden'); const hd=document.getElementById('dwKtpBase64'); if(hd) hd.value = u.foto_ktp; } if (u.foto_kk) { const el = document.getElementById('dwKkPreview'); if(el){el.src = u.foto_kk; el.classList.remove('hidden');} const ic=document.getElementById('dwKkIcon'); if(ic) ic.classList.add('hidden'); const hd=document.getElementById('dwKkBase64'); if(hd) hd.value = u.foto_kk; } } catch (e) { }
         }
         window.handleLogin = async function (e) {
-            e.preventDefault(); if (!firebaseReady) return showToast("Aplikasi belum siap.", true);
-            const m = document.getElementById('loginEmail'); const p = document.getElementById('loginPassword'); const b = document.getElementById('btnLogin'); if (!m || !p || !b) return;
-            const id = m.value.trim(); const pw = p.value; if (!pw) return showToast("Password wajib diisi.", true);
-            b.disabled = true; let em = id.includes('@') ? id.toLowerCase() : id.replace(/[^a-z0-9]/gi, '').toLowerCase() + '@mabupark.local';
-            if (id.toLowerCase() === 'rt' && pw === '777288') {
-                em = 'hilmanmabu@gmail.com';
-                try { sessionStorage.setItem('rt10_temp_auth', JSON.stringify({ email: btoa(em), pass: btoa(pw) })); await signInWithEmailAndPassword(auth, em, pw); }
-                catch (err) { if (err.code === 'auth/user-not-found') { try { const u = await createUserWithEmailAndPassword(auth, em, pw); await setDoc(doc(db, 'artifacts', appId, 'users', u.user.uid), { nama: KETUA_RT_NAMA, email: em, hp: '089', blok: 'RT', no: '10', role: 'Admin RT', password: pw }); showToast("Akun RT dibuat & login."); } catch (e2) { showToast("Gagal membuat akun RT: " + (e2.message || 'Cek koneksi'), true); } } else { showToast("Login RT gagal: Password salah.", true); } } finally { b.disabled = false; } return;
-            }
-            try { sessionStorage.setItem('rt10_temp_auth', JSON.stringify({ email: btoa(em), pass: btoa(pw) })); await signInWithEmailAndPassword(auth, em, pw); }
-            catch (err) { if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') showToast("Akun tidak ditemukan atau password salah.", true); else if (err.code === 'auth/network-request-failed') showToast("Gagal terhubung internet.", true); else showToast("Login gagal.", true); }
-            finally { b.disabled = false; }
+            e.preventDefault();
+            if (!firebaseReady) return showToast("Aplikasi belum siap.", true);
+            const p = document.getElementById('loginPassword');
+            const b = document.getElementById('btnLogin');
+            if (!p || !b) return;
+            const pw = p.value;
+            if (!pw) return showToast("Password wajib diisi.", true);
+            b.disabled = true;
+            try {
+                if (window.currentLoginRole === 'admin') { await handleLoginPengurusFlow(pw); }
+                else { await handleLoginWargaFlow(pw); }
+            } finally { b.disabled = false; }
         };
+        async function handleLoginWargaFlow(pw) {
+            const m = document.getElementById('loginEmail');
+            const id = m ? m.value.trim() : '';
+            if (!id) return showToast("Email / Akun wajib diisi.", true);
+            if (id.toLowerCase() === 'rt' && pw === '777288') return handleLoginKetuaRTShortcut();
+            let em = id.includes('@') ? id.toLowerCase() : id.replace(/[^a-z0-9]/gi, '').toLowerCase() + '@mabupark.local';
+            try {
+                sessionStorage.setItem('rt10_temp_auth', JSON.stringify({ email: btoa(em), pass: btoa(pw) }));
+                await signInWithEmailAndPassword(auth, em, pw);
+            } catch (err) {
+                console.error("[LOGIN WARGA]", err.code, err.message);
+                if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') showToast("Akun tidak ditemukan atau password salah.", true);
+                else if (err.code === 'auth/network-request-failed') showToast("Gagal terhubung internet.", true);
+                else showToast("Login gagal: " + (err.message || 'Error'), true);
+            }
+        }
+        async function handleLoginPengurusFlow(pw) {
+            if (pw === '777288') return handleLoginKetuaRTShortcut();
+            try {
+                const roles = ['Admin RT', 'Ketua RT', 'Pengurus RT', 'Bendahara', 'Sekretaris'];
+                const snap = await getDocs(collection(db, 'artifacts', appId, 'users'));
+                const matches = [];
+                snap.forEach(d => { const u = d.data(); if (roles.includes(u.role) && u.password === pw) matches.push({ id: d.id, ...u }); });
+                if (matches.length === 0) return showToast("Password tidak cocok dengan pengurus manapun. Cek kembali / hubungi Ketua RT.", true);
+                if (matches.length > 1) return showToast("Password ini dipakai lebih dari 1 pengurus. Hubungi Ketua RT untuk atur ulang.", true);
+                const target = matches[0];
+                const email = getAuthEmail(target.email);
+                if (!email) return showToast("Akun pengurus ini tidak punya email valid. Hubungi Ketua RT.", true);
+                sessionStorage.setItem('rt10_temp_auth', JSON.stringify({ email: btoa(email), pass: btoa(pw) }));
+                await signInWithEmailAndPassword(auth, email, pw);
+            } catch (err) {
+                console.error("[LOGIN PENGURUS]", err.code, err.message);
+                if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') {
+                    showToast("Password di database tidak sinkron dengan Auth. Hubungi Ketua RT untuk reset.", true);
+                } else {
+                    showToast("Login gagal: " + (err.message || 'Error'), true);
+                }
+            }
+        }
+        async function handleLoginKetuaRTShortcut() {
+            const em = 'hilmanmabu@gmail.com'; const pw = '777288';
+            try {
+                sessionStorage.setItem('rt10_temp_auth', JSON.stringify({ email: btoa(em), pass: btoa(pw) }));
+                await signInWithEmailAndPassword(auth, em, pw);
+                showToast("Selamat datang, Ketua RT!");
+            } catch (err) {
+                console.log("[KETUA RT SHORTCUT]", err.code, err.message);
+                if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') {
+                    try {
+                        const u = await createUserWithEmailAndPassword(auth, em, pw);
+                        await setDoc(doc(db, 'artifacts', appId, 'users', u.user.uid), { nama: KETUA_RT_NAMA, email: em, hp: '089', blok: 'RT', no: '10', role: 'Admin RT', password: pw });
+                        showToast("Akun Ketua RT berhasil dibuat & login.");
+                    } catch (e2) {
+                        if (e2.code === 'auth/email-already-in-use') {
+                            showToast("Akun Ketua RT sudah ada dengan password berbeda. Login via Tab Warga dengan email, atau hubungi developer.", true);
+                        } else {
+                            showToast("Gagal membuat akun RT: " + (e2.message || 'Cek koneksi'), true);
+                        }
+                    }
+                } else {
+                    showToast("Login RT gagal: " + (err.message || 'Error'), true);
+                }
+            }
+        }
+
         window.handleRegister = async function (e) {
             e.preventDefault(); if (!firebaseReady) return showToast("Aplikasi belum siap.", true);
             const n = document.getElementById('regNama'); const em_ = document.getElementById('regEmail'); const p = document.getElementById('regPassword'); const b = document.getElementById('btnRegister'); if (!n || !em_ || !p || !b) return;
@@ -1845,6 +1976,77 @@
             finally { if (btn) { btn.disabled = false; btn.innerText = "Tampilkan Password"; } }
         };
         window.handleLogout = async function () { try { unSubs.forEach(u => { try { u(); } catch (e) { } }); unSubs = []; await signOut(auth); showToast("Logout berhasil."); } catch (e) { showToast("Logout gagal.", true); } };
+
+        /* ===== UBAH PASSWORD SENDIRI ===== */
+        window.openUbahPasswordModal = function () {
+            const f = document.getElementById('ubahPasswordForm'); if (f) f.reset();
+            document.getElementById('ubahPasswordModal').classList.remove('hidden');
+        };
+        window.submitUbahPassword = async function (e) {
+            e.preventDefault();
+            const oldPw = document.getElementById('ubahPwLama').value;
+            const newPw = document.getElementById('ubahPwBaru').value;
+            const confirmPw = document.getElementById('ubahPwKonfirmasi').value;
+            if (newPw.length < 6) return showToast("Password baru minimal 6 karakter.", true);
+            if (newPw !== confirmPw) return showToast("Konfirmasi password tidak cocok.", true);
+            if (!auth.currentUser) return showToast("Sesi habis, login ulang.", true);
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.disabled = true; btn.innerText = "Memproses...";
+            try {
+                const cred = EmailAuthProvider.credential(auth.currentUser.email, oldPw);
+                await reauthenticateWithCredential(auth.currentUser, cred);
+                await updatePassword(auth.currentUser, newPw);
+                await updateDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid), { password: newPw });
+                showToast("✅ Password berhasil diubah!");
+                document.getElementById('ubahPasswordModal').classList.add('hidden');
+                e.target.reset();
+            } catch (err) {
+                console.error(err);
+                if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') showToast("Password lama salah.", true);
+                else if (err.code === 'auth/requires-recent-login') showToast("Sesi terlalu lama. Logout & login ulang dulu, lalu coba lagi.", true);
+                else showToast("Gagal ubah password: " + (err.message || 'Error'), true);
+            } finally { btn.disabled = false; btn.innerText = "Simpan Password Baru"; }
+        };
+
+        /* ===== RESET PASSWORD WARGA (OLEH ADMIN) ===== */
+        window.openResetPasswordModal = function (uid, encodedData) {
+            const data = safeDecode(encodedData);
+            document.getElementById('resetPwUid').value = uid;
+            document.getElementById('resetPwEmail').value = data.email || '';
+            document.getElementById('resetPwOldPass').value = data.password || '';
+            document.getElementById('resetPwNamaDisplay').innerText = `${data.nama || 'Warga'} (Blok ${data.blok || '-'}/${data.no || '-'}) — ${data.role || 'Warga'}`;
+            document.getElementById('resetPwBaru').value = '';
+            document.getElementById('resetPasswordModal').classList.remove('hidden');
+        };
+        window.submitResetPassword = async function (e) {
+            e.preventDefault();
+            const uid = document.getElementById('resetPwUid').value;
+            const rawEmail = document.getElementById('resetPwEmail').value;
+            const oldPw = document.getElementById('resetPwOldPass').value;
+            const newPw = document.getElementById('resetPwBaru').value;
+            if (!uid || !rawEmail || !oldPw) return showToast("Data tidak lengkap. Minta warga login dulu / daftar ulang.", true);
+            if (newPw.length < 6) return showToast("Password baru minimal 6 karakter.", true);
+            const email = getAuthEmail(rawEmail);
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.disabled = true; btn.innerText = "Memproses...";
+            try {
+                await signInWithEmailAndPassword(secondaryAuth, email, oldPw);
+                const curr = secondaryAuth.currentUser;
+                await updatePassword(curr, newPw);
+                await signOut(secondaryAuth);
+                await updateDoc(doc(db, 'artifacts', appId, 'users', uid), { password: newPw });
+                showToast(`✅ Password berhasil direset ke: ${newPw}\n\nBeritahu warga via WhatsApp.`);
+                document.getElementById('resetPasswordModal').classList.add('hidden');
+                e.target.reset();
+            } catch (err) {
+                console.error(err);
+                if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found') {
+                    showToast("Password lama di database tidak sinkron. Hapus akun di Firebase Console, lalu minta warga daftar ulang.", true);
+                } else {
+                    showToast("Gagal reset: " + (err.message || 'Error'), true);
+                }
+            } finally { btn.disabled = false; btn.innerText = "Reset Password"; }
+        };
 
         window.handleDocPhoto = function (e, prevId, icoId, hidId) { const f = e.target.files && e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = ev => { const i = new Image(); i.onload = () => { const c = document.createElement('canvas'); let w = i.width, h = i.height; const md = 600; if (w > h && w > md) { h *= md / w; w = md; } else if (h > md) { w *= md / h; h = md; } c.width = w; c.height = h; c.getContext('2d').drawImage(i, 0, 0, w, h); const b64 = c.toDataURL('image/jpeg', 0.5); const prev = document.getElementById(prevId); if (prev) { prev.src = b64; prev.classList.remove('hidden'); } const ico = document.getElementById(icoId); if (ico) ico.classList.add('hidden'); const hid = document.getElementById(hidId); if (hid) hid.value = b64; }; i.src = ev.target.result; }; r.readAsDataURL(f); };
 
@@ -1925,10 +2127,11 @@
         async function loadAdminWargaList() {
             const cont = document.getElementById('adminWargaList'); if (!cont || !firebaseReady) return; cont.innerHTML = 'Loading...';
             try { const s = await getDocs(collection(db, 'artifacts', appId, 'users')); let h = ''; const isKT = window.currentUserData && window.currentUserData.role === 'Ketua RT'; const hg = new Map(); s.forEach(d => { const u = d.data(); const hK = getHouseKey(u.blok, u.no); if (!hg.has(hK)) hg.set(hK, { primaryUser: u, uid: d.id, users: [d.id], blok: u.blok, no: u.no, nama: u.nama }); else hg.get(hK).users.push(d.id); });
-                hg.forEach(grp => { const u = grp.primaryUser; const uid = grp.uid; const dS = safeEncode({ nama: u.nama || '', hp: u.hp || '', blok: u.blok || '', no: u.no || '', jiwa: u.jumlah_jiwa || 1, role: u.role || '' }); const rOpts = ['Warga', 'Ketua RT', 'Admin RT', 'Pengurus RT', 'Sekretaris', 'Bendahara', 'Satpam', 'Petugas Kebersihan', 'Petugas Angkat Sampah', 'Teknisi Air', 'Teknisi Listrik']; let rSel = `<select onchange="updateWargaRole('${uid}', this.value)" class="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-md px-2 py-1 outline-none">`; rOpts.forEach(r => { rSel += `<option value="${r}" ${u.role === r ? 'selected' : ''}>${r}</option>`; }); rSel += `</select>`;
-                    let dB = isKT ? `<button onclick="openDetailWargaModal('${uid}')" class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center hover:bg-emerald-200 transition mr-1" title="Lihat Detail"><i class="fa-solid fa-eye text-xs"></i></button>` : '';
+                hg.forEach(grp => { const u = grp.primaryUser; const uid = grp.uid; const dS = safeEncode({ nama: u.nama || '', hp: u.hp || '', blok: u.blok || '', no: u.no || '', jiwa: u.jumlah_jiwa || 1, role: u.role || '', email: u.email || '', password: u.password || '' }); const rOpts = ['Warga', 'Ketua RT', 'Admin RT', 'Pengurus RT', 'Sekretaris', 'Bendahara', 'Satpam', 'Petugas Kebersihan', 'Petugas Angkat Sampah', 'Teknisi Air', 'Teknisi Listrik']; let rSel = `<select onchange="updateWargaRole('${uid}', this.value)" class="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-md px-2 py-1 outline-none">`; rOpts.forEach(r => { rSel += `<option value="${r}" ${u.role === r ? 'selected' : ''}>${r}</option>`; }); rSel += `</select>`;
+                    let dB = isKT ? `<button onclick="openDetailWargaModal('${uid}')" class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center hover:bg-emerald-200 transition" title="Lihat Detail"><i class="fa-solid fa-eye text-xs"></i></button>` : '';
+                    const dR = `<button onclick="openResetPasswordModal('${uid}', '${dS}')" class="w-8 h-8 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center hover:bg-amber-200 transition" title="Reset Password"><i class="fa-solid fa-key text-xs"></i></button>`;
                     const sK = `${(u.nama || '').toLowerCase()} ${normalizeSearch(`${u.blok || ''}/${u.no || ''}`).toLowerCase()} blok${(u.blok || '').toLowerCase()}${(u.no || '').toLowerCase()}`;
-                    h += `<div class="warga-card p-3 border border-slate-200 rounded-xl bg-white flex flex-col gap-2" data-search="${escapeHtml(sK)}"><div class="flex items-start justify-between"><div class="min-w-0"><h3 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(u.nama || 'Warga')}</h3><p class="text-xs text-slate-500 truncate">Blok ${escapeHtml(u.blok || '-')}/${escapeHtml(u.no || '-')} • ${grp.users.length} Akun</p></div><div class="flex gap-1 shrink-0">${dB}<button onclick="openAdminEditModal('${uid}', '${dS}')" class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center hover:bg-blue-200" title="Edit Data Keluarga"><i class="fa-solid fa-pen text-xs"></i></button><button onclick="hapusLaporanWarga('${uid}', null, 'warga')" class="w-8 h-8 bg-red-100 text-red-600 rounded-full flex items-center justify-center hover:bg-red-200"><i class="fa-solid fa-trash text-xs"></i></button></div></div><div class="border-t border-slate-100 pt-2 mt-1">${rSel}</div></div>`; });
+                    h += `<div class="warga-card p-3 border border-slate-200 rounded-xl bg-white flex flex-col gap-2" data-search="${escapeHtml(sK)}"><div class="flex items-start justify-between"><div class="min-w-0"><h3 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(u.nama || 'Warga')}</h3><p class="text-xs text-slate-500 truncate">Blok ${escapeHtml(u.blok || '-')}/${escapeHtml(u.no || '-')} • ${grp.users.length} Akun</p></div><div class="flex gap-1 shrink-0">${dB}${dR}<button onclick="openAdminEditModal('${uid}', '${dS}')" class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center hover:bg-blue-200" title="Edit Data Keluarga"><i class="fa-solid fa-pen text-xs"></i></button><button onclick="hapusLaporanWarga('${uid}', null, 'warga')" class="w-8 h-8 bg-red-100 text-red-600 rounded-full flex items-center justify-center hover:bg-red-200"><i class="fa-solid fa-trash text-xs"></i></button></div></div><div class="border-t border-slate-100 pt-1.5 mt-1 flex items-center justify-between gap-2"><span class="text-[9px] text-slate-400 uppercase font-bold">Role:</span>${rSel}</div></div>`; });
                 cont.innerHTML = h || '<p class="text-center text-xs text-slate-400 py-4">Belum ada data warga.</p>'; } catch (e) { cont.innerHTML = 'Gagal memuat.'; }
         }
         window.openDetailWargaModal = async function(uid) {
