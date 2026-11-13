@@ -26,7 +26,6 @@
         .chat-bubble-wrapper.justify-end>div:last-child{background:#059669!important;box-shadow:0 4px 12px -4px rgba(5,150,105,.3)!important;border:none!important;cursor:pointer}
         .chat-bubble-wrapper.justify-start>div:last-child{box-shadow:0 2px 10px -2px rgba(15,23,42,.08)!important;border-color:#eef2f7!important;cursor:pointer}
         #kasWargaListContainer::-webkit-scrollbar{width:4px}#kasWargaListContainer::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
-        /* ======= STATUS COLORS v5 ======= */
         .cell-L{background:#059669!important;color:#fff!important}
         .cell-LK{background:#10b981!important;color:#fff!important}
         .cell-LA{background:#34d399!important;color:#065f46!important}
@@ -43,7 +42,6 @@
         .matrix-blok-col{position:sticky;left:0;z-index:5;background:#fff;width:62px;min-width:62px;max-width:62px}
         .matrix-header-blok{position:sticky;left:0;z-index:11;background:#059669;width:62px;min-width:62px;max-width:62px}
         .matrix-cell-btn{width:100%;padding:5px 1px;font-size:10px;font-weight:700;transition:all .15s;position:relative;min-height:24px}
-        /* ======= STICKY HEADER BULAN (KAS) ======= */
         .kas-global-thead th{position:sticky;top:0;z-index:20;background:#059669}
         .kas-global-thead th.matrix-header-blok{z-index:30;background:#059669}
     </style>
@@ -159,6 +157,21 @@
             </form>
         </div>
     </div>
+    <!-- ═════════ MODAL EDIT KAS (BARU) ═════════ -->
+    <div id="modalEditKas" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4" onclick="document.getElementById('modalEditKas').classList.add('hidden')">
+        <div class="bg-white w-full max-w-md rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up" onclick="event.stopPropagation()">
+            <button onclick="document.getElementById('modalEditKas').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-lg font-bold text-slate-800 mb-4">Edit Pengeluaran</h3>
+            <form id="formEditKas" onsubmit="simpanEditKas(event)" class="space-y-3">
+                <input type="hidden" id="editKasId">
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Kategori</label><select id="editKasKategori" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"><option value="Belanja">Belanja</option><option value="Perbaikan">Perbaikan</option><option value="Konsumsi Kerja bakti">Konsumsi Kerja bakti</option><option value="Uang Kematian">Uang Kematian</option><option value="Listrik Toren">Listrik Toren</option><option value="Insentif">Insentif</option><option value="Gaji Satpam">Gaji Satpam</option><option value="Kasbon">Kasbon</option><option value="Lainnya">Lainnya</option></select></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Uraian</label><input type="text" id="editKasKet" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Jumlah (Rp)</label><input type="number" inputmode="numeric" pattern="[0-9]*" id="editKasNominal" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Tanggal Transaksi</label><input type="date" id="editKasTanggal" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div class="flex gap-2 pt-2"><button type="button" onclick="document.getElementById('modalEditKas').classList.add('hidden')" class="flex-1 bg-slate-100 text-slate-700 font-bold py-3 rounded-xl">Batal</button><button type="submit" class="flex-1 bg-emerald-600 text-white font-bold py-3 rounded-xl shadow-md">Simpan Perubahan</button></div>
+            </form>
+        </div>
+    </div>
     <div id="detailWargaModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4" onclick="document.getElementById('detailWargaModal').classList.add('hidden')">
         <div class="bg-white w-full max-w-md rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('detailWargaModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
@@ -180,12 +193,14 @@
             </form>
         </div>
     </div>
+    <!-- ═════════ MODAL EDIT PEKERJA (FOTO DITAMBAH) ═════════ -->
     <div id="editPekerjaModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4" onclick="document.getElementById('editPekerjaModal').classList.add('hidden')">
         <div class="bg-white w-full max-w-sm rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('editPekerjaModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-lg font-bold text-slate-800 mb-4">Edit Data Pekerja</h3>
             <form id="editPekerjaForm" onsubmit="simpanEditPekerja(event)" class="space-y-3">
                 <input type="hidden" id="editPkjId">
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Foto Pekerja</label><div class="flex items-center gap-2"><img id="editPkjFotoPreview" class="hidden w-14 h-14 rounded-lg object-cover border border-slate-200"><i id="editPkjFotoIcon" class="fa-solid fa-user text-3xl text-slate-300"></i><button type="button" onclick="bukaKameraRealtime('editPkjFotoPreview','editPkjFotoIcon','editPkjFotoBase64',null,'user')" class="bg-emerald-600 text-white px-3 py-2 rounded-lg text-[11px] font-bold shadow-sm flex items-center gap-1.5"><i class="fa-solid fa-camera"></i> Kamera</button><button type="button" onclick="document.getElementById('editPkjFotoInput').click()" class="bg-slate-100 text-slate-700 px-3 py-2 rounded-lg text-[11px] font-semibold border border-slate-200 flex items-center gap-1.5"><i class="fa-regular fa-image"></i> Galeri</button><input type="file" id="editPkjFotoInput" accept="image/*" class="hidden" onchange="handleDocPhoto(event,'editPkjFotoPreview','editPkjFotoIcon','editPkjFotoBase64')"><input type="hidden" id="editPkjFotoBase64"></div></div>
                 <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nama</label><input type="text" id="editPkjNama" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
                 <div><label class="block text-xs font-semibold text-slate-600 mb-1">No. HP</label><input type="tel" inputmode="tel" id="editPkjHp" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
                 <div><label class="block text-xs font-semibold text-slate-600 mb-1">Status Pekerjaan</label><input type="text" id="editPkjStatus" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
@@ -566,10 +581,13 @@
                     <div class="relative">
                         <div id="admViewWarga" class="block">
                             <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3 mb-3"><p class="text-[11px] text-amber-900 leading-relaxed"><i class="fa-solid fa-circle-info mr-1"></i> <b>Data Master</b> berisi 125 rumah resmi. Seed dulu sekali jika kosong.</p></div>
+                            <div class="mb-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button id="btnSeedMaster" onclick="seedDataMaster()" class="bg-emerald-600 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm"><i class="fa-solid fa-rocket"></i> Seed 125 Rumah</button>
+                                <button id="btnImportKas" onclick="importKas2026Excel()" class="bg-blue-600 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm hover:bg-blue-700"><i class="fa-solid fa-upload"></i> Import Kas 2026</button>
+                            </div>
                             <div class="mb-3 flex flex-wrap gap-2">
-                                <button id="btnSeedMaster" onclick="seedDataMaster()" class="flex-1 bg-emerald-600 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm"><i class="fa-solid fa-rocket"></i> Seed 125 Rumah</button>
-                                <button onclick="openTambahMasterModal()" class="bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold px-3 py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2"><i class="fa-solid fa-user-plus"></i> Tambah</button>
-                                <button onclick="exportWargaData()" class="bg-slate-800 text-white font-bold px-3 py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2"><i class="fa-solid fa-file-csv"></i> CSV</button>
+                                <button onclick="openTambahMasterModal()" class="flex-1 bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold px-3 py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2"><i class="fa-solid fa-user-plus"></i> Tambah Rumah</button>
+                                <button onclick="exportWargaData()" class="flex-1 bg-slate-800 text-white font-bold px-3 py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
                             </div>
                             <div class="relative mb-4"><i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400"></i><input type="text" id="searchWarga" onkeyup="filterWarga()" placeholder="Cari nama / blok / V1 1..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 outline-none bg-white text-sm shadow-sm"></div>
                             <div id="adminWargaList" class="space-y-3"></div>
@@ -629,7 +647,6 @@
         function getBulanList(tahun) { return NAMA_BULAN.map(m => `${m} ${tahun}`); }
         function getTahunBerjalan() { return new Date().getFullYear(); }
         const DAFTAR_BULAN_IURAN = getBulanList(getTahunBerjalan());
-        const PILIHAN_NOMINAL_IURAN = [0,20000,25000,30000,35000,40000,45000,50000,60000,70000,75000,80000,90000,100000,110000,120000,125000,130000,140000,150000,160000,170000,175000,180000,190000,200000];
 
         const DATA_WARGA_DEFAULT = [
             {blok:'E',no:'1',nama:'IRNI PRIJAYANTINI'},{blok:'E',no:'2',nama:'ASEP TATA'},{blok:'E',no:'4',nama:'DERIS'},{blok:'E',no:'5',nama:'AYU WINDA'},{blok:'E',no:'6',nama:'TAFANA ANDINI'},{blok:'E',no:'7',nama:'SEPTHA MAULANA'},{blok:'E',no:'8',nama:'NENENG'},{blok:'E',no:'9',nama:'ALAMSYAH'},{blok:'E',no:'10',nama:'GITA'},{blok:'E',no:'11',nama:'INTAN / EKI'},{blok:'E',no:'11A',nama:'DEA'},{blok:'E',no:'12',nama:'IMAM'},{blok:'E',no:'14',nama:'ENDANG'},{blok:'E',no:'15',nama:'DENI SETIA'},{blok:'E',no:'16',nama:'REYVAN'},{blok:'E',no:'17',nama:'ALI / DIKA'},
@@ -649,6 +666,234 @@
             {blok:'V2',no:'1',nama:'NATA'},{blok:'V2',no:'2/4',nama:'SIHABUDIN'},{blok:'V2',no:'3',nama:'EMPI'},{blok:'V2',no:'5',nama:'SUDIRMAN'},{blok:'V2',no:'6',nama:'KANIM RUSIADI'},{blok:'V2',no:'7',nama:'SITI'},{blok:'V2',no:'8',nama:'FANDI'},{blok:'V2',no:'9',nama:'ADITYA N'},{blok:'V2',no:'10',nama:'KEPSEK'},
             {blok:'V3',no:'1',nama:'WILDAN'},{blok:'V3',no:'2',nama:'IQBAL'},{blok:'V3',no:'3',nama:'DINA'},{blok:'V3',no:'4',nama:'MARIA'},{blok:'V3',no:'5',nama:'SUMI'},{blok:'V3',no:'6',nama:'ALDANI'},{blok:'V3',no:'7',nama:'HERAWATI'},{blok:'V3',no:'8',nama:'HENDRI'},{blok:'V3',no:'9',nama:'NIA ELFANIASARI'},{blok:'V3',no:'10',nama:'DIAN'},
             {blok:'W',no:'1',nama:'RIAN'},{blok:'W',no:'2',nama:'SINAR AJI'},{blok:'W',no:'3',nama:'SANTI'},{blok:'W',no:'4',nama:'BIMA FAWWAZ .F'}
+        ];
+
+        /* ══════════════════════════════════════════════════════════════════
+           DATA KAS 2026 DARI EXCEL (208 TRANSAKSI)
+           Format: [tanggal, bulan, kategori, uraian, nominal]
+        ══════════════════════════════════════════════════════════════════ */
+        const KAS_2026_DATA = [
+            // ═══ JANUARI 2026 (32 transaksi) ═══
+            [20,'Januari','GAJI SATPAM 1','Gaji Satpam Acuy',1500000],
+            [20,'Januari','GAJI SATPAM 2','Gaji Satpam Asep',1500000],
+            [20,'Januari','GAJI SAMPAH','Gaji Petugas Sampah',1300000],
+            [20,'Januari','INS. P KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',200000],
+            [10,'Januari','GAJI KEBERSIHAN','Gaji Petugas Kebersihan (Kojek)',1200000],
+            [2,'Januari','TOKEN POS','TOKEN POS',51500],
+            [20,'Januari','Insentif Bendahara 2 dan 3','Insentif Bendahara 1,2',250000],
+            [20,'Januari','KOPI POS SATPAM','KOPI POS SATPAM',100000],
+            [10,'Januari','GAJI MERBOT','GAJI MERBOT',500000],
+            [2,'Januari','Token Mushola','Token Mushola',150000],
+            [2,'Januari','Aqua Pos Satpam','Aqua Pos Satpam',50000],
+            [1,'Januari','bayar cctv','bayar cctv',227000],
+            [3,'Januari','bensin mesin rumput','bensin mesin rumput',40000],
+            [5,'Januari','konsumsi kerja bakti','konsumsi kerja bakti',174000],
+            [5,'Januari','bensin dan oli mesin rumput','bensin dan oli mesin rumput',85000],
+            [5,'Januari','upah kuras turen','upah kuras turen',200000],
+            [10,'Januari','Beli pisau mesin rumput baru','Beli pisau mesin rumput baru',50000],
+            [11,'Januari','Upah pak dede','Upah pak dede',100000],
+            [13,'Januari','Alat kebersihan pos satpam','Alat kebersihan pos satpam',50000],
+            [13,'Januari','Kran dispenser pos satpam','Kran dispenser pos satpam',12000],
+            [13,'Januari','Ganti lampu pju','Ganti lampu pju',200000],
+            [17,'Januari','Jasa pindahan kwh mushola','Jasa pindahan kwh mushola',250000],
+            [17,'Januari','Jas hujan satpam dan kebersihan','Jas hujan satpam dan kebersihan',140000],
+            [19,'Januari','Token mesin air kwh atas','Token mesin air kwh atas',500000],
+            [19,'Januari','Ganti lampu pju','Ganti lampu pju',200000],
+            [20,'Januari','Beli pacul dan iskup semen','Beli pacul dan iskup semen',240000],
+            [22,'Januari','Bensin mesin rumput','Bensin mesin rumput',20000],
+            [24,'Januari','Semen','Semen',400000],
+            [24,'Januari','Pasir','Pasir',180000],
+            [25,'Januari','Makan petugas PLN','Makan petugas PLN',150000],
+            [25,'Januari','Ganti kapasitor mesin air atas','Ganti kapasitor mesin air atas',100000],
+            [27,'Januari','potongan APK Dana','potongan APK Dana',80000],
+            // ═══ FEBRUARI 2026 (24 transaksi) ═══
+            [20,'Februari','GAJI SATPAM 1','GAJI SATPAM 1',1500000],
+            [20,'Februari','GAJI SATPAM 2','GAJI SATPAM 2',1500000],
+            [20,'Februari','GAJI SAMPAH','GAJI SAMPAH',1300000],
+            [20,'Februari','INS. P KIWONG','INS. P KIWONG',300000],
+            [20,'Februari','GAJI KEBERSIHAN','GAJI KEBERSIHAN',1250000],
+            [6,'Februari','TOKEN POS','TOKEN POS',51500],
+            [20,'Februari','Insentif Bendahara 1,2','Insentif Bendahara 1,2',450000],
+            [20,'Februari','KOPI POS SATPAM','KOPI POS SATPAM',100000],
+            [10,'Februari','GAJI MERBOT','GAJI MERBOT',600000],
+            [2,'Februari','Token Mushola','Token Mushola',50000],
+            [2,'Februari','Aqua Pos Satpam','Aqua Pos Satpam',50000],
+            [1,'Februari','bayar cctv','bayar cctv',230000],
+            [10,'Februari','pemasangan Kwh baru mesin air bawah','pemasangan Kwh baru mesin air bawah',750000],
+            [7,'Februari',"al Qur'an inpentaris","al Qur'an inpentaris",80000],
+            [7,'Februari','pisau untuk kebutuhan babat rumput','pisau untuk kebutuhan babat rumput',50000],
+            [13,'Februari','perbaikan jalur air blok L','perbaikan jalur air blok L',50000],
+            [10,'Februari','kabel 2x2,5 untuk kebutuhan kwh','kabel 2x2,5 untuk kebutuhan kwh',50000],
+            [14,'Februari','busi mesin rumput dan pilok','busi mesin rumput dan pilok',100000],
+            [17,'Februari','pluit','pluit',12000],
+            [25,'Februari','pembelian toa megapone','pembelian toa megapone',120000],
+            [25,'Februari','ganti radar pelampung mesin air bawah','ganti radar pelampung mesin air bawah',35000],
+            [26,'Februari','ganti ban dalam gerobak sampah','ganti ban dalam gerobak sampah',50000],
+            [27,'Februari','token kwh mesin air atas','token kwh mesin air atas',250000],
+            [27,'Februari','ganti lampu pju blok U,V,S,E','ganti lampu pju blok U,V,S,E',200000],
+            // ═══ MARET 2026 (18 transaksi · 2024 sudah di-skip) ═══
+            [14,'Maret','GAJI SATPAM DIDI','THR patungan RT 9',1500000],
+            [14,'Maret','GAJI SATPAM ACHUY','THR Patungan RT 9',1500000],
+            [14,'Maret','GAJI SAMPAH JOKO','THR patungan RT 9',1300000],
+            [14,'Maret','INS. P KIWONG','Plus jaga rutin malam minggu 100',400000],
+            [14,'Maret','GAJI KEBERSIHAN WARMAN','Potong kasbon tnggal 9 maret',1100000],
+            [20,'Maret','TOKEN POS','TOKEN POS',51500],
+            [14,'Maret','Insentif Bendahara 2,3','Arif dan Sudirman /2',500000],
+            [8,'Maret','KOPI POS SATPAM & TOKEN','KOPI POS SATPAM & TOKEN',200000],
+            [14,'Maret','GAJI MERBOT','GAJI MERBOT',500000],
+            [2,'Maret','Aqua Pos Satpam','Aqua Pos Satpam',50000],
+            [14,'Maret','SANTUNAN','10 ORANG /yatim 50.000',4000000],
+            [14,'Maret','OPAY','OPAY',300000],
+            [14,'Maret','THR SATPAM HERI','THR SATPAM HERI',300000],
+            [27,'Maret','Alat Kebersihan','Alat Kebersihan',100000],
+            [1,'Maret','Lainnya','Pengeluaran tanpa uraian (Maret)',400000],
+            [1,'Maret','nobar','nobar',60000],
+            [31,'Maret','uang jaga idul fitri satpam','patungan rt 09 &10',200000],
+            [4,'Maret','Belanja material gudang','Kanal dll',496000],
+            // ═══ APRIL 2026 (20 transaksi) ═══
+            [20,'April','GAJI SATPAM DIDI','SATPAM',1500000],
+            [20,'April','GAJI SATPAM ACUY','SATPAM',1500000],
+            [20,'April','GAJI JOKO SAMPAH','ANGKUT SAMPAH',1300000],
+            [20,'April','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh, Perawatan jalur Air. dll',400000],
+            [20,'April','GAJI WARMAN','SATPAM + KEBERSIHAN',1500000],
+            [20,'April','INSENTIF BENDAHARA ARIF','Multi Teknisi, Turen, Listrik, CCTV dll',300000],
+            [20,'April','INSENTIF BENDAHARA SUDIRMAN','Petugas Keliling dan Kebersihan',150000],
+            [22,'April','POS SATPAM','POS SATPAM',200000],
+            [1,'April','bayar cctv','cicilan terakhir',227000],
+            [1,'April','pembelian polisi tidur 1bh','cek material dan ketinggian speed bump',135000],
+            [4,'April','belanja kebutuhan gudang inventaris','Kanal, spandek, seng, baud.dll',606000],
+            [6,'April','Pengurasan Turen','Pengurasan Turen',230000],
+            [11,'April','bensin mesin rumput & alat pel lantai','bensin mesin rumput & alat pel lantai',280000],
+            [14,'April','polibag sampah','8 pak',200000],
+            [14,'April','perbaikan pralon talang air pos satpam','patungan rt 9 dan 10 + babat rumput area gardu PLN',350000],
+            [20,'April','Pemasangan polisi tidur /speed bumb','Konsumsi dll',200000],
+            [20,'April','uang duka didi satpam','urunan dengan RT 9',514000],
+            [22,'April','token kwh mesin air','token kwh mesin air',617000],
+            [22,'April','bensin mesin rumput','bensin mesin rumput',50000],
+            [24,'April','Bayar cicilan mesin rumput bensin','Bayar cicilan mesin rumput bensin',376000],
+            // ═══ MEI 2026 (16 transaksi) ═══
+            [20,'Mei','GAJI SATPAM DIDI','SATPAM',1500000],
+            [20,'Mei','GAJI SATPAM ACUY','SATPAM',1500000],
+            [20,'Mei','GAJI JOKO SAMPAH','ANGKUT SAMPAH',1400000],
+            [20,'Mei','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',400000],
+            [20,'Mei','GAJI WARMAN','SATPAM + KEBERSIHAN',1000000],
+            [20,'Mei','INSENTIF BENDAHARA ARIF','Multi Teknisi, Turen, Listrik, CCTV, Perawatan jalur Air,dll',400000],
+            [20,'Mei','INSENTIF BENDAHARA SUDIRMAN','Petugas Keliling, Kebersihan dan perbaikan air',200000],
+            [20,'Mei','POS SATPAM','POS SATPAM',200000],
+            [20,'Mei','MUSHOLA','Token - Alat Kebersihan - dll',200000],
+            [5,'Mei','pembayaran cicilan polisi tidur 1','pembayaran cicilan polisi tidur 1',1155000],
+            [5,'Mei','pembelian pisau mesin rumput baterai','pembelian pisau mesin rumput baterai',30000],
+            [16,'Mei','pembelian obat pembasmi rumput (rambo)','pembelian obat pembasmi rumput (rambo)',155000],
+            [21,'Mei','ganti lampu pju depan blok n5','ganti lampu pju depan blok n5',200000],
+            [22,'Mei','pembayaran kwh mesin air','pembayaran kwh mesin air',555000],
+            [23,'Mei','ganti mcb panel pju dan lampu pos satpam','ganti mcb panel pju dan lampu pos satpam',100000],
+            [25,'Mei','ganti 2buah lampu pju blok W dan R','ganti 2buah lampu pju blok W dan R',400000],
+            [26,'Mei','sewa tenda idul adha','sewa tenda idul adha',100000],
+            // ═══ JUNI 2026 (21 transaksi) ═══
+            [20,'Juni','GAJI SATPAM DIDI','SATPAM',1500000],
+            [20,'Juni','GAJI SATPAM ACUY','SATPAM',1500000],
+            [20,'Juni','GAJI JOKO SAMPAH','ANGKUT SAMPAH',1300000],
+            [20,'Juni','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',400000],
+            [20,'Juni','GAJI KOJEK','SATPAM + KEBERSIHAN',1000000],
+            [20,'Juni','INSENTIF BENDAHARA ARIF','Multi Teknisi, Turen, Listrik, CCTV, Perawatan jalur Air,dll',400000],
+            [20,'Juni','INSENTIF BENDAHARA SUDIRMAN','Petugas Keliling dan Kebersihan',200000],
+            [20,'Juni','POS SATPAM','Token - Kopi - Aqua Galon',200000],
+            [3,'Juni','pembelian plastik sampah','pembelian plastik sampah',100000],
+            [4,'Juni','pembayaran cicilan polisi tidur','pembayaran cicilan polisi tidur',1155000],
+            [5,'Juni','pembelian 2bh sensor lampu pos ronda','dan pemasangan lampu rooftank air',160000],
+            [7,'Juni','perbaikan jalan yang rusak blok E,O,P,K,T','semen 2 sak pasir 1 mobil',198000],
+            [10,'Juni','Pemasangan KWH pos ronda','PLN',400000],
+            [11,'Juni','pembelian vacum air dan kored rumput','pembelian vacum air dan kored rumput',180000],
+            [11,'Juni','pembelian baterai senter securiti','pembelian baterai senter securiti',50000],
+            [12,'Juni','Pisau mesin Rumput','Pisau mesin Rumput',50000],
+            [18,'Juni','bensin mesin rumput','bensin mesin rumput',50000],
+            [19,'Juni','perbaikan kabel mesin air yg kebakar','patungan rt 10 dan 09',50000],
+            [20,'Juni','konsumsi kerja bakti turen babat rumput','konsumsi kerja bakti turen babat rumput',145000],
+            [22,'Juni','service mesin air atas dan bawah','patungan rt 09 dan rt 10',1000000],
+            [25,'Juni','roko konsumsi kerja bakti dan p2tl','roko konsumsi kerja bakti dan p2tl',300000],
+            [26,'Juni','bayar listrik kwh mesin air atas dan bawah','patungan rt 09 dan rt 10',360000],
+            // ═══ JULI 2026 (22 transaksi) ═══
+            [20,'Juli','GAJI SATPAM DIDI','SATPAM',1100000],
+            [20,'Juli','GAJI SATPAM ACUY','SATPAM',1500000],
+            [20,'Juli','GAJI JOKO SAMPAH','Gaji Petugas Sampah',1300000],
+            [20,'Juli','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',400000],
+            [5,'Juli','CICILAN HP WARMAN','SATPAM + KEBERSIHAN',188000],
+            [20,'Juli','INSENTIF BENDAHARA ARIF','Multi Teknisi, Turen, Listrik, CCTV, Perawatan jalur Air,dll',400000],
+            [20,'Juli','INSENTIF BENDAHARA SUDIRMAN','Petugas Keliling dan Kebersihan',200000],
+            [20,'Juli','POS SATPAM','POS SATPAM',200000],
+            [20,'Juli','GAJI KOJEK','petugas kebersihan dan keamanan rt 10',1500000],
+            [31,'Juli','bayar listrik kwh 1 dan 2','bayar listrik kwh 1 dan 2',57000],
+            [5,'Juli','Cicilan poldur dan mesin rumput','Cicilan poldur dan mesin rumput',1526000],
+            [2,'Juli','ganti lampu blok i, E, K dan N, M, L','ganti lampu blok i, E, K dan N, M, L',300000],
+            [2,'Juli','upah damkar basmi sarang tawon','upah damkar basmi sarang tawon',200000],
+            [8,'Juli','perbaikan mesin air atas (ganti mesin baru)','patungan rt 009 dan rt 010',530000],
+            [8,'Juli','uang duka dan tenda','patungan rt 009 dan rt 010',700000],
+            [14,'Juli','obat basmi rumput / rambo','obat basmi rumput / rambo',92000],
+            [20,'Juli','GAJI ASEP SATPAM','GAJI ASEP SATPAM',500000],
+            [17,'Juli','ganti mcb dan kabel kwh yang rusak','patungan rt 009 dan rt 010',75000],
+            [23,'Juli','perbaikan dan ganti lampu pju yang putus','blok O, P, Q',200000],
+            [20,'Juli','upah pengurasan rooftank/toren','patungan rt 009 dan rt 010',250000],
+            [27,'Juli','kasbon ka oji /acuy','kasbon ka oji /acuy',300000],
+            [29,'Juli','ganti lampu pju yang putus','blok i, L',200000],
+            // ═══ AGUSTUS 2026 (15 transaksi) ═══
+            [20,'Agustus','GAJI SATPAM ACUY','SATPAM',1000000],
+            [20,'Agustus','GAJI SATPAM ASEP','SATPAM',1500000],
+            [20,'Agustus','GAJI JOKO SAMPAH','ANGKUT SAMPAH',1300000],
+            [20,'Agustus','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',400000],
+            [25,'Agustus','GAJI KOJEK','petugas kebersihan rt10 dan satpam',1500000],
+            [20,'Agustus','INSENTIF BENDAHARA ARIF','Multi Teknisi, Turen, Listrik, CCTV, Perawatan jalur Air,dll',400000],
+            [20,'Agustus','INSENTIF BENDAHARA SUDIRMAN','Petugas Keliling dan Kebersihan',200000],
+            [20,'Agustus','POS SATPAM','Air Token & Kopi',200000],
+            [20,'Agustus','KWH MESIN AIR','Listrik Bulanan',500000],
+            [27,'Agustus','HP WARMAN','SATPAM + KEBERSIHAN',188000],
+            [20,'Agustus','pembayaran cicilan polisi tidur','pembayaran cicilan polisi tidur',1155000],
+            [5,'Agustus','pembayaran s pinjam 1','patungan rt 9 dan rt 10 (perbaikan mesin air atas)',780000],
+            [5,'Agustus','kasbon acuy /oji','kasbon acuy /oji',500000],
+            [11,'Agustus','pembelian plastik sampah','pembelian plastik sampah',100000],
+            [13,'Agustus','ganti lampu pju putus','blok P, Q',200000],
+            // ═══ SEPTEMBER 2026 (18 transaksi) ═══
+            [19,'September','GAJI SATPAM ACUY','SATPAM',1500000],
+            [19,'September','GAJI SATPAM ASEP','SATPAM',1500000],
+            [20,'September','GAJI JOKO SAMPAH','ANGKUT SAMPAH',1300000],
+            [19,'September','GAJI KOJEK','Petugas kebersihan rt10 dan satpam',1300000],
+            [19,'September','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',400000],
+            [19,'September','INSENTIF BENDAHARA ARIF','Multi Teknisi, Turen, Listrik, CCTV, Perawatan jalur Air,dll',400000],
+            [19,'September','INSENTIF BENDAHARA SUDIRMAN','Petugas Keliling dan Kebersihan',200000],
+            [20,'September','POS SATPAM','Air Token & Kopi',200000],
+            [29,'September','KWH MESIN AIR','Listrik Bulanan',2075000],
+            [4,'September','pembayaran cicilan polisi tidur','pembayaran cicilan polisi tidur',1151000],
+            [3,'September','pembayaran s pinjam','pinjaman perbaikan Air',1380000],
+            [17,'September','pisau mesin rumput','pisau mesin rumput',50000],
+            [4,'September','Kasbon Pak kiwong','Kasbon Pak kiwong',500000],
+            [6,'September','masker','masker',30000],
+            [21,'September','ganti lampu pju','blok i dan blok R',400000],
+            [23,'September','pembelian 2 bh reflektor jalan','cermin cembung',313000],
+            [1,'September','perbaikan cctv','perbaikan cctv',50000],
+            [30,'September','Kompresor Flush Air','patungan dengan rt 9',150000],
+            // ═══ OKTOBER 2026 (14 transaksi) ═══
+            [20,'Oktober','GAJI SATPAM ACUY','SATPAM',1500000],
+            [20,'Oktober','GAJI SATPAM ASEP','SATPAM',1500000],
+            [20,'Oktober','GAJI JOKO SAMPAH','ANGKUT SAMPAH',1300000],
+            [20,'Oktober','GAJI KOJEK','Petugas kebersihan rt10 dan satpam',1500000],
+            [20,'Oktober','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',500000],
+            [20,'Oktober','INSENTIF BENDAHARA ARIF','Teknisi, Turen, Listrik, CCTV, jalur Air,dll',400000],
+            [20,'Oktober','INSENTIF BENDAHARA SUDIRMAN','Petugas Keliling dan Kebersihan',200000],
+            [20,'Oktober','POS SATPAM','Air Token & Kopi',200000],
+            [20,'Oktober','KWH MESIN AIR','Listrik Bulanan',2200000],
+            [11,'Oktober','konsumsi rapat','konsumsi rapat',121000],
+            [14,'Oktober','ganti lampu pju','blok i dan E',300000],
+            [16,'Oktober','ganti lampu pju','blok V1 dan L',400000],
+            [24,'Oktober','pembelian pisau mesin rumput','pembelian pisau mesin rumput',50000],
+            [24,'Oktober','pembelian gergaji besi','pembelian gergaji besi',42000],
+            // ═══ NOVEMBER 2026 (8 transaksi) ═══
+            [1,'November','GAJI SATPAM ACUY','SATPAM (Kasbon)',900000],
+            [1,'November','GAJI KOJEK','Petugas kebersihan rt10 dan satpam (Kasbon)',200000],
+            [4,'November','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',500000],
+            [1,'November','Iuran TPU/Kematian','DKM Al-Ikhwan',250000],
+            [4,'November','pembayaran s pinjam 1','patungan rt 9 dan rt 10 (perbaikan mesin air atas)',680000],
+            [10,'November','token kwh mesin bawah','token kwh mesin bawah',250000],
+            [12,'November','konsumsi pengeboran','konsumsi pengeboran',250000],
+            [12,'November','penambal turen','penambal turen',151000]
         ];
 
         function normalizeHouseData(rb, rn) {
@@ -690,10 +935,7 @@
         window.tarifConfig = JSON.parse(JSON.stringify(DEFAULT_TARIF_CONFIG));
         const BULAN_MAP_EXCEL = { 'Jan':'JAN','Feb':'FEB','Mar':'MAR','Apr':'APR','Mei':'MEI','Jun':'JUN','Jul':'JUL','Agu':'AGS','Sep':'SEP','Okt':'OKT','Nop':'NOP','Des':'DES' };
 
-        function normalizeStatus(st) {
-            if (st === 'K') return 'LK';
-            return st || 'BL';
-        }
+        function normalizeStatus(st) { if (st === 'K') return 'LK'; return st || 'BL'; }
         function isLunasStatus(st) { return !!(STATUS_CODES[normalizeStatus(st)]?.isLunas); }
 
         function getTarifAktif(kode, bulanKey) {
@@ -798,13 +1040,6 @@
             document.getElementById('regNo')?.addEventListener('change', window.updateRegHint);
         });
 
-        function initDropdownIuran() {
-            const aBln = document.getElementById('adminBulanIuran'); const aNom = document.getElementById('adminNominalIuran');
-            if (aBln && aBln.options.length === 0) DAFTAR_BULAN_IURAN.forEach(b => aBln.add(new Option(b, b)));
-            if (aNom && aNom.options.length === 0) PILIHAN_NOMINAL_IURAN.forEach(n => aNom.add(new Option(formatRupiah(n), n)));
-        }
-        initDropdownIuran();
-
         window.seedDataMaster = async function () {
             if (!isAdminRole()) return showToast("Hanya pengurus yang bisa seed.", true);
             if (!confirm("Akan mengisi 125 rumah dari Excel ke database master.\n\nData yang sudah ada TIDAK akan diubah.\n\nLanjutkan?")) return;
@@ -839,6 +1074,101 @@
                 showToast(`✅ Rumah ${norm.blok} ${norm.no} ditambahkan`);
                 loadAdminWargaList(); loadStatistik();
             } catch (e) { showToast("Gagal: " + e.message, true); }
+        };
+
+        /* ══════════════════════════════════════════════════════════════════
+           IMPORT KAS 2026 — TIMPA SEMUA PENGELUARAN LAMA
+        ══════════════════════════════════════════════════════════════════ */
+        window.importKas2026Excel = async function() {
+            if (!isAdminRole()) return showToast("Hanya pengurus.", true);
+            const totalRp = KAS_2026_DATA.reduce((s, r) => s + r[4], 0);
+            if (!confirm(`⚠️ TIMPA DATA PENGELUARAN 2026\n\nSemua pengeluaran tahun 2026 (jenis keluar) akan DIHAPUS.\n\nLalu diisi ulang:\n• ${KAS_2026_DATA.length} transaksi\n• Total: ${formatRupiah(totalRp)}\n\nLanjutkan?`)) return;
+
+            const btn = document.getElementById('btnImportKas');
+            if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menghapus lama...'; }
+            try {
+                // 1. Hapus semua pengeluaran 2026
+                const s = await getDocs(collection(db, 'artifacts', appId, 'kas'));
+                let deleted = 0;
+                for (const d of s.docs) {
+                    const it = d.data();
+                    if (it.jenis === 'keluar') {
+                        const tgl = new Date(it.timestamp);
+                        if (tgl.getFullYear() === 2026) { await deleteDoc(doc(db, 'artifacts', appId, 'kas', d.id)); deleted++; }
+                    }
+                }
+                if (btn) btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Insert 0/${KAS_2026_DATA.length}`;
+                // 2. Insert baru
+                const BULAN_IDX = { 'Januari':0,'Februari':1,'Maret':2,'April':3,'Mei':4,'Juni':5,'Juli':6,'Agustus':7,'September':8,'Oktober':9,'November':10,'Desember':11 };
+                const currentUser = (window.currentUserData && window.currentUserData.nama) || 'Admin';
+                let added = 0, errors = 0;
+                for (const row of KAS_2026_DATA) {
+                    const [tgl, bln, kat, uraian, nom] = row;
+                    if (!nom || nom <= 0) continue;
+                    const mIdx = BULAN_IDX[bln];
+                    if (mIdx === undefined) continue;
+                    const ts = new Date(2026, mIdx, tgl || 1, 12, 0, 0).getTime();
+                    try {
+                        await addDoc(collection(db, 'artifacts', appId, 'kas'), {
+                            tipeDoc: 'transaksi', jenis: 'keluar',
+                            kategori: kat || 'Lainnya',
+                            keterangan: uraian || kat || 'Tanpa Keterangan',
+                            nominal: Number(nom),
+                            oleh: `${currentUser} (Import Excel)`,
+                            timestamp: ts,
+                            source: 'excel_2026',
+                            importedAt: Date.now()
+                        });
+                        added++;
+                        if (added % 10 === 0 && btn) btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${added}/${KAS_2026_DATA.length}`;
+                    } catch(e) { errors++; console.error(e); }
+                }
+                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-upload"></i> Import Kas 2026'; }
+                showToast(`✅ Selesai!\n${deleted} lama dihapus\n${added} baru ditambahkan\n${errors} error`);
+                loadBukuKas();
+                if (document.getElementById('kasView') && !document.getElementById('kasView').classList.contains('hidden')) {
+                    switchKasTab('riwayat');
+                }
+            } catch(e) {
+                console.error(e);
+                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-upload"></i> Import Kas 2026'; }
+                showToast("Gagal: " + e.message, true);
+            }
+        };
+
+        /* ══════════════════════════════════════════════════════════════════
+           EDIT KAS — Modal terbuka dari tombol pensil
+        ══════════════════════════════════════════════════════════════════ */
+        window.openEditKas = function(id) {
+            if (!isAdminRole()) return showToast("Hanya pengurus.", true);
+            const item = globalKasList.find(x => x.id === id);
+            if (!item) return showToast("Data tidak ditemukan.", true);
+            document.getElementById('editKasId').value = id;
+            document.getElementById('editKasKategori').value = item.kategori || 'Lainnya';
+            document.getElementById('editKasKet').value = item.keterangan || '';
+            document.getElementById('editKasNominal').value = item.nominal || 0;
+            const d = new Date(item.timestamp || Date.now());
+            document.getElementById('editKasTanggal').value = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+            document.getElementById('modalEditKas').classList.remove('hidden');
+        };
+
+        window.simpanEditKas = async function(e) {
+            e.preventDefault();
+            const id = document.getElementById('editKasId').value;
+            const kategori = document.getElementById('editKasKategori').value;
+            const keterangan = document.getElementById('editKasKet').value.trim();
+            const nominal = Number(document.getElementById('editKasNominal').value);
+            const tglVal = document.getElementById('editKasTanggal').value;
+            if (!id || !keterangan || !nominal || !tglVal) return showToast("Lengkapi data!", true);
+            let ts = Date.now();
+            try { const [yy,mm,dd] = tglVal.split('-').map(Number); ts = new Date(yy, mm-1, dd, 12,0,0).getTime(); } catch(e) {}
+            try {
+                await updateDoc(doc(db, 'artifacts', appId, 'kas', id), { kategori, keterangan, nominal, timestamp: ts, updatedAt: Date.now() });
+                document.getElementById('modalEditKas').classList.add('hidden');
+                showToast("✅ Pengeluaran diperbarui!");
+                loadBukuKas();
+                if (document.getElementById('kasView') && !document.getElementById('kasView').classList.contains('hidden')) switchKasTab('riwayat');
+            } catch(e) { showToast("Gagal: " + e.message, true); }
         };
 
         function bufferToBase64(b) { return btoa(String.fromCharCode.apply(null, new Uint8Array(b))); }
@@ -1021,8 +1351,41 @@
             try { const s = await getDocs(collection(db, 'artifacts', appId, 'pekerja')); let h = ''; s.forEach(d => { const p = d.data(); const foto = p.fotoBase64 || `https://ui-avatars.com/api/?name=${p.nama || 'P'}&background=random`; const tgl = p.tglMasuk ? new Date(p.tglMasuk).toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'}) : '-'; const sd = safeEncode(p); h += `<div class="bg-white p-3 rounded-xl border shadow-sm flex items-center gap-3 mb-2"><img src="${foto}" class="w-12 h-12 rounded-lg object-cover border shrink-0"><div class="min-w-0 flex-1"><h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(p.nama || 'Nama')}</h4><p class="text-[11px] text-slate-500 truncate">${escapeHtml(p.hp || '-')} • ${tgl}</p><p class="text-[11px] text-emerald-600 font-bold">${escapeHtml(p.statusPekerjaan || 'Petugas')} • Gaji: ${formatRupiah(p.gaji)}</p></div><div class="flex gap-1 shrink-0"><button onclick="openEditPekerjaModal('${d.id}', '${sd}')" class="w-8 h-8 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center"><i class="fa-solid fa-pen text-xs"></i></button><button onclick="hapusPekerja('${d.id}')" class="w-8 h-8 bg-red-50 text-red-500 rounded-full flex items-center justify-center"><i class="fa-solid fa-trash text-xs"></i></button></div></div>`; }); cont.innerHTML = h || '<p class="text-center text-xs text-slate-400">Belum ada pekerja.</p>'; } catch(e) { cont.innerHTML = '<p class="text-center text-red-500 text-xs">Gagal.</p>'; }
         }
         window.hapusPekerja = async function(id) { if(!confirm("Hapus pekerja ini?")) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'pekerja', id)); showToast("Dihapus."); loadAdminPekerjaList(); loadDataPekerjaWarga(); } catch(e) {} };
-        window.openEditPekerjaModal = function(id, sd) { const d = safeDecode(sd); document.getElementById('editPkjId').value = id; document.getElementById('editPkjNama').value = d.nama || ''; document.getElementById('editPkjHp').value = d.hp || ''; document.getElementById('editPkjStatus').value = d.statusPekerjaan || ''; document.getElementById('editPkjTgl').value = d.tglMasuk || ''; document.getElementById('editPkjGaji').value = d.gaji || ''; document.getElementById('editPkjAlamat').value = d.alamat || ''; document.getElementById('editPekerjaModal').classList.remove('hidden'); };
-        window.simpanEditPekerja = async function(e) { e.preventDefault(); const id = document.getElementById('editPkjId').value; const nama = document.getElementById('editPkjNama').value; const hp = document.getElementById('editPkjHp').value; const statusPekerjaan = document.getElementById('editPkjStatus').value; const tglMasuk = document.getElementById('editPkjTgl').value; const gaji = Number(document.getElementById('editPkjGaji').value); const alamat = document.getElementById('editPkjAlamat').value; try { await updateDoc(doc(db, 'artifacts', appId, 'pekerja', id), { nama, hp, statusPekerjaan, tglMasuk, gaji, alamat }); showToast("✅ Diperbarui!"); document.getElementById('editPekerjaModal').classList.add('hidden'); loadAdminPekerjaList(); loadDataPekerjaWarga(); } catch(err) { showToast("Gagal.", true); } };
+        window.openEditPekerjaModal = function(id, sd) {
+            const d = safeDecode(sd);
+            document.getElementById('editPkjId').value = id;
+            document.getElementById('editPkjNama').value = d.nama || '';
+            document.getElementById('editPkjHp').value = d.hp || '';
+            document.getElementById('editPkjStatus').value = d.statusPekerjaan || '';
+            document.getElementById('editPkjTgl').value = d.tglMasuk || '';
+            document.getElementById('editPkjGaji').value = d.gaji || '';
+            document.getElementById('editPkjAlamat').value = d.alamat || '';
+            // ⚡ Load foto
+            const foto = d.fotoBase64 || '';
+            const prev = document.getElementById('editPkjFotoPreview');
+            const ico = document.getElementById('editPkjFotoIcon');
+            const hid = document.getElementById('editPkjFotoBase64');
+            if (foto) { if(prev){prev.src=foto; prev.classList.remove('hidden');} if(ico) ico.classList.add('hidden'); if(hid) hid.value = foto; }
+            else { if(prev) prev.classList.add('hidden'); if(ico) ico.classList.remove('hidden'); if(hid) hid.value = ''; }
+            document.getElementById('editPekerjaModal').classList.remove('hidden');
+        };
+        window.simpanEditPekerja = async function(e) {
+            e.preventDefault();
+            const id = document.getElementById('editPkjId').value;
+            const nama = document.getElementById('editPkjNama').value;
+            const hp = document.getElementById('editPkjHp').value;
+            const statusPekerjaan = document.getElementById('editPkjStatus').value;
+            const tglMasuk = document.getElementById('editPkjTgl').value;
+            const gaji = Number(document.getElementById('editPkjGaji').value);
+            const alamat = document.getElementById('editPkjAlamat').value;
+            const foto = document.getElementById('editPkjFotoBase64').value || '';
+            try {
+                await updateDoc(doc(db, 'artifacts', appId, 'pekerja', id), { nama, hp, statusPekerjaan, tglMasuk, gaji, alamat, fotoBase64: foto, updatedAt: Date.now() });
+                showToast("✅ Pekerja diperbarui!");
+                document.getElementById('editPekerjaModal').classList.add('hidden');
+                loadAdminPekerjaList(); loadDataPekerjaWarga();
+            } catch(err) { showToast("Gagal.", true); }
+        };
 
         window.simpanBukuTamu = async function(e) { e.preventDefault(); const nm = document.getElementById('tamuNama').value.trim(); const hp = document.getElementById('tamuHp').value.trim(); const tj = document.getElementById('tamuTujuan').value.trim(); const kp = document.getElementById('tamuKeperluan').value.trim(); const lama = document.getElementById('tamuLama').value; const foto = document.getElementById('tamuFotoBase64').value; try { await addDoc(collection(db, 'artifacts', appId, 'tamu'), { nama: nm, hp, tujuan: tj, keperluan: kp, lama, fotoBase64: foto, waktuMasuk: Date.now(), oleh: (window.currentUserData && window.currentUserData.nama) || 'Warga' }); document.getElementById('formTamu').reset(); document.getElementById('tamuFotoPreview').classList.add('hidden'); document.getElementById('tamuFotoIcon').classList.remove('hidden'); document.getElementById('tamuFotoBase64').value = ''; showToast("✅ Data Tamu terkirim!"); switchTab('beranda'); } catch(err) { showToast("Gagal.", true); } };
         window.loadBukuTamu = async function() { const cont = document.getElementById('adminTamuList'); if (!cont) return; cont.innerHTML = 'Loading...'; try { const today = new Date(); today.setHours(0,0,0,0); const s = await getDocs(query(collection(db, 'artifacts', appId, 'tamu'), orderBy('waktuMasuk', 'desc'))); let h = ''; s.forEach(d => { const t = d.data(); if (t.waktuMasuk >= today.getTime()) { const jam = new Date(t.waktuMasuk).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'}); const foto = t.fotoBase64 || `https://ui-avatars.com/api/?name=${t.nama || 'T'}&background=random`; h += `<div class="p-3 bg-white border rounded-xl flex gap-3 items-start mb-2 shadow-sm"><img src="${foto}" class="w-10 h-10 rounded-lg object-cover border shrink-0"><div class="flex-1 min-w-0"><h4 class="font-bold text-sm text-slate-800">${escapeHtml(t.nama)}</h4><p class="text-[11px] text-slate-600">HP: ${escapeHtml(t.hp || '-')}</p><p class="text-[11px] text-slate-600">Tujuan: ${escapeHtml(t.tujuan)} • ${jam}</p><p class="text-[10px] text-slate-500 italic">"${escapeHtml(t.keperluan || '-')}"</p><p class="text-[10px] font-bold text-emerald-600">${escapeHtml(t.lama || '-')} Jam</p></div><button onclick="hapusTamu('${d.id}')" class="w-7 h-7 bg-red-50 text-red-500 rounded-lg shrink-0"><i class="fa-solid fa-trash text-xs"></i></button></div>`; } }); cont.innerHTML = h || '<p class="text-xs text-slate-500 text-center">Belum ada tamu hari ini.</p>'; } catch(e) { cont.innerHTML = '<p class="text-xs text-red-500 text-center">Gagal.</p>'; } };
@@ -1192,11 +1555,21 @@
             const cont = document.getElementById('kasWargaListContainer'); if(!cont) return;
             let fl = list; if (currentKasFilter === 'masuk') fl = list.filter(x => x.jenis === 'masuk'); else if (currentKasFilter === 'keluar') fl = list.filter(x => x.jenis === 'keluar');
             if (fl.length === 0) { cont.innerHTML = '<p class="text-center text-xs text-slate-400 py-10">Belum ada transaksi.</p>'; return; }
+            const canEditKas = isAdminRole();
             let h = ''; let g = {};
             fl.forEach(x => { const d = new Date(x.timestamp || Date.now()); const ds = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' }); if(!g[ds]) g[ds] = []; g[ds].push(x); });
             for (const [lb, it] of Object.entries(g)) {
                 h += `<div class="mb-3"><h4 class="text-xs font-bold text-slate-800 mb-2 text-center tracking-wide">${lb}</h4><div class="space-y-2">`;
-                it.forEach(x => { const iM = x.jenis === 'masuk'; const ac = iM ? 'text-emerald-500' : 'text-red-500'; const ic = iM ? 'text-emerald-500 border-emerald-200' : 'text-red-500 border-red-200'; const sg = iM ? '+' : '-'; const icn = iM ? 'fa-arrow-down' : 'fa-arrow-up'; const ts = new Date(x.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }); h += `<div class="bg-white p-3.5 rounded-2xl flex justify-between items-center shadow-sm border border-slate-100"><div class="flex items-center gap-3 min-w-0"><div class="w-9 h-9 rounded-full border flex items-center justify-center shrink-0 ${ic}"><i class="fa-solid ${icn} text-xs"></i></div><div class="min-w-0"><h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(x.keterangan)}</h4><p class="text-[10px] text-slate-500">${ts} WIB ${x.kategori ? '• ' + escapeHtml(x.kategori) : ''}</p></div></div><span class="font-bold text-sm shrink-0 ${ac}">${sg} ${formatRupiah(x.nominal)}</span></div>`; });
+                it.forEach(x => {
+                    const iM = x.jenis === 'masuk';
+                    const ac = iM ? 'text-emerald-500' : 'text-red-500';
+                    const ic = iM ? 'text-emerald-500 border-emerald-200' : 'text-red-500 border-red-200';
+                    const sg = iM ? '+' : '-';
+                    const icn = iM ? 'fa-arrow-down' : 'fa-arrow-up';
+                    const ts = new Date(x.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                    const editBtn = (canEditKas && !iM) ? `<button onclick="openEditKas('${x.id}')" class="w-7 h-7 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-100 shrink-0 ml-1" title="Edit"><i class="fa-solid fa-pen text-[10px]"></i></button>` : '';
+                    h += `<div class="bg-white p-3.5 rounded-2xl flex justify-between items-center shadow-sm border border-slate-100"><div class="flex items-center gap-3 min-w-0 flex-1"><div class="w-9 h-9 rounded-full border flex items-center justify-center shrink-0 ${ic}"><i class="fa-solid ${icn} text-xs"></i></div><div class="min-w-0 flex-1"><h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(x.keterangan)}</h4><p class="text-[10px] text-slate-500">${ts} WIB ${x.kategori ? '• ' + escapeHtml(x.kategori) : ''}</p></div></div><div class="flex items-center gap-1 shrink-0"><span class="font-bold text-sm ${ac}">${sg} ${formatRupiah(x.nominal)}</span>${editBtn}</div></div>`;
+                });
                 h += `</div></div>`;
             }
             cont.innerHTML = h;
@@ -1275,7 +1648,6 @@
         window.bayarIuranQRIS = function() { document.getElementById('qrisModal').classList.remove('hidden'); };
         window.pindaiQRIS = function() { alert("Buka Mobile Banking / Dompet Digital, pilih 'Scan QRIS', arahkan ke layar."); };
 
-        window.exportWargaPDF = async function() { if (!firebaseReady) return; showToast("Menyiapkan PDF..."); try { const s = await getDocs(collection(db, 'artifacts', appId, 'warga_master')); if (s.empty) return showToast("Tidak ada data.", true); const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.setFontSize(16); doc.text("Data Warga RT.010 / RW.002 Mabu Park", 14, 20); doc.setFontSize(10); doc.text(`Dicetak: ${new Date().toLocaleString('id-ID')}`, 14, 26); let bd = []; s.forEach((d, i) => { const u = d.data(); bd.push([i + 1, u.nama || '-', u.blok || '-', u.no || '-', u.status_rumah || 'HUNI']); }); doc.autoTable({ startY: 35, head: [['No', 'Nama', 'Blok', 'No', 'Status']], body: bd, styles: { fontSize: 9 }, headStyles: { fillColor: [5, 150, 105] } }); doc.save(`Data_Warga_RT010_${Date.now()}.pdf`); showToast("✅ PDF diunduh!"); } catch(e) { showToast("Gagal.", true); } };
         window.exportWargaData = async function() { if (!firebaseReady) return; showToast("Menyiapkan..."); try { const s = await getDocs(collection(db, 'artifacts', appId, 'warga_master')); if (s.empty) return showToast("Tidak ada data.", true); let csv = "Nama,Blok,No,Status Rumah,Jumlah Jiwa\n"; s.forEach(d => { const u = d.data(); csv += `${(u.nama || '-').replace(/,/g, '')},${u.blok || '-'},${u.no || '-'},${u.status_rumah || 'HUNI'},${u.jumlah_jiwa || 0}\n`; }); const b = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const l = document.createElement("a"); l.setAttribute("href", URL.createObjectURL(b)); l.setAttribute("download", `Data_Warga_RT010_${Date.now()}.csv`); document.body.appendChild(l); l.click(); document.body.removeChild(l); showToast("✅ CSV diunduh!"); } catch(e) { showToast("Gagal.", true); } };
 
         window.loadStatistik = async function() {
@@ -1359,7 +1731,7 @@
         function showAuthScreen() { const m = document.getElementById('mainAppContainer'); if (m) { m.classList.add('hidden'); m.classList.remove('flex'); } const a = document.getElementById('authContainer'); if (a) { a.classList.remove('hidden'); a.classList.add('flex'); } }
         function showAppScreen() {
             const a = document.getElementById('authContainer'); if (a) { a.classList.add('hidden'); a.classList.remove('flex'); } const m = document.getElementById('mainAppContainer'); if (m) { m.classList.remove('hidden'); m.classList.add('flex'); }
-            const isK = window.currentUserData && window.currentUserData.role === 'Ketua RT'; const isRT = isAdminRole();
+            const isRT = isAdminRole();
             document.body.classList.toggle('role-admin', !!isRT);
             document.body.classList.toggle('role-warga', !isRT);
             const ba = document.getElementById('navAdminBtn'); if (ba) { if (isRT) { ba.classList.remove('hidden'); ba.classList.add('flex'); } else { ba.classList.add('hidden'); ba.classList.remove('flex'); } }
@@ -1602,7 +1974,6 @@
             ['Warga','Laporan','Pekerja','Tamu','Booking','Sos','Pengumuman'].forEach(x => { const v = document.getElementById('admView' + x), b = document.getElementById('tabAdm' + x); if (x.toLowerCase() === t) { if (v) { v.classList.remove('hidden'); v.classList.add('block'); } if (b) b.className = "py-2 text-[10px] sm:text-xs font-bold bg-emerald-100 text-emerald-700 rounded-xl shadow-sm transition-all"; } else { if (v) { v.classList.add('hidden'); v.classList.remove('block'); } if (b) b.className = "py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all"; } });
             if (t === 'warga') loadAdminWargaList(); else if (t === 'laporan') loadAdminLaporan(); else if (t === 'pengumuman') loadAdminPengumuman(); else if (t === 'tamu') loadBukuTamu(); else if (t === 'booking') loadAdminBookingList(); else if (t === 'pekerja') loadAdminPekerjaList();
         };
-        window.toggleAdminAddWarga = function (show) { const f = document.getElementById('adminAddWargaForm'), b = document.getElementById('btnToggleAddWarga'); if (!f || !b) return; if (show) { f.classList.remove('hidden'); b.classList.add('hidden'); } else { f.classList.add('hidden'); b.classList.remove('hidden'); f.reset(); const p = document.getElementById('admNewPass'); if (p) p.value = 'warga010'; } };
 
         async function createAccountForMaster(docId, blok, no, nama) {
             const uname = prompt(`Username untuk ${nama} (Blok ${blok} ${no}):`, nama.toLowerCase().split(' ')[0].replace(/[^a-z0-9]/gi, ''));
@@ -1701,11 +2072,6 @@
             const inp = raw.toLowerCase(), nI = normalizeSearch(raw).toLowerCase();
             document.querySelectorAll('.warga-card').forEach(card => { const s = (card.dataset.search || '').toLowerCase(); const t = card.innerText.toLowerCase(); const m = s.includes(inp) || s.includes(nI) || t.includes(inp) || t.includes(nI); card.style.display = m ? 'flex' : 'none'; });
         };
-        window.openDetailWargaModal = async function(uid) {
-            const m = document.getElementById('detailWargaModal'), c = document.getElementById('detailWargaContent'); if (!m || !c) return;
-            c.innerHTML = 'Loading...'; m.classList.remove('hidden');
-            try { const snap = await getDoc(doc(db, 'artifacts', appId, 'users', uid)); if (snap.exists()) { const u = snap.data(); c.innerHTML = `<p><b>Nama:</b> ${escapeHtml(u.nama || '-')}</p><p><b>Blok:</b> ${escapeHtml(u.blok || '-')}/${escapeHtml(u.no || '-')}</p><p><b>Role:</b> ${escapeHtml(u.role || 'Warga')}</p><p><b>Email:</b> ${escapeHtml(u.email || '-')}</p><p><b>HP:</b> ${escapeHtml(u.hp || '-')}</p>`; } } catch(e) { c.innerHTML = 'Gagal.'; }
-        };
         window.hapusLaporanWarga = async (uid, did, type) => { if (!confirm("Yakin hapus?")) return; try { if (type === 'laporan') await deleteDoc(doc(db, 'artifacts', appId, 'users', uid, 'history', did)); else await deleteDoc(doc(db, 'artifacts', appId, 'users', uid)); showToast("Dihapus."); if (type === 'laporan') loadAdminLaporan(); else { loadAdminWargaList(); loadStatistik(); } } catch (e) {} };
 
         async function loadAdminLaporan() {
@@ -1727,9 +2093,6 @@
         window.postPengumuman = async function () { try { const je = document.getElementById('pengJudul'), ie = document.getElementById('pengIsi'); const j = je?.value.trim(), i = ie?.value.trim(); if (!j || !i) return showToast("Judul & isi wajib.", true); await addDoc(collection(db, 'artifacts', appId, 'pengumuman'), { judul: j, isi: i, timestamp: Date.now() }); showToast("Diposting."); if (je) je.value = ''; if (ie) ie.value = ''; loadAdminPengumuman(); loadPengumumanUtama(); loadMarquee(); } catch (e) {} };
         window.hapusPengumuman = async function (id) { try { await deleteDoc(doc(db, 'artifacts', appId, 'pengumuman', id)); showToast("Dihapus."); loadAdminPengumuman(); loadPengumumanUtama(); loadMarquee(); } catch (e) {} };
         window.loadPengumumanUtama = async function () { try { const s = await getDocs(query(collection(db, 'artifacts', appId, 'pengumuman'), orderBy('timestamp', 'desc'))); const pc = document.getElementById('pengumumanContainer'); if (!s.empty) { const d = s.docs[0].data(); const pj = document.getElementById('pengumumanJudul'), pi = document.getElementById('pengumumanIsi'); if (pj) pj.innerText = d.judul; if (pi) pi.innerText = d.isi; if (pc) pc.classList.remove('hidden'); } else if (pc) pc.classList.add('hidden'); } catch (e) {} };
-        window.loadAdminInventaris = async function () { const cont = document.getElementById('adminInventarisList'); if (!cont) return; cont.innerHTML = 'Loading...'; try { const s = await getDocs(query(collection(db, 'artifacts', appId, 'inventaris'), orderBy('timestamp', 'asc'))); let h = ''; s.forEach(d => { h += `<div class="p-2 border rounded-xl bg-white flex justify-between items-center mb-2"><div class="min-w-0"><h4 class="font-bold text-sm truncate">${escapeHtml(d.data().nama)}</h4><p class="text-[10px] text-slate-500 truncate">${escapeHtml(d.data().detail || '-')}</p></div><button onclick="hapusInventaris('${d.id}')" class="text-red-500 w-8 h-8 flex items-center justify-center bg-red-50 rounded-lg shrink-0"><i class="fa-solid fa-trash text-xs"></i></button></div>`; }); cont.innerHTML = h || '<p class="text-xs text-slate-500 text-center">Belum ada.</p>'; } catch(e) { cont.innerHTML = 'Gagal.'; } };
-        window.tambahInventaris = async function () { const ne = document.getElementById('invBaruNama'), de = document.getElementById('invBaruDetail'); const n = ne?.value.trim(), d = de?.value.trim() || ''; if (!n) return showToast("Nama wajib.", true); try { await addDoc(collection(db, 'artifacts', appId, 'inventaris'), { nama: n, detail: d, timestamp: Date.now() }); showToast("Ditambah."); if (ne) ne.value = ''; if (de) de.value = ''; loadAdminInventaris(); } catch(e) {} };
-        window.hapusInventaris = async function (id) { if (!confirm("Hapus barang?")) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'inventaris', id)); showToast("Dihapus."); loadAdminInventaris(); } catch(e) {} };
         window.loadInventarisWarga = async function () { const cont = document.getElementById('inventarisDynamicList'); if (!cont) return; cont.innerHTML = 'Loading...'; try { const s = await getDocs(query(collection(db, 'artifacts', appId, 'inventaris'), orderBy('timestamp', 'asc'))); let h = '', i = 1; s.forEach(d => { const data = d.data(); h += `<label class="flex items-center justify-between p-3 border rounded-xl cursor-pointer hover:bg-emerald-50 transition bg-white"><div class="min-w-0 flex-1"><span class="font-medium text-sm text-slate-800 block truncate">${i}. ${escapeHtml(data.nama)}</span>${data.detail ? `<span class="text-[10px] text-slate-500 mt-0.5 block truncate">${escapeHtml(data.detail)}</span>` : ''}</div><input type="checkbox" value="${escapeHtml(data.nama)}" class="inv-checkbox shrink-0 ml-2"></label>`; i++; }); cont.innerHTML = h || '<p class="text-sm text-center text-slate-500 py-4">Belum ada barang.</p>'; } catch(e) { cont.innerHTML = 'Gagal.'; } };
 
         let editCtx = { masterId: null, bulanKey: null, status: 'BL', nominal: 0, custom: false, namaWarga: '' };
@@ -1824,11 +2187,7 @@
                 if (editCtx.custom && editCtx.nominal !== preset) iuranNominal[editCtx.bulanKey] = editCtx.nominal;
                 else delete iuranNominal[editCtx.bulanKey];
                 const finalNom = STATUS_CODES[editCtx.status]?.isLunas ? (editCtx.custom ? editCtx.nominal : preset) : 0;
-                await updateDoc(doc(db, 'artifacts', appId, 'warga_master', editCtx.masterId), {
-                    [`iuran.${editCtx.bulanKey}`]: editCtx.status,
-                    iuranNominal: iuranNominal,
-                    updatedAt: Date.now()
-                });
+                await updateDoc(doc(db, 'artifacts', appId, 'warga_master', editCtx.masterId), { [`iuran.${editCtx.bulanKey}`]: editCtx.status, iuranNominal: iuranNominal, updatedAt: Date.now() });
                 const bl = `${w.blok || '-'} ${w.no || '-'}`;
                 const ket = `Iuran ${editCtx.namaWarga} (${bl}) - ${editCtx.bulanKey}`;
                 const qk = query(collection(db, 'artifacts', appId, 'kas'));
@@ -1837,12 +2196,7 @@
                 sk.forEach(d => { const k = d.data(); if (k.keterangan === ket && k.jenis === 'masuk') ext = d.id; });
                 if (finalNom > 0) {
                     if (ext) await deleteDoc(doc(db, 'artifacts', appId, 'kas', ext));
-                    await addDoc(collection(db, 'artifacts', appId, 'kas'), {
-                        tipeDoc: 'transaksi', jenis: 'masuk', nominal: finalNom,
-                        keterangan: ket, kategori: 'Iuran',
-                        oleh: (window.currentUserData && window.currentUserData.nama) || 'Admin',
-                        timestamp: Date.now()
-                    });
+                    await addDoc(collection(db, 'artifacts', appId, 'kas'), { tipeDoc: 'transaksi', jenis: 'masuk', nominal: finalNom, keterangan: ket, kategori: 'Iuran', oleh: (window.currentUserData && window.currentUserData.nama) || 'Admin', timestamp: Date.now() });
                 } else if (ext) await deleteDoc(doc(db, 'artifacts', appId, 'kas', ext));
                 tutupEditSel();
                 showToast(`${bl} ${editCtx.bulanKey} → ${editCtx.status}${editCtx.custom ? ' (' + formatRupiah(editCtx.nominal) + ')' : ''}`);
@@ -1902,7 +2256,6 @@
             else { const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream; if (iOS) alert("iPhone: Share → Add to Home Screen → Add"); else alert("Android: Titik tiga → Install App"); }
         };
         window.hidePwaBanner = () => { document.getElementById('pwaBanner')?.classList.add('hidden'); localStorage.setItem('pwaDismissed', 'true'); };
-        window.refreshAppUpdate = function () { const b = document.getElementById('updateBanner'); if (b) b.classList.add('hidden'); if (pendingUpdateWorker) { pendingUpdateWorker.postMessage({ action: 'skipWaiting' }); setTimeout(() => window.location.reload(), 600); } else window.location.reload(); };
 
         if ('serviceWorker' in navigator) { window.addEventListener('load', () => { if (swRegistered) return; swRegistered = true; navigator.serviceWorker.register('/sw.js').then(reg => { reg.addEventListener('updatefound', () => { const nw = reg.installing; if (!nw) return; nw.addEventListener('statechange', () => { if (nw.state === 'installed' && navigator.serviceWorker.controller) { pendingUpdateWorker = nw; localStorage.setItem('rt10_need_update', 'true'); loadMarquee(); } }); }); }).catch(err => console.warn('[SW]', err)); }); }
     </script>
