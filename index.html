@@ -107,8 +107,8 @@
     </div>
 
     <!-- POPUP WAJIB INSTALL -->
-    <div id="wajibInstallModal" class="hidden fixed inset-0 bg-slate-950/80 z-[150] flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-sm rounded-3xl p-7 text-center relative shadow-2xl animate-fade-slide-up">
+    <div id="wajibInstallModal" class="hidden fixed inset-0 bg-slate-950/80 z-[150] flex items-center justify-center p-4" onclick="document.getElementById('wajibInstallModal').classList.add('hidden')">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-7 text-center relative shadow-2xl animate-fade-slide-up" onclick="event.stopPropagation()">
             <img src="1000531885.png" onerror="this.src='/icon-192.png';" class="w-20 h-20 mx-auto rounded-2xl object-cover shadow-md mb-4">
             <h3 class="text-xl font-bold text-slate-900 mb-2">Install Aplikasi Sekarang</h3>
             <p class="text-sm text-slate-600 mb-2">Aplikasi ini <b>sangat ringan</b>, tidak akan membebani HP Anda. Dapat diakses offline.</p>
@@ -168,8 +168,8 @@
     </div>
 
     <!-- MODAL CROP FOTO PROFIL -->
-    <div id="cropModal" class="hidden fixed inset-0 bg-slate-950/90 z-[160] flex flex-col items-center justify-center p-4">
-        <div class="bg-white rounded-2xl p-4 w-full max-w-sm">
+    <div id="cropModal" class="hidden fixed inset-0 bg-slate-950/90 z-[160] flex flex-col items-center justify-center p-4" onclick="batalCrop()">
+        <div class="bg-white rounded-2xl p-4 w-full max-w-sm" onclick="event.stopPropagation()">
             <h3 class="font-bold text-slate-800 mb-3 text-center">Sesuaikan Foto Profil</h3>
             <div class="relative w-full aspect-square bg-slate-200 rounded-full overflow-hidden mb-4" id="cropContainer">
                 <img id="cropImage" src="" class="absolute top-0 left-0 w-full h-full object-contain cursor-move" style="transform-origin: center;">
@@ -191,8 +191,8 @@
     </div>
 
     <!-- NOTIFIKASI PROMPT -->
-    <div id="notifPromptModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-sm rounded-3xl p-7 text-center relative shadow-2xl animate-fade-slide-up">
+    <div id="notifPromptModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4" onclick="tutupPromptNotif()">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-7 text-center relative shadow-2xl animate-fade-slide-up" onclick="event.stopPropagation()">
             <button onclick="tutupPromptNotif()" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
             <div class="relative w-20 h-20 mx-auto mb-5"><div class="relative w-20 h-20 bg-emerald-600 text-white rounded-full flex items-center justify-center text-3xl shadow-lg"><i class="fa-solid fa-bell animate-bounce"></i></div></div>
             <h3 class="text-xl font-bold text-slate-900 mb-2">Aktifkan Notifikasi</h3>
@@ -214,8 +214,8 @@
     </div>
 
     <!-- MODAL INPUT KAS PENGELUARAN -->
-    <div id="modalInputKas" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up">
+    <div id="modalInputKas" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4" onclick="document.getElementById('modalInputKas').classList.add('hidden')">
+        <div class="bg-white w-full max-w-md rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('modalInputKas').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-lg font-bold text-slate-800 mb-4">Input Pengeluaran Kas</h3>
             <form id="formInputKas" onsubmit="tambahTransaksiKasForm(event)" class="space-y-3">
@@ -248,8 +248,8 @@
     </div>
 
     <!-- MODAL DETAIL WARGA (KETUA RT ONLY) -->
-    <div id="detailWargaModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up max-h-[90vh] overflow-y-auto">
+    <div id="detailWargaModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4" onclick="document.getElementById('detailWargaModal').classList.add('hidden')">
+        <div class="bg-white w-full max-w-md rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('detailWargaModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-lg font-bold text-slate-800 mb-4">Detail Data Keluarga</h3>
             <div id="detailWargaContent" class="space-y-3"></div>
@@ -257,8 +257,8 @@
     </div>
 
     <!-- MODAL EDIT WARGA (ADMIN) -->
-    <div id="editWargaModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-sm rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up">
+    <div id="editWargaModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4" onclick="document.getElementById('editWargaModal').classList.add('hidden')">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('editWargaModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-lg font-bold text-slate-800 mb-4">Edit Data Keluarga (Rumah)</h3>
             <p class="text-xs text-slate-500 mb-3">Perubahan di sini akan disinkronkan ke semua akun di rumah ini.</p>
@@ -279,8 +279,8 @@
     </div>
 
     <!-- MODAL EDIT PEKERJA -->
-    <div id="editPekerjaModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-sm rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up max-h-[90vh] overflow-y-auto">
+    <div id="editPekerjaModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4" onclick="document.getElementById('editPekerjaModal').classList.add('hidden')">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('editPekerjaModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="text-lg font-bold text-slate-800 mb-4">Edit Data Pekerja</h3>
             <form id="editPekerjaForm" onsubmit="simpanEditPekerja(event)" class="space-y-3">
@@ -297,7 +297,6 @@
     </div>
 
     <!-- ============================== AUTHENTICATION ============================== -->
-    <!-- PERBAIKAN: overflow-y-auto ditambahkan, items-start agar tidak terpotong di HP -->
     <div id="authContainer" class="w-full h-[100dvh] bg-slate-50 relative flex flex-col items-center justify-start sm:justify-center overflow-y-auto p-4 sm:p-6 py-10">
         <div class="w-full max-w-4xl bg-white rounded-none sm:rounded-[2rem] sm:shadow-2xl flex flex-col md:flex-row overflow-hidden relative">
             <div class="hidden md:flex md:w-1/2 bg-emerald-600 p-10 flex-col justify-center items-center text-center relative overflow-hidden">
@@ -768,6 +767,7 @@
                         <div class="hidden md:flex flex-col gap-2 w-full md:w-auto md:self-end mt-4 md:mt-0">
                             <button onclick="switchTab('data')" class="w-full md:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-xl flex justify-center items-center gap-2 transition text-sm shadow-sm"><i class="fa-solid fa-user-pen"></i> Edit Data</button>
                             <button onclick="handleLogout()" class="w-full md:w-auto bg-red-50 hover:bg-red-100 text-red-600 font-bold py-2 px-6 rounded-xl border border-red-200 flex justify-center items-center gap-2 transition text-sm shadow-sm"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
+                            <button onclick="clearAllAppCache()" class="w-full md:w-auto bg-slate-800 hover:bg-slate-900 text-white font-bold py-2 px-6 rounded-xl flex justify-center items-center gap-2 transition text-sm shadow-sm mt-2"><i class="fa-solid fa-broom"></i> Hapus Cache & Perbarui</button>
                         </div>
                     </div>
 
@@ -784,6 +784,7 @@
                             </div>
                         </div>
                         <button onclick="switchTab('data')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition text-sm shadow-sm"><i class="fa-solid fa-user-pen"></i> Edit Data Saya</button>
+                        <button onclick="clearAllAppCache()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition text-sm shadow-sm mt-2"><i class="fa-solid fa-broom"></i> Hapus Cache & Perbarui</button>
                     </div>
                 </div>
             </div>
@@ -919,14 +920,15 @@
                     <!-- Content overlap -->
                     <div class="relative max-w-4xl mx-auto w-full -mt-4 rounded-t-3xl bg-slate-50 min-h-[60vh]">
                         <div class="sticky top-0 z-20 bg-slate-50 pt-4 pb-3 px-4 rounded-t-3xl">
+                            <!-- PERBAIKAN: Tagihan Warga kiri, Riwayat Kas kanan -->
                             <div id="kasTabsContainer" class="flex bg-slate-200 p-1 rounded-xl shadow-sm">
-                                <button onclick="switchKasTab('riwayat')" id="tabKasRiwayat" class="flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all">Riwayat Kas</button>
-                                <button onclick="switchKasTab('tagihan')" id="tabKasTagihan" class="hidden flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all">Tagihan Warga</button>
+                                <button onclick="switchKasTab('tagihan')" id="tabKasTagihan" class="flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all">Tagihan Warga</button>
+                                <button onclick="switchKasTab('riwayat')" id="tabKasRiwayat" class="flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all">Riwayat Kas</button>
                             </div>
                         </div>
 
                         <div class="px-4 pb-6">
-                            <div id="kasRiwayatContainer">
+                            <div id="kasRiwayatContainer" class="hidden">
                                 <div id="kasFilterContainer" class="flex justify-between items-center mb-3">
                                     <div class="flex bg-slate-100 p-1 rounded-lg flex-1 mr-2">
                                         <button onclick="filterKas('semua')" id="tabKasSemua" class="flex-1 py-1.5 text-[10px] font-bold bg-white shadow-sm rounded-md text-emerald-600 transition-all">Semua</button>
@@ -938,7 +940,7 @@
                                 <div id="kasWargaListContainer" class="space-y-4 pb-10"></div>
                             </div>
 
-                            <div id="kasTagihanContainer" class="hidden">
+                            <div id="kasTagihanContainer">
                                 <div class="mb-3 flex gap-2">
                                     <select id="kasBulanTagihan" onchange="loadKasTagihanWarga()" class="flex-1 px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none"></select>
                                     <div class="relative flex-1">
@@ -1944,7 +1946,7 @@
 
         /* KAS & PENGELUARAN RUTIN */
         let currentKasFilter = 'semua'; let globalKasList = [];
-        let currentKasView = 'riwayat';
+        let currentKasView = 'tagihan'; // Default sekarang Tagihan
 
         window.switchKasTab = function(tipe) {
             currentKasView = tipe;
@@ -1953,19 +1955,19 @@
             const contRiwayat = document.getElementById('kasRiwayatContainer');
             const contTagihan = document.getElementById('kasTagihanContainer');
 
-            if(tipe === 'riwayat') {
-                btnRiwayat.className = "flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all";
-                btnTagihan.className = "flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all";
-                contRiwayat.classList.remove('hidden');
-                contTagihan.classList.add('hidden');
-                loadBukuKas();
-            } else {
+            if(tipe === 'tagihan') {
                 btnTagihan.className = "flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all";
                 btnRiwayat.className = "flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all";
                 contTagihan.classList.remove('hidden');
                 contRiwayat.classList.add('hidden');
                 initDropdownIuran();
                 loadKasTagihanWarga();
+            } else {
+                btnRiwayat.className = "flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all";
+                btnTagihan.className = "flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all";
+                contRiwayat.classList.remove('hidden');
+                contTagihan.classList.add('hidden');
+                loadBukuKas();
             }
         };
 
@@ -2003,10 +2005,6 @@
                     } else {
                         const grp = houseGroups.get(hKey);
                         grp.users.push(d.id);
-                        // Pilih representasi nama dari Kepala Keluarga jika ada
-                        if (u.status_keluarga === 'Kawin' && u.nama_suami && !grp.nama.includes(u.nama_suami)) {
-                            // Logika opsional untuk menampilkan nama KK
-                        }
                     }
                 });
 
@@ -2573,6 +2571,13 @@
         async function loadMarquee() {
             const el = document.getElementById('marqueeContent');
             if (!el || !firebaseReady) return;
+            
+            // CEK INFO UPDATE
+            if (pendingUpdateWorker || localStorage.getItem('rt10_need_update') === 'true') {
+                el.innerHTML = `<span class="text-red-600 font-extrabold animate-pulse bg-yellow-200 px-2 py-1 rounded">⚠️ APLIKASI PERLU UPDATE! Buka Menu Profil lalu klik "Hapus Cache & Perbarui". ⚠️</span>`;
+                return;
+            }
+
             try {
                 const sPeng = await getDocs(query(collection(db, 'artifacts', appId, 'pengumuman'), orderBy('timestamp', 'desc')));
                 if (!sPeng.empty) {
@@ -3177,7 +3182,7 @@
                     document.getElementById('kasFilterContainer').classList.remove('hidden');
                     currentKasFilter = 'semua';
                 }
-                switchKasTab('riwayat'); 
+                switchKasTab('tagihan'); // Ubah default ke tagihan
             }
             else if (t === 'inventaris') { show('inventarisView', 'flex'); prefillFormData(); loadInventarisWarga(); }
             else if (t === 'sos') { show('sosView', 'flex'); }
@@ -3219,6 +3224,44 @@
             }
         });
 
+        // FITUR HAPUS CACHE TOTAL
+        window.clearAllAppCache = async function() {
+            if (!confirm("PERINGATAN!\n\nAnda akan menghapus seluruh cache dan memuat ulang aplikasi. Pastikan tidak ada data yang sedang diisi.\n\nLanjutkan?")) return;
+            
+            showToast("Membersihkan cache...", false);
+            
+            try {
+                // 1. Unregister Service Workers
+                if ('serviceWorker' in navigator) {
+                    const regs = await navigator.serviceWorker.getRegistrations();
+                    for (let reg of regs) {
+                        await reg.unregister();
+                    }
+                }
+                
+                // 2. Hapus semua Cache Storage
+                if ('caches' in window) {
+                    const cacheNames = await caches.keys();
+                    for (let name of cacheNames) {
+                        await caches.delete(name);
+                    }
+                }
+
+                // 3. Hapus Local Storage & Session Storage (Kecuali kredensial fingerprint agar tidak perlu login ulang manual)
+                // Tapi lebih aman dibersihkan total agar benar-benar fresh
+                localStorage.clear();
+                sessionStorage.clear();
+
+                // 4. Force Reload
+                setTimeout(() => {
+                    window.location.reload();
+                }, 800);
+            } catch (e) {
+                console.error(e);
+                showToast("Gagal membersihkan cache, coba tutup manual.", true);
+            }
+        };
+
         // PWA INSTALL LOGIC
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -3259,7 +3302,7 @@
             window.addEventListener('load', () => {
                 if (swRegistered) return; swRegistered = true;
                 navigator.serviceWorker.register('/sw.js').then(reg => {
-                    reg.addEventListener('updatefound', () => { const newWorker = reg.installing; if (!newWorker) return; newWorker.addEventListener('statechange', () => { if (newWorker.state === 'installed' && navigator.serviceWorker.controller) { pendingUpdateWorker = newWorker; const banner = document.getElementById('updateBanner'); if (banner) banner.classList.remove('hidden'); } }); });
+                    reg.addEventListener('updatefound', () => { const newWorker = reg.installing; if (!newWorker) return; newWorker.addEventListener('statechange', () => { if (newWorker.state === 'installed' && navigator.serviceWorker.controller) { pendingUpdateWorker = newWorker; localStorage.setItem('rt10_need_update', 'true'); loadMarquee(); } }); });
                 }).catch(err => console.warn("[SW register] Pastikan file sw.js ada.", err));
             });
         }
