@@ -297,7 +297,8 @@
     </div>
 
     <!-- ============================== AUTHENTICATION ============================== -->
-    <div id="authContainer" class="w-full h-full bg-slate-50 relative flex flex-col items-center justify-center overflow-y-auto p-4 sm:p-6">
+    <!-- PERBAIKAN: overflow-y-auto ditambahkan, items-start agar tidak terpotong di HP -->
+    <div id="authContainer" class="w-full h-[100dvh] bg-slate-50 relative flex flex-col items-center justify-start sm:justify-center overflow-y-auto p-4 sm:p-6 py-10">
         <div class="w-full max-w-4xl bg-white rounded-none sm:rounded-[2rem] sm:shadow-2xl flex flex-col md:flex-row overflow-hidden relative">
             <div class="hidden md:flex md:w-1/2 bg-emerald-600 p-10 flex-col justify-center items-center text-center relative overflow-hidden">
                 <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
@@ -330,7 +331,8 @@
                     <p id="regPrompt" class="text-center text-sm text-slate-600 mt-4">Belum punya akun? <button type="button" onclick="switchAuthView('register')" class="text-emerald-600 font-bold">Daftar Warga</button></p>
                 </form>
 
-                <form id="registerForm" onsubmit="handleRegister(event)" class="w-full space-y-4 fade-transition hidden absolute inset-0 bg-white p-6 sm:p-10 overflow-y-auto z-20">
+                <!-- PERBAIKAN: Hapus absolute inset-0 agar form tidak terpotong -->
+                <form id="registerForm" onsubmit="handleRegister(event)" class="w-full space-y-4 fade-transition hidden bg-white p-2 sm:p-4 z-20 mt-4 relative">
                     <div class="flex items-center gap-3 mb-6 sticky top-0 bg-white py-2 z-10 border-b border-slate-100"><button type="button" onclick="switchAuthView('login')" class="w-9 h-9 bg-slate-100 rounded-full"><i class="fa-solid fa-arrow-left text-slate-600"></i></button><h2 class="text-lg font-bold text-slate-800">Registrasi Warga</h2></div>
                     <div class="bg-blue-50 border border-blue-200 p-3 rounded-xl text-[11px] text-blue-800 leading-relaxed mb-2"><i class="fa-solid fa-circle-info mr-1"></i> <b>Penting:</b> 1 Akun untuk 1 Anggota Keluarga. Data Iuran & Demografi akan digabung otomatis berdasarkan Blok & No Rumah.</div>
                     <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Nama Lengkap</label><input type="text" id="regNama" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"></div>
@@ -344,10 +346,11 @@
                     <button type="submit" id="btnRegister" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl mt-4 shadow-lg">Daftar Sekarang</button>
                 </form>
 
-                <form id="forgotForm" onsubmit="handleForgot(event)" class="w-full space-y-4 fade-transition hidden absolute inset-0 bg-white p-6 sm:p-10 z-20">
+                <!-- PERBAIKAN: Lupa Password pakai Email / No WA -->
+                <form id="forgotForm" onsubmit="handleForgot(event)" class="w-full space-y-4 fade-transition hidden bg-white p-2 sm:p-4 z-20 mt-4 relative">
                     <div class="flex items-center gap-3 mb-6"><button type="button" onclick="switchAuthView('login')" class="w-9 h-9 bg-slate-100 rounded-full"><i class="fa-solid fa-arrow-left text-slate-600"></i></button><h2 class="text-lg font-bold text-slate-800">Lupa Password</h2></div>
-                    <p class="text-sm text-slate-600 mb-4">Masukkan Email / Akun yang terdaftar untuk melihat password Anda.</p>
-                    <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Email / Akun</label><input type="text" id="forgotEmail" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"></div>
+                    <p class="text-sm text-slate-600 mb-4">Masukkan <b>Email</b> atau <b>No. WhatsApp</b> yang terdaftar untuk melihat password Anda.</p>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Email / No. WhatsApp</label><input type="text" id="forgotEmail" required placeholder="Contoh: budi atau 081234..." class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"></div>
                     <button type="submit" id="btnForgot" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg">Tampilkan Password</button>
                 </form>
             </div>
@@ -2532,8 +2535,6 @@
                     if (!houseGroups.has(hKey)) {
                         houseGroups.set(hKey, u);
                     }
-                    // Opsional: Jika data di rumah ini kosong (0), kita bisa timpa dengan data dari anggota keluarga lain yang lebih lengkap. 
-                    // Tapi sesuai kesepakatan, Data Pemilik Utama (pertama kali masuk Map) yang dipakai.
                 });
 
                 let totalRumah = houseGroups.size;
@@ -2546,13 +2547,11 @@
                     if (u.status_keluarga === 'Kawin' || u.status_keluarga === 'Sudah Berkeluarga') {
                         if (u.nama_suami) totalLaki++;
                         if (u.nama_istri) totalPerempuan++;
-                        // Jika kosong dua-duanya, asumsikan 1 KK = 1 L + 1 P sebagai fallback
                         if (!u.nama_suami && !u.nama_istri) { totalLaki++; totalPerempuan++; }
                     } else {
                         if (u.jenis_kelamin === 'Laki-laki') totalLaki++;
                         else if (u.jenis_kelamin === 'Perempuan') totalPerempuan++;
                         else {
-                            // Fallback jika gender kosong
                             if (u.nama_suami) totalLaki++;
                             if (u.nama_istri) totalPerempuan++;
                             if (!u.nama_suami && !u.nama_istri) totalLaki++;
@@ -2733,12 +2732,58 @@
             catch (err) { showToast("Gagal mendaftar: akun mungkin sudah terdaftar.", true); }
             finally { b.disabled = false; }
         };
+        
+        // PERBAIKAN: LOGIKA LUPA PASSWORD VIA EMAIL ATAU NO WA
         window.handleForgot = async function (e) {
             e.preventDefault(); if (!firebaseReady) return showToast("Aplikasi belum siap.", true);
-            const em = document.getElementById('forgotEmail')?.value.trim(); const btn = document.getElementById('btnForgot'); if (!em) return; if (btn) { btn.disabled = true; btn.innerText = "Mencari..."; }
-            try { const s = await getDocs(collection(db, 'artifacts', appId, 'users')); let foundPass = null; let foundName = null; s.forEach(d => { const u = d.data(); const cleanEmail = u.email ? u.email.replace(/[^a-z0-9]/gi, '') : ''; const cleanInput = em.replace(/[^a-z0-9]/gi, ''); if ((u.email && u.email.toLowerCase() === em.toLowerCase()) || (cleanEmail && cleanEmail === cleanInput) || (u.email && u.email.toLowerCase() === em.toLowerCase() + '@mabupark.local')) { foundPass = u.password; foundName = u.nama; } }); if (foundPass) { alert(`Halo ${foundName || 'Warga'},\n\nPassword Anda saat ini adalah: ${foundPass}\n\nMohon simpan dengan baik.`); showToast("Password ditemukan!"); switchAuthView('login'); } else { showToast("Email tidak ditemukan atau password tidak tersimpan. Hubungi Pengurus RT.", true); } }
-            catch (err) { showToast("Gagal mencari data.", true); } finally { if (btn) { btn.disabled = false; btn.innerText = "Tampilkan Password"; } }
+            const input = document.getElementById('forgotEmail')?.value.trim(); 
+            const btn = document.getElementById('btnForgot'); 
+            if (!input) return; 
+            if (btn) { btn.disabled = true; btn.innerText = "Mencari..."; }
+            
+            try { 
+                const s = await getDocs(collection(db, 'artifacts', appId, 'users')); 
+                let foundPass = null; 
+                let foundName = null; 
+                
+                const cleanInput = input.replace(/[^a-z0-9]/gi, '').toLowerCase();
+                const waInput = formatWaNumber(input); // format ke 628...
+
+                s.forEach(d => { 
+                    const u = d.data(); 
+                    const userEmail = u.email ? u.email.toLowerCase() : '';
+                    const cleanEmail = userEmail.replace(/[^a-z0-9]/gi, '');
+                    const userHp = u.hp ? String(u.hp) : '';
+                    const waHp = formatWaNumber(userHp);
+
+                    // Cek kecocokan Email (termasuk format mabupark.local)
+                    const matchEmail = (userEmail === input.toLowerCase()) || (cleanEmail === cleanInput) || (userEmail === input.toLowerCase() + '@mabupark.local');
+                    
+                    // Cek kecocokan No HP / WA
+                    const matchWa = (userHp === input) || (waHp === waInput) || (waHp.endsWith(waInput) && waInput.length > 8);
+
+                    if (matchEmail || matchWa) { 
+                        foundPass = u.password; 
+                        foundName = u.nama; 
+                    } 
+                }); 
+                
+                if (foundPass) { 
+                    alert(`Halo ${foundName || 'Warga'},\n\nPassword Anda saat ini adalah: ${foundPass}\n\nMohon simpan dengan baik.`); 
+                    showToast("Password ditemukan!"); 
+                    switchAuthView('login'); 
+                } else { 
+                    showToast("Email / No. WA tidak ditemukan. Hubungi Pengurus RT.", true); 
+                } 
+            }
+            catch (err) { 
+                console.error(err);
+                showToast("Gagal mencari data.", true); 
+            } finally { 
+                if (btn) { btn.disabled = false; btn.innerText = "Tampilkan Password"; } 
+            }
         };
+        
         window.handleLogout = async function () { try { unSubs.forEach(u => { try { u(); } catch (e) { } }); unSubs = []; await signOut(auth); showToast("Logout berhasil."); } catch (e) { showToast("Logout gagal.", true); } };
 
         window.handleDocPhoto = function (e, prevId, icoId, hidId) {
