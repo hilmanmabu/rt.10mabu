@@ -498,21 +498,25 @@
                     <div class="relative max-w-4xl mx-auto w-full -mt-6 rounded-t-3xl bg-slate-50 min-h-[60vh]">
                         <div class="sticky top-0 z-20 bg-slate-50 pt-4 pb-3 px-4 rounded-t-3xl">
                             <div class="flex bg-slate-200 p-1 rounded-xl shadow-sm">
-                                <button id="tabKasGaji" class="flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all">
-                                    <i class="fa-solid fa-money-bill-wave mr-1"></i> Gaji & Insentif
-                                </button>
+                                <button id="tabKasGaji" onclick="switchKasTab('gaji')" class="flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all">Gaji & Insentif</button>
+                                <button id="tabKasRiwayat" onclick="switchKasTab('riwayat')" class="flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all">Riwayat Kas</button>
                             </div>
                         </div>
                         <div class="px-4 pb-6">
-                            <div class="bg-white border border-slate-200 rounded-xl p-2.5 mb-3 flex items-center gap-1.5 shadow-sm">
-                                <select id="gajiBulanSelect" onchange="loadGajiInsentif()" class="flex-1 bg-slate-50 border border-slate-200 text-slate-800 text-xs font-bold rounded-lg px-2 py-2 outline-none focus:border-emerald-500">
-                                    <option value="Januari">Januari</option><option value="Februari">Februari</option><option value="Maret">Maret</option><option value="April">April</option><option value="Mei">Mei</option><option value="Juni">Juni</option><option value="Juli">Juli</option><option value="Agustus">Agustus</option><option value="September">September</option><option value="Oktober">Oktober</option><option value="November">November</option><option value="Desember">Desember</option>
-                                </select>
-                                <select id="gajiTahunSelect" onchange="loadGajiInsentif()" class="flex-1 bg-slate-50 border border-slate-200 text-slate-800 text-xs font-bold rounded-lg px-2 py-2 outline-none focus:border-emerald-500"></select>
-                                <button onclick="loadGajiInsentif()" class="w-9 h-9 bg-emerald-600 text-white rounded-lg flex items-center justify-center shadow-sm"><i class="fa-solid fa-refresh text-xs"></i></button>
+                            <div id="kasGajiContainer">
+                                <div class="bg-white border border-slate-200 rounded-xl p-2.5 mb-3 flex items-center gap-1.5 shadow-sm">
+                                    <select id="gajiBulanSelect" onchange="loadGajiInsentif()" class="flex-1 bg-slate-50 border border-slate-200 text-slate-800 text-xs font-bold rounded-lg px-2 py-2 outline-none focus:border-emerald-500">
+                                        <option value="Januari">Januari</option><option value="Februari">Februari</option><option value="Maret">Maret</option><option value="April">April</option><option value="Mei">Mei</option><option value="Juni">Juni</option><option value="Juli">Juli</option><option value="Agustus">Agustus</option><option value="September">September</option><option value="Oktober">Oktober</option><option value="November">November</option><option value="Desember">Desember</option>
+                                    </select>
+                                    <select id="gajiTahunSelect" onchange="loadGajiInsentif()" class="flex-1 bg-slate-50 border border-slate-200 text-slate-800 text-xs font-bold rounded-lg px-2 py-2 outline-none focus:border-emerald-500"></select>
+                                    <button onclick="loadGajiInsentif()" class="w-9 h-9 bg-emerald-600 text-white rounded-lg flex items-center justify-center shadow-sm"><i class="fa-solid fa-refresh text-xs"></i></button>
+                                </div>
+                                <div id="gajiListContainer" class="space-y-3">
+                                    <p class="text-center text-xs text-slate-400 py-6">Memuat data pekerja...</p>
+                                </div>
                             </div>
-                            <div id="gajiListContainer" class="space-y-3">
-                                <p class="text-center text-xs text-slate-400 py-6">Memuat data pekerja...</p>
+                            <div id="kasRiwayatContainer" class="hidden">
+                                <div id="kasWargaListContainer" class="space-y-4 pb-10"></div>
                             </div>
                         </div>
                     </div>
@@ -1162,7 +1166,28 @@
         window.hapusBooking = async function(id) { if(!confirm("Hapus pengajuan?")) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'booking', id)); loadAdminBookingList(); showToast("Dihapus."); } catch(e) {} };
 
         let currentKasFilter = 'semua', globalKasList = [];
-        window.switchKasTab = function(tipe) { loadGajiInsentif(); };
+        
+        window.switchKasTab = function(tipe) {
+            const tabGaji = document.getElementById('tabKasGaji');
+            const tabRiwayat = document.getElementById('tabKasRiwayat');
+            const contGaji = document.getElementById('kasGajiContainer');
+            const contRiwayat = document.getElementById('kasRiwayatContainer');
+            
+            if (tipe === 'gaji') {
+                if(tabGaji) tabGaji.className = "flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all";
+                if(tabRiwayat) tabRiwayat.className = "flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all";
+                if(contGaji) contGaji.classList.remove('hidden');
+                if(contRiwayat) contRiwayat.classList.add('hidden');
+                loadGajiInsentif();
+            } else {
+                if(tabRiwayat) tabRiwayat.className = "flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all";
+                if(tabGaji) tabGaji.className = "flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all";
+                if(contRiwayat) contRiwayat.classList.remove('hidden');
+                if(contGaji) contGaji.classList.add('hidden');
+                currentKasFilter = 'keluar';
+                loadBukuKas(); 
+            }
+        };
 
         window.loadKasTagihanWarga = async function() {
             const body = document.getElementById('kasTagihanMatrixBody'), sumCont = document.getElementById('kasTagihanSummary');
@@ -1358,7 +1383,7 @@
                 await Promise.all(tasks);
                 showToast(`✅ ${updates} status berhasil di-paste`);
                 if (document.getElementById('kasGlobalView') && !document.getElementById('kasGlobalView').classList.contains('hidden')) loadKasGlobalView();
-                if (document.getElementById('kasTagihanContainer') && !document.getElementById('kasTagihanContainer').classList.contains('hidden')) loadKasTagihanWarga();
+                if (document.getElementById('kasRiwayatContainer') && !document.getElementById('kasRiwayatContainer').classList.contains('hidden')) loadBukuKas();
             } catch(e) { showToast('Gagal paste: ' + e.message, true); }
         }
 
@@ -1433,7 +1458,6 @@
         };
 
         window.autofillKasKet = function() { const k = document.getElementById('formKasKategori').value; const i = document.getElementById('formKasKet'); if (k && k !== 'Lainnya') i.value = k; };
-        window.filterKas = function(tipe) { currentKasFilter = tipe; renderKasList(); };
         window.openModalInputKas = function() {
             const now = new Date();
             const y = now.getFullYear(), m = String(now.getMonth() + 1).padStart(2, '0'), d = String(now.getDate()).padStart(2, '0');
@@ -1474,27 +1498,31 @@
                 const sa = tm - tk;
                 const elS = document.getElementById('kasTotalSaldo'), elM = document.getElementById('kasTotalMasuk'), elK = document.getElementById('kasTotalKeluar'), elA = document.getElementById('kasSaldoAwal');
                 if (elS) elS.innerText = formatRupiah(sa); if (elM) elM.innerText = formatRupiah(tm); if (elK) elK.innerText = formatRupiah(tk); if (elA) elA.innerText = formatRupiah(0);
+                
+                const contRiwayat = document.getElementById('kasRiwayatContainer');
+                if (contRiwayat && !contRiwayat.classList.contains('hidden')) {
+                    renderKasList(fl.filter(x => x.jenis === 'keluar'));
+                }
             } catch (e) { console.error('loadBukuKas error:', e); }
         };
 
-        function renderKasList(list = globalKasList) {
+        function renderKasList(list) {
             const cont = document.getElementById('kasWargaListContainer'); if(!cont) return;
-            let fl = list; if (currentKasFilter === 'masuk') fl = list.filter(x => x.jenis === 'masuk'); else if (currentKasFilter === 'keluar') fl = list.filter(x => x.jenis === 'keluar');
-            if (fl.length === 0) { cont.innerHTML = '<p class="text-center text-xs text-slate-400 py-10">Belum ada transaksi.</p>'; return; }
+            if (list.length === 0) { cont.innerHTML = '<p class="text-center text-xs text-slate-400 py-10">Belum ada pengeluaran.</p>'; return; }
             const canEditKas = isAdminRole();
             let h = ''; let g = {};
-            fl.forEach(x => { const d = new Date(x.timestamp || Date.now()); const ds = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' }); if(!g[ds]) g[ds] = []; g[ds].push(x); });
+            list.forEach(x => { 
+                const d = new Date(x.timestamp || Date.now()); 
+                const ds = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' }); 
+                if(!g[ds]) g[ds] = []; 
+                g[ds].push(x); 
+            });
             for (const [lb, it] of Object.entries(g)) {
                 h += `<div class="mb-3"><h4 class="text-xs font-bold text-slate-800 mb-2 text-center tracking-wide">${lb}</h4><div class="space-y-2">`;
                 it.forEach(x => {
-                    const iM = x.jenis === 'masuk';
-                    const ac = iM ? 'text-emerald-500' : 'text-red-500';
-                    const ic = iM ? 'text-emerald-500 border-emerald-200' : 'text-red-500 border-red-200';
-                    const sg = iM ? '+' : '-';
-                    const icn = iM ? 'fa-arrow-down' : 'fa-arrow-up';
                     const ts = new Date(x.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-                    const editBtn = (canEditKas && !iM) ? `<button onclick="openEditKas('${x.id}')" class="w-7 h-7 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-100 shrink-0 ml-1" title="Edit"><i class="fa-solid fa-pen text-[10px]"></i></button>` : '';
-                    h += `<div class="bg-white p-3.5 rounded-2xl flex justify-between items-center shadow-sm border border-slate-100"><div class="flex items-center gap-3 min-w-0 flex-1"><div class="w-9 h-9 rounded-full border flex items-center justify-center shrink-0 ${ic}"><i class="fa-solid ${icn} text-xs"></i></div><div class="min-w-0 flex-1"><h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(x.keterangan)}</h4><p class="text-[10px] text-slate-500">${ts} WIB ${x.kategori ? '• ' + escapeHtml(x.kategori) : ''}</p></div></div><div class="flex items-center gap-1 shrink-0"><span class="font-bold text-sm ${ac}">${sg} ${formatRupiah(x.nominal)}</span>${editBtn}</div></div>`;
+                    const editBtn = canEditKas ? `<button onclick="openEditKas('${x.id}')" class="w-7 h-7 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-100 shrink-0 ml-1" title="Edit"><i class="fa-solid fa-pen text-[10px]"></i></button>` : '';
+                    h += `<div class="bg-white p-3.5 rounded-2xl flex justify-between items-center shadow-sm border border-slate-100"><div class="flex items-center gap-3 min-w-0 flex-1"><div class="w-9 h-9 rounded-full border flex items-center justify-center shrink-0 text-red-500 border-red-200"><i class="fa-solid fa-arrow-up text-xs"></i></div><div class="min-w-0 flex-1"><h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(x.keterangan)}</h4><p class="text-[10px] text-slate-500">${ts} WIB ${x.kategori ? '• ' + escapeHtml(x.kategori) : ''}</p></div></div><div class="flex items-center gap-1 shrink-0"><span class="font-bold text-sm text-red-500">- ${formatRupiah(x.nominal)}</span>${editBtn}</div></div>`;
                 });
                 h += `</div></div>`;
             }
@@ -1560,7 +1588,6 @@
                 let html = '';
                 pekerja.forEach(w => {
                     const rec = gajiMap.get(w.id);
-                    // ⚡ FIX: Menambahkan kurung ( ) agar tidak SyntaxError
                     const gajiPokok = (rec?.gajiPokok) ?? (Number(w.gaji) || 0);
                     const insentif = rec?.insentif ?? 0;
                     const status = rec?.status || 'BELUM';
@@ -1649,7 +1676,6 @@
             if (!w) return;
             const num = Number(value) || 0;
             const rec = currentGajiData.gaji.get(pekerjaId);
-            // ⚡ FIX: Menambahkan kurung ( )
             const gajiPokok = field === 'gajiPokok' ? num : ((rec?.gajiPokok) ?? (Number(w.gaji) || 0));
             const insentif = field === 'insentif' ? num : (rec?.insentif ?? 0);
             const totalKasbon = rec?.totalKasbon || 0;
@@ -2396,7 +2422,7 @@
                 show('kasView', 'flex');
                 const n = document.getElementById('navKasBtn');
                 if (n) { n.classList.remove('text-slate-400'); n.classList.add('text-emerald-600'); }
-                loadGajiInsentif();
+                switchKasTab('gaji');
             }
             else if (t === 'kas_global') { show('kasGlobalView', 'flex'); loadKasGlobalView(); }
             else if (t === 'inventaris') { show('inventarisView', 'flex'); prefillFormData(); loadInventarisWarga(); }
