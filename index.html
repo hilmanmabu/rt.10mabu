@@ -26,9 +26,26 @@
         .chat-bubble-wrapper.justify-end>div:last-child{background:#059669!important;box-shadow:0 4px 12px -4px rgba(5,150,105,.3)!important;border:none!important;cursor:pointer}
         .chat-bubble-wrapper.justify-start>div:last-child{box-shadow:0 2px 10px -2px rgba(15,23,42,.08)!important;border-color:#eef2f7!important;cursor:pointer}
         #kasWargaListContainer::-webkit-scrollbar{width:4px}#kasWargaListContainer::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
-        .cell-L{background:#059669!important;color:#fff!important}.cell-K{background:#eab308!important;color:#fff!important}.cell-BL{background:#f1f5f9!important;color:#64748b!important}
-        .cell-gratis{position:relative}.cell-gratis::after{content:'';position:absolute;top:1px;right:1px;width:4px;height:4px;border-radius:50%;background:#dc2626}
-        .matrix-blok-col{position:sticky;left:0;z-index:5;background:#fff}.matrix-header-blok{position:sticky;left:0;z-index:11;background:#059669}
+        /* ======= STATUS COLORS v5 ======= */
+        .cell-L{background:#059669!important;color:#fff!important}
+        .cell-LK{background:#10b981!important;color:#fff!important}
+        .cell-LA{background:#34d399!important;color:#065f46!important}
+        .cell-LC{background:#6ee7b7!important;color:#065f46!important}
+        .cell-P{background:#3b82f6!important;color:#fff!important}
+        .cell-A{background:#94a3b8!important;color:#fff!important}
+        .cell-BL{background:#f1f5f9!important;color:#64748b!important}
+        .cell-T{background:#a78bfa!important;color:#fff!important}
+        .role-admin .cell-gratis{position:relative}
+        .role-admin .cell-gratis::after{content:'';position:absolute;top:1px;right:1px;width:5px;height:5px;border-radius:50%;background:#dc2626;box-shadow:0 0 0 1px #fff}
+        .role-admin .cell-custom{position:relative}
+        .role-admin .cell-custom::before{content:'';position:absolute;top:1px;left:1px;width:5px;height:5px;border-radius:50%;background:#f59e0b;box-shadow:0 0 0 1px #fff;animation:blink 1.5s infinite}
+        @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+        .matrix-blok-col{position:sticky;left:0;z-index:5;background:#fff;width:62px;min-width:62px;max-width:62px}
+        .matrix-header-blok{position:sticky;left:0;z-index:11;background:#059669;width:62px;min-width:62px;max-width:62px}
+        .matrix-cell-btn{width:100%;padding:5px 1px;font-size:10px;font-weight:700;transition:all .15s;position:relative;min-height:24px}
+        /* ======= STICKY HEADER BULAN (KAS) ======= */
+        .kas-global-thead th{position:sticky;top:0;z-index:20;background:#059669}
+        .kas-global-thead th.matrix-header-blok{z-index:30;background:#059669}
     </style>
 </head>
 <body class="w-full h-full text-ink select-none bg-slate-50 flex flex-col">
@@ -105,6 +122,30 @@
             </div>
         </div>
     </div>
+    <div id="editCellModal" class="hidden fixed inset-0 bg-slate-950/70 z-[140] flex items-center justify-center p-3" onclick="tutupEditSel()">
+        <div class="bg-white rounded-3xl w-full max-w-md p-5 max-h-[92vh] overflow-y-auto" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-start mb-3">
+                <div class="min-w-0">
+                    <h3 id="ecTitle" class="font-bold text-lg text-slate-800">E 1 · Jan 2026</h3>
+                    <p id="ecSubtitle" class="text-xs text-slate-500 truncate">Nama</p>
+                </div>
+                <button onclick="tutupEditSel()" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 shrink-0"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-2">Status</label>
+            <div id="ecStatusPicker" class="grid grid-cols-4 gap-1.5 mb-4"></div>
+            <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Nominal (Rp)</label>
+            <input type="number" inputmode="numeric" pattern="[0-9]*" id="ecNominal" oninput="updateEcNominal()" class="w-full px-3 py-2.5 rounded-xl border-2 border-slate-200 bg-slate-50 text-base font-bold text-slate-800 outline-none focus:border-emerald-500">
+            <div class="flex justify-between items-center mt-1.5 mb-3">
+                <p id="ecPresetInfo" class="text-[10px] text-slate-500"></p>
+                <button onclick="resetEcNominal()" class="text-[10px] text-emerald-600 font-bold hidden" id="ecResetBtn"><i class="fa-solid fa-rotate-left mr-1"></i>Reset ke Preset</button>
+            </div>
+            <div id="ecInfoBox" class="rounded-xl p-2.5 mb-4 text-[11px] leading-relaxed"></div>
+            <div class="flex gap-2">
+                <button onclick="tutupEditSel()" class="flex-1 bg-slate-100 text-slate-700 font-bold py-3 rounded-xl">Batal</button>
+                <button onclick="simpanEditSel()" class="flex-1 bg-emerald-600 text-white font-bold py-3 rounded-xl shadow-md">Simpan</button>
+            </div>
+        </div>
+    </div>
     <div id="modalInputKas" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4" onclick="document.getElementById('modalInputKas').classList.add('hidden')">
         <div class="bg-white w-full max-w-md rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('modalInputKas').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
@@ -112,7 +153,7 @@
             <form id="formInputKas" onsubmit="tambahTransaksiKasForm(event)" class="space-y-3">
                 <div><label class="block text-xs font-semibold text-slate-600 mb-1">Kategori</label><select id="formKasKategori" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"><option value="">-- Pilih Kategori --</option><option value="Belanja">Belanja</option><option value="Perbaikan">Perbaikan</option><option value="Konsumsi Kerja bakti">Konsumsi Kerja bakti</option><option value="Uang Kematian">Uang Kematian</option><option value="Listrik Toren">Listrik Toren</option><option value="Insentif">Insentif</option><option value="Gaji Satpam">Gaji Satpam</option><option value="Kasbon">Kasbon</option><option value="Lainnya">Lainnya</option></select></div>
                 <div><label class="block text-xs font-semibold text-slate-600 mb-1">Uraian</label><input type="text" id="formKasKet" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
-                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Jumlah (Rp)</label><input type="number" id="formKasNominal" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Jumlah (Rp)</label><input type="number" inputmode="numeric" pattern="[0-9]*" id="formKasNominal" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
                 <div><label class="block text-xs font-semibold text-slate-600 mb-1">Tanggal Transaksi</label><input type="date" id="formKasTanggal" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"><p class="text-[10px] text-slate-500 italic mt-1"><i class="fa-solid fa-circle-info mr-1"></i> Ubah tanggal jika mencatat pengeluaran lampau</p></div>
                 <button type="submit" class="w-full bg-red-600 text-white font-bold py-3 rounded-xl shadow-md mt-2">Simpan Pengeluaran</button>
             </form>
@@ -146,10 +187,10 @@
             <form id="editPekerjaForm" onsubmit="simpanEditPekerja(event)" class="space-y-3">
                 <input type="hidden" id="editPkjId">
                 <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nama</label><input type="text" id="editPkjNama" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
-                <div><label class="block text-xs font-semibold text-slate-600 mb-1">No. HP</label><input type="tel" id="editPkjHp" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">No. HP</label><input type="tel" inputmode="tel" id="editPkjHp" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
                 <div><label class="block text-xs font-semibold text-slate-600 mb-1">Status Pekerjaan</label><input type="text" id="editPkjStatus" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
                 <div><label class="block text-xs font-semibold text-slate-600 mb-1">Tgl Masuk</label><input type="date" id="editPkjTgl" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
-                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Gaji</label><input type="number" id="editPkjGaji" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Gaji</label><input type="number" inputmode="numeric" pattern="[0-9]*" id="editPkjGaji" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
                 <div><label class="block text-xs font-semibold text-slate-600 mb-1">Alamat</label><input type="text" id="editPkjAlamat" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
                 <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl shadow-md mt-2">Simpan</button>
             </form>
@@ -180,7 +221,7 @@
             </form>
         </div>
     </div>
-
+	
     <div id="authContainer" class="w-full h-[100dvh] bg-slate-50 relative overflow-y-auto overscroll-contain flex flex-col">
         <div class="m-auto w-full max-w-4xl px-3 py-6 sm:px-6 sm:py-8">
             <div class="w-full bg-white rounded-none sm:rounded-[2rem] sm:shadow-2xl flex flex-col md:flex-row shrink-0 md:overflow-hidden relative">
@@ -215,7 +256,7 @@
                         <div class="flex items-center gap-3 mb-6 sticky top-0 bg-white py-2 z-10 border-b border-slate-100"><button type="button" onclick="switchAuthView('login')" class="w-9 h-9 bg-slate-100 rounded-full"><i class="fa-solid fa-arrow-left text-slate-600"></i></button><h2 class="text-lg font-bold text-slate-800">Registrasi Warga</h2></div>
                         <div class="bg-blue-50 border border-blue-200 p-3 rounded-xl text-[11px] text-blue-800 leading-relaxed mb-2"><i class="fa-solid fa-circle-info mr-1"></i> <b>Penting:</b> Nama & Blok harus sesuai data resmi RT.</div>
                         <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Nama Lengkap</label><input type="text" id="regNama" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"></div>
-                        <div class="flex gap-3"><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">Jenis Kelamin</label><select id="regGender" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"><option value="Laki-laki">Laki-laki</option><option value="Perempuan">Perempuan</option></select></div><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">No. WA</label><input type="tel" id="regHp" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"></div></div>
+                        <div class="flex gap-3"><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">Jenis Kelamin</label><select id="regGender" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"><option value="Laki-laki">Laki-laki</option><option value="Perempuan">Perempuan</option></select></div><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">No. WA</label><input type="tel" inputmode="tel" id="regHp" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"></div></div>
                         <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Email / Akun</label><input type="text" id="regEmail" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"></div>
                         <div class="flex gap-3"><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">Blok</label><select id="regBlok" required onchange="updateNoDropdown('regBlok','regNo'); updateRegHint()" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"><option value="">-- Pilih --</option></select></div><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1.5">No</label><select id="regNo" required onchange="updateRegHint()" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"><option value="">-- Pilih --</option></select></div></div>
                         <div id="regWargaHint" class="hidden bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-[11px] text-emerald-800 leading-relaxed"><i class="fa-solid fa-check-circle mr-1"></i> <span id="regWargaHintText"></span></div>
@@ -326,7 +367,7 @@
                 <form id="formSurat" onsubmit="submitForm(event, 'Surat Menyurat')" class="p-4 md:p-6 space-y-4 flex-1">
                     <div class="bg-blue-50 border border-blue-200 p-3 rounded-xl text-xs text-blue-800"><i class="fa-solid fa-file-pdf mr-1"></i> Setelah disetujui, PDF bisa diunduh di menu Riwayat.</div>
                     <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nama Lengkap (KTP)</label><input type="text" id="spNama" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div>
-                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">NIK</label><input type="number" id="spNik" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">NIK</label><input type="number" inputmode="numeric" pattern="[0-9]*" id="spNik" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div>
                     <div class="grid grid-cols-2 gap-2.5"><div><label class="block text-xs font-semibold text-slate-600 mb-1">Tempat, Tgl Lahir</label><input type="text" id="spTtl" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div><div><label class="block text-xs font-semibold text-slate-600 mb-1">Jenis Kelamin</label><select id="spJk" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"><option value="Laki-laki">Laki-laki</option><option value="Perempuan">Perempuan</option></select></div></div>
                     <div class="grid grid-cols-2 gap-2.5"><div><label class="block text-xs font-semibold text-slate-600 mb-1">Agama</label><select id="spAgama" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"><option value="Islam">Islam</option><option value="Kristen">Kristen</option><option value="Katolik">Katolik</option><option value="Hindu">Hindu</option><option value="Buddha">Buddha</option></select></div><div><label class="block text-xs font-semibold text-slate-600 mb-1">Status Perkawinan</label><select id="spStatusNikah" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"><option value="Kawin">Kawin</option><option value="Belum Kawin">Belum Kawin</option><option value="Cerai Hidup">Cerai Hidup</option><option value="Cerai Mati">Cerai Mati</option></select></div></div>
                     <div><label class="block text-xs font-semibold text-slate-600 mb-1">Pekerjaan</label><input type="text" id="spPekerjaan" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div>
@@ -341,7 +382,7 @@
                 <form id="formDataWarga" onsubmit="submitForm(event, 'Isi Data Warga')" class="p-4 md:p-6 space-y-4 flex-1">
                     <div class="bg-blue-50 border border-blue-200 p-3 rounded-xl text-[11px] text-blue-800 leading-relaxed mb-2"><i class="fa-solid fa-circle-info mr-1"></i> <b>Penting:</b> Blok & No wajib sesuai data resmi RT.</div>
                     <div><label class="block text-xs font-semibold text-slate-600 mb-1">Alamat (Otomatis)</label><textarea id="dwAlamatRumah" rows="2" readonly class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-700 text-sm resize-none">Perumahan Mabu Park RT.010/RW.002 Desa Aweh Kalanganyar</textarea></div>
-                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">NIK (16 Digit)</label><input type="number" id="dwNik" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">NIK (16 Digit)</label><input type="number" inputmode="numeric" pattern="[0-9]*" id="dwNik" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div>
                     <div class="flex gap-3"><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Tempat Lahir</label><input type="text" id="dwTempatLahir" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Tgl Lahir</label><input type="date" id="dwTglLahir" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div></div>
                     <div class="bg-blue-50/60 p-4 rounded-xl border border-blue-100"><label class="block text-xs font-semibold text-slate-700 mb-3">Status Pernikahan</label><div class="flex gap-3"><label class="flex-1 relative cursor-pointer"><input type="radio" id="statusBelumKawin" name="statusKeluarga" value="Belum Kawin" onchange="toggleKeluargaStatus()" checked class="peer sr-only"><div class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-center text-sm transition-all peer-checked:bg-emerald-50 peer-checked:border-emerald-500 peer-checked:text-emerald-700 peer-checked:font-bold">Belum Kawin</div></label><label class="flex-1 relative cursor-pointer"><input type="radio" id="statusKawin" name="statusKeluarga" value="Kawin" onchange="toggleKeluargaStatus()" class="peer sr-only"><div class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-center text-sm transition-all peer-checked:bg-emerald-50 peer-checked:border-emerald-500 peer-checked:text-emerald-700 peer-checked:font-bold">Kawin</div></label></div></div>
                     <div class="bg-emerald-50/60 p-4 rounded-xl border border-emerald-100"><label class="block text-xs font-semibold text-slate-700 mb-3">Tempat Tinggal</label><div class="flex gap-3"><label class="flex-1 relative cursor-pointer"><input type="radio" id="statusPribadi" name="statusRumah" value="Milik Pribadi" checked class="peer sr-only"><div class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-center text-sm transition-all peer-checked:bg-emerald-50 peer-checked:border-emerald-500 peer-checked:text-emerald-700 peer-checked:font-bold">Pribadi</div></label><label class="flex-1 relative cursor-pointer"><input type="radio" id="statusNgontrak" name="statusRumah" value="Ngontrak" class="peer sr-only"><div class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-center text-sm transition-all peer-checked:bg-emerald-50 peer-checked:border-emerald-500 peer-checked:text-emerald-700 peer-checked:font-bold">Ngontrak</div></label></div></div>
@@ -353,7 +394,7 @@
                     <div><label class="block text-xs font-semibold text-slate-600 mb-1">Agama</label><select id="dwAgama" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"><option value="Islam">Islam</option><option value="Kristen">Kristen</option><option value="Katolik">Katolik</option><option value="Hindu">Hindu</option><option value="Buddha">Buddha</option></select></div>
                     <div><label class="block text-xs font-semibold text-slate-600 mb-1">Pekerjaan</label><input type="text" id="dwPekerjaan" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div>
                     <div><label class="block text-xs font-semibold text-slate-600 mb-2">Sudah KTP Mabu?</label><div class="flex gap-3"><label class="flex-1 relative cursor-pointer"><input type="radio" id="ktpSudah" name="statusKtp" value="Sudah KTP Mabu" checked class="peer sr-only"><div class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-center text-sm transition-all peer-checked:bg-emerald-50 peer-checked:border-emerald-500 peer-checked:text-emerald-700 peer-checked:font-bold">Sudah</div></label><label class="flex-1 relative cursor-pointer"><input type="radio" id="ktpBelum" name="statusKtp" value="Belum KTP Mabu" class="peer sr-only"><div class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-center text-sm transition-all peer-checked:bg-emerald-50 peer-checked:border-emerald-500 peer-checked:text-emerald-700 peer-checked:font-bold">Belum</div></label></div></div>
-                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">Jumlah Jiwa (1 Rumah)</label><input type="number" id="dwJiwa" min="1" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">Jumlah Jiwa (1 Rumah)</label><input type="number" inputmode="numeric" pattern="[0-9]*" id="dwJiwa" min="1" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div>
                     <div class="grid grid-cols-2 gap-3 pt-2">
                         <div><label class="block text-[10px] font-bold uppercase text-slate-600 mb-1.5">Foto KTP</label><div class="border-2 border-dashed border-slate-200 rounded-xl p-3 text-center bg-white"><img id="dwKtpPreview" class="hidden mx-auto h-24 rounded mb-2 border border-slate-200 object-cover"><i id="dwKtpIcon" class="fa-solid fa-id-card text-2xl text-slate-400 mb-2 block"></i><button type="button" onclick="bukaKameraRealtime('dwKtpPreview','dwKtpIcon','dwKtpBase64',null,null,'KTP')" class="bg-emerald-600 text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold shadow-sm w-full"><i class="fa-solid fa-camera"></i> Scan KTP</button><p class="text-[9px] text-red-500 mt-1 font-semibold">*Wajib Kamera</p><input id="dwKtpInput" type="file" accept="image/*" class="hidden" onchange="handleDocPhoto(event,'dwKtpPreview','dwKtpIcon','dwKtpBase64')"><input type="hidden" id="dwKtpBase64"></div></div>
                         <div><label class="block text-[10px] font-bold uppercase text-slate-600 mb-1.5">Foto KK</label><div class="border-2 border-dashed border-slate-200 rounded-xl p-3 text-center bg-white"><img id="dwKkPreview" class="hidden mx-auto h-24 rounded mb-2 border border-slate-200 object-cover"><i id="dwKkIcon" class="fa-solid fa-people-roof text-2xl text-slate-400 mb-2 block"></i><button type="button" onclick="bukaKameraRealtime('dwKkPreview','dwKkIcon','dwKkBase64',null,null,'KK')" class="bg-emerald-600 text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold shadow-sm w-full"><i class="fa-solid fa-camera"></i> Scan KK</button><p class="text-[9px] text-red-500 mt-1 font-semibold">*Wajib Kamera</p><input id="dwKkInput" type="file" accept="image/*" class="hidden" onchange="handleDocPhoto(event,'dwKkPreview','dwKkIcon','dwKkBase64')"><input type="hidden" id="dwKkBase64"></div></div>
@@ -394,10 +435,10 @@
                 <form id="formTamu" onsubmit="simpanBukuTamu(event)" class="p-4 md:p-6 space-y-4 flex-1">
                     <div class="bg-blue-50 border border-blue-200 p-3 rounded-xl text-xs text-blue-800 leading-relaxed mb-2"><i class="fa-solid fa-info-circle mr-1"></i> Catat data tamu yang berkunjung.</div>
                     <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nama Tamu</label><input type="text" id="tamuNama" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div>
-                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">No HP</label><input type="tel" id="tamuHp" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">No HP</label><input type="tel" inputmode="tel" id="tamuHp" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div>
                     <div><label class="block text-xs font-semibold text-slate-600 mb-1">Tujuan (Blok/No)</label><input type="text" id="tamuTujuan" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div>
                     <div><label class="block text-xs font-semibold text-slate-600 mb-1">Keperluan</label><input type="text" id="tamuKeperluan" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div>
-                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">Lama Berkunjung (Jam)</label><input type="number" id="tamuLama" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div>
+                    <div><label class="block text-xs font-semibold text-slate-600 mb-1">Lama Berkunjung (Jam)</label><input type="number" inputmode="numeric" pattern="[0-9]*" id="tamuLama" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm outline-none focus:border-emerald-500"></div>
                     <div><label class="block text-xs font-semibold text-slate-600 mb-1">Foto Tamu</label><div class="flex items-center gap-2"><img id="tamuFotoPreview" class="hidden w-12 h-12 rounded-lg object-cover border border-slate-200"><button type="button" onclick="bukaKameraRealtime('tamuFotoPreview','tamuFotoIcon','tamuFotoBase64',null,'user')" class="bg-emerald-600 text-white px-3 py-2 rounded-lg text-xs font-bold shadow-sm flex items-center gap-1.5"><i class="fa-solid fa-camera"></i> Kamera</button><button type="button" onclick="document.getElementById('tamuFotoInput').click()" class="bg-slate-100 text-slate-700 px-3 py-2 rounded-lg text-xs font-semibold border border-slate-200 flex items-center gap-1.5"><i class="fa-regular fa-image"></i> Galeri</button><i id="tamuFotoIcon" class="fa-solid fa-user text-slate-400"></i><input type="file" id="tamuFotoInput" accept="image/*" class="hidden" onchange="handleDocPhoto(event,'tamuFotoPreview','tamuFotoIcon','tamuFotoBase64')"><input type="hidden" id="tamuFotoBase64"></div></div>
                     <div class="pt-2"><button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-md">Kirim Data Tamu</button></div>
                 </form>
@@ -411,8 +452,8 @@
                         <h3 class="font-bold text-sm mb-3 text-slate-800">Tambah Produk</h3>
                         <div class="mb-3"><div class="w-full h-32 border-2 border-dashed border-orange-200 bg-orange-50 rounded-2xl flex flex-col items-center justify-center relative overflow-hidden mb-2"><img id="umkmImgPreview" class="hidden absolute inset-0 w-full h-full object-cover"><i id="umkmImgIcon" class="fa-solid fa-camera text-2xl text-orange-400 mb-1"></i><span id="umkmImgText" class="text-xs font-semibold text-orange-600">Foto Produk</span></div><div class="flex gap-2"><button type="button" onclick="bukaKameraRealtime('umkmImgPreview','umkmImgIcon','umkmBase64','umkmImgText')" class="flex-1 bg-orange-500 text-white py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm"><i class="fa-solid fa-camera"></i> Kamera</button><button type="button" onclick="document.getElementById('umkmInputFile').click()" class="px-3 py-2 bg-slate-100 text-slate-700 rounded-lg text-xs font-semibold border border-slate-200 flex items-center justify-center gap-1"><i class="fa-regular fa-image"></i> Galeri</button></div><input type="file" id="umkmInputFile" accept="image/*" class="hidden" onchange="handleDocPhoto(event,'umkmImgPreview','umkmImgIcon','umkmBase64'); document.getElementById('umkmImgText').classList.add('hidden');"><input type="hidden" id="umkmBase64"></div>
                         <input type="text" id="umkmNamaBarang" required placeholder="Nama Produk" class="w-full px-4 py-2.5 rounded-lg border border-slate-200 bg-slate-50/50 mb-2.5 text-sm focus:border-orange-500 outline-none">
-                        <input type="number" id="umkmHarga" required placeholder="Harga (Rp)" class="w-full px-4 py-2.5 rounded-lg border border-slate-200 bg-slate-50/50 mb-2.5 text-sm focus:border-orange-500 outline-none">
-                        <input type="tel" id="umkmWa" required placeholder="No WhatsApp" class="w-full px-4 py-2.5 rounded-lg border border-slate-200 bg-slate-50/50 mb-2.5 text-sm focus:border-orange-500 outline-none">
+                        <input type="number" inputmode="numeric" pattern="[0-9]*" id="umkmHarga" required placeholder="Harga (Rp)" class="w-full px-4 py-2.5 rounded-lg border border-slate-200 bg-slate-50/50 mb-2.5 text-sm focus:border-orange-500 outline-none">
+                        <input type="tel" inputmode="tel" id="umkmWa" required placeholder="No WhatsApp" class="w-full px-4 py-2.5 rounded-lg border border-slate-200 bg-slate-50/50 mb-2.5 text-sm focus:border-orange-500 outline-none">
                         <textarea id="umkmDeskripsi" rows="2" placeholder="Deskripsi singkat..." class="w-full px-4 py-2.5 rounded-lg border border-slate-200 bg-slate-50/50 mb-3 text-sm resize-none focus:border-orange-500 outline-none"></textarea>
                         <div class="flex gap-2"><button type="button" onclick="toggleUmkmForm(false)" class="flex-1 bg-slate-100 font-bold py-2.5 rounded-lg text-sm text-slate-700">Batal</button><button type="submit" class="flex-1 bg-orange-500 text-white font-bold py-2.5 rounded-lg text-sm">Posting</button></div>
                     </form>
@@ -454,9 +495,8 @@
                             <div id="kasTagihanContainer">
                                 <div class="mb-3"><div class="relative w-full"><i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-600 text-sm font-bold"></i><input type="text" id="searchTagihanWarga" oninput="filterTagihanWarga()" placeholder="Cari warga / V1 1 / v1.1 / K 9-10..." class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold text-slate-800 outline-none focus:border-emerald-500"></div></div>
                                 <div id="kasTagihanSummary" class="mb-3 admin-only-hint hidden"></div>
-                                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm mb-3"><div class="overflow-x-auto"><table class="w-full text-center" style="min-width: 640px;"><thead class="bg-emerald-600 text-white font-bold text-[10px]"><tr><th class="p-1.5 text-left matrix-header-blok bg-emerald-600 min-w-[70px]">Blok</th><th class="p-1">JAN</th><th class="p-1">FEB</th><th class="p-1">MAR</th><th class="p-1">APR</th><th class="p-1">MEI</th><th class="p-1">JUN</th><th class="p-1">JUL</th><th class="p-1">AGU</th><th class="p-1">SEP</th><th class="p-1">OKT</th><th class="p-1">NOV</th><th class="p-1">DES</th><th class="p-1 bg-emerald-700 admin-only-col hidden">X/12</th></tr></thead><tbody id="kasTagihanMatrixBody" class="text-[10px]"></tbody></table></div></div>
-                                <p class="text-[10px] text-slate-500 text-center italic admin-only-hint hidden">Klik sel untuk cycle <b>L → K → BL</b>. Ubah nominal di <b>Panel Admin → Iuran</b>.</p>
-                                <p class="text-[10px] text-slate-500 text-center italic warga-only-hint">L = Lunas · K = Rumah Kosong · BL = Belum Lunas.</p>
+                                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm mb-3"><div class="overflow-auto" style="max-height:55vh;"><table class="w-full text-center" style="min-width: 560px;"><thead class="kas-global-thead bg-emerald-600 text-white font-bold text-[10px]"><tr><th class="p-1 text-left matrix-header-blok bg-emerald-600">Blok</th><th class="p-1">JAN</th><th class="p-1">FEB</th><th class="p-1">MAR</th><th class="p-1">APR</th><th class="p-1">MEI</th><th class="p-1">JUN</th><th class="p-1">JUL</th><th class="p-1">AGU</th><th class="p-1">SEP</th><th class="p-1">OKT</th><th class="p-1">NOP</th><th class="p-1">DES</th></tr></thead><tbody id="kasTagihanMatrixBody" class="text-[10px]"></tbody></table></div></div>
+                                <p class="text-[10px] text-slate-500 text-center italic admin-only-hint hidden">Klik sel untuk edit status & nominal.</p>
                             </div>
                         </div>
                     </div>
@@ -465,12 +505,11 @@
 
             <div id="kasGlobalView" class="hidden flex-col h-full bg-slate-50 w-full overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0"><button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button><h2 class="font-bold text-lg text-emerald-700 flex items-center gap-2 flex-1"><i class="fa-solid fa-calendar-check"></i> Kas Global</h2></div>
-                <div class="p-3 md:p-5 max-w-5xl mx-auto w-full">
+                <div class="p-3 md:p-5 w-full max-w-7xl mx-auto">
                     <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 mb-3 flex items-center gap-2"><i class="fa-solid fa-calendar text-emerald-600"></i><label class="text-xs font-bold text-emerald-900">Tahun:</label><select id="kasGlobalTahunSelect" onchange="loadKasGlobalView()" class="flex-1 bg-white border border-emerald-300 rounded-lg px-2 py-1.5 text-xs font-bold outline-none"></select></div>
                     <div id="kasGlobalSummary" class="mb-3 admin-only-hint hidden"></div>
-                    <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm"><div class="overflow-x-auto"><table class="w-full text-center" style="min-width: 600px;"><thead class="bg-emerald-600 text-white font-bold text-[10px]"><tr><th class="p-1.5 text-left matrix-header-blok min-w-[60px]">Blok</th><th class="p-1">JAN</th><th class="p-1">FEB</th><th class="p-1">MAR</th><th class="p-1">APR</th><th class="p-1">MEI</th><th class="p-1">JUN</th><th class="p-1">JUL</th><th class="p-1">AGU</th><th class="p-1">SEP</th><th class="p-1">OKT</th><th class="p-1">NOV</th><th class="p-1">DES</th><th class="p-1 bg-emerald-700 admin-only-col hidden">X/12</th></tr></thead><tbody id="kasGlobalBody" class="text-[10px]"></tbody></table></div></div>
-                    <p class="text-[10px] text-slate-500 text-center italic mt-2 admin-only-hint hidden">Klik sel untuk cycle <b>L → K → BL</b>.</p>
-                    <p class="text-[10px] text-slate-500 text-center italic mt-2 warga-only-hint">L = Lunas · K = Rumah Kosong · BL = Belum Lunas.</p>
+                    <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm"><div class="overflow-auto" style="max-height:55vh;"><table class="w-full text-center" style="min-width: 560px;"><thead class="kas-global-thead bg-emerald-600 text-white font-bold text-[10px]"><tr><th class="p-1 text-left matrix-header-blok bg-emerald-600">Blok</th><th class="p-1">JAN</th><th class="p-1">FEB</th><th class="p-1">MAR</th><th class="p-1">APR</th><th class="p-1">MEI</th><th class="p-1">JUN</th><th class="p-1">JUL</th><th class="p-1">AGU</th><th class="p-1">SEP</th><th class="p-1">OKT</th><th class="p-1">NOP</th><th class="p-1">DES</th></tr></thead><tbody id="kasGlobalBody" class="text-[10px]"></tbody></table></div></div>
+                    <p class="text-[10px] text-slate-500 text-center italic mt-2 admin-only-hint hidden">Klik sel untuk edit status & nominal.</p>
                 </div>
             </div>
 
@@ -519,8 +558,6 @@
                         <button id="tabAdmWarga" onclick="switchAdminTab('warga')" class="py-2 text-[10px] sm:text-xs font-bold bg-emerald-100 text-emerald-700 rounded-xl shadow-sm transition-all">Warga</button>
                         <button id="tabAdmLaporan" onclick="switchAdminTab('laporan')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Laporan</button>
                         <button id="tabAdmPekerja" onclick="switchAdminTab('pekerja')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Pekerja</button>
-                        <button id="tabAdmIuran" onclick="switchAdminTab('iuran')" class="hidden py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Iuran</button>
-                        <button id="tabAdmKas" onclick="switchAdminTab('kas')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Kas</button>
                         <button id="tabAdmTamu" onclick="switchAdminTab('tamu')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Tamu</button>
                         <button id="tabAdmBooking" onclick="switchAdminTab('booking')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">Booking</button>
                         <button id="tabAdmSos" onclick="switchAdminTab('sos')" class="py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all">SOS</button>
@@ -542,28 +579,14 @@
                             <div class="mb-3"><button id="btnToggleAddPekerja" onclick="toggleAdminAddPekerja(true)" class="w-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2"><i class="fa-solid fa-user-plus"></i> Tambah Pekerja</button></div>
                             <form id="adminAddPekerjaForm" onsubmit="simpanPekerjaBaruAdmin(event)" class="hidden bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mt-2 space-y-3 shadow-sm mb-4">
                                 <div class="flex justify-between items-center border-b border-emerald-200 pb-2"><h3 class="font-bold text-emerald-900 text-xs uppercase"><i class="fa-solid fa-user-plus mr-1"></i> Daftarkan Pekerja</h3><button type="button" onclick="toggleAdminAddPekerja(false)" class="text-xs text-slate-500 hover:text-red-500 font-bold"><i class="fa-solid fa-xmark"></i></button></div>
-                                <div class="grid grid-cols-2 gap-2.5"><div><label class="block text-[11px] font-semibold text-slate-700 mb-1">Nama *</label><input type="text" id="pkjNama" required class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div><div><label class="block text-[11px] font-semibold text-slate-700 mb-1">No. HP *</label><input type="tel" id="pkjHp" required class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div></div>
-                                <div class="grid grid-cols-2 gap-2.5"><div><label class="block text-[11px] font-semibold text-slate-700 mb-1">Tgl Masuk *</label><input type="date" id="pkjTgl" required class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div><div><label class="block text-[11px] font-semibold text-slate-700 mb-1">Gaji *</label><input type="number" id="pkjGaji" required class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div></div>
+                                <div class="grid grid-cols-2 gap-2.5"><div><label class="block text-[11px] font-semibold text-slate-700 mb-1">Nama *</label><input type="text" id="pkjNama" required class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div><div><label class="block text-[11px] font-semibold text-slate-700 mb-1">No. HP *</label><input type="tel" inputmode="tel" id="pkjHp" required class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div></div>
+                                <div class="grid grid-cols-2 gap-2.5"><div><label class="block text-[11px] font-semibold text-slate-700 mb-1">Tgl Masuk *</label><input type="date" id="pkjTgl" required class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div><div><label class="block text-[11px] font-semibold text-slate-700 mb-1">Gaji *</label><input type="number" inputmode="numeric" pattern="[0-9]*" id="pkjGaji" required class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div></div>
                                 <div><label class="block text-[11px] font-semibold text-slate-700 mb-1">Status Pekerjaan *</label><input type="text" id="pkjStatus" required class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div>
                                 <div><label class="block text-[11px] font-semibold text-slate-700 mb-1">Alamat *</label><input type="text" id="pkjAlamat" required class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs outline-none focus:border-emerald-500"></div>
                                 <div><label class="block text-[11px] font-semibold text-slate-700 mb-1">Foto</label><div class="flex items-center gap-2"><img id="pkjFotoPreview" class="hidden w-12 h-12 rounded-lg object-cover border border-slate-200"><button type="button" onclick="bukaKameraRealtime('pkjFotoPreview','pkjFotoIcon','pkjFotoBase64',null,'user')" class="bg-emerald-600 text-white px-3 py-2 rounded-lg text-[11px] font-bold shadow-sm flex items-center gap-1.5"><i class="fa-solid fa-camera"></i> Kamera</button><button type="button" onclick="document.getElementById('pkjFotoInput').click()" class="bg-slate-100 text-slate-700 px-3 py-2 rounded-lg text-[11px] font-semibold border border-slate-200 flex items-center gap-1.5"><i class="fa-regular fa-image"></i> Galeri</button><i id="pkjFotoIcon" class="fa-solid fa-user text-slate-400"></i><input type="file" id="pkjFotoInput" accept="image/*" class="hidden" onchange="handleDocPhoto(event,'pkjFotoPreview','pkjFotoIcon','pkjFotoBase64')"><input type="hidden" id="pkjFotoBase64"></div></div>
                                 <div class="flex gap-2 pt-1"><button type="button" onclick="toggleAdminAddPekerja(false)" class="flex-1 bg-white border border-slate-300 text-slate-700 font-bold py-2 rounded-lg text-xs">Batal</button><button type="submit" id="btnSubmitNewPekerja" class="flex-1 bg-emerald-600 text-white font-bold py-2 rounded-lg text-xs shadow-sm">Simpan</button></div>
                             </form>
                             <div id="adminPekerjaList" class="space-y-3"></div>
-                        </div>
-                        <div id="admViewIuran" class="hidden">
-                            <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mb-4 space-y-3">
-                                <div class="flex justify-between items-center"><h3 class="font-bold text-emerald-900 text-sm">Pengaturan Iuran</h3><button onclick="kirimPengingatIuran()" class="bg-amber-500 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg shadow-sm flex items-center gap-1 transition"><i class="fa-solid fa-bell"></i> Ingatkan</button></div>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                                    <div><label class="block text-[11px] font-semibold text-emerald-800 mb-1">Bulan Tagihan</label><select id="adminBulanIuran" onchange="loadAdminIuran()" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none"></select></div>
-                                    <div><label class="block text-[11px] font-semibold text-emerald-800 mb-1">Nominal Default</label><div class="flex gap-2"><select id="adminNominalIuran" onchange="simpanNominalDefault()" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none"></select><button onclick="simpanNominalDefault()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-lg text-xs font-bold shadow-sm whitespace-nowrap" title="Kunci tarif"><i class="fa-solid fa-lock"></i></button></div></div>
-                                </div>
-                            </div>
-                            <div id="adminIuranWargaList" class="space-y-2"></div>
-                        </div>
-                        <div id="admViewKas" class="hidden">
-                            <div class="flex justify-between items-center mb-3"><h3 class="font-bold text-slate-700 text-sm">Rincian Transaksi</h3><button onclick="openModalInputKas()" class="bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm"><i class="fa-solid fa-plus mr-1"></i> Input Pengeluaran</button></div>
-                            <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm"><div class="overflow-x-auto"><table class="w-full text-left text-[11px]"><thead class="bg-slate-100 text-slate-600 uppercase font-bold"><tr><th class="p-2 border-b">Tgl</th><th class="p-2 border-b">Kategori</th><th class="p-2 border-b">Uraian</th><th class="p-2 border-b text-right">Jumlah</th><th class="p-2 border-b text-center">Aksi</th></tr></thead><tbody id="adminKasTableBody" class="divide-y divide-slate-100 text-slate-700"></tbody></table></div></div>
                         </div>
                         <div id="admViewTamu" class="hidden"><div class="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-4"><h3 class="font-bold text-blue-900 text-sm">Daftar Tamu</h3><p class="text-xs text-blue-700 mt-1">Data dari menu Buku Tamu warga.</p></div><div id="adminTamuList" class="space-y-2"></div></div>
                         <div id="admViewBooking" class="hidden"><div class="bg-cyan-50 border border-cyan-200 rounded-2xl p-4 mb-4"><h3 class="font-bold text-cyan-900 text-sm">Pemesanan Inventaris</h3><p class="text-xs text-cyan-700 mt-1">Daftar pengajuan peminjaman barang.</p></div><div id="adminBookingList" class="space-y-2"></div></div>
@@ -592,7 +615,7 @@
             </div>
         </nav>
     </div>
-
+	
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, inMemoryPersistence, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -601,8 +624,8 @@
         const appId = 'layanan-warga-rt10';
         const KETUA_RT_NAMA = "Ade Hilman Fatahillah";
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbydEnQUz9TIKloH_4TUQIP0jYK-SSHvv3OwLN6gR8lUMlUF554nQrhs1EUfxHezmVSJIQ/exec";
-        
-        const NAMA_BULAN = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+
+        const NAMA_BULAN = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nop','Des'];
         function getBulanList(tahun) { return NAMA_BULAN.map(m => `${m} ${tahun}`); }
         function getTahunBerjalan() { return new Date().getFullYear(); }
         const DAFTAR_BULAN_IURAN = getBulanList(getTahunBerjalan());
@@ -646,9 +669,58 @@
         function normalizeSearch(str) { return String(str || '').toUpperCase().replace(/V([123])[\s\.\-\_\/]+(\d)/g, 'V$1.$2').replace(/[^A-Z0-9]/g, ''); }
         function isAdminRole() { return window.currentUserData && ['Admin RT', 'Ketua RT', 'Pengurus RT', 'Bendahara', 'Sekretaris'].includes(window.currentUserData.role); }
         function getAuthEmail(userEmail) { if (!userEmail) return null; return userEmail.includes('@') ? userEmail.toLowerCase() : userEmail.replace(/[^a-z0-9]/gi, '').toLowerCase() + '@mabupark.local'; }
-        function isLunasStatus(st) { return st === 'L' || st === 'K'; }
         function getDaftarBlokUnik() { const s = new Set(); DATA_WARGA_DEFAULT.forEach(w => s.add(w.blok)); return Array.from(s).sort(); }
         function getNoByBlok(blok) { return DATA_WARGA_DEFAULT.filter(w => w.blok === blok).map(w => w.no).sort((a, b) => a.localeCompare(b, undefined, { numeric: true })); }
+
+        const STATUS_CODES = {
+            'L':  { label:'Lunas Standar (Huni)',      isLunas:true },
+            'LK': { label:'Lunas Rumah Kosong',        isLunas:true },
+            'LA': { label:'Lunas Tanpa Air (Non-Air)', isLunas:true },
+            'LC': { label:'Lunas CCTV',                isLunas:true },
+            'P':  { label:'Pengurus RT (Bebas)',       isLunas:false },
+            'A':  { label:'Abai (Tidak Bayar)',        isLunas:false },
+            'BL': { label:'Belum Lunas / Menunggak',   isLunas:false },
+            'T':  { label:'Tidak Mampu (Bebas Iuran)', isLunas:false }
+        };
+        const DEFAULT_TARIF_CONFIG = {
+            tarifStandar:   { L:100000, LK:50000, LA:70000, LC:80000,  P:0, A:0, BL:0, T:0 },
+            tarifPerubahan: { L:125000, LK:50000, LA:70000, LC:100000, P:0, A:0, BL:0, T:0 },
+            bulanBerlaku:   { L:'NOP', LK:'NOP', LA:'NOP', LC:'NOP', P:'SEMUA BULAN', A:'SEMUA BULAN', BL:'SEMUA BULAN', T:'SEMUA BULAN' }
+        };
+        window.tarifConfig = JSON.parse(JSON.stringify(DEFAULT_TARIF_CONFIG));
+        const BULAN_MAP_EXCEL = { 'Jan':'JAN','Feb':'FEB','Mar':'MAR','Apr':'APR','Mei':'MEI','Jun':'JUN','Jul':'JUL','Agu':'AGS','Sep':'SEP','Okt':'OKT','Nop':'NOP','Des':'DES' };
+
+        function normalizeStatus(st) {
+            if (st === 'K') return 'LK';
+            return st || 'BL';
+        }
+        function isLunasStatus(st) { return !!(STATUS_CODES[normalizeStatus(st)]?.isLunas); }
+
+        function getTarifAktif(kode, bulanKey) {
+            const cfg = window.tarifConfig || DEFAULT_TARIF_CONFIG;
+            const std = (cfg.tarifStandar || {})[kode] ?? 0;
+            const per = (cfg.tarifPerubahan || {})[kode] ?? std;
+            const blnBerlaku = String((cfg.bulanBerlaku || {})[kode] || 'SEMUA BULAN').toUpperCase();
+            if (blnBerlaku === 'SEMUA BULAN') return per;
+            const mk = String(bulanKey).substring(0, 3);
+            return (blnBerlaku === (BULAN_MAP_EXCEL[mk] || mk.toUpperCase())) ? per : std;
+        }
+
+        function hitungNominal(wargaData, bulanKey) {
+            const st = normalizeStatus((wargaData.iuran || {})[bulanKey]);
+            if (!STATUS_CODES[st]?.isLunas) return 0;
+            const custom = (wargaData.iuranNominal || {})[bulanKey];
+            if (custom !== undefined && custom !== null && custom !== '') return Number(custom);
+            return getTarifAktif(st, bulanKey);
+        }
+
+        function isCustomNominal(wargaData, bulanKey) {
+            const st = normalizeStatus((wargaData.iuran || {})[bulanKey]);
+            if (!STATUS_CODES[st]?.isLunas) return false;
+            const custom = (wargaData.iuranNominal || {})[bulanKey];
+            if (custom === undefined || custom === null || custom === '') return false;
+            return Number(custom) !== getTarifAktif(st, bulanKey);
+        }
 
         window.currentUserData = null; window.currentLoginRole = 'warga';
         let unSubs = []; let isFiturSOSEnabled = true; let nominalIuranDefault = 125000;
@@ -707,21 +779,19 @@
             if (!box || !txt) return;
             if (!b || !n) { box.classList.add('hidden'); return; }
             const found = DATA_WARGA_DEFAULT.find(w => w.blok === b && w.no === n);
-            if (found) { txt.innerHTML = `Rumah <b>${found.blok}/${found.no}</b> terdaftar atas nama <b>${escapeHtml(found.nama)}</b>.`; box.classList.remove('hidden'); }
+            if (found) { txt.innerHTML = `Rumah <b>${found.blok} ${found.no}</b> terdaftar atas nama <b>${escapeHtml(found.nama)}</b>.`; box.classList.remove('hidden'); }
             else box.classList.add('hidden');
         };
-        
-        // ⚠️ FIX: Deklarasi global untuk updateRegHint
         window.updateRegHint = function() {
             const b = document.getElementById('regBlok')?.value || ''; const n = document.getElementById('regNo')?.value || '';
             const box = document.getElementById('regWargaHint'); const txt = document.getElementById('regWargaHintText');
             if (!box || !txt) return;
             if (!b || !n) { box.classList.add('hidden'); return; }
             const found = DATA_WARGA_DEFAULT.find(w => w.blok === b && w.no === n);
-            if (found) { txt.innerHTML = `Rumah <b>${b}/${n}</b> terdaftar atas nama <b>${escapeHtml(found.nama)}</b>. Akun Anda akan otomatis tersinkron.`; box.classList.remove('hidden'); }
-            else { txt.innerHTML = `Rumah <b>${b}/${n}</b> belum terdaftar di master. Data akan otomatis dibuat baru.`; box.classList.remove('hidden'); }
+            if (found) { txt.innerHTML = `Rumah <b>${b} ${n}</b> terdaftar atas nama <b>${escapeHtml(found.nama)}</b>. Akun Anda akan otomatis tersinkron.`; box.classList.remove('hidden'); }
+            else { txt.innerHTML = `Rumah <b>${b} ${n}</b> belum terdaftar di master. Data akan otomatis dibuat baru.`; box.classList.remove('hidden'); }
         };
-        
+
         document.addEventListener('DOMContentLoaded', () => {
             populateAllBlokDropdowns();
             document.getElementById('regBlok')?.addEventListener('change', () => { updateNoDropdown('regBlok','regNo'); window.updateRegHint(); });
@@ -747,7 +817,7 @@
                     try {
                         const snap = await getDoc(doc(db, 'artifacts', appId, 'warga_master', docId));
                         if (snap.exists()) { skipped++; continue; }
-                        await setDoc(doc(db, 'artifacts', appId, 'warga_master', docId), { nama: w.nama, blok: w.blok, no: w.no, status_rumah: 'HUNI', jumlah_jiwa: 0, iuran: {}, iuranNominal: {}, createdAt: Date.now(), updatedAt: Date.now() });
+                        await setDoc(doc(db, 'artifacts', appId, 'warga_master', docId), { nama: w.nama, blok: w.blok, no: w.no, status_rumah: 'HUNI', jumlah_jiwa: 0, iuran: {}, iuranNominal: {}, status_aktif: 'A', createdAt: Date.now(), updatedAt: Date.now() });
                         added++;
                     } catch (e) { errors++; console.warn('seed err', docId, e); }
                 }
@@ -765,8 +835,8 @@
             try {
                 const snap = await getDoc(doc(db, 'artifacts', appId, 'warga_master', docId));
                 if (snap.exists()) return showToast("Rumah ini sudah ada di master.", true);
-                await setDoc(doc(db, 'artifacts', appId, 'warga_master', docId), { nama: nama.toUpperCase(), blok: norm.blok, no: norm.no, status_rumah: 'HUNI', jumlah_jiwa: 0, iuran: {}, iuranNominal: {}, createdAt: Date.now(), updatedAt: Date.now() });
-                showToast(`✅ Rumah ${norm.blok}/${norm.no} ditambahkan`);
+                await setDoc(doc(db, 'artifacts', appId, 'warga_master', docId), { nama: nama.toUpperCase(), blok: norm.blok, no: norm.no, status_rumah: 'HUNI', jumlah_jiwa: 0, iuran: {}, iuranNominal: {}, status_aktif: 'A', createdAt: Date.now(), updatedAt: Date.now() });
+                showToast(`✅ Rumah ${norm.blok} ${norm.no} ditambahkan`);
                 loadAdminWargaList(); loadStatistik();
             } catch (e) { showToast("Gagal: " + e.message, true); }
         };
@@ -979,70 +1049,41 @@
             document.querySelectorAll('.admin-only-col').forEach(el => el.classList.toggle('hidden', !isAdmin));
             document.querySelectorAll('.admin-only-hint').forEach(el => el.classList.toggle('hidden', !isAdmin));
             document.querySelectorAll('.warga-only-hint').forEach(el => el.classList.toggle('hidden', isAdmin));
-            body.innerHTML = `<tr><td colspan="14" class="text-center py-5"><i class="fa-solid fa-spinner fa-spin text-slate-400"></i></td></tr>`;
+            body.innerHTML = `<tr><td colspan="13" class="text-center py-5"><i class="fa-solid fa-spinner fa-spin text-slate-400"></i></td></tr>`;
             if (sumCont) sumCont.innerHTML = '';
             try {
                 const s = await getDocs(collection(db, 'artifacts', appId, 'warga_master'));
                 const arr = []; s.forEach(d => arr.push({ id: d.id, ...d.data() }));
-                if (arr.length === 0) { body.innerHTML = '<tr><td colspan="14" class="text-center text-xs text-slate-400 py-5">Belum ada data master. Admin klik <b>Seed 125 Rumah</b> di Panel Admin.</td></tr>'; return; }
+                if (arr.length === 0) { body.innerHTML = '<tr><td colspan="13" class="text-center text-xs text-slate-400 py-5">Belum ada data master. Admin klik <b>Seed 125 Rumah</b> di Panel Admin.</td></tr>'; return; }
                 arr.sort((a, b) => { const bkA = (a.blok || '').toUpperCase().padEnd(4); const bkB = (b.blok || '').toUpperCase().padEnd(4); if (bkA !== bkB) return bkA.localeCompare(bkB); return String(a.no || '').localeCompare(String(b.no || ''), undefined, { numeric: true }); });
                 let gp = 0, gr = 0, html = '';
                 arr.forEach(w => {
-                    const iuran = w.iuran || {}, iuranNom = w.iuranNominal || {};
                     let poin = 0, rp = 0, cells = '';
                     const sN = String(w.nama || '').replace(/'/g, "\\'");
                     months.forEach(bln => {
-                        const st = iuran[bln] || 'BL'; const nom = Number(iuranNom[bln] ?? 0); const isL = isLunasStatus(st);
+                        const st = normalizeStatus((w.iuran || {})[bln]);
+                        const nom = hitungNominal(w, bln);
+                        const isL = STATUS_CODES[st]?.isLunas;
+                        const custom = isCustomNominal(w, bln);
                         if (isL) { poin += 1; rp += nom; }
                         const sB = String(bln).replace(/'/g, "\\'");
-                        const cls = st === 'L' ? 'cell-L' : st === 'K' ? 'cell-K' : 'cell-BL';
-                        const gr = isL && nom === 0 ? ' cell-gratis' : '';
-                        if (isAdmin) cells += `<td class="p-0 border border-slate-100"><button onclick="toggleIuranCell('${w.id}','${sB}','${sN}')" class="w-full py-1.5 text-[10px] font-bold ${cls}${gr} hover:opacity-80" title="${escapeHtml(bln)}: ${st}${nom > 0 ? ' · Rp ' + nom.toLocaleString('id-ID') : (isL ? ' · Gratis' : '')}">${st}</button></td>`;
-                        else cells += `<td class="p-1.5 border border-slate-100 text-[10px] font-bold ${cls}">${st}</td>`;
+                        const cls = `cell-${st}`;
+                        const gratis = (isL && nom === 0) ? ' cell-gratis' : '';
+                        const custCls = custom ? ' cell-custom' : '';
+                        if (isAdmin) {
+                            cells += `<td class="p-0 border border-slate-100"><button onclick="openEditSel('${w.id}','${sB}','${sN}')" class="matrix-cell-btn ${cls}${gratis}${custCls} hover:opacity-80" title="${escapeHtml(bln)}: ${st}${isL ? ' · ' + formatRupiah(nom) : ''}${custom ? ' (custom)' : ''}">${st}</button></td>`;
+                        } else {
+                            cells += `<td class="p-0 border border-slate-100"><div class="matrix-cell-btn ${cls}${gratis}${custCls}">${st}</div></td>`;
+                        }
                     });
                     gp += poin; gr += rp;
-                    const bl = `${w.blok || '-'}/${w.no || '-'}`;
-                    const tot = isAdmin ? `<td class="p-1 border border-slate-100 bg-slate-50"><div class="flex flex-col items-center leading-tight"><span class="text-[10px] font-bold text-emerald-700">${poin}/12</span><span class="text-[7px] text-slate-500">${formatRupiah(rp)}</span></div></td>` : '';
+                    const bl = `${w.blok || '-'} ${w.no || '-'}`;
                     const sk = `${(w.nama || '').toLowerCase()} ${normalizeSearch(bl).toLowerCase()} blok${(w.blok || '').toLowerCase()}${(w.no || '').toLowerCase()}`;
-                    html += `<tr class="tagihan-row hover:bg-slate-50" data-search="${escapeHtml(sk)}"><td class="p-1.5 border border-slate-100 text-left matrix-blok-col"><div class="flex flex-col leading-tight"><span class="font-bold text-slate-800 text-[10px]">${escapeHtml(bl)}</span><span class="text-[8px] text-slate-500 truncate max-w-[60px]">${escapeHtml(w.nama || '')}</span></div></td>${cells}${tot}</tr>`;
+                    html += `<tr class="tagihan-row hover:bg-slate-50" data-search="${escapeHtml(sk)}"><td class="p-1 border border-slate-100 text-left matrix-blok-col"><div class="flex flex-col leading-tight"><span class="font-bold text-slate-800 text-[10px]">${escapeHtml(bl)}</span><span class="text-[8px] text-slate-500 truncate max-w-[55px]">${escapeHtml(w.nama || '')}</span></div></td>${cells}</tr>`;
                 });
                 body.innerHTML = html;
-                if (isAdmin && sumCont) sumCont.innerHTML = `<div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm"><div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-slate-700"><i class="fa-solid fa-calculator text-emerald-600 mr-1"></i> Akumulasi ${getTahunBerjalan()}</span><span class="text-[10px] text-slate-500">${arr.length} rumah</span></div><div class="grid grid-cols-2 gap-2"><div class="bg-emerald-50 p-2 rounded-lg text-center"><p class="text-[9px] text-emerald-700 font-semibold uppercase">Total Point L+K</p><p class="text-base font-bold text-emerald-600">${gp}</p></div><div class="bg-slate-100 p-2 rounded-lg text-center"><p class="text-[9px] text-slate-700 font-semibold uppercase">Total Rp</p><p class="text-xs font-bold text-slate-800">${formatRupiah(gr)}</p></div></div><p class="text-[9px] text-slate-500 italic text-center mt-2">L & K = 1 point · BL = 0 point</p></div>`;
-            } catch(e) { console.error(e); body.innerHTML = '<tr><td colspan="14" class="text-center text-xs text-red-500 py-5">Gagal memuat.</td></tr>'; }
-        };
-
-        window.toggleIuranCell = async function(masterId, bulan, nama) {
-            if (!isAdminRole()) return showToast("Hanya pengurus.", true);
-            const cycle = { 'L': 'K', 'K': 'BL', 'BL': 'L' };
-            const currentUser = window.currentUserData.nama || 'Admin';
-            try {
-                const snap = await getDoc(doc(db, 'artifacts', appId, 'warga_master', masterId));
-                if (!snap.exists()) return showToast("Data rumah tidak ditemukan.", true);
-                const w = snap.data();
-                const cs = (w.iuran || {})[bulan] || 'BL';
-                const ns = cycle[cs] || 'L';
-                const DEF = { 'L': nominalIuranDefault, 'K': Math.round(nominalIuranDefault/2), 'BL': 0 };
-                const existingNom = (w.iuranNominal || {})[bulan];
-                const newNom = (existingNom === undefined || existingNom === null) ? (DEF[ns] ?? 0) : existingNom;
-                const finalNom = ns === 'BL' ? 0 : newNom;
-                await updateDoc(doc(db, 'artifacts', appId, 'warga_master', masterId), { [`iuran.${bulan}`]: ns, [`iuranNominal.${bulan}`]: finalNom, updatedAt: Date.now() });
-                const bl = `${w.blok}/${w.no}`;
-                const ket = `Iuran ${nama} (${bl}) - ${bulan}`;
-                const qk = query(collection(db, 'artifacts', appId, 'kas')); const sk = await getDocs(qk); let ext = null;
-                sk.forEach(d => { const k = d.data(); if (k.keterangan === ket && k.jenis === 'masuk') ext = d.id; });
-                if (finalNom > 0) { if (ext) await deleteDoc(doc(db, 'artifacts', appId, 'kas', ext)); await addDoc(collection(db, 'artifacts', appId, 'kas'), { tipeDoc: 'transaksi', jenis: 'masuk', nominal: finalNom, keterangan: ket, oleh: currentUser, timestamp: Date.now() }); }
-                else if (ext) await deleteDoc(doc(db, 'artifacts', appId, 'kas', ext));
-                showToast(`${bl} ${bulan} → ${ns}${finalNom > 0 ? ' (Rp ' + finalNom.toLocaleString('id-ID') + ')' : ''}`);
-                loadKasTagihanWarga(); loadBukuKas();
-                if (document.getElementById('kasGlobalView') && !document.getElementById('kasGlobalView').classList.contains('hidden')) loadKasGlobalView();
-            } catch(e) { console.error(e); showToast("Gagal ubah status.", true); }
-        };
-
-        window.filterTagihanWarga = function() {
-            const raw = document.getElementById('searchTagihanWarga')?.value || '';
-            if (!raw.trim()) { document.querySelectorAll('.tagihan-row').forEach(r => r.style.display = 'table-row'); return; }
-            const inp = raw.toLowerCase().trim(), nI = normalizeSearch(raw).toLowerCase();
-            document.querySelectorAll('.tagihan-row').forEach(r => { const s = (r.dataset.search || '').toLowerCase(); r.style.display = (s.includes(inp) || s.includes(nI)) ? 'table-row' : 'none'; });
+                if (isAdmin && sumCont) sumCont.innerHTML = `<div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm"><div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-slate-700"><i class="fa-solid fa-calculator text-emerald-600 mr-1"></i> Akumulasi ${getTahunBerjalan()}</span><span class="text-[10px] text-slate-500">${arr.length} rumah</span></div><div class="grid grid-cols-2 gap-2"><div class="bg-emerald-50 p-2 rounded-lg text-center"><p class="text-[9px] text-emerald-700 font-semibold uppercase">Total Point</p><p class="text-base font-bold text-emerald-600">${gp}</p></div><div class="bg-slate-100 p-2 rounded-lg text-center"><p class="text-[9px] text-slate-700 font-semibold uppercase">Total Rp</p><p class="text-xs font-bold text-slate-800">${formatRupiah(gr)}</p></div></div></div>`;
+            } catch(e) { console.error(e); body.innerHTML = '<tr><td colspan="13" class="text-center text-xs text-red-500 py-5">Gagal memuat.</td></tr>'; }
         };
 
         window.loadKasGlobalView = function() {
@@ -1054,39 +1095,51 @@
             document.querySelectorAll('.admin-only-col').forEach(el => el.classList.toggle('hidden', !isAdmin));
             document.querySelectorAll('.admin-only-hint').forEach(el => el.classList.toggle('hidden', !isAdmin));
             document.querySelectorAll('.warga-only-hint').forEach(el => el.classList.toggle('hidden', isAdmin));
-            body.innerHTML = `<tr><td colspan="14" class="text-center py-5"><i class="fa-solid fa-spinner fa-spin text-slate-400"></i></td></tr>`;
+            body.innerHTML = `<tr><td colspan="13" class="text-center py-5"><i class="fa-solid fa-spinner fa-spin text-slate-400"></i></td></tr>`;
             if (sumCont) sumCont.innerHTML = '';
             getDocs(collection(db, 'artifacts', appId, 'warga_master')).then(s => {
                 const arr = []; s.forEach(d => arr.push({ id: d.id, ...d.data() }));
-                if (arr.length === 0) { body.innerHTML = '<tr><td colspan="14" class="text-center py-5 text-xs text-slate-400">Belum ada data master.</td></tr>'; return; }
+                if (arr.length === 0) { body.innerHTML = '<tr><td colspan="13" class="text-center py-5 text-xs text-slate-400">Belum ada data master.</td></tr>'; return; }
                 arr.sort((a, b) => { const bkA = (a.blok || '').toUpperCase().padEnd(4); const bkB = (b.blok || '').toUpperCase().padEnd(4); if (bkA !== bkB) return bkA.localeCompare(bkB); return String(a.no || '').localeCompare(String(b.no || ''), undefined, { numeric: true }); });
                 let gp = 0, gr = 0, html = '';
                 arr.forEach(w => {
-                    const iuran = w.iuran || {}, iuranNom = w.iuranNominal || {};
                     let poin = 0, rp = 0, cells = '';
                     const sN = String(w.nama || '').replace(/'/g, "\\'");
                     months.forEach(bln => {
-                        const st = iuran[bln] || 'BL'; const nom = Number(iuranNom[bln] ?? 0); const isL = isLunasStatus(st);
+                        const st = normalizeStatus((w.iuran || {})[bln]);
+                        const nom = hitungNominal(w, bln);
+                        const isL = STATUS_CODES[st]?.isLunas;
+                        const custom = isCustomNominal(w, bln);
                         if (isL) { poin += 1; rp += nom; }
                         const sB = String(bln).replace(/'/g, "\\'");
-                        const cls = st === 'L' ? 'cell-L' : st === 'K' ? 'cell-K' : 'cell-BL';
-                        const gr = isL && nom === 0 ? ' cell-gratis' : '';
-                        if (isAdmin) cells += `<td class="p-0 border border-slate-100"><button onclick="toggleIuranCell('${w.id}','${sB}','${sN}')" class="w-full py-1.5 text-[10px] font-bold ${cls}${gr} hover:opacity-80" title="${escapeHtml(bln)}: ${st}${nom > 0 ? ' · Rp ' + nom.toLocaleString('id-ID') : (isL ? ' · Gratis' : '')}">${st}</button></td>`;
-                        else cells += `<td class="p-1.5 border border-slate-100 text-[10px] font-bold ${cls}">${st}</td>`;
+                        const cls = `cell-${st}`;
+                        const gratis = (isL && nom === 0) ? ' cell-gratis' : '';
+                        const custCls = custom ? ' cell-custom' : '';
+                        if (isAdmin) {
+                            cells += `<td class="p-0 border border-slate-100"><button onclick="openEditSel('${w.id}','${sB}','${sN}')" class="matrix-cell-btn ${cls}${gratis}${custCls} hover:opacity-80">${st}</button></td>`;
+                        } else {
+                            cells += `<td class="p-0 border border-slate-100"><div class="matrix-cell-btn ${cls}${gratis}${custCls}">${st}</div></td>`;
+                        }
                     });
                     gp += poin; gr += rp;
-                    const bl = `${w.blok || '-'}/${w.no || '-'}`;
-                    const tot = isAdmin ? `<td class="p-1 border border-slate-100 bg-slate-50 admin-only-col"><div class="flex flex-col items-center leading-tight"><span class="text-[10px] font-bold text-emerald-700">${poin}/12</span><span class="text-[7px] text-slate-500">${formatRupiah(rp)}</span></div></td>` : '';
-                    html += `<tr class="hover:bg-slate-50"><td class="p-1.5 border border-slate-100 text-left matrix-blok-col"><div class="flex flex-col leading-tight"><span class="font-bold text-slate-800 text-[10px]">${escapeHtml(bl)}</span><span class="text-[8px] text-slate-500 truncate max-w-[60px]">${escapeHtml(w.nama || '')}</span></div></td>${cells}${tot}</tr>`;
+                    const bl = `${w.blok || '-'} ${w.no || '-'}`;
+                    html += `<tr class="hover:bg-slate-50"><td class="p-1 border border-slate-100 text-left matrix-blok-col"><div class="flex flex-col leading-tight"><span class="font-bold text-slate-800 text-[10px]">${escapeHtml(bl)}</span><span class="text-[8px] text-slate-500 truncate max-w-[55px]">${escapeHtml(w.nama || '')}</span></div></td>${cells}</tr>`;
                 });
                 body.innerHTML = html;
-                if (isAdmin && sumCont) sumCont.innerHTML = `<div class="bg-white p-3 rounded-xl border shadow-sm"><div class="flex justify-between items-center mb-1"><span class="text-xs font-bold text-slate-700"><i class="fa-solid fa-calculator text-emerald-600 mr-1"></i> Akumulasi ${tahun}</span><span class="text-[10px] text-slate-500">${arr.length} rumah</span></div><div class="grid grid-cols-2 gap-2"><div class="bg-emerald-50 p-2 rounded-lg text-center"><p class="text-[9px] text-emerald-700 font-semibold uppercase">Total Point L+K</p><p class="text-base font-bold text-emerald-600">${gp}</p></div><div class="bg-slate-100 p-2 rounded-lg text-center"><p class="text-[9px] text-slate-700 font-semibold uppercase">Total Rp</p><p class="text-xs font-bold text-slate-800">${formatRupiah(gr)}</p></div></div></div>`;
-            }).catch(err => { console.error(err); body.innerHTML = '<tr><td colspan="14" class="text-center text-xs text-red-500 py-5">Gagal memuat.</td></tr>'; });
+                if (isAdmin && sumCont) sumCont.innerHTML = `<div class="bg-white p-3 rounded-xl border shadow-sm"><div class="flex justify-between items-center mb-1"><span class="text-xs font-bold text-slate-700"><i class="fa-solid fa-calculator text-emerald-600 mr-1"></i> Akumulasi ${tahun}</span><span class="text-[10px] text-slate-500">${arr.length} rumah</span></div><div class="grid grid-cols-2 gap-2"><div class="bg-emerald-50 p-2 rounded-lg text-center"><p class="text-[9px] text-emerald-700 font-semibold uppercase">Total Point</p><p class="text-base font-bold text-emerald-600">${gp}</p></div><div class="bg-slate-100 p-2 rounded-lg text-center"><p class="text-[9px] text-slate-700 font-semibold uppercase">Total Rp</p><p class="text-xs font-bold text-slate-800">${formatRupiah(gr)}</p></div></div></div>`;
+            }).catch(err => { console.error(err); body.innerHTML = '<tr><td colspan="13" class="text-center text-xs text-red-500 py-5">Gagal memuat.</td></tr>'; });
+        };
+
+        window.filterTagihanWarga = function() {
+            const raw = document.getElementById('searchTagihanWarga')?.value || '';
+            if (!raw.trim()) { document.querySelectorAll('.tagihan-row').forEach(r => r.style.display = 'table-row'); return; }
+            const inp = raw.toLowerCase().trim(), nI = normalizeSearch(raw).toLowerCase();
+            document.querySelectorAll('.tagihan-row').forEach(r => { const s = (r.dataset.search || '').toLowerCase(); r.style.display = (s.includes(inp) || s.includes(nI)) ? 'table-row' : 'none'; });
         };
 
         window.autofillKasKet = function() { const k = document.getElementById('formKasKategori').value; const i = document.getElementById('formKasKet'); if (k && k !== 'Lainnya') i.value = k; };
         window.filterKas = function(tipe) { currentKasFilter = tipe; ['semua', 'masuk', 'keluar'].forEach(t => { const btn = document.getElementById('tabKas' + t.charAt(0).toUpperCase() + t.slice(1)); if(btn) { if(t === tipe) btn.className = "flex-1 py-1.5 text-[10px] font-bold bg-white shadow-sm rounded-md text-emerald-600 transition-all"; else btn.className = "flex-1 py-1.5 text-[10px] font-semibold text-slate-500 rounded-md transition-all"; } }); renderKasList(); };
-        
+
         window.openModalInputKas = function() {
             const now = new Date();
             const y = now.getFullYear(), m = String(now.getMonth() + 1).padStart(2, '0'), d = String(now.getDate()).padStart(2, '0');
@@ -1103,31 +1156,17 @@
             const tglVal = document.getElementById('formKasTanggal')?.value;
             if (!nom || !ket) return showToast("Nominal dan keterangan wajib!", true);
             if (!tglVal) return showToast("Tanggal transaksi wajib diisi!", true);
-            
             let ts = Date.now();
+            try { const [yy, mm, dd] = tglVal.split('-').map(Number); const now = new Date(); ts = new Date(yy, mm - 1, dd, now.getHours(), now.getMinutes(), now.getSeconds()).getTime(); } catch (err) {}
             try {
-                const [yy, mm, dd] = tglVal.split('-').map(Number);
-                const now = new Date();
-                ts = new Date(yy, mm - 1, dd, now.getHours(), now.getMinutes(), now.getSeconds()).getTime();
-            } catch (err) {}
-
-            try {
-                await addDoc(collection(db, 'artifacts', appId, 'kas'), {
-                    tipeDoc: 'transaksi',
-                    kategori: kat,
-                    jenis: 'keluar',
-                    nominal: nom,
-                    keterangan: ket,
-                    oleh: (window.currentUserData && window.currentUserData.nama) || 'Pengurus',
-                    timestamp: ts
-                });
+                await addDoc(collection(db, 'artifacts', appId, 'kas'), { tipeDoc: 'transaksi', kategori: kat, jenis: 'keluar', nominal: nom, keterangan: ket, oleh: (window.currentUserData && window.currentUserData.nama) || 'Pengurus', timestamp: ts });
                 document.getElementById('modalInputKas').classList.add('hidden');
                 document.getElementById('formInputKas').reset();
                 showToast("Pengeluaran disimpan!");
                 loadBukuKas();
             } catch (err) { showToast("Gagal.", true); }
         };
-        
+
         window.hapusTransaksiKas = async function (id) { if (!confirm("Hapus transaksi ini?")) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'kas', id)); showToast("Dihapus."); loadBukuKas(); } catch(e) {} };
 
         window.loadBukuKas = async function () {
@@ -1214,96 +1253,30 @@
                 const docId = getHouseKey(u.blok, u.no);
                 const snap = await getDoc(doc(db, 'artifacts', appId, 'warga_master', docId));
                 const dataIuran = (snap.exists() && snap.data().iuran) || {};
+                const IURAN_STYLE = {
+                    'L':  { lbl:'LUNAS',        cls:'bg-emerald-50 border-emerald-300',  ib:'bg-emerald-600 text-white', ic:'fa-check',               bd:'bg-emerald-600 text-white' },
+                    'LK': { lbl:'KOSONG',       cls:'bg-emerald-50 border-emerald-300',  ib:'bg-emerald-500 text-white', ic:'fa-house',               bd:'bg-emerald-500 text-white' },
+                    'LA': { lbl:'NON-AIR',      cls:'bg-emerald-50 border-emerald-300',  ib:'bg-emerald-500 text-white', ic:'fa-droplet-slash',       bd:'bg-emerald-500 text-white' },
+                    'LC': { lbl:'CCTV',         cls:'bg-emerald-50 border-emerald-300',  ib:'bg-emerald-400 text-white', ic:'fa-video',               bd:'bg-emerald-400 text-white' },
+                    'P':  { lbl:'PENGURUS',     cls:'bg-blue-50 border-blue-300',        ib:'bg-blue-600 text-white',    ic:'fa-user-shield',         bd:'bg-blue-600 text-white' },
+                    'A':  { lbl:'ABAI',         cls:'bg-slate-50 border-slate-300',      ib:'bg-slate-500 text-white',   ic:'fa-ban',                 bd:'bg-slate-500 text-white' },
+                    'BL': { lbl:'BELUM',        cls:'bg-white border-slate-200',         ib:'bg-red-50 text-red-500',    ic:'fa-clock',               bd:'bg-red-100 text-red-600' },
+                    'T':  { lbl:'TIDAK MAMPU',  cls:'bg-purple-50 border-purple-300',    ib:'bg-purple-500 text-white',  ic:'fa-hands-holding-heart', bd:'bg-purple-500 text-white' }
+                };
                 let h = '';
                 getBulanList(getTahunBerjalan()).forEach(bln => {
-                    const st = dataIuran[bln] || 'BL';
-                    const lbl = st === 'L' ? 'LUNAS' : st === 'K' ? 'KOSONG' : 'BELUM';
-                    const cls = st === 'L' ? 'bg-emerald-50 border-emerald-300' : st === 'K' ? 'bg-yellow-50 border-yellow-300' : 'bg-white border-slate-200';
-                    const ib = st === 'L' ? 'bg-emerald-600 text-white' : st === 'K' ? 'bg-yellow-500 text-white' : 'bg-red-50 text-red-500';
-                    const ic = st === 'L' ? 'fa-check' : st === 'K' ? 'fa-house' : 'fa-clock';
-                    const bd = st === 'L' ? 'bg-emerald-600 text-white' : st === 'K' ? 'bg-yellow-500 text-white' : 'bg-red-100 text-red-600';
-                    h += `<div class="p-3.5 border ${cls} rounded-xl flex justify-between items-center shadow-sm"><div class="flex items-center gap-3 min-w-0"><div class="w-10 h-10 rounded-xl flex justify-center items-center shrink-0 ${ib}"><i class="fa-solid ${ic} text-lg"></i></div><div class="min-w-0"><h4 class="font-bold text-sm text-slate-800">${bln}</h4></div></div><span class="px-3 py-1.5 text-xs font-bold rounded-lg shrink-0 ${bd}">${lbl}</span></div>`;
+                    const st = normalizeStatus(dataIuran[bln]);
+                    const style = IURAN_STYLE[st] || IURAN_STYLE['BL'];
+                    h += `<div class="p-3.5 border ${style.cls} rounded-xl flex justify-between items-center shadow-sm"><div class="flex items-center gap-3 min-w-0"><div class="w-10 h-10 rounded-xl flex justify-center items-center shrink-0 ${style.ib}"><i class="fa-solid ${style.ic} text-lg"></i></div><div class="min-w-0"><h4 class="font-bold text-sm text-slate-800">${bln}</h4></div></div><span class="px-3 py-1.5 text-xs font-bold rounded-lg shrink-0 ${style.bd}">${style.lbl}</span></div>`;
                 });
                 cont.innerHTML = h;
             } catch (e) { cont.innerHTML = '<p class="text-center text-red-500 text-xs">Gagal memuat.</p>'; }
         };
         window.bayarIuranQRIS = function() { document.getElementById('qrisModal').classList.remove('hidden'); };
         window.pindaiQRIS = function() { alert("Buka Mobile Banking / Dompet Digital, pilih 'Scan QRIS', arahkan ke layar."); };
-        window.simpanNominalDefault = async function () { const a = document.getElementById('adminNominalIuran'); if (!a) return; nominalIuranDefault = Number(a.value); try { await setDoc(doc(db, 'artifacts', appId, 'kas', 'config_iuran'), { nominalDefault: nominalIuranDefault, updatedAt: Date.now() }, { merge: true }); showToast(`✅ Tarif: ${formatRupiah(nominalIuranDefault)}`); if (currentKasView === 'tagihan') loadKasTagihanWarga(); } catch(e) { showToast("Gagal.", true); } };
-        window.kirimPengingatIuran = async function () { const b = document.getElementById('adminBulanIuran')?.value, n = document.getElementById('adminNominalIuran')?.value; if (!b || !n) return; try { await setDoc(doc(db, 'artifacts', appId, 'kas', 'config_iuran'), { nominalDefault: Number(n), reminderBulan: b, reminderNominal: Number(n), reminderTimestamp: Date.now() }, { merge: true }); showToast(`🔔 Pengingat ${b} dikirim!`); } catch(e) {} };
 
-        window.loadAdminIuran = async function () {
-            initDropdownIuran(); const bs = document.getElementById('adminBulanIuran'); if (!bs) return;
-            const selBln = bs.value; const cont = document.getElementById('adminIuranWargaList'); if (!cont) return; cont.innerHTML = 'Loading...';
-            try {
-                const s = await getDocs(collection(db, 'artifacts', appId, 'warga_master'));
-                const arr = []; s.forEach(d => arr.push({ id: d.id, ...d.data() }));
-                arr.sort((a, b) => { const bkA = (a.blok || '').toUpperCase().padEnd(4); const bkB = (b.blok || '').toUpperCase().padEnd(4); if (bkA !== bkB) return bkA.localeCompare(bkB); return String(a.no || '').localeCompare(String(b.no || ''), undefined, { numeric: true }); });
-                let h = '';
-                arr.forEach(w => {
-                    const st = (w.iuran && w.iuran[selBln]) || 'BL';
-                    const nom = (w.iuranNominal && w.iuranNominal[selBln]) !== undefined ? Number(w.iuranNominal[selBln]) : 0;
-                    const sN = String(w.nama || 'Warga').replace(/'/g, "\\'"); const sB = escapeHtml(w.blok || '-'); const sNo = escapeHtml(w.no || '-');
-                    let optNom = ''; for (let i = 0; i <= 200000; i += 5000) optNom += `<option value="${i}" ${nom === i ? 'selected' : ''}>${formatRupiah(i)}</option>`;
-                    h += `<div class="p-3 border rounded-xl flex flex-col gap-2 mb-2 bg-white shadow-sm"><div class="flex justify-between items-start"><div class="min-w-0"><h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(w.nama || 'Warga')}</h4><p class="text-[11px] text-slate-500">Blok ${sB}/${sNo}</p></div><div class="text-right shrink-0"><p class="text-[11px] font-bold px-2 py-0.5 rounded ${st !== 'BL' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}">${escapeHtml(st)}</p><p class="text-[10px] text-slate-500 font-semibold mt-0.5">${formatRupiah(nom)}</p></div></div><div class="flex items-center justify-between border-t pt-2 mt-1 gap-2"><select id="stat_${w.id}" onchange="simpanIuranWarga('${w.id}', '${selBln}', '${sN}', '${sB}', '${sNo}', true)" class="w-1/2 text-[11px] font-bold border rounded-lg p-1.5 bg-slate-50 outline-none"><option value="BL" ${st === 'BL' ? 'selected' : ''}>BL - Belum</option><option value="L" ${st === 'L' ? 'selected' : ''}>L - Lunas</option><option value="K" ${st === 'K' ? 'selected' : ''}>K - Kosong</option></select><select id="nom_${w.id}" onchange="simpanIuranWarga('${w.id}', '${selBln}', '${sN}', '${sB}', '${sNo}', false)" class="w-1/2 text-[11px] font-bold border rounded-lg p-1.5 bg-slate-50 outline-none">${optNom}</select></div></div>`;
-                });
-                cont.innerHTML = h || '<p class="text-xs text-slate-500 text-center">Data master kosong. Klik Seed dulu.</p>';
-            } catch (e) { cont.innerHTML = 'Gagal.'; }
-        };
-
-        window.simpanIuranWarga = async function (masterId, bulan, nama, blok, no, isStatusChange) {
-            const statEl = document.getElementById('stat_' + masterId), nomEl = document.getElementById('nom_' + masterId);
-            if (!statEl || !nomEl) return;
-            let sc = statEl.value, nv = Number(nomEl.value);
-            const currentUser = (window.currentUserData && window.currentUserData.nama) || 'Admin'; const bl = `${blok}/${no}`;
-            try {
-                const snap = await getDoc(doc(db, 'artifacts', appId, 'warga_master', masterId));
-                if (!snap.exists()) return showToast("Data tidak ditemukan.", true);
-                const w = snap.data();
-                const exNom = (w.iuranNominal || {})[bulan];
-                const DEF = { 'L': nominalIuranDefault, 'K': Math.round(nominalIuranDefault/2), 'BL': 0 };
-                if (isStatusChange) {
-                    if (sc === 'BL') nv = 0;
-                    else if (exNom === undefined || exNom === null) nv = DEF[sc] ?? 0;
-                    else nv = Number(exNom);
-                    nomEl.value = nv;
-                }
-                const finalNom = sc === 'BL' ? 0 : nv;
-                await updateDoc(doc(db, 'artifacts', appId, 'warga_master', masterId), { [`iuran.${bulan}`]: sc, [`iuranNominal.${bulan}`]: finalNom, updatedAt: Date.now() });
-                const ket = `Iuran ${nama} (${bl}) - ${bulan}`;
-                const qk = query(collection(db, 'artifacts', appId, 'kas')); const sk = await getDocs(qk); let ext = null;
-                sk.forEach(d => { const k = d.data(); if (k.keterangan === ket && k.jenis === 'masuk') ext = d.id; });
-                if (finalNom > 0) { if (ext) await deleteDoc(doc(db, 'artifacts', appId, 'kas', ext)); await addDoc(collection(db, 'artifacts', appId, 'kas'), { tipeDoc: 'transaksi', jenis: 'masuk', nominal: finalNom, keterangan: ket, oleh: currentUser, timestamp: Date.now() }); }
-                else if (ext) await deleteDoc(doc(db, 'artifacts', appId, 'kas', ext));
-                const payload = { action: "update_iuran", nama, blok, no_rumah: no, bulan, nominal: finalNom, status: sc, waktu: new Date().toLocaleString('id-ID') };
-                if (GOOGLE_SCRIPT_URL) fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) }).catch(() => {});
-                showToast(`Tersimpan: ${sc} (${formatRupiah(finalNom)})`); loadAdminIuran(); loadBukuKas();
-            } catch (e) { showToast("Gagal update.", true); }
-        };
-
-        window.exportWargaPDF = async function() {
-            if (!firebaseReady) return; showToast("Menyiapkan PDF...");
-            try {
-                const s = await getDocs(collection(db, 'artifacts', appId, 'warga_master'));
-                if (s.empty) return showToast("Tidak ada data.", true);
-                const { jsPDF } = window.jspdf; const doc = new jsPDF();
-                doc.setFontSize(16); doc.text("Data Warga RT.010 / RW.002 Mabu Park", 14, 20);
-                doc.setFontSize(10); doc.text(`Dicetak: ${new Date().toLocaleString('id-ID')}`, 14, 26);
-                let bd = []; s.forEach((d, i) => { const u = d.data(); bd.push([i + 1, u.nama || '-', u.blok || '-', u.no || '-', u.status_rumah || 'HUNI']); });
-                doc.autoTable({ startY: 35, head: [['No', 'Nama', 'Blok', 'No', 'Status']], body: bd, styles: { fontSize: 9 }, headStyles: { fillColor: [5, 150, 105] } });
-                doc.save(`Data_Warga_RT010_${Date.now()}.pdf`); showToast("✅ PDF diunduh!");
-            } catch(e) { showToast("Gagal.", true); }
-        };
-        window.exportWargaData = async function() {
-            if (!firebaseReady) return; showToast("Menyiapkan...");
-            try {
-                const s = await getDocs(collection(db, 'artifacts', appId, 'warga_master'));
-                if (s.empty) return showToast("Tidak ada data.", true);
-                let csv = "Nama,Blok,No,Status Rumah,Jumlah Jiwa\n";
-                s.forEach(d => { const u = d.data(); csv += `${(u.nama || '-').replace(/,/g, '')},${u.blok || '-'},${u.no || '-'},${u.status_rumah || 'HUNI'},${u.jumlah_jiwa || 0}\n`; });
-                const b = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const l = document.createElement("a"); l.setAttribute("href", URL.createObjectURL(b)); l.setAttribute("download", `Data_Warga_RT010_${Date.now()}.csv`); document.body.appendChild(l); l.click(); document.body.removeChild(l); showToast("✅ CSV diunduh!");
-            } catch(e) { showToast("Gagal.", true); }
-        };
+        window.exportWargaPDF = async function() { if (!firebaseReady) return; showToast("Menyiapkan PDF..."); try { const s = await getDocs(collection(db, 'artifacts', appId, 'warga_master')); if (s.empty) return showToast("Tidak ada data.", true); const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.setFontSize(16); doc.text("Data Warga RT.010 / RW.002 Mabu Park", 14, 20); doc.setFontSize(10); doc.text(`Dicetak: ${new Date().toLocaleString('id-ID')}`, 14, 26); let bd = []; s.forEach((d, i) => { const u = d.data(); bd.push([i + 1, u.nama || '-', u.blok || '-', u.no || '-', u.status_rumah || 'HUNI']); }); doc.autoTable({ startY: 35, head: [['No', 'Nama', 'Blok', 'No', 'Status']], body: bd, styles: { fontSize: 9 }, headStyles: { fillColor: [5, 150, 105] } }); doc.save(`Data_Warga_RT010_${Date.now()}.pdf`); showToast("✅ PDF diunduh!"); } catch(e) { showToast("Gagal.", true); } };
+        window.exportWargaData = async function() { if (!firebaseReady) return; showToast("Menyiapkan..."); try { const s = await getDocs(collection(db, 'artifacts', appId, 'warga_master')); if (s.empty) return showToast("Tidak ada data.", true); let csv = "Nama,Blok,No,Status Rumah,Jumlah Jiwa\n"; s.forEach(d => { const u = d.data(); csv += `${(u.nama || '-').replace(/,/g, '')},${u.blok || '-'},${u.no || '-'},${u.status_rumah || 'HUNI'},${u.jumlah_jiwa || 0}\n`; }); const b = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const l = document.createElement("a"); l.setAttribute("href", URL.createObjectURL(b)); l.setAttribute("download", `Data_Warga_RT010_${Date.now()}.csv`); document.body.appendChild(l); l.click(); document.body.removeChild(l); showToast("✅ CSV diunduh!"); } catch(e) { showToast("Gagal.", true); } };
 
         window.loadStatistik = async function() {
             if (!firebaseReady) return;
@@ -1341,9 +1314,10 @@
                     const u = ud.data(); const docId = getHouseKey(u.blok, u.no);
                     const ms = await getDoc(doc(db, 'artifacts', appId, 'warga_master', docId));
                     const iuran = (ms.exists() && ms.data().iuran) || {};
-                    const now = new Date(); const mn = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+                    const now = new Date(); const mn = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nop", "Des"];
                     const cm = `${mn[now.getMonth()]} ${now.getFullYear()}`;
-                    const paid = ['L', 'K'].includes(iuran[cm]);
+                    const stn = normalizeStatus(iuran[cm]);
+                    const paid = STATUS_CODES[stn]?.isLunas;
                     if (!paid) el.innerHTML = `🔔 <b>PENGINGAT:</b> Mohon Bapak/Ibu ${escapeHtml(u.nama || 'Warga')}, iuran <b>${cm}</b> belum lunas.`;
                     else el.innerHTML = `✅ Terima kasih, iuran bulan ${cm} sudah lunas.`;
                 } else el.innerHTML = `Selamat datang di Aplikasi Layanan Warga RT.010 / RW.002.`;
@@ -1357,7 +1331,13 @@
             let iP = true; try { unSubs.push(onSnapshot(collection(db, 'artifacts', appId, 'pengumuman'), (s) => { if (iP) { iP = false; return; } s.docChanges().forEach(c => { if (c.type === 'added') { loadPengumumanUtama(); loadMarquee(); const isRT = window.currentUserData && window.currentUserData.role === 'Admin RT'; if (!isRT) kirimNotifikasiPesan(`Pengumuman`, c.doc.data().judul); } }); }, (e) => console.warn(e))); } catch(e) {}
             try { unSubs.push(onSnapshot(doc(db, 'artifacts', appId, 'kas', 'config_sos'), (snap) => { const d = snap.exists() ? snap.data() : { enabled: true }; isFiturSOSEnabled = d.enabled !== false; const bh = document.getElementById('btnHeaderSOS'), bhm = document.getElementById('btnHomeSOS'), cb = document.getElementById('toggleFiturSOSCheckbox'); if (cb) cb.checked = isFiturSOSEnabled; if (isFiturSOSEnabled) { if (bh) bh.classList.remove('hidden'); if (bhm) bhm.classList.remove('hidden'); } else { if (bh) bh.classList.add('hidden'); if (bhm) bhm.classList.add('hidden'); } const ab = document.getElementById('sosActiveAlertBanner'), st = document.getElementById('adminStatusSOSText'); const isRT = window.currentUserData && ['Admin RT', 'Pengurus RT', 'Bendahara', 'Sekretaris'].includes(window.currentUserData.role); const bb = document.getElementById('btnAdminStopSOSBanner'); if (bb) bb.classList.toggle('hidden', !isRT); if (d.activeSOS && d.activeSOS.jenis) { if (ab) { const t = document.getElementById('sosAlertTitle'), dsc = document.getElementById('sosAlertDesc'); if (t) t.innerText = `DARURAT: ${d.activeSOS.jenis}!`; if (dsc) dsc.innerText = `Pelapor: ${d.activeSOS.nama} (${d.activeSOS.blok})`; ab.classList.remove('hidden'); } if (st) st.innerText = `🚨 DARURAT AKTIF: ${d.activeSOS.jenis} oleh ${d.activeSOS.nama}`; } else { if (ab) ab.classList.add('hidden'); if (st) st.innerText = "Aman. Tidak ada sinyal darurat."; } }, () => {})); } catch(e) {}
             try { unSubs.push(onSnapshot(doc(db, 'artifacts', appId, 'users', user.uid), (snap) => { if (!snap.exists()) return; window.currentUserData = snap.data(); const iv = document.getElementById('iuranView'); if (iv && !iv.classList.contains('hidden')) loadIuranUser(); loadMarquee(); }, () => {})); } catch(e) {}
-            let iK = true; try { unSubs.push(onSnapshot(doc(db, 'artifacts', appId, 'kas', 'config_iuran'), (snap) => { if (!snap.exists()) return; const d = snap.data(); if (d.nominalDefault) nominalIuranDefault = d.nominalDefault; if (d.reminderBulan) { const b = document.getElementById('iuranReminderBanner'); if (b && !iK) { const t = document.getElementById('iuranReminderTitle'), tx = document.getElementById('iuranReminderText'); if (t) t.innerText = `Pengingat Iuran ${d.reminderBulan}`; if (tx) tx.innerText = `Iuran ${formatRupiah(d.reminderNominal || nominalIuranDefault)} belum tercatat lunas.`; b.classList.remove('hidden'); kirimNotifikasiPesan(`Pengingat Iuran ${d.reminderBulan}`, `Mohon cek Kartu Iuran.`); } } iK = false; }, () => {})); } catch(e) {}
+            let iK = true; try { unSubs.push(onSnapshot(doc(db, 'artifacts', appId, 'kas', 'config_iuran'), (snap) => { if (!snap.exists()) return; const d = snap.data(); if (d.nominalDefault) nominalIuranDefault = d.nominalDefault;
+                    if (d.tarifStandar) window.tarifConfig.tarifStandar = d.tarifStandar;
+                    if (d.tarifPerubahan) window.tarifConfig.tarifPerubahan = d.tarifPerubahan;
+                    if (d.bulanBerlaku) window.tarifConfig.bulanBerlaku = d.bulanBerlaku;
+                    const kt = document.getElementById('kasTagihanContainer');
+                    if (kt && !kt.classList.contains('hidden')) loadKasTagihanWarga();
+                    if (d.reminderBulan) { const b = document.getElementById('iuranReminderBanner'); if (b && !iK) { const t = document.getElementById('iuranReminderTitle'), tx = document.getElementById('iuranReminderText'); if (t) t.innerText = `Pengingat Iuran ${d.reminderBulan}`; if (tx) tx.innerText = `Iuran ${formatRupiah(d.reminderNominal || nominalIuranDefault)} belum tercatat lunas.`; b.classList.remove('hidden'); kirimNotifikasiPesan(`Pengingat Iuran ${d.reminderBulan}`, `Mohon cek Kartu Iuran.`); } } iK = false; }, () => {})); } catch(e) {}
         }
 
         if (firebaseReady && auth) {
@@ -1380,7 +1360,8 @@
         function showAppScreen() {
             const a = document.getElementById('authContainer'); if (a) { a.classList.add('hidden'); a.classList.remove('flex'); } const m = document.getElementById('mainAppContainer'); if (m) { m.classList.remove('hidden'); m.classList.add('flex'); }
             const isK = window.currentUserData && window.currentUserData.role === 'Ketua RT'; const isRT = isAdminRole();
-            const ti = document.getElementById('tabAdmIuran'); if (ti) { if (isK) ti.classList.remove('hidden'); else ti.classList.add('hidden'); }
+            document.body.classList.toggle('role-admin', !!isRT);
+            document.body.classList.toggle('role-warga', !isRT);
             const ba = document.getElementById('navAdminBtn'); if (ba) { if (isRT) { ba.classList.remove('hidden'); ba.classList.add('flex'); } else { ba.classList.add('hidden'); ba.classList.remove('flex'); } }
             const nr = document.getElementById('navRiwayatBtn'); if (nr) { if (isRT) { nr.classList.remove('hidden'); nr.classList.add('flex'); } else { nr.classList.add('hidden'); nr.classList.remove('flex'); } }
             const bm = document.getElementById('btnToggleMute'); if (bm) { if (isRT) bm.classList.remove('hidden'); else bm.classList.add('hidden'); }
@@ -1481,10 +1462,10 @@
                 const gender = document.getElementById('regGender')?.value || 'Laki-laki';
                 const mSnap = await getDoc(doc(db, 'artifacts', appId, 'warga_master', docId));
                 if (!mSnap.exists()) {
-                    await setDoc(doc(db, 'artifacts', appId, 'warga_master', docId), { nama: nm.toUpperCase(), blok: norm.blok, no: norm.no, status_rumah: 'HUNI', jumlah_jiwa: 0, iuran: {}, iuranNominal: {}, createdAt: Date.now(), updatedAt: Date.now() });
+                    await setDoc(doc(db, 'artifacts', appId, 'warga_master', docId), { nama: nm.toUpperCase(), blok: norm.blok, no: norm.no, status_rumah: 'HUNI', jumlah_jiwa: 0, iuran: {}, iuranNominal: {}, status_aktif: 'A', createdAt: Date.now(), updatedAt: Date.now() });
                 }
                 await setDoc(doc(db, 'artifacts', appId, 'users', c.user.uid), { nama: nm, email: id, jenis_kelamin: gender, hp, blok: norm.blok, no: norm.no, role: 'Warga', password: pw });
-                showToast("Daftar sukses! Akun Anda tersinkron ke rumah " + norm.blok + "/" + norm.no);
+                showToast("Daftar sukses! Akun Anda tersinkron ke rumah " + norm.blok + " " + norm.no);
             } catch (err) { showToast("Gagal daftar: akun mungkin sudah terdaftar.", true); }
             finally { b.disabled = false; }
         };
@@ -1593,7 +1574,7 @@
                     const docId = getHouseKey(norm.blok, norm.no);
                     const mSnap = await getDoc(doc(db, 'artifacts', appId, 'warga_master', docId));
                     if (!mSnap.exists()) {
-                        await setDoc(doc(db, 'artifacts', appId, 'warga_master', docId), { nama: nm.toUpperCase(), blok: norm.blok, no: norm.no, status_rumah: 'HUNI', jumlah_jiwa: parseInt(dObj.jumlah_jiwa) || 0, iuran: {}, iuranNominal: {}, createdAt: Date.now(), updatedAt: Date.now() });
+                        await setDoc(doc(db, 'artifacts', appId, 'warga_master', docId), { nama: nm.toUpperCase(), blok: norm.blok, no: norm.no, status_rumah: 'HUNI', jumlah_jiwa: parseInt(dObj.jumlah_jiwa) || 0, iuran: {}, iuranNominal: {}, status_aktif: 'A', createdAt: Date.now(), updatedAt: Date.now() });
                     } else {
                         await updateDoc(doc(db, 'artifacts', appId, 'warga_master', docId), { jumlah_jiwa: parseInt(dObj.jumlah_jiwa) || mSnap.data().jumlah_jiwa || 0, updatedAt: Date.now() });
                     }
@@ -1618,13 +1599,13 @@
         window.toggleKeluargaStatus = function () { const st = document.querySelector('input[name="statusKeluarga"]:checked')?.value || 'Belum Kawin'; const fB = document.getElementById('formBelumKeluarga'), fS = document.getElementById('formSudahKeluarga'); if (st === 'Belum Kawin') { fB?.classList.remove('hidden'); fS?.classList.add('hidden'); } else { fB?.classList.add('hidden'); fS?.classList.remove('hidden'); } };
 
         window.switchAdminTab = function (t) {
-            ['Warga','Laporan','Pekerja','Iuran','Kas','Tamu','Booking','Sos','Pengumuman'].forEach(x => { const v = document.getElementById('admView' + x), b = document.getElementById('tabAdm' + x); if (x.toLowerCase() === t) { if (v) { v.classList.remove('hidden'); v.classList.add('block'); } if (b) b.className = "py-2 text-[10px] sm:text-xs font-bold bg-emerald-100 text-emerald-700 rounded-xl shadow-sm transition-all"; } else { if (v) { v.classList.add('hidden'); v.classList.remove('block'); } if (b) b.className = "py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all"; } });
-            if (t === 'warga') loadAdminWargaList(); else if (t === 'laporan') loadAdminLaporan(); else if (t === 'pengumuman') loadAdminPengumuman(); else if (t === 'kas') loadBukuKas(); else if (t === 'iuran') loadAdminIuran(); else if (t === 'tamu') loadBukuTamu(); else if (t === 'booking') loadAdminBookingList(); else if (t === 'pekerja') loadAdminPekerjaList();
+            ['Warga','Laporan','Pekerja','Tamu','Booking','Sos','Pengumuman'].forEach(x => { const v = document.getElementById('admView' + x), b = document.getElementById('tabAdm' + x); if (x.toLowerCase() === t) { if (v) { v.classList.remove('hidden'); v.classList.add('block'); } if (b) b.className = "py-2 text-[10px] sm:text-xs font-bold bg-emerald-100 text-emerald-700 rounded-xl shadow-sm transition-all"; } else { if (v) { v.classList.add('hidden'); v.classList.remove('block'); } if (b) b.className = "py-2 text-[10px] sm:text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-all"; } });
+            if (t === 'warga') loadAdminWargaList(); else if (t === 'laporan') loadAdminLaporan(); else if (t === 'pengumuman') loadAdminPengumuman(); else if (t === 'tamu') loadBukuTamu(); else if (t === 'booking') loadAdminBookingList(); else if (t === 'pekerja') loadAdminPekerjaList();
         };
         window.toggleAdminAddWarga = function (show) { const f = document.getElementById('adminAddWargaForm'), b = document.getElementById('btnToggleAddWarga'); if (!f || !b) return; if (show) { f.classList.remove('hidden'); b.classList.add('hidden'); } else { f.classList.add('hidden'); b.classList.remove('hidden'); f.reset(); const p = document.getElementById('admNewPass'); if (p) p.value = 'warga010'; } };
 
         async function createAccountForMaster(docId, blok, no, nama) {
-            const uname = prompt(`Username untuk ${nama} (Blok ${blok}/${no}):`, nama.toLowerCase().split(' ')[0].replace(/[^a-z0-9]/gi, ''));
+            const uname = prompt(`Username untuk ${nama} (Blok ${blok} ${no}):`, nama.toLowerCase().split(' ')[0].replace(/[^a-z0-9]/gi, ''));
             if (!uname) return;
             const pw = prompt("Password (min 6 karakter):", "warga010");
             if (!pw || pw.length < 6) return showToast("Password min 6 karakter.", true);
@@ -1663,7 +1644,7 @@
                     const sN = escapeHtml(w.nama || 'Warga');
                     const sB = escapeHtml(w.blok || '-');
                     const sNo = escapeHtml(w.no || '-');
-                    const sK = `${(w.nama || '').toLowerCase()} ${normalizeSearch(`${w.blok || ''}/${w.no || ''}`).toLowerCase()} blok${(w.blok || '').toLowerCase()}${(w.no || '').toLowerCase()}`;
+                    const sK = `${(w.nama || '').toLowerCase()} ${normalizeSearch(`${w.blok || ''} ${w.no || ''}`).toLowerCase()} blok${(w.blok || '').toLowerCase()}${(w.no || '').toLowerCase()}`;
                     const dS = safeEncode({ nama: w.nama, blok: w.blok, no: w.no, status_rumah: w.status_rumah });
                     let akunHtml = '';
                     if (hasAcc) {
@@ -1676,11 +1657,11 @@
                     }
                     h += `<div class="warga-card p-3 border border-slate-200 rounded-xl bg-white flex flex-col gap-2" data-search="${escapeHtml(sK)}">
                         <div class="flex items-start justify-between gap-2">
-                            <div class="min-w-0 flex-1"><h3 class="font-bold text-sm text-slate-800 truncate">${sN}</h3><p class="text-xs text-slate-500 truncate">Blok ${sB}/${sNo} • <span class="${hasAcc ? 'text-emerald-600 font-bold' : 'text-slate-400'}">${accs.length} Akun</span>${w.status_rumah === 'KOSONG' ? ' <span class="bg-amber-100 text-amber-700 text-[9px] px-1.5 py-0.5 rounded">KOSONG</span>' : ''}</p></div>
+                            <div class="min-w-0 flex-1"><h3 class="font-bold text-sm text-slate-800 truncate">${sN}</h3><p class="text-xs text-slate-500 truncate">Blok ${sB} ${sNo} • <span class="${hasAcc ? 'text-emerald-600 font-bold' : 'text-slate-400'}">${accs.length} Akun</span>${w.status_rumah === 'KOSONG' ? ' <span class="bg-amber-100 text-amber-700 text-[9px] px-1.5 py-0.5 rounded">KOSONG</span>' : ''}</p></div>
                             <div class="flex gap-1 shrink-0">
                                 <button onclick="openEditMasterModal('${w.id}', '${dS}')" class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center hover:bg-blue-200" title="Edit Master"><i class="fa-solid fa-pen text-xs"></i></button>
                                 ${!hasAcc ? `<button onclick="buatAkunManual('${w.id}', '${sB}', '${sNo}', '${sN.replace(/'/g, "\\'")}')" class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center hover:bg-emerald-200" title="Buat Akun"><i class="fa-solid fa-user-plus text-xs"></i></button>` : ''}
-                                <button onclick="hapusMaster('${w.id}', '${sN.replace(/'/g, "\\'")}', '${sB}/${sNo}')" class="w-8 h-8 bg-red-100 text-red-600 rounded-full flex items-center justify-center hover:bg-red-200" title="Hapus"><i class="fa-solid fa-trash text-xs"></i></button>
+                                <button onclick="hapusMaster('${w.id}', '${sN.replace(/'/g, "\\'")}', '${sB} ${sNo}')" class="w-8 h-8 bg-red-100 text-red-600 rounded-full flex items-center justify-center hover:bg-red-200" title="Hapus"><i class="fa-solid fa-trash text-xs"></i></button>
                             </div>
                         </div>
                         <div class="border-t border-slate-100 pt-1.5 flex flex-col gap-1">${akunHtml}</div>
@@ -1749,8 +1730,127 @@
         window.loadAdminInventaris = async function () { const cont = document.getElementById('adminInventarisList'); if (!cont) return; cont.innerHTML = 'Loading...'; try { const s = await getDocs(query(collection(db, 'artifacts', appId, 'inventaris'), orderBy('timestamp', 'asc'))); let h = ''; s.forEach(d => { h += `<div class="p-2 border rounded-xl bg-white flex justify-between items-center mb-2"><div class="min-w-0"><h4 class="font-bold text-sm truncate">${escapeHtml(d.data().nama)}</h4><p class="text-[10px] text-slate-500 truncate">${escapeHtml(d.data().detail || '-')}</p></div><button onclick="hapusInventaris('${d.id}')" class="text-red-500 w-8 h-8 flex items-center justify-center bg-red-50 rounded-lg shrink-0"><i class="fa-solid fa-trash text-xs"></i></button></div>`; }); cont.innerHTML = h || '<p class="text-xs text-slate-500 text-center">Belum ada.</p>'; } catch(e) { cont.innerHTML = 'Gagal.'; } };
         window.tambahInventaris = async function () { const ne = document.getElementById('invBaruNama'), de = document.getElementById('invBaruDetail'); const n = ne?.value.trim(), d = de?.value.trim() || ''; if (!n) return showToast("Nama wajib.", true); try { await addDoc(collection(db, 'artifacts', appId, 'inventaris'), { nama: n, detail: d, timestamp: Date.now() }); showToast("Ditambah."); if (ne) ne.value = ''; if (de) de.value = ''; loadAdminInventaris(); } catch(e) {} };
         window.hapusInventaris = async function (id) { if (!confirm("Hapus barang?")) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'inventaris', id)); showToast("Dihapus."); loadAdminInventaris(); } catch(e) {} };
-        window.muatBarangBawaan = async function () { const b = [{ nama: "Gerobak", detail: "" },{ nama: "Linggis", detail: "" },{ nama: "Mesin potong rumput (Unit 1)", detail: "Tersedia 2 unit" },{ nama: "Mesin potong rumput (Unit 2)", detail: "Tersedia 2 unit" },{ nama: "Alat semprot tanaman elektrik", detail: "" },{ nama: "Karpet", detail: "" },{ nama: "Tenda 1", detail: "RUSAK - Patungan dengan RT 9" },{ nama: "Kursi Plastik", detail: "Tersedia 30 pcs" },{ nama: "Kabel + Lampu", detail: "" },{ nama: "Garpu tanah kecil", detail: "" },{ nama: "Pacul", detail: "" },{ nama: "Speaker Aktif", detail: "" },{ nama: "Sekop", detail: "" },{ nama: "Megaphone", detail: "" }]; try { for (let i = 0; i < b.length; i++) await addDoc(collection(db, 'artifacts', appId, 'inventaris'), { nama: b[i].nama, detail: b[i].detail, timestamp: Date.now() + i }); showToast("Dimuat!"); loadAdminInventaris(); } catch(e) { showToast("Gagal.", true); } };
         window.loadInventarisWarga = async function () { const cont = document.getElementById('inventarisDynamicList'); if (!cont) return; cont.innerHTML = 'Loading...'; try { const s = await getDocs(query(collection(db, 'artifacts', appId, 'inventaris'), orderBy('timestamp', 'asc'))); let h = '', i = 1; s.forEach(d => { const data = d.data(); h += `<label class="flex items-center justify-between p-3 border rounded-xl cursor-pointer hover:bg-emerald-50 transition bg-white"><div class="min-w-0 flex-1"><span class="font-medium text-sm text-slate-800 block truncate">${i}. ${escapeHtml(data.nama)}</span>${data.detail ? `<span class="text-[10px] text-slate-500 mt-0.5 block truncate">${escapeHtml(data.detail)}</span>` : ''}</div><input type="checkbox" value="${escapeHtml(data.nama)}" class="inv-checkbox shrink-0 ml-2"></label>`; i++; }); cont.innerHTML = h || '<p class="text-sm text-center text-slate-500 py-4">Belum ada barang.</p>'; } catch(e) { cont.innerHTML = 'Gagal.'; } };
+
+        let editCtx = { masterId: null, bulanKey: null, status: 'BL', nominal: 0, custom: false, namaWarga: '' };
+
+        window.openEditSel = async function(masterId, bulanKey, namaWarga) {
+            if (!isAdminRole()) return showToast("Hanya pengurus yang bisa edit.", true);
+            try {
+                const snap = await getDoc(doc(db, 'artifacts', appId, 'warga_master', masterId));
+                if (!snap.exists()) return showToast("Data tidak ditemukan.", true);
+                const w = snap.data();
+                const st = normalizeStatus((w.iuran || {})[bulanKey]);
+                const custom = isCustomNominal(w, bulanKey);
+                const nom = hitungNominal(w, bulanKey);
+                editCtx = { masterId, bulanKey, status: st, nominal: nom, custom, namaWarga: namaWarga || w.nama };
+                const bl = `${w.blok || '-'} ${w.no || '-'}`;
+                document.getElementById('ecTitle').innerText = `${bl} · ${bulanKey}`;
+                document.getElementById('ecSubtitle').innerText = namaWarga || w.nama || '';
+                document.getElementById('ecNominal').value = nom;
+                renderEcStatusPicker();
+                updateEcInfo();
+                document.getElementById('editCellModal').classList.remove('hidden');
+            } catch(e) { showToast("Gagal buka.", true); }
+        };
+
+        window.tutupEditSel = function() { document.getElementById('editCellModal').classList.add('hidden'); };
+
+        function renderEcStatusPicker() {
+            const el = document.getElementById('ecStatusPicker');
+            if (!el) return;
+            let h = '';
+            Object.keys(STATUS_CODES).forEach(k => {
+                const active = editCtx.status === k;
+                h += `<button type="button" onclick="pilihEcStatus('${k}')" class="py-2 rounded-lg font-bold text-[11px] cell-${k} ${active ? 'ring-2 ring-offset-1 ring-slate-900' : 'opacity-70 hover:opacity-100'}">${k}</button>`;
+            });
+            el.innerHTML = h;
+        }
+
+        window.pilihEcStatus = function(k) {
+            editCtx.status = k;
+            const preset = STATUS_CODES[k]?.isLunas ? getTarifAktif(k, editCtx.bulanKey) : 0;
+            editCtx.nominal = preset; editCtx.custom = false;
+            document.getElementById('ecNominal').value = preset;
+            renderEcStatusPicker(); updateEcInfo();
+        };
+
+        window.updateEcNominal = function() {
+            const v = Number(document.getElementById('ecNominal').value) || 0;
+            editCtx.nominal = v;
+            const preset = STATUS_CODES[editCtx.status]?.isLunas ? getTarifAktif(editCtx.status, editCtx.bulanKey) : 0;
+            editCtx.custom = (v !== preset) && STATUS_CODES[editCtx.status]?.isLunas;
+            updateEcInfo();
+        };
+
+        window.resetEcNominal = function() {
+            const preset = STATUS_CODES[editCtx.status]?.isLunas ? getTarifAktif(editCtx.status, editCtx.bulanKey) : 0;
+            editCtx.nominal = preset; editCtx.custom = false;
+            document.getElementById('ecNominal').value = preset;
+            updateEcInfo();
+        };
+
+        function updateEcInfo() {
+            const preset = STATUS_CODES[editCtx.status]?.isLunas ? getTarifAktif(editCtx.status, editCtx.bulanKey) : 0;
+            const infoBox = document.getElementById('ecInfoBox');
+            const resetBtn = document.getElementById('ecResetBtn');
+            const presetInfo = document.getElementById('ecPresetInfo');
+            if (!infoBox) return;
+            document.getElementById('ecNominal').disabled = !STATUS_CODES[editCtx.status]?.isLunas;
+            if (presetInfo) presetInfo.innerText = `Preset ${editCtx.status} = ${formatRupiah(preset)}`;
+            if (!STATUS_CODES[editCtx.status]?.isLunas) {
+                infoBox.className = 'rounded-xl p-2.5 mb-4 text-[11px] leading-relaxed bg-slate-50 text-slate-700 border border-slate-200';
+                infoBox.innerHTML = `<b>${editCtx.status}</b> bukan status lunas — nominal otomatis <b>Rp 0</b>.`;
+                resetBtn.classList.add('hidden');
+            } else if (editCtx.custom) {
+                infoBox.className = 'rounded-xl p-2.5 mb-4 text-[11px] leading-relaxed bg-amber-50 text-amber-800 border border-amber-300';
+                infoBox.innerHTML = `⚡ <b>Nominal custom</b> aktif. Preset = ${formatRupiah(preset)}, Anda tetapkan <b>${formatRupiah(editCtx.nominal)}</b>.`;
+                resetBtn.classList.remove('hidden');
+            } else {
+                infoBox.className = 'rounded-xl p-2.5 mb-4 text-[11px] leading-relaxed bg-emerald-50 text-emerald-800 border border-emerald-200';
+                infoBox.innerHTML = `✅ Menggunakan <b>preset</b>: ${formatRupiah(preset)}. Ketik nominal lain untuk override.`;
+                resetBtn.classList.add('hidden');
+            }
+        }
+
+        window.simpanEditSel = async function() {
+            if (!editCtx.masterId) return;
+            const preset = STATUS_CODES[editCtx.status]?.isLunas ? getTarifAktif(editCtx.status, editCtx.bulanKey) : 0;
+            try {
+                const snap = await getDoc(doc(db, 'artifacts', appId, 'warga_master', editCtx.masterId));
+                if (!snap.exists()) return showToast("Data tidak ditemukan.", true);
+                const w = snap.data();
+                const iuranNominal = { ...(w.iuranNominal || {}) };
+                if (editCtx.custom && editCtx.nominal !== preset) iuranNominal[editCtx.bulanKey] = editCtx.nominal;
+                else delete iuranNominal[editCtx.bulanKey];
+                const finalNom = STATUS_CODES[editCtx.status]?.isLunas ? (editCtx.custom ? editCtx.nominal : preset) : 0;
+                await updateDoc(doc(db, 'artifacts', appId, 'warga_master', editCtx.masterId), {
+                    [`iuran.${editCtx.bulanKey}`]: editCtx.status,
+                    iuranNominal: iuranNominal,
+                    updatedAt: Date.now()
+                });
+                const bl = `${w.blok || '-'} ${w.no || '-'}`;
+                const ket = `Iuran ${editCtx.namaWarga} (${bl}) - ${editCtx.bulanKey}`;
+                const qk = query(collection(db, 'artifacts', appId, 'kas'));
+                const sk = await getDocs(qk);
+                let ext = null;
+                sk.forEach(d => { const k = d.data(); if (k.keterangan === ket && k.jenis === 'masuk') ext = d.id; });
+                if (finalNom > 0) {
+                    if (ext) await deleteDoc(doc(db, 'artifacts', appId, 'kas', ext));
+                    await addDoc(collection(db, 'artifacts', appId, 'kas'), {
+                        tipeDoc: 'transaksi', jenis: 'masuk', nominal: finalNom,
+                        keterangan: ket, kategori: 'Iuran',
+                        oleh: (window.currentUserData && window.currentUserData.nama) || 'Admin',
+                        timestamp: Date.now()
+                    });
+                } else if (ext) await deleteDoc(doc(db, 'artifacts', appId, 'kas', ext));
+                tutupEditSel();
+                showToast(`${bl} ${editCtx.bulanKey} → ${editCtx.status}${editCtx.custom ? ' (' + formatRupiah(editCtx.nominal) + ')' : ''}`);
+                loadKasTagihanWarga();
+                if (document.getElementById('kasGlobalView') && !document.getElementById('kasGlobalView').classList.contains('hidden')) loadKasGlobalView();
+                loadBukuKas();
+            } catch(e) { console.error(e); showToast("Gagal simpan.", true); }
+        };
 
         window.switchTab = function (t) {
             const views = ['homeView','chatView','riwayatView','laporView','suratView','dataView','profilView','umkmView','iuranView','kasView','kasGlobalView','inventarisView','sosView','adminView','pekerjaView','pengurusView','tamuView'];
