@@ -44,6 +44,16 @@
         .matrix-cell-btn{width:100%;padding:5px 1px;font-size:10px;font-weight:700;transition:all .15s;position:relative;min-height:24px}
         .kas-global-thead th{position:sticky;top:0;z-index:20;background:#059669}
         .kas-global-thead th.matrix-header-blok{z-index:30;background:#059669}
+        /* === NEW: Resize kolom & seleksi matrix === */
+        .th-resizable{position:relative;user-select:none}
+        .th-resizer{position:absolute;right:-3px;top:0;width:8px;height:100%;cursor:col-resize;z-index:25}
+        .th-resizer::after{content:'';position:absolute;left:4px;top:20%;height:60%;width:1px;background:rgba(255,255,255,.35)}
+        .th-resizer:hover{background:rgba(255,255,255,.25)}
+        .matrix-selected{background:#bfdbfe!important;color:#1e40af!important;outline:2px solid #3b82f6;outline-offset:-2px}
+        #kasGlobalTable,#kasTagihanMatrix{table-layout:fixed;width:100%}
+        #kasGlobalTable th,#kasGlobalTable td,#kasTagihanMatrix th,#kasTagihanMatrix td{overflow:hidden}
+        .gaji-card{transition:box-shadow .2s}
+        .gaji-card:hover{box-shadow:0 4px 14px -4px rgba(15,23,42,.15)}
     </style>
 </head>
 <body class="w-full h-full text-ink select-none bg-slate-50 flex flex-col">
@@ -157,7 +167,6 @@
             </form>
         </div>
     </div>
-    <!-- ═════════ MODAL EDIT KAS (BARU) ═════════ -->
     <div id="modalEditKas" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4" onclick="document.getElementById('modalEditKas').classList.add('hidden')">
         <div class="bg-white w-full max-w-md rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('modalEditKas').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
@@ -193,7 +202,6 @@
             </form>
         </div>
     </div>
-    <!-- ═════════ MODAL EDIT PEKERJA (FOTO DITAMBAH) ═════════ -->
     <div id="editPekerjaModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4" onclick="document.getElementById('editPekerjaModal').classList.add('hidden')">
         <div class="bg-white w-full max-w-sm rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('editPekerjaModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
@@ -236,7 +244,6 @@
             </form>
         </div>
     </div>
-	
     <div id="authContainer" class="w-full h-[100dvh] bg-slate-50 relative overflow-y-auto overscroll-contain flex flex-col">
         <div class="m-auto w-full max-w-4xl px-3 py-6 sm:px-6 sm:py-8">
             <div class="w-full bg-white rounded-none sm:rounded-[2rem] sm:shadow-2xl flex flex-col md:flex-row shrink-0 md:overflow-hidden relative">
@@ -288,7 +295,6 @@
             </div>
         </div>
     </div>
-
     <div id="mainAppContainer" class="w-full h-[100dvh] bg-slate-50 relative hidden flex-col overflow-hidden">
         <header class="bg-emerald-600 text-white px-4 pb-2 pt-safe-top sm:px-6 lg:px-8 sm:py-2 shrink-0 z-30 shadow-md w-full relative">
             <div class="flex items-center justify-between gap-2 max-w-7xl mx-auto w-full">
@@ -334,7 +340,6 @@
                     </div>
                 </div>
             </div>
-
             <div id="chatView" class="hidden px-4 sm:px-6 lg:px-8 pt-3 pb-3 flex-1 flex flex-col h-full min-h-0 overflow-hidden items-center w-full">
                 <div class="flex justify-between items-center mb-2.5 shrink-0 w-full max-w-5xl gap-2">
                     <div class="flex bg-slate-200 p-1 rounded-xl flex-1"><button id="subTabGrup" onclick="pilihModeChat('grup')" class="flex-1 py-1.5 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600"><i class="fa-solid fa-users mr-1"></i> Grup</button><button id="subTabJapri" onclick="pilihModeChat('japri')" class="flex-1 py-1.5 text-xs font-semibold text-slate-500 rounded-lg"><i class="fa-solid fa-user-group mr-1"></i> Japri</button></div>
@@ -362,9 +367,7 @@
                     </div>
                 </form>
             </div>
-
             <div id="riwayatView" class="hidden px-4 sm:px-6 lg:px-8 pt-5 pb-6 w-full max-w-5xl mx-auto"><h3 class="font-bold text-slate-800 mb-4 text-sm uppercase tracking-wider">Riwayat Permohonan</h3><div id="riwayatListContainer" class="space-y-3"></div></div>
-
             <div id="laporView" class="hidden flex-col h-full bg-slate-50 w-full max-w-3xl mx-auto overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0"><button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button><h2 class="font-bold text-lg text-slate-800">Lapor & Tanya RT</h2></div>
                 <form id="formLapor" onsubmit="submitForm(event, 'Tanya & Lapor RT')" class="p-4 md:p-6 space-y-4 flex-1">
@@ -376,7 +379,6 @@
                     <div class="pt-2"><button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-md">Kirim Laporan</button></div>
                 </form>
             </div>
-
             <div id="suratView" class="hidden flex-col h-full bg-slate-50 w-full max-w-3xl mx-auto overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0"><button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button><h2 class="font-bold text-lg text-slate-800">Surat Pengantar</h2></div>
                 <form id="formSurat" onsubmit="submitForm(event, 'Surat Menyurat')" class="p-4 md:p-6 space-y-4 flex-1">
@@ -391,7 +393,6 @@
                     <div class="pt-2"><div class="bg-amber-50 border border-amber-200 p-3 rounded-xl text-xs text-amber-800 text-center font-semibold mb-3"><i class="fa-solid fa-circle-info mr-1"></i> (Silahkan hubungi RT untuk stempel dan tanda tangan)</div><button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-md">Kirim Permohonan Surat</button></div>
                 </form>
             </div>
-
             <div id="dataView" class="hidden flex-col h-full bg-slate-50 w-full max-w-3xl mx-auto overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0"><button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button><h2 class="font-bold text-lg text-slate-800">Isi Data Warga</h2></div>
                 <form id="formDataWarga" onsubmit="submitForm(event, 'Isi Data Warga')" class="p-4 md:p-6 space-y-4 flex-1">
@@ -417,7 +418,6 @@
                     <div class="pt-2"><button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-md">Simpan Data Warga</button></div>
                 </form>
             </div>
-
             <div id="profilView" class="hidden flex-col h-full bg-slate-50 w-full max-w-3xl mx-auto overflow-y-auto">
                 <div class="p-4 md:p-6 flex-1 flex flex-col justify-center">
                     <div class="bg-white md:bg-transparent rounded-2xl p-6 shadow-xl md:shadow-none border border-slate-200 md:border-none flex flex-col md:flex-row items-center gap-6 relative overflow-hidden">
@@ -444,7 +444,6 @@
                     </div>
                 </div>
             </div>
-
             <div id="tamuView" class="hidden flex-col h-full bg-slate-50 w-full max-w-3xl mx-auto overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0"><button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button><h2 class="font-bold text-lg text-slate-800">Buku Tamu Warga</h2></div>
                 <form id="formTamu" onsubmit="simpanBukuTamu(event)" class="p-4 md:p-6 space-y-4 flex-1">
@@ -458,7 +457,6 @@
                     <div class="pt-2"><button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-md">Kirim Data Tamu</button></div>
                 </form>
             </div>
-
             <div id="umkmView" class="hidden flex-col h-full bg-slate-50 w-full max-w-5xl mx-auto overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0"><button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button><h2 class="font-bold text-lg text-orange-600 flex items-center gap-2"><i class="fa-solid fa-store"></i> Pasar UMKM</h2></div>
                 <div class="p-4 md:p-6 space-y-4 flex-1">
@@ -475,7 +473,6 @@
                     <div id="umkmListContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 pb-4"></div>
                 </div>
             </div>
-
             <div id="iuranView" class="hidden flex-col h-full bg-slate-50 w-full max-w-3xl mx-auto overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0"><button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button><h2 class="font-bold text-lg text-emerald-600 flex items-center gap-2"><i class="fa-solid fa-id-card-clip"></i> Kartu Iuran</h2></div>
                 <div class="p-4 md:p-6 space-y-4 flex-1">
@@ -486,6 +483,7 @@
                 </div>
             </div>
 
+            <!-- ================= KAS VIEW (DIROMBAK) ================= -->
             <div id="kasView" class="hidden flex-col h-full bg-slate-50 w-full overflow-hidden">
                 <div id="kasScrollContainer" class="flex-1 overflow-y-auto scroll-smooth">
                     <div class="bg-emerald-600 text-white pt-safe-top px-4 pb-16 shadow-md w-full">
@@ -501,17 +499,23 @@
                         </div>
                     </div>
                     <div class="relative max-w-4xl mx-auto w-full -mt-6 rounded-t-3xl bg-slate-50 min-h-[60vh]">
-                        <div class="sticky top-0 z-20 bg-slate-50 pt-4 pb-3 px-4 rounded-t-3xl"><div id="kasTabsContainer" class="flex bg-slate-200 p-1 rounded-xl shadow-sm"><button onclick="switchKasTab('tagihan')" id="tabKasTagihan" class="flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all">Tagihan Warga</button><button onclick="switchKasTab('riwayat')" id="tabKasRiwayat" class="flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all">Riwayat Kas</button></div></div>
-                        <div class="px-4 pb-6">
-                            <div id="kasRiwayatContainer" class="hidden">
-                                <div id="kasFilterContainer" class="flex justify-between items-center mb-3"><div class="flex bg-slate-100 p-1 rounded-lg flex-1"><button onclick="filterKas('semua')" id="tabKasSemua" class="flex-1 py-1.5 text-[10px] font-bold bg-white shadow-sm rounded-md text-emerald-600 transition-all">Semua</button><button onclick="filterKas('masuk')" id="tabKasMasuk" class="flex-1 py-1.5 text-[10px] font-semibold text-slate-500 rounded-md transition-all">Masuk</button><button onclick="filterKas('keluar')" id="tabKasKeluar" class="flex-1 py-1.5 text-[10px] font-semibold text-slate-500 rounded-md transition-all">Keluar</button></div></div>
-                                <div id="kasWargaListContainer" class="space-y-4 pb-10"></div>
+                        <div class="sticky top-0 z-20 bg-slate-50 pt-4 pb-3 px-4 rounded-t-3xl">
+                            <div class="flex bg-slate-200 p-1 rounded-xl shadow-sm">
+                                <button id="tabKasGaji" class="flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all">
+                                    <i class="fa-solid fa-money-bill-wave mr-1"></i> Gaji & Insentif
+                                </button>
                             </div>
-                            <div id="kasTagihanContainer">
-                                <div class="mb-3"><div class="relative w-full"><i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-600 text-sm font-bold"></i><input type="text" id="searchTagihanWarga" oninput="filterTagihanWarga()" placeholder="Cari warga / V1 1 / v1.1 / K 9-10..." class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold text-slate-800 outline-none focus:border-emerald-500"></div></div>
-                                <div id="kasTagihanSummary" class="mb-3 admin-only-hint hidden"></div>
-                                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm mb-3"><div class="overflow-auto" style="max-height:55vh;"><table class="w-full text-center" style="min-width: 560px;"><thead class="kas-global-thead bg-emerald-600 text-white font-bold text-[10px]"><tr><th class="p-1 text-left matrix-header-blok bg-emerald-600">Blok</th><th class="p-1">JAN</th><th class="p-1">FEB</th><th class="p-1">MAR</th><th class="p-1">APR</th><th class="p-1">MEI</th><th class="p-1">JUN</th><th class="p-1">JUL</th><th class="p-1">AGU</th><th class="p-1">SEP</th><th class="p-1">OKT</th><th class="p-1">NOP</th><th class="p-1">DES</th></tr></thead><tbody id="kasTagihanMatrixBody" class="text-[10px]"></tbody></table></div></div>
-                                <p class="text-[10px] text-slate-500 text-center italic admin-only-hint hidden">Klik sel untuk edit status & nominal.</p>
+                        </div>
+                        <div class="px-4 pb-6">
+                            <div class="bg-white border border-slate-200 rounded-xl p-2.5 mb-3 flex items-center gap-1.5 shadow-sm">
+                                <select id="gajiBulanSelect" onchange="loadGajiInsentif()" class="flex-1 bg-slate-50 border border-slate-200 text-slate-800 text-xs font-bold rounded-lg px-2 py-2 outline-none focus:border-emerald-500">
+                                    <option value="Januari">Januari</option><option value="Februari">Februari</option><option value="Maret">Maret</option><option value="April">April</option><option value="Mei">Mei</option><option value="Juni">Juni</option><option value="Juli">Juli</option><option value="Agustus">Agustus</option><option value="September">September</option><option value="Oktober">Oktober</option><option value="November">November</option><option value="Desember">Desember</option>
+                                </select>
+                                <select id="gajiTahunSelect" onchange="loadGajiInsentif()" class="flex-1 bg-slate-50 border border-slate-200 text-slate-800 text-xs font-bold rounded-lg px-2 py-2 outline-none focus:border-emerald-500"></select>
+                                <button onclick="loadGajiInsentif()" class="w-9 h-9 bg-emerald-600 text-white rounded-lg flex items-center justify-center shadow-sm"><i class="fa-solid fa-refresh text-xs"></i></button>
+                            </div>
+                            <div id="gajiListContainer" class="space-y-3">
+                                <p class="text-center text-xs text-slate-400 py-6">Memuat data pekerja...</p>
                             </div>
                         </div>
                     </div>
@@ -522,8 +526,26 @@
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0"><button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button><h2 class="font-bold text-lg text-emerald-700 flex items-center gap-2 flex-1"><i class="fa-solid fa-calendar-check"></i> Kas Global</h2></div>
                 <div class="p-3 md:p-5 w-full max-w-7xl mx-auto">
                     <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 mb-3 flex items-center gap-2"><i class="fa-solid fa-calendar text-emerald-600"></i><label class="text-xs font-bold text-emerald-900">Tahun:</label><select id="kasGlobalTahunSelect" onchange="loadKasGlobalView()" class="flex-1 bg-white border border-emerald-300 rounded-lg px-2 py-1.5 text-xs font-bold outline-none"></select></div>
+                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-2.5 mb-3 text-[10px] text-blue-800 leading-relaxed"><i class="fa-solid fa-circle-info mr-1"></i> <b>Tips:</b> Drag garis di header untuk atur lebar kolom · Klik-drag sel untuk seleksi · <kbd class="bg-white px-1 rounded border">Ctrl+C</kbd> salin (Excel/Sheets) · <kbd class="bg-white px-1 rounded border">Ctrl+V</kbd> paste status (Admin).</div>
                     <div id="kasGlobalSummary" class="mb-3 admin-only-hint hidden"></div>
-                    <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm"><div class="overflow-auto" style="max-height:55vh;"><table class="w-full text-center" style="min-width: 560px;"><thead class="kas-global-thead bg-emerald-600 text-white font-bold text-[10px]"><tr><th class="p-1 text-left matrix-header-blok bg-emerald-600">Blok</th><th class="p-1">JAN</th><th class="p-1">FEB</th><th class="p-1">MAR</th><th class="p-1">APR</th><th class="p-1">MEI</th><th class="p-1">JUN</th><th class="p-1">JUL</th><th class="p-1">AGU</th><th class="p-1">SEP</th><th class="p-1">OKT</th><th class="p-1">NOP</th><th class="p-1">DES</th></tr></thead><tbody id="kasGlobalBody" class="text-[10px]"></tbody></table></div></div>
+                    <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                        <div class="overflow-auto" style="max-height:60vh;">
+                            <table id="kasGlobalTable" class="w-full text-center" style="min-width: 620px;">
+                                <thead class="kas-global-thead bg-emerald-600 text-white font-bold text-[10px]">
+                                    <tr>
+                                        <th class="p-1 text-left matrix-header-blok bg-emerald-600" style="width:70px;">Blok</th>
+                                        <th class="p-1" style="width:42px;">JAN</th><th class="p-1" style="width:42px;">FEB</th>
+                                        <th class="p-1" style="width:42px;">MAR</th><th class="p-1" style="width:42px;">APR</th>
+                                        <th class="p-1" style="width:42px;">MEI</th><th class="p-1" style="width:42px;">JUN</th>
+                                        <th class="p-1" style="width:42px;">JUL</th><th class="p-1" style="width:42px;">AGU</th>
+                                        <th class="p-1" style="width:42px;">SEP</th><th class="p-1" style="width:42px;">OKT</th>
+                                        <th class="p-1" style="width:42px;">NOP</th><th class="p-1" style="width:42px;">DES</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="kasGlobalBody" class="text-[10px]"></tbody>
+                            </table>
+                        </div>
+                    </div>
                     <p class="text-[10px] text-slate-500 text-center italic mt-2 admin-only-hint hidden">Klik sel untuk edit status & nominal.</p>
                 </div>
             </div>
@@ -541,7 +563,6 @@
                     <div class="pt-2"><button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-md">Kirim Peminjaman</button></div>
                 </form>
             </div>
-
             <div id="sosView" class="hidden flex-col h-full bg-slate-50 w-full max-w-3xl mx-auto overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0"><button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button><h2 class="font-bold text-lg text-red-600 flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> Panggilan Darurat</h2></div>
                 <div class="p-4 md:p-6 flex-1 flex flex-col justify-center items-center text-center">
@@ -555,17 +576,14 @@
                     </div>
                 </div>
             </div>
-
             <div id="pekerjaView" class="hidden flex-col h-full bg-slate-50 w-full max-w-3xl mx-auto overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0"><button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button><h2 class="font-bold text-lg text-slate-800">Data Pekerja</h2></div>
                 <div class="p-4 md:p-6 flex-1"><div id="pekerjaWargaList" class="grid grid-cols-2 md:grid-cols-3 gap-3"></div></div>
             </div>
-
             <div id="pengurusView" class="hidden flex-col h-full bg-slate-50 w-full max-w-3xl mx-auto overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0"><button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button><h2 class="font-bold text-lg text-slate-800">Pengurus RT</h2></div>
                 <div class="p-4 md:p-6 flex-1"><div id="pengurusWargaList" class="grid grid-cols-2 md:grid-cols-3 gap-3"></div></div>
             </div>
-
             <div id="adminView" class="hidden flex-col h-full bg-slate-50 w-full max-w-6xl mx-auto overflow-y-auto">
                 <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0"><button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button><h2 class="font-bold text-lg text-slate-800 flex items-center gap-2"><i class="fa-solid fa-users-gear text-emerald-600"></i> Panel Pengurus</h2></div>
                 <div class="p-4 md:p-6 flex-1">
@@ -620,7 +638,6 @@
                 </div>
             </div>
         </main>
-
         <nav id="bottomNav" class="bg-white border-t border-slate-200 flex justify-center items-center pt-2 pb-safe-bottom shrink-0 z-30 shadow-[0_-4px_12px_-4px_rgba(15,23,42,0.05)] w-full">
             <div class="flex justify-around items-center w-full max-w-md mx-auto px-1">
                 <button id="navBerandaBtn" onclick="switchTab('beranda')" class="flex flex-col items-center text-emerald-600 flex-1 py-1"><i class="fa-solid fa-house text-lg mb-1"></i><span class="text-[9px] font-semibold">Beranda</span></button>
@@ -633,7 +650,6 @@
             </div>
         </nav>
     </div>
-	
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, inMemoryPersistence, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -642,7 +658,6 @@
         const appId = 'layanan-warga-rt10';
         const KETUA_RT_NAMA = "Ade Hilman Fatahillah";
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbydEnQUz9TIKloH_4TUQIP0jYK-SSHvv3OwLN6gR8lUMlUF554nQrhs1EUfxHezmVSJIQ/exec";
-
         const NAMA_BULAN = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nop','Des'];
         function getBulanList(tahun) { return NAMA_BULAN.map(m => `${m} ${tahun}`); }
         function getTahunBerjalan() { return new Date().getFullYear(); }
@@ -668,232 +683,18 @@
             {blok:'W',no:'1',nama:'RIAN'},{blok:'W',no:'2',nama:'SINAR AJI'},{blok:'W',no:'3',nama:'SANTI'},{blok:'W',no:'4',nama:'BIMA FAWWAZ .F'}
         ];
 
-        /* ══════════════════════════════════════════════════════════════════
-           DATA KAS 2026 DARI EXCEL (208 TRANSAKSI)
-           Format: [tanggal, bulan, kategori, uraian, nominal]
-        ══════════════════════════════════════════════════════════════════ */
         const KAS_2026_DATA = [
-            // ═══ JANUARI 2026 (32 transaksi) ═══
-            [20,'Januari','GAJI SATPAM 1','Gaji Satpam Acuy',1500000],
-            [20,'Januari','GAJI SATPAM 2','Gaji Satpam Asep',1500000],
-            [20,'Januari','GAJI SAMPAH','Gaji Petugas Sampah',1300000],
-            [20,'Januari','INS. P KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',200000],
-            [10,'Januari','GAJI KEBERSIHAN','Gaji Petugas Kebersihan (Kojek)',1200000],
-            [2,'Januari','TOKEN POS','TOKEN POS',51500],
-            [20,'Januari','Insentif Bendahara 2 dan 3','Insentif Bendahara 1,2',250000],
-            [20,'Januari','KOPI POS SATPAM','KOPI POS SATPAM',100000],
-            [10,'Januari','GAJI MERBOT','GAJI MERBOT',500000],
-            [2,'Januari','Token Mushola','Token Mushola',150000],
-            [2,'Januari','Aqua Pos Satpam','Aqua Pos Satpam',50000],
-            [1,'Januari','bayar cctv','bayar cctv',227000],
-            [3,'Januari','bensin mesin rumput','bensin mesin rumput',40000],
-            [5,'Januari','konsumsi kerja bakti','konsumsi kerja bakti',174000],
-            [5,'Januari','bensin dan oli mesin rumput','bensin dan oli mesin rumput',85000],
-            [5,'Januari','upah kuras turen','upah kuras turen',200000],
-            [10,'Januari','Beli pisau mesin rumput baru','Beli pisau mesin rumput baru',50000],
-            [11,'Januari','Upah pak dede','Upah pak dede',100000],
-            [13,'Januari','Alat kebersihan pos satpam','Alat kebersihan pos satpam',50000],
-            [13,'Januari','Kran dispenser pos satpam','Kran dispenser pos satpam',12000],
-            [13,'Januari','Ganti lampu pju','Ganti lampu pju',200000],
-            [17,'Januari','Jasa pindahan kwh mushola','Jasa pindahan kwh mushola',250000],
-            [17,'Januari','Jas hujan satpam dan kebersihan','Jas hujan satpam dan kebersihan',140000],
-            [19,'Januari','Token mesin air kwh atas','Token mesin air kwh atas',500000],
-            [19,'Januari','Ganti lampu pju','Ganti lampu pju',200000],
-            [20,'Januari','Beli pacul dan iskup semen','Beli pacul dan iskup semen',240000],
-            [22,'Januari','Bensin mesin rumput','Bensin mesin rumput',20000],
-            [24,'Januari','Semen','Semen',400000],
-            [24,'Januari','Pasir','Pasir',180000],
-            [25,'Januari','Makan petugas PLN','Makan petugas PLN',150000],
-            [25,'Januari','Ganti kapasitor mesin air atas','Ganti kapasitor mesin air atas',100000],
-            [27,'Januari','potongan APK Dana','potongan APK Dana',80000],
-            // ═══ FEBRUARI 2026 (24 transaksi) ═══
-            [20,'Februari','GAJI SATPAM 1','GAJI SATPAM 1',1500000],
-            [20,'Februari','GAJI SATPAM 2','GAJI SATPAM 2',1500000],
-            [20,'Februari','GAJI SAMPAH','GAJI SAMPAH',1300000],
-            [20,'Februari','INS. P KIWONG','INS. P KIWONG',300000],
-            [20,'Februari','GAJI KEBERSIHAN','GAJI KEBERSIHAN',1250000],
-            [6,'Februari','TOKEN POS','TOKEN POS',51500],
-            [20,'Februari','Insentif Bendahara 1,2','Insentif Bendahara 1,2',450000],
-            [20,'Februari','KOPI POS SATPAM','KOPI POS SATPAM',100000],
-            [10,'Februari','GAJI MERBOT','GAJI MERBOT',600000],
-            [2,'Februari','Token Mushola','Token Mushola',50000],
-            [2,'Februari','Aqua Pos Satpam','Aqua Pos Satpam',50000],
-            [1,'Februari','bayar cctv','bayar cctv',230000],
-            [10,'Februari','pemasangan Kwh baru mesin air bawah','pemasangan Kwh baru mesin air bawah',750000],
-            [7,'Februari',"al Qur'an inpentaris","al Qur'an inpentaris",80000],
-            [7,'Februari','pisau untuk kebutuhan babat rumput','pisau untuk kebutuhan babat rumput',50000],
-            [13,'Februari','perbaikan jalur air blok L','perbaikan jalur air blok L',50000],
-            [10,'Februari','kabel 2x2,5 untuk kebutuhan kwh','kabel 2x2,5 untuk kebutuhan kwh',50000],
-            [14,'Februari','busi mesin rumput dan pilok','busi mesin rumput dan pilok',100000],
-            [17,'Februari','pluit','pluit',12000],
-            [25,'Februari','pembelian toa megapone','pembelian toa megapone',120000],
-            [25,'Februari','ganti radar pelampung mesin air bawah','ganti radar pelampung mesin air bawah',35000],
-            [26,'Februari','ganti ban dalam gerobak sampah','ganti ban dalam gerobak sampah',50000],
-            [27,'Februari','token kwh mesin air atas','token kwh mesin air atas',250000],
-            [27,'Februari','ganti lampu pju blok U,V,S,E','ganti lampu pju blok U,V,S,E',200000],
-            // ═══ MARET 2026 (18 transaksi · 2024 sudah di-skip) ═══
-            [14,'Maret','GAJI SATPAM DIDI','THR patungan RT 9',1500000],
-            [14,'Maret','GAJI SATPAM ACHUY','THR Patungan RT 9',1500000],
-            [14,'Maret','GAJI SAMPAH JOKO','THR patungan RT 9',1300000],
-            [14,'Maret','INS. P KIWONG','Plus jaga rutin malam minggu 100',400000],
-            [14,'Maret','GAJI KEBERSIHAN WARMAN','Potong kasbon tnggal 9 maret',1100000],
-            [20,'Maret','TOKEN POS','TOKEN POS',51500],
-            [14,'Maret','Insentif Bendahara 2,3','Arif dan Sudirman /2',500000],
-            [8,'Maret','KOPI POS SATPAM & TOKEN','KOPI POS SATPAM & TOKEN',200000],
-            [14,'Maret','GAJI MERBOT','GAJI MERBOT',500000],
-            [2,'Maret','Aqua Pos Satpam','Aqua Pos Satpam',50000],
-            [14,'Maret','SANTUNAN','10 ORANG /yatim 50.000',4000000],
-            [14,'Maret','OPAY','OPAY',300000],
-            [14,'Maret','THR SATPAM HERI','THR SATPAM HERI',300000],
-            [27,'Maret','Alat Kebersihan','Alat Kebersihan',100000],
-            [1,'Maret','Lainnya','Pengeluaran tanpa uraian (Maret)',400000],
-            [1,'Maret','nobar','nobar',60000],
-            [31,'Maret','uang jaga idul fitri satpam','patungan rt 09 &10',200000],
-            [4,'Maret','Belanja material gudang','Kanal dll',496000],
-            // ═══ APRIL 2026 (20 transaksi) ═══
-            [20,'April','GAJI SATPAM DIDI','SATPAM',1500000],
-            [20,'April','GAJI SATPAM ACUY','SATPAM',1500000],
-            [20,'April','GAJI JOKO SAMPAH','ANGKUT SAMPAH',1300000],
-            [20,'April','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh, Perawatan jalur Air. dll',400000],
-            [20,'April','GAJI WARMAN','SATPAM + KEBERSIHAN',1500000],
-            [20,'April','INSENTIF BENDAHARA ARIF','Multi Teknisi, Turen, Listrik, CCTV dll',300000],
-            [20,'April','INSENTIF BENDAHARA SUDIRMAN','Petugas Keliling dan Kebersihan',150000],
-            [22,'April','POS SATPAM','POS SATPAM',200000],
-            [1,'April','bayar cctv','cicilan terakhir',227000],
-            [1,'April','pembelian polisi tidur 1bh','cek material dan ketinggian speed bump',135000],
-            [4,'April','belanja kebutuhan gudang inventaris','Kanal, spandek, seng, baud.dll',606000],
-            [6,'April','Pengurasan Turen','Pengurasan Turen',230000],
-            [11,'April','bensin mesin rumput & alat pel lantai','bensin mesin rumput & alat pel lantai',280000],
-            [14,'April','polibag sampah','8 pak',200000],
-            [14,'April','perbaikan pralon talang air pos satpam','patungan rt 9 dan 10 + babat rumput area gardu PLN',350000],
-            [20,'April','Pemasangan polisi tidur /speed bumb','Konsumsi dll',200000],
-            [20,'April','uang duka didi satpam','urunan dengan RT 9',514000],
-            [22,'April','token kwh mesin air','token kwh mesin air',617000],
-            [22,'April','bensin mesin rumput','bensin mesin rumput',50000],
-            [24,'April','Bayar cicilan mesin rumput bensin','Bayar cicilan mesin rumput bensin',376000],
-            // ═══ MEI 2026 (16 transaksi) ═══
-            [20,'Mei','GAJI SATPAM DIDI','SATPAM',1500000],
-            [20,'Mei','GAJI SATPAM ACUY','SATPAM',1500000],
-            [20,'Mei','GAJI JOKO SAMPAH','ANGKUT SAMPAH',1400000],
-            [20,'Mei','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',400000],
-            [20,'Mei','GAJI WARMAN','SATPAM + KEBERSIHAN',1000000],
-            [20,'Mei','INSENTIF BENDAHARA ARIF','Multi Teknisi, Turen, Listrik, CCTV, Perawatan jalur Air,dll',400000],
-            [20,'Mei','INSENTIF BENDAHARA SUDIRMAN','Petugas Keliling, Kebersihan dan perbaikan air',200000],
-            [20,'Mei','POS SATPAM','POS SATPAM',200000],
-            [20,'Mei','MUSHOLA','Token - Alat Kebersihan - dll',200000],
-            [5,'Mei','pembayaran cicilan polisi tidur 1','pembayaran cicilan polisi tidur 1',1155000],
-            [5,'Mei','pembelian pisau mesin rumput baterai','pembelian pisau mesin rumput baterai',30000],
-            [16,'Mei','pembelian obat pembasmi rumput (rambo)','pembelian obat pembasmi rumput (rambo)',155000],
-            [21,'Mei','ganti lampu pju depan blok n5','ganti lampu pju depan blok n5',200000],
-            [22,'Mei','pembayaran kwh mesin air','pembayaran kwh mesin air',555000],
-            [23,'Mei','ganti mcb panel pju dan lampu pos satpam','ganti mcb panel pju dan lampu pos satpam',100000],
-            [25,'Mei','ganti 2buah lampu pju blok W dan R','ganti 2buah lampu pju blok W dan R',400000],
-            [26,'Mei','sewa tenda idul adha','sewa tenda idul adha',100000],
-            // ═══ JUNI 2026 (21 transaksi) ═══
-            [20,'Juni','GAJI SATPAM DIDI','SATPAM',1500000],
-            [20,'Juni','GAJI SATPAM ACUY','SATPAM',1500000],
-            [20,'Juni','GAJI JOKO SAMPAH','ANGKUT SAMPAH',1300000],
-            [20,'Juni','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',400000],
-            [20,'Juni','GAJI KOJEK','SATPAM + KEBERSIHAN',1000000],
-            [20,'Juni','INSENTIF BENDAHARA ARIF','Multi Teknisi, Turen, Listrik, CCTV, Perawatan jalur Air,dll',400000],
-            [20,'Juni','INSENTIF BENDAHARA SUDIRMAN','Petugas Keliling dan Kebersihan',200000],
-            [20,'Juni','POS SATPAM','Token - Kopi - Aqua Galon',200000],
-            [3,'Juni','pembelian plastik sampah','pembelian plastik sampah',100000],
-            [4,'Juni','pembayaran cicilan polisi tidur','pembayaran cicilan polisi tidur',1155000],
-            [5,'Juni','pembelian 2bh sensor lampu pos ronda','dan pemasangan lampu rooftank air',160000],
-            [7,'Juni','perbaikan jalan yang rusak blok E,O,P,K,T','semen 2 sak pasir 1 mobil',198000],
-            [10,'Juni','Pemasangan KWH pos ronda','PLN',400000],
-            [11,'Juni','pembelian vacum air dan kored rumput','pembelian vacum air dan kored rumput',180000],
-            [11,'Juni','pembelian baterai senter securiti','pembelian baterai senter securiti',50000],
-            [12,'Juni','Pisau mesin Rumput','Pisau mesin Rumput',50000],
-            [18,'Juni','bensin mesin rumput','bensin mesin rumput',50000],
-            [19,'Juni','perbaikan kabel mesin air yg kebakar','patungan rt 10 dan 09',50000],
-            [20,'Juni','konsumsi kerja bakti turen babat rumput','konsumsi kerja bakti turen babat rumput',145000],
-            [22,'Juni','service mesin air atas dan bawah','patungan rt 09 dan rt 10',1000000],
-            [25,'Juni','roko konsumsi kerja bakti dan p2tl','roko konsumsi kerja bakti dan p2tl',300000],
-            [26,'Juni','bayar listrik kwh mesin air atas dan bawah','patungan rt 09 dan rt 10',360000],
-            // ═══ JULI 2026 (22 transaksi) ═══
-            [20,'Juli','GAJI SATPAM DIDI','SATPAM',1100000],
-            [20,'Juli','GAJI SATPAM ACUY','SATPAM',1500000],
-            [20,'Juli','GAJI JOKO SAMPAH','Gaji Petugas Sampah',1300000],
-            [20,'Juli','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',400000],
-            [5,'Juli','CICILAN HP WARMAN','SATPAM + KEBERSIHAN',188000],
-            [20,'Juli','INSENTIF BENDAHARA ARIF','Multi Teknisi, Turen, Listrik, CCTV, Perawatan jalur Air,dll',400000],
-            [20,'Juli','INSENTIF BENDAHARA SUDIRMAN','Petugas Keliling dan Kebersihan',200000],
-            [20,'Juli','POS SATPAM','POS SATPAM',200000],
-            [20,'Juli','GAJI KOJEK','petugas kebersihan dan keamanan rt 10',1500000],
-            [31,'Juli','bayar listrik kwh 1 dan 2','bayar listrik kwh 1 dan 2',57000],
-            [5,'Juli','Cicilan poldur dan mesin rumput','Cicilan poldur dan mesin rumput',1526000],
-            [2,'Juli','ganti lampu blok i, E, K dan N, M, L','ganti lampu blok i, E, K dan N, M, L',300000],
-            [2,'Juli','upah damkar basmi sarang tawon','upah damkar basmi sarang tawon',200000],
-            [8,'Juli','perbaikan mesin air atas (ganti mesin baru)','patungan rt 009 dan rt 010',530000],
-            [8,'Juli','uang duka dan tenda','patungan rt 009 dan rt 010',700000],
-            [14,'Juli','obat basmi rumput / rambo','obat basmi rumput / rambo',92000],
-            [20,'Juli','GAJI ASEP SATPAM','GAJI ASEP SATPAM',500000],
-            [17,'Juli','ganti mcb dan kabel kwh yang rusak','patungan rt 009 dan rt 010',75000],
-            [23,'Juli','perbaikan dan ganti lampu pju yang putus','blok O, P, Q',200000],
-            [20,'Juli','upah pengurasan rooftank/toren','patungan rt 009 dan rt 010',250000],
-            [27,'Juli','kasbon ka oji /acuy','kasbon ka oji /acuy',300000],
-            [29,'Juli','ganti lampu pju yang putus','blok i, L',200000],
-            // ═══ AGUSTUS 2026 (15 transaksi) ═══
-            [20,'Agustus','GAJI SATPAM ACUY','SATPAM',1000000],
-            [20,'Agustus','GAJI SATPAM ASEP','SATPAM',1500000],
-            [20,'Agustus','GAJI JOKO SAMPAH','ANGKUT SAMPAH',1300000],
-            [20,'Agustus','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',400000],
-            [25,'Agustus','GAJI KOJEK','petugas kebersihan rt10 dan satpam',1500000],
-            [20,'Agustus','INSENTIF BENDAHARA ARIF','Multi Teknisi, Turen, Listrik, CCTV, Perawatan jalur Air,dll',400000],
-            [20,'Agustus','INSENTIF BENDAHARA SUDIRMAN','Petugas Keliling dan Kebersihan',200000],
-            [20,'Agustus','POS SATPAM','Air Token & Kopi',200000],
-            [20,'Agustus','KWH MESIN AIR','Listrik Bulanan',500000],
-            [27,'Agustus','HP WARMAN','SATPAM + KEBERSIHAN',188000],
-            [20,'Agustus','pembayaran cicilan polisi tidur','pembayaran cicilan polisi tidur',1155000],
-            [5,'Agustus','pembayaran s pinjam 1','patungan rt 9 dan rt 10 (perbaikan mesin air atas)',780000],
-            [5,'Agustus','kasbon acuy /oji','kasbon acuy /oji',500000],
-            [11,'Agustus','pembelian plastik sampah','pembelian plastik sampah',100000],
-            [13,'Agustus','ganti lampu pju putus','blok P, Q',200000],
-            // ═══ SEPTEMBER 2026 (18 transaksi) ═══
-            [19,'September','GAJI SATPAM ACUY','SATPAM',1500000],
-            [19,'September','GAJI SATPAM ASEP','SATPAM',1500000],
-            [20,'September','GAJI JOKO SAMPAH','ANGKUT SAMPAH',1300000],
-            [19,'September','GAJI KOJEK','Petugas kebersihan rt10 dan satpam',1300000],
-            [19,'September','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',400000],
-            [19,'September','INSENTIF BENDAHARA ARIF','Multi Teknisi, Turen, Listrik, CCTV, Perawatan jalur Air,dll',400000],
-            [19,'September','INSENTIF BENDAHARA SUDIRMAN','Petugas Keliling dan Kebersihan',200000],
-            [20,'September','POS SATPAM','Air Token & Kopi',200000],
-            [29,'September','KWH MESIN AIR','Listrik Bulanan',2075000],
-            [4,'September','pembayaran cicilan polisi tidur','pembayaran cicilan polisi tidur',1151000],
-            [3,'September','pembayaran s pinjam','pinjaman perbaikan Air',1380000],
-            [17,'September','pisau mesin rumput','pisau mesin rumput',50000],
-            [4,'September','Kasbon Pak kiwong','Kasbon Pak kiwong',500000],
-            [6,'September','masker','masker',30000],
-            [21,'September','ganti lampu pju','blok i dan blok R',400000],
-            [23,'September','pembelian 2 bh reflektor jalan','cermin cembung',313000],
-            [1,'September','perbaikan cctv','perbaikan cctv',50000],
-            [30,'September','Kompresor Flush Air','patungan dengan rt 9',150000],
-            // ═══ OKTOBER 2026 (14 transaksi) ═══
-            [20,'Oktober','GAJI SATPAM ACUY','SATPAM',1500000],
-            [20,'Oktober','GAJI SATPAM ASEP','SATPAM',1500000],
-            [20,'Oktober','GAJI JOKO SAMPAH','ANGKUT SAMPAH',1300000],
-            [20,'Oktober','GAJI KOJEK','Petugas kebersihan rt10 dan satpam',1500000],
-            [20,'Oktober','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',500000],
-            [20,'Oktober','INSENTIF BENDAHARA ARIF','Teknisi, Turen, Listrik, CCTV, jalur Air,dll',400000],
-            [20,'Oktober','INSENTIF BENDAHARA SUDIRMAN','Petugas Keliling dan Kebersihan',200000],
-            [20,'Oktober','POS SATPAM','Air Token & Kopi',200000],
-            [20,'Oktober','KWH MESIN AIR','Listrik Bulanan',2200000],
-            [11,'Oktober','konsumsi rapat','konsumsi rapat',121000],
-            [14,'Oktober','ganti lampu pju','blok i dan E',300000],
-            [16,'Oktober','ganti lampu pju','blok V1 dan L',400000],
-            [24,'Oktober','pembelian pisau mesin rumput','pembelian pisau mesin rumput',50000],
-            [24,'Oktober','pembelian gergaji besi','pembelian gergaji besi',42000],
-            // ═══ NOVEMBER 2026 (8 transaksi) ═══
-            [1,'November','GAJI SATPAM ACUY','SATPAM (Kasbon)',900000],
-            [1,'November','GAJI KOJEK','Petugas kebersihan rt10 dan satpam (Kasbon)',200000],
-            [4,'November','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',500000],
-            [1,'November','Iuran TPU/Kematian','DKM Al-Ikhwan',250000],
-            [4,'November','pembayaran s pinjam 1','patungan rt 9 dan rt 10 (perbaikan mesin air atas)',680000],
-            [10,'November','token kwh mesin bawah','token kwh mesin bawah',250000],
-            [12,'November','konsumsi pengeboran','konsumsi pengeboran',250000],
-            [12,'November','penambal turen','penambal turen',151000]
+            [20,'Januari','GAJI SATPAM 1','Gaji Satpam Acuy',1500000],[20,'Januari','GAJI SATPAM 2','Gaji Satpam Asep',1500000],[20,'Januari','GAJI SAMPAH','Gaji Petugas Sampah',1300000],[20,'Januari','INS. P KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',200000],[10,'Januari','GAJI KEBERSIHAN','Gaji Petugas Kebersihan (Kojek)',1200000],[2,'Januari','TOKEN POS','TOKEN POS',51500],[20,'Januari','Insentif Bendahara 2 dan 3','Insentif Bendahara 1,2',250000],[20,'Januari','KOPI POS SATPAM','KOPI POS SATPAM',100000],[10,'Januari','GAJI MERBOT','GAJI MERBOT',500000],[2,'Januari','Token Mushola','Token Mushola',150000],[2,'Januari','Aqua Pos Satpam','Aqua Pos Satpam',50000],[1,'Januari','bayar cctv','bayar cctv',227000],[3,'Januari','bensin mesin rumput','bensin mesin rumput',40000],[5,'Januari','konsumsi kerja bakti','konsumsi kerja bakti',174000],[5,'Januari','bensin dan oli mesin rumput','bensin dan oli mesin rumput',85000],[5,'Januari','upah kuras turen','upah kuras turen',200000],[10,'Januari','Beli pisau mesin rumput baru','Beli pisau mesin rumput baru',50000],[11,'Januari','Upah pak dede','Upah pak dede',100000],[13,'Januari','Alat kebersihan pos satpam','Alat kebersihan pos satpam',50000],[13,'Januari','Kran dispenser pos satpam','Kran dispenser pos satpam',12000],[13,'Januari','Ganti lampu pju','Ganti lampu pju',200000],[17,'Januari','Jasa pindahan kwh mushola','Jasa pindahan kwh mushola',250000],[17,'Januari','Jas hujan satpam dan kebersihan','Jas hujan satpam dan kebersihan',140000],[19,'Januari','Token mesin air kwh atas','Token mesin air kwh atas',500000],[19,'Januari','Ganti lampu pju','Ganti lampu pju',200000],[20,'Januari','Beli pacul dan iskup semen','Beli pacul dan iskup semen',240000],[22,'Januari','Bensin mesin rumput','Bensin mesin rumput',20000],[24,'Januari','Semen','Semen',400000],[24,'Januari','Pasir','Pasir',180000],[25,'Januari','Makan petugas PLN','Makan petugas PLN',150000],[25,'Januari','Ganti kapasitor mesin air atas','Ganti kapasitor mesin air atas',100000],[27,'Januari','potongan APK Dana','potongan APK Dana',80000],
+            [20,'Februari','GAJI SATPAM 1','GAJI SATPAM 1',1500000],[20,'Februari','GAJI SATPAM 2','GAJI SATPAM 2',1500000],[20,'Februari','GAJI SAMPAH','GAJI SAMPAH',1300000],[20,'Februari','INS. P KIWONG','INS. P KIWONG',300000],[20,'Februari','GAJI KEBERSIHAN','GAJI KEBERSIHAN',1250000],[6,'Februari','TOKEN POS','TOKEN POS',51500],[20,'Februari','Insentif Bendahara 1,2','Insentif Bendahara 1,2',450000],[20,'Februari','KOPI POS SATPAM','KOPI POS SATPAM',100000],[10,'Februari','GAJI MERBOT','GAJI MERBOT',600000],[2,'Februari','Token Mushola','Token Mushola',50000],[2,'Februari','Aqua Pos Satpam','Aqua Pos Satpam',50000],[1,'Februari','bayar cctv','bayar cctv',230000],[10,'Februari','pemasangan Kwh baru mesin air bawah','pemasangan Kwh baru mesin air bawah',750000],[7,'Februari',"al Qur'an inpentaris","al Qur'an inpentaris",80000],[7,'Februari','pisau untuk kebutuhan babat rumput','pisau untuk kebutuhan babat rumput',50000],[13,'Februari','perbaikan jalur air blok L','perbaikan jalur air blok L',50000],[10,'Februari','kabel 2x2,5 untuk kebutuhan kwh','kabel 2x2,5 untuk kebutuhan kwh',50000],[14,'Februari','busi mesin rumput dan pilok','busi mesin rumput dan pilok',100000],[17,'Februari','pluit','pluit',12000],[25,'Februari','pembelian toa megapone','pembelian toa megapone',120000],[25,'Februari','ganti radar pelampung mesin air bawah','ganti radar pelampung mesin air bawah',35000],[26,'Februari','ganti ban dalam gerobak sampah','ganti ban dalam gerobak sampah',50000],[27,'Februari','token kwh mesin air atas','token kwh mesin air atas',250000],[27,'Februari','ganti lampu pju blok U,V,S,E','ganti lampu pju blok U,V,S,E',200000],
+            [14,'Maret','GAJI SATPAM DIDI','THR patungan RT 9',1500000],[14,'Maret','GAJI SATPAM ACHUY','THR Patungan RT 9',1500000],[14,'Maret','GAJI SAMPAH JOKO','THR patungan RT 9',1300000],[14,'Maret','INS. P KIWONG','Plus jaga rutin malam minggu 100',400000],[14,'Maret','GAJI KEBERSIHAN WARMAN','Potong kasbon tnggal 9 maret',1100000],[20,'Maret','TOKEN POS','TOKEN POS',51500],[14,'Maret','Insentif Bendahara 2,3','Arif dan Sudirman /2',500000],[8,'Maret','KOPI POS SATPAM & TOKEN','KOPI POS SATPAM & TOKEN',200000],[14,'Maret','GAJI MERBOT','GAJI MERBOT',500000],[2,'Maret','Aqua Pos Satpam','Aqua Pos Satpam',50000],[14,'Maret','SANTUNAN','10 ORANG /yatim 50.000',4000000],[14,'Maret','OPAY','OPAY',300000],[14,'Maret','THR SATPAM HERI','THR SATPAM HERI',300000],[27,'Maret','Alat Kebersihan','Alat Kebersihan',100000],[1,'Maret','Lainnya','Pengeluaran tanpa uraian (Maret)',400000],[1,'Maret','nobar','nobar',60000],[31,'Maret','uang jaga idul fitri satpam','patungan rt 09 &10',200000],[4,'Maret','Belanja material gudang','Kanal dll',496000],
+            [20,'April','GAJI SATPAM DIDI','SATPAM',1500000],[20,'April','GAJI SATPAM ACUY','SATPAM',1500000],[20,'April','GAJI JOKO SAMPAH','ANGKUT SAMPAH',1300000],[20,'April','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh, Perawatan jalur Air. dll',400000],[20,'April','GAJI WARMAN','SATPAM + KEBERSIHAN',1500000],[20,'April','INSENTIF BENDAHARA ARIF','Multi Teknisi, Turen, Listrik, CCTV dll',300000],[20,'April','INSENTIF BENDAHARA SUDIRMAN','Petugas Keliling dan Kebersihan',150000],[22,'April','POS SATPAM','POS SATPAM',200000],[1,'April','bayar cctv','cicilan terakhir',227000],[1,'April','pembelian polisi tidur 1bh','cek material dan ketinggian speed bump',135000],[4,'April','belanja kebutuhan gudang inventaris','Kanal, spandek, seng, baud.dll',606000],[6,'April','Pengurasan Turen','Pengurasan Turen',230000],[11,'April','bensin mesin rumput & alat pel lantai','bensin mesin rumput & alat pel lantai',280000],[14,'April','polibag sampah','8 pak',200000],[14,'April','perbaikan pralon talang air pos satpam','patungan rt 9 dan 10 + babat rumput area gardu PLN',350000],[20,'April','Pemasangan polisi tidur /speed bumb','Konsumsi dll',200000],[20,'April','uang duka didi satpam','urunan dengan RT 9',514000],[22,'April','token kwh mesin air','token kwh mesin air',617000],[22,'April','bensin mesin rumput','bensin mesin rumput',50000],[24,'April','Bayar cicilan mesin rumput bensin','Bayar cicilan mesin rumput bensin',376000],
+            [20,'Mei','GAJI SATPAM DIDI','SATPAM',1500000],[20,'Mei','GAJI SATPAM ACUY','SATPAM',1500000],[20,'Mei','GAJI JOKO SAMPAH','ANGKUT SAMPAH',1400000],[20,'Mei','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',400000],[20,'Mei','GAJI WARMAN','SATPAM + KEBERSIHAN',1000000],[20,'Mei','INSENTIF BENDAHARA ARIF','Multi Teknisi, Turen, Listrik, CCTV, Perawatan jalur Air,dll',400000],[20,'Mei','INSENTIF BENDAHARA SUDIRMAN','Petugas Keliling, Kebersihan dan perbaikan air',200000],[20,'Mei','POS SATPAM','POS SATPAM',200000],[20,'Mei','MUSHOLA','Token - Alat Kebersihan - dll',200000],[5,'Mei','pembayaran cicilan polisi tidur 1','pembayaran cicilan polisi tidur 1',1155000],[5,'Mei','pembelian pisau mesin rumput baterai','pembelian pisau mesin rumput baterai',30000],[16,'Mei','pembelian obat pembasmi rumput (rambo)','pembelian obat pembasmi rumput (rambo)',155000],[21,'Mei','ganti lampu pju depan blok n5','ganti lampu pju depan blok n5',200000],[22,'Mei','pembayaran kwh mesin air','pembayaran kwh mesin air',555000],[23,'Mei','ganti mcb panel pju dan lampu pos satpam','ganti mcb panel pju dan lampu pos satpam',100000],[25,'Mei','ganti 2buah lampu pju blok W dan R','ganti 2buah lampu pju blok W dan R',400000],[26,'Mei','sewa tenda idul adha','sewa tenda idul adha',100000],
+            [20,'Juni','GAJI SATPAM DIDI','SATPAM',1500000],[20,'Juni','GAJI SATPAM ACUY','SATPAM',1500000],[20,'Juni','GAJI JOKO SAMPAH','ANGKUT SAMPAH',1300000],[20,'Juni','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',400000],[20,'Juni','GAJI KOJEK','SATPAM + KEBERSIHAN',1000000],[20,'Juni','INSENTIF BENDAHARA ARIF','Multi Teknisi, Turen, Listrik, CCTV, Perawatan jalur Air,dll',400000],[20,'Juni','INSENTIF BENDAHARA SUDIRMAN','Petugas Keliling dan Kebersihan',200000],[20,'Juni','POS SATPAM','Token - Kopi - Aqua Galon',200000],[3,'Juni','pembelian plastik sampah','pembelian plastik sampah',100000],[4,'Juni','pembayaran cicilan polisi tidur','pembayaran cicilan polisi tidur',1155000],[5,'Juni','pembelian 2bh sensor lampu pos ronda','dan pemasangan lampu rooftank air',160000],[7,'Juni','perbaikan jalan yang rusak blok E,O,P,K,T','semen 2 sak pasir 1 mobil',198000],[10,'Juni','Pemasangan KWH pos ronda','PLN',400000],[11,'Juni','pembelian vacum air dan kored rumput','pembelian vacum air dan kored rumput',180000],[11,'Juni','pembelian baterai senter securiti','pembelian baterai senter securiti',50000],[12,'Juni','Pisau mesin Rumput','Pisau mesin Rumput',50000],[18,'Juni','bensin mesin rumput','bensin mesin rumput',50000],[19,'Juni','perbaikan kabel mesin air yg kebakar','patungan rt 10 dan 09',50000],[20,'Juni','konsumsi kerja bakti turen babat rumput','konsumsi kerja bakti turen babat rumput',145000],[22,'Juni','service mesin air atas dan bawah','patungan rt 09 dan rt 10',1000000],[25,'Juni','roko konsumsi kerja bakti dan p2tl','roko konsumsi kerja bakti dan p2tl',300000],[26,'Juni','bayar listrik kwh mesin air atas dan bawah','patungan rt 09 dan rt 10',360000],
+            [20,'Juli','GAJI SATPAM DIDI','SATPAM',1100000],[20,'Juli','GAJI SATPAM ACUY','SATPAM',1500000],[20,'Juli','GAJI JOKO SAMPAH','Gaji Petugas Sampah',1300000],[20,'Juli','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',400000],[5,'Juli','CICILAN HP WARMAN','SATPAM + KEBERSIHAN',188000],[20,'Juli','INSENTIF BENDAHARA ARIF','Multi Teknisi, Turen, Listrik, CCTV, Perawatan jalur Air,dll',400000],[20,'Juli','INSENTIF BENDAHARA SUDIRMAN','Petugas Keliling dan Kebersihan',200000],[20,'Juli','POS SATPAM','POS SATPAM',200000],[20,'Juli','GAJI KOJEK','petugas kebersihan dan keamanan rt 10',1500000],[31,'Juli','bayar listrik kwh 1 dan 2','bayar listrik kwh 1 dan 2',57000],[5,'Juli','Cicilan poldur dan mesin rumput','Cicilan poldur dan mesin rumput',1526000],[2,'Juli','ganti lampu blok i, E, K dan N, M, L','ganti lampu blok i, E, K dan N, M, L',300000],[2,'Juli','upah damkar basmi sarang tawon','upah damkar basmi sarang tawon',200000],[8,'Juli','perbaikan mesin air atas (ganti mesin baru)','patungan rt 009 dan rt 010',530000],[8,'Juli','uang duka dan tenda','patungan rt 009 dan rt 010',700000],[14,'Juli','obat basmi rumput / rambo','obat basmi rumput / rambo',92000],[20,'Juli','GAJI ASEP SATPAM','GAJI ASEP SATPAM',500000],[17,'Juli','ganti mcb dan kabel kwh yang rusak','patungan rt 009 dan rt 010',75000],[23,'Juli','perbaikan dan ganti lampu pju yang putus','blok O, P, Q',200000],[20,'Juli','upah pengurasan rooftank/toren','patungan rt 009 dan rt 010',250000],[27,'Juli','kasbon ka oji /acuy','kasbon ka oji /acuy',300000],[29,'Juli','ganti lampu pju yang putus','blok i, L',200000],
+            [20,'Agustus','GAJI SATPAM ACUY','SATPAM',1000000],[20,'Agustus','GAJI SATPAM ASEP','SATPAM',1500000],[20,'Agustus','GAJI JOKO SAMPAH','ANGKUT SAMPAH',1300000],[20,'Agustus','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',400000],[25,'Agustus','GAJI KOJEK','petugas kebersihan rt10 dan satpam',1500000],[20,'Agustus','INSENTIF BENDAHARA ARIF','Multi Teknisi, Turen, Listrik, CCTV, Perawatan jalur Air,dll',400000],[20,'Agustus','INSENTIF BENDAHARA SUDIRMAN','Petugas Keliling dan Kebersihan',200000],[20,'Agustus','POS SATPAM','Air Token & Kopi',200000],[20,'Agustus','KWH MESIN AIR','Listrik Bulanan',500000],[27,'Agustus','HP WARMAN','SATPAM + KEBERSIHAN',188000],[20,'Agustus','pembayaran cicilan polisi tidur','pembayaran cicilan polisi tidur',1155000],[5,'Agustus','pembayaran s pinjam 1','patungan rt 9 dan rt 10 (perbaikan mesin air atas)',780000],[5,'Agustus','kasbon acuy /oji','kasbon acuy /oji',500000],[11,'Agustus','pembelian plastik sampah','pembelian plastik sampah',100000],[13,'Agustus','ganti lampu pju putus','blok P, Q',200000],
+            [19,'September','GAJI SATPAM ACUY','SATPAM',1500000],[19,'September','GAJI SATPAM ASEP','SATPAM',1500000],[20,'September','GAJI JOKO SAMPAH','ANGKUT SAMPAH',1300000],[19,'September','GAJI KOJEK','Petugas kebersihan rt10 dan satpam',1300000],[19,'September','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',400000],[19,'September','INSENTIF BENDAHARA ARIF','Multi Teknisi, Turen, Listrik, CCTV, Perawatan jalur Air,dll',400000],[19,'September','INSENTIF BENDAHARA SUDIRMAN','Petugas Keliling dan Kebersihan',200000],[20,'September','POS SATPAM','Air Token & Kopi',200000],[29,'September','KWH MESIN AIR','Listrik Bulanan',2075000],[4,'September','pembayaran cicilan polisi tidur','pembayaran cicilan polisi tidur',1151000],[3,'September','pembayaran s pinjam','pinjaman perbaikan Air',1380000],[17,'September','pisau mesin rumput','pisau mesin rumput',50000],[4,'September','Kasbon Pak kiwong','Kasbon Pak kiwong',500000],[6,'September','masker','masker',30000],[21,'September','ganti lampu pju','blok i dan blok R',400000],[23,'September','pembelian 2 bh reflektor jalan','cermin cembung',313000],[1,'September','perbaikan cctv','perbaikan cctv',50000],[30,'September','Kompresor Flush Air','patungan dengan rt 9',150000],
+            [20,'Oktober','GAJI SATPAM ACUY','SATPAM',1500000],[20,'Oktober','GAJI SATPAM ASEP','SATPAM',1500000],[20,'Oktober','GAJI JOKO SAMPAH','ANGKUT SAMPAH',1300000],[20,'Oktober','GAJI KOJEK','Petugas kebersihan rt10 dan satpam',1500000],[20,'Oktober','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',500000],[20,'Oktober','INSENTIF BENDAHARA ARIF','Teknisi, Turen, Listrik, CCTV, jalur Air,dll',400000],[20,'Oktober','INSENTIF BENDAHARA SUDIRMAN','Petugas Keliling dan Kebersihan',200000],[20,'Oktober','POS SATPAM','Air Token & Kopi',200000],[20,'Oktober','KWH MESIN AIR','Listrik Bulanan',2200000],[11,'Oktober','konsumsi rapat','konsumsi rapat',121000],[14,'Oktober','ganti lampu pju','blok i dan E',300000],[16,'Oktober','ganti lampu pju','blok V1 dan L',400000],[24,'Oktober','pembelian pisau mesin rumput','pembelian pisau mesin rumput',50000],[24,'Oktober','pembelian gergaji besi','pembelian gergaji besi',42000],
+            [1,'November','GAJI SATPAM ACUY','SATPAM (Kasbon)',900000],[1,'November','GAJI KOJEK','Petugas kebersihan rt10 dan satpam (Kasbon)',200000],[4,'November','INSENTIF KIWONG','SATPAM +Teknisi Turen, swacam kwh dll',500000],[1,'November','Iuran TPU/Kematian','DKM Al-Ikhwan',250000],[4,'November','pembayaran s pinjam 1','patungan rt 9 dan rt 10 (perbaikan mesin air atas)',680000],[10,'November','token kwh mesin bawah','token kwh mesin bawah',250000],[12,'November','konsumsi pengeboran','konsumsi pengeboran',250000],[12,'November','penambal turen','penambal turen',151000]
         ];
 
         function normalizeHouseData(rb, rn) {
@@ -934,10 +735,8 @@
         };
         window.tarifConfig = JSON.parse(JSON.stringify(DEFAULT_TARIF_CONFIG));
         const BULAN_MAP_EXCEL = { 'Jan':'JAN','Feb':'FEB','Mar':'MAR','Apr':'APR','Mei':'MEI','Jun':'JUN','Jul':'JUL','Agu':'AGS','Sep':'SEP','Okt':'OKT','Nop':'NOP','Des':'DES' };
-
         function normalizeStatus(st) { if (st === 'K') return 'LK'; return st || 'BL'; }
         function isLunasStatus(st) { return !!(STATUS_CODES[normalizeStatus(st)]?.isLunas); }
-
         function getTarifAktif(kode, bulanKey) {
             const cfg = window.tarifConfig || DEFAULT_TARIF_CONFIG;
             const std = (cfg.tarifStandar || {})[kode] ?? 0;
@@ -947,7 +746,6 @@
             const mk = String(bulanKey).substring(0, 3);
             return (blnBerlaku === (BULAN_MAP_EXCEL[mk] || mk.toUpperCase())) ? per : std;
         }
-
         function hitungNominal(wargaData, bulanKey) {
             const st = normalizeStatus((wargaData.iuran || {})[bulanKey]);
             if (!STATUS_CODES[st]?.isLunas) return 0;
@@ -955,7 +753,6 @@
             if (custom !== undefined && custom !== null && custom !== '') return Number(custom);
             return getTarifAktif(st, bulanKey);
         }
-
         function isCustomNominal(wargaData, bulanKey) {
             const st = normalizeStatus((wargaData.iuran || {})[bulanKey]);
             if (!STATUS_CODES[st]?.isLunas) return false;
@@ -988,7 +785,6 @@
         function safeDecode(e) { return JSON.parse(decodeURIComponent(e)); }
         function formatWaNumber(hp) { if (!hp) return ''; let n = String(hp).replace(/[^0-9]/g, ''); if (n.startsWith('0')) n = '62' + n.substring(1); return n; }
         function formatFullDate(ts) { if (!ts) return ''; return new Date(ts).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); }
-
         function updateHeaderDate() { const el = document.getElementById('headerDate'); if (el) el.innerText = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }); }
         setInterval(updateHeaderDate, 1000); updateHeaderDate();
 
@@ -1075,19 +871,13 @@
                 loadAdminWargaList(); loadStatistik();
             } catch (e) { showToast("Gagal: " + e.message, true); }
         };
-
-        /* ══════════════════════════════════════════════════════════════════
-           IMPORT KAS 2026 — TIMPA SEMUA PENGELUARAN LAMA
-        ══════════════════════════════════════════════════════════════════ */
         window.importKas2026Excel = async function() {
             if (!isAdminRole()) return showToast("Hanya pengurus.", true);
             const totalRp = KAS_2026_DATA.reduce((s, r) => s + r[4], 0);
             if (!confirm(`⚠️ TIMPA DATA PENGELUARAN 2026\n\nSemua pengeluaran tahun 2026 (jenis keluar) akan DIHAPUS.\n\nLalu diisi ulang:\n• ${KAS_2026_DATA.length} transaksi\n• Total: ${formatRupiah(totalRp)}\n\nLanjutkan?`)) return;
-
             const btn = document.getElementById('btnImportKas');
             if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menghapus lama...'; }
             try {
-                // 1. Hapus semua pengeluaran 2026
                 const s = await getDocs(collection(db, 'artifacts', appId, 'kas'));
                 let deleted = 0;
                 for (const d of s.docs) {
@@ -1098,7 +888,6 @@
                     }
                 }
                 if (btn) btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Insert 0/${KAS_2026_DATA.length}`;
-                // 2. Insert baru
                 const BULAN_IDX = { 'Januari':0,'Februari':1,'Maret':2,'April':3,'Mei':4,'Juni':5,'Juli':6,'Agustus':7,'September':8,'Oktober':9,'November':10,'Desember':11 };
                 const currentUser = (window.currentUserData && window.currentUserData.nama) || 'Admin';
                 let added = 0, errors = 0;
@@ -1109,16 +898,7 @@
                     if (mIdx === undefined) continue;
                     const ts = new Date(2026, mIdx, tgl || 1, 12, 0, 0).getTime();
                     try {
-                        await addDoc(collection(db, 'artifacts', appId, 'kas'), {
-                            tipeDoc: 'transaksi', jenis: 'keluar',
-                            kategori: kat || 'Lainnya',
-                            keterangan: uraian || kat || 'Tanpa Keterangan',
-                            nominal: Number(nom),
-                            oleh: `${currentUser} (Import Excel)`,
-                            timestamp: ts,
-                            source: 'excel_2026',
-                            importedAt: Date.now()
-                        });
+                        await addDoc(collection(db, 'artifacts', appId, 'kas'), { tipeDoc: 'transaksi', jenis: 'keluar', kategori: kat || 'Lainnya', keterangan: uraian || kat || 'Tanpa Keterangan', nominal: Number(nom), oleh: `${currentUser} (Import Excel)`, timestamp: ts, source: 'excel_2026', importedAt: Date.now() });
                         added++;
                         if (added % 10 === 0 && btn) btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${added}/${KAS_2026_DATA.length}`;
                     } catch(e) { errors++; console.error(e); }
@@ -1126,19 +906,12 @@
                 if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-upload"></i> Import Kas 2026'; }
                 showToast(`✅ Selesai!\n${deleted} lama dihapus\n${added} baru ditambahkan\n${errors} error`);
                 loadBukuKas();
-                if (document.getElementById('kasView') && !document.getElementById('kasView').classList.contains('hidden')) {
-                    switchKasTab('riwayat');
-                }
             } catch(e) {
                 console.error(e);
                 if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-upload"></i> Import Kas 2026'; }
                 showToast("Gagal: " + e.message, true);
             }
         };
-
-        /* ══════════════════════════════════════════════════════════════════
-           EDIT KAS — Modal terbuka dari tombol pensil
-        ══════════════════════════════════════════════════════════════════ */
         window.openEditKas = function(id) {
             if (!isAdminRole()) return showToast("Hanya pengurus.", true);
             const item = globalKasList.find(x => x.id === id);
@@ -1151,7 +924,6 @@
             document.getElementById('editKasTanggal').value = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
             document.getElementById('modalEditKas').classList.remove('hidden');
         };
-
         window.simpanEditKas = async function(e) {
             e.preventDefault();
             const id = document.getElementById('editKasId').value;
@@ -1167,7 +939,6 @@
                 document.getElementById('modalEditKas').classList.add('hidden');
                 showToast("✅ Pengeluaran diperbarui!");
                 loadBukuKas();
-                if (document.getElementById('kasView') && !document.getElementById('kasView').classList.contains('hidden')) switchKasTab('riwayat');
             } catch(e) { showToast("Gagal: " + e.message, true); }
         };
 
@@ -1360,7 +1131,6 @@
             document.getElementById('editPkjTgl').value = d.tglMasuk || '';
             document.getElementById('editPkjGaji').value = d.gaji || '';
             document.getElementById('editPkjAlamat').value = d.alamat || '';
-            // ⚡ Load foto
             const foto = d.fotoBase64 || '';
             const prev = document.getElementById('editPkjFotoPreview');
             const ico = document.getElementById('editPkjFotoIcon');
@@ -1396,28 +1166,19 @@
         window.ubahStatusBooking = async function(id, s) { try { await updateDoc(doc(db, 'artifacts', appId, 'booking', id), { status: s }); showToast(`Booking ${s}!`); loadAdminBookingList(); } catch(e) {} };
         window.hapusBooking = async function(id) { if(!confirm("Hapus pengajuan?")) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'booking', id)); loadAdminBookingList(); showToast("Dihapus."); } catch(e) {} };
 
-        let currentKasFilter = 'semua', globalKasList = [], currentKasView = 'tagihan';
-        window.switchKasTab = function(tipe) {
-            currentKasView = tipe;
-            const br = document.getElementById('tabKasRiwayat'), bt = document.getElementById('tabKasTagihan');
-            const cr = document.getElementById('kasRiwayatContainer'), ct = document.getElementById('kasTagihanContainer');
-            if(tipe === 'tagihan') { bt.className = "flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all"; br.className = "flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all"; ct.classList.remove('hidden'); cr.classList.add('hidden'); loadKasTagihanWarga(); }
-            else { br.className = "flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all"; bt.className = "flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all"; cr.classList.remove('hidden'); ct.classList.add('hidden'); loadBukuKas(); }
-        };
+        let currentKasFilter = 'semua', globalKasList = [];
+        window.switchKasTab = function(tipe) { loadGajiInsentif(); };
 
         window.loadKasTagihanWarga = async function() {
             const body = document.getElementById('kasTagihanMatrixBody'), sumCont = document.getElementById('kasTagihanSummary');
             if (!body || !firebaseReady) return;
             const isAdmin = isAdminRole(); const months = getBulanList(getTahunBerjalan());
-            document.querySelectorAll('.admin-only-col').forEach(el => el.classList.toggle('hidden', !isAdmin));
-            document.querySelectorAll('.admin-only-hint').forEach(el => el.classList.toggle('hidden', !isAdmin));
-            document.querySelectorAll('.warga-only-hint').forEach(el => el.classList.toggle('hidden', isAdmin));
             body.innerHTML = `<tr><td colspan="13" class="text-center py-5"><i class="fa-solid fa-spinner fa-spin text-slate-400"></i></td></tr>`;
             if (sumCont) sumCont.innerHTML = '';
             try {
                 const s = await getDocs(collection(db, 'artifacts', appId, 'warga_master'));
                 const arr = []; s.forEach(d => arr.push({ id: d.id, ...d.data() }));
-                if (arr.length === 0) { body.innerHTML = '<tr><td colspan="13" class="text-center text-xs text-slate-400 py-5">Belum ada data master. Admin klik <b>Seed 125 Rumah</b> di Panel Admin.</td></tr>'; return; }
+                if (arr.length === 0) { body.innerHTML = '<tr><td colspan="13" class="text-center text-xs text-slate-400 py-5">Belum ada data master.</td></tr>'; return; }
                 arr.sort((a, b) => { const bkA = (a.blok || '').toUpperCase().padEnd(4); const bkB = (b.blok || '').toUpperCase().padEnd(4); if (bkA !== bkB) return bkA.localeCompare(bkB); return String(a.no || '').localeCompare(String(b.no || ''), undefined, { numeric: true }); });
                 let gp = 0, gr = 0, html = '';
                 arr.forEach(w => {
@@ -1433,31 +1194,212 @@
                         const cls = `cell-${st}`;
                         const gratis = (isL && nom === 0) ? ' cell-gratis' : '';
                         const custCls = custom ? ' cell-custom' : '';
-                        if (isAdmin) {
-                            cells += `<td class="p-0 border border-slate-100"><button onclick="openEditSel('${w.id}','${sB}','${sN}')" class="matrix-cell-btn ${cls}${gratis}${custCls} hover:opacity-80" title="${escapeHtml(bln)}: ${st}${isL ? ' · ' + formatRupiah(nom) : ''}${custom ? ' (custom)' : ''}">${st}</button></td>`;
-                        } else {
-                            cells += `<td class="p-0 border border-slate-100"><div class="matrix-cell-btn ${cls}${gratis}${custCls}">${st}</div></td>`;
-                        }
+                        if (isAdmin) { cells += `<td class="p-0 border border-slate-100"><button onclick="openEditSel('${w.id}','${sB}','${sN}')" class="matrix-cell-btn ${cls}${gratis}${custCls} hover:opacity-80" title="${escapeHtml(bln)}: ${st}${isL ? ' · ' + formatRupiah(nom) : ''}${custom ? ' (custom)' : ''}">${st}</button></td>`; }
+                        else { cells += `<td class="p-0 border border-slate-100"><div class="matrix-cell-btn ${cls}${gratis}${custCls}">${st}</div></td>`; }
                     });
                     gp += poin; gr += rp;
                     const bl = `${w.blok || '-'} ${w.no || '-'}`;
                     const sk = `${(w.nama || '').toLowerCase()} ${normalizeSearch(bl).toLowerCase()} blok${(w.blok || '').toLowerCase()}${(w.no || '').toLowerCase()}`;
-                    html += `<tr class="tagihan-row hover:bg-slate-50" data-search="${escapeHtml(sk)}"><td class="p-1 border border-slate-100 text-left matrix-blok-col"><div class="flex flex-col leading-tight"><span class="font-bold text-slate-800 text-[10px]">${escapeHtml(bl)}</span><span class="text-[8px] text-slate-500 truncate max-w-[55px]">${escapeHtml(w.nama || '')}</span></div></td>${cells}</tr>`;
+                    html += `<tr class="tagihan-row hover:bg-slate-50" data-master-id="${w.id}" data-search="${escapeHtml(sk)}"><td class="p-1 border border-slate-100 text-left matrix-blok-col"><div class="flex flex-col leading-tight"><span class="font-bold text-slate-800 text-[10px]">${escapeHtml(bl)}</span><span class="text-[8px] text-slate-500 truncate max-w-[55px]">${escapeHtml(w.nama || '')}</span></div></td>${cells}</tr>`;
                 });
                 body.innerHTML = html;
                 if (isAdmin && sumCont) sumCont.innerHTML = `<div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm"><div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-slate-700"><i class="fa-solid fa-calculator text-emerald-600 mr-1"></i> Akumulasi ${getTahunBerjalan()}</span><span class="text-[10px] text-slate-500">${arr.length} rumah</span></div><div class="grid grid-cols-2 gap-2"><div class="bg-emerald-50 p-2 rounded-lg text-center"><p class="text-[9px] text-emerald-700 font-semibold uppercase">Total Point</p><p class="text-base font-bold text-emerald-600">${gp}</p></div><div class="bg-slate-100 p-2 rounded-lg text-center"><p class="text-[9px] text-slate-700 font-semibold uppercase">Total Rp</p><p class="text-xs font-bold text-slate-800">${formatRupiah(gr)}</p></div></div></div>`;
+                setTimeout(() => { initResizableTable('kasTagihanMatrix'); initMatrixSelection('kasTagihanMatrix'); }, 50);
             } catch(e) { console.error(e); body.innerHTML = '<tr><td colspan="13" class="text-center text-xs text-red-500 py-5">Gagal memuat.</td></tr>'; }
         };
+
+        /* ══════════════════════════════════════════════════════════════════
+           FITUR BARU 1: RESIZE KOLOM + SELEKSI MATRIX (COPY/PASTE EXCEL)
+        ══════════════════════════════════════════════════════════════════ */
+        let matrixSelection = { active: false, startR: 0, startC: 0, endR: 0, endC: 0, tableId: null };
+        let currentGlobalMonths = [];
+
+        window.initResizableTable = function(tableId) {
+            const table = document.getElementById(tableId);
+            if (!table) return;
+            const ths = table.querySelectorAll('thead th');
+            ths.forEach((th) => {
+                if (th.querySelector('.th-resizer')) return;
+                th.classList.add('th-resizable');
+                const resizer = document.createElement('div');
+                resizer.className = 'th-resizer';
+                th.appendChild(resizer);
+                let startX, startW;
+                resizer.addEventListener('mousedown', (e) => {
+                    e.preventDefault(); e.stopPropagation();
+                    startX = e.pageX; startW = th.offsetWidth;
+                    const onMove = (ev) => {
+                        const w = Math.max(28, startW + (ev.pageX - startX));
+                        th.style.width = w + 'px'; th.style.minWidth = w + 'px';
+                    };
+                    const onUp = () => {
+                        document.removeEventListener('mousemove', onMove);
+                        document.removeEventListener('mouseup', onUp);
+                    };
+                    document.addEventListener('mousemove', onMove);
+                    document.addEventListener('mouseup', onUp);
+                });
+            });
+        };
+
+        window.initMatrixSelection = function(tableId) {
+            const table = document.getElementById(tableId);
+            if (!table) return;
+            const body = table.querySelector('tbody');
+            if (!body || body.dataset.selectionInit === '1') return;
+            body.dataset.selectionInit = '1';
+            body.addEventListener('mousedown', (e) => {
+                if (e.button !== 0) return;
+                const td = e.target.closest('td');
+                if (!td) return;
+                const row = td.parentElement;
+                const rowIdx = Array.from(body.rows).indexOf(row);
+                const colIdx = Array.from(row.cells).indexOf(td);
+                if (rowIdx < 0 || colIdx < 0) return;
+                if (e.shiftKey && matrixSelection.tableId === tableId) {
+                    matrixSelection.endR = rowIdx;
+                    matrixSelection.endC = colIdx;
+                } else {
+                    matrixSelection.active = true;
+                    matrixSelection.startR = rowIdx;
+                    matrixSelection.startC = colIdx;
+                    matrixSelection.endR = rowIdx;
+                    matrixSelection.endC = colIdx;
+                    matrixSelection.tableId = tableId;
+                }
+                updateMatrixHighlight();
+                const onMove = (ev) => {
+                    const t = ev.target.closest('td');
+                    if (!t) return;
+                    const r = Array.from(body.rows).indexOf(t.parentElement);
+                    const c = Array.from(t.parentElement.cells).indexOf(t);
+                    if (r >= 0 && c >= 0) { matrixSelection.endR = r; matrixSelection.endC = c; updateMatrixHighlight(); }
+                };
+                const onUp = () => {
+                    document.removeEventListener('mousemove', onMove);
+                    document.removeEventListener('mouseup', onUp);
+                };
+                document.addEventListener('mousemove', onMove);
+                document.addEventListener('mouseup', onUp);
+            });
+        };
+
+        function updateMatrixHighlight() {
+            const table = document.getElementById(matrixSelection.tableId);
+            if (!table) return;
+            const body = table.querySelector('tbody');
+            const minR = Math.min(matrixSelection.startR, matrixSelection.endR);
+            const maxR = Math.max(matrixSelection.startR, matrixSelection.endR);
+            const minC = Math.min(matrixSelection.startC, matrixSelection.endC);
+            const maxC = Math.max(matrixSelection.startC, matrixSelection.endC);
+            Array.from(body.rows).forEach((row, r) => {
+                Array.from(row.cells).forEach((cell, c) => {
+                    cell.classList.toggle('matrix-selected', r >= minR && r <= maxR && c >= minC && c <= maxC);
+                });
+            });
+        }
+
+        function copyMatrixSelection() {
+            if (!matrixSelection.tableId) return;
+            const table = document.getElementById(matrixSelection.tableId);
+            const body = table.querySelector('tbody');
+            const minR = Math.min(matrixSelection.startR, matrixSelection.endR);
+            const maxR = Math.max(matrixSelection.startR, matrixSelection.endR);
+            const minC = Math.min(matrixSelection.startC, matrixSelection.endC);
+            const maxC = Math.max(matrixSelection.startC, matrixSelection.endC);
+            let tsv = '';
+            for (let r = minR; r <= maxR; r++) {
+                const row = body.rows[r];
+                if (!row) continue;
+                const cells = [];
+                for (let c = minC; c <= maxC; c++) {
+                    const cell = row.cells[c];
+                    if (!cell) { cells.push(''); continue; }
+                    if (c === 0) {
+                        const blok = cell.querySelector('.font-bold')?.textContent?.trim() || '';
+                        const nama = cell.querySelector('.text-slate-500')?.textContent?.trim() || '';
+                        cells.push(blok + (nama ? ' ' + nama : ''));
+                    } else {
+                        const btn = cell.querySelector('.matrix-cell-btn');
+                        cells.push(btn ? btn.textContent.trim() : cell.textContent.trim());
+                    }
+                }
+                tsv += cells.join('\t') + '\n';
+            }
+            navigator.clipboard.writeText(tsv).then(() => {
+                showToast(`✅ ${(maxR-minR+1) * (maxC-minC+1)} sel disalin ke clipboard`);
+            }).catch(() => showToast('Gagal menyalin', true));
+        }
+
+        async function pasteMatrixSelection(text) {
+            if (!matrixSelection.tableId || !isAdminRole()) return showToast('Hanya pengurus yang bisa paste', true);
+            const table = document.getElementById(matrixSelection.tableId);
+            const body = table.querySelector('tbody');
+            const minR = Math.min(matrixSelection.startR, matrixSelection.endR);
+            const minC = Math.min(matrixSelection.startC, matrixSelection.endC);
+            const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
+            if (!lines.length) return;
+            const months = currentGlobalMonths.length ? currentGlobalMonths : getBulanList(getTahunBerjalan());
+            let updates = 0;
+            const tasks = [];
+            for (let r = 0; r < lines.length; r++) {
+                const cells = lines[r].split('\t');
+                const row = body.rows[minR + r];
+                if (!row) continue;
+                const masterId = row.dataset.masterId;
+                if (!masterId) continue;
+                for (let c = 0; c < cells.length; c++) {
+                    const val = cells[c].trim().toUpperCase();
+                    if (!STATUS_CODES[val]) continue;
+                    const colIdx = minC + c;
+                    if (colIdx < 1 || colIdx > 12) continue;
+                    const bulanKey = months[colIdx - 1];
+                    if (!bulanKey) continue;
+                    tasks.push(updateDoc(doc(db, 'artifacts', appId, 'warga_master', masterId), {
+                        [`iuran.${bulanKey}`]: val, updatedAt: Date.now()
+                    }));
+                    updates++;
+                }
+            }
+            if (!updates) return showToast('Tidak ada status valid (L/LK/LA/LC/P/A/BL/T)', true);
+            try {
+                await Promise.all(tasks);
+                showToast(`✅ ${updates} status berhasil di-paste`);
+                if (document.getElementById('kasGlobalView') && !document.getElementById('kasGlobalView').classList.contains('hidden')) loadKasGlobalView();
+                if (document.getElementById('kasTagihanContainer') && !document.getElementById('kasTagihanContainer').classList.contains('hidden')) loadKasTagihanWarga();
+            } catch(e) { showToast('Gagal paste: ' + e.message, true); }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'c' && matrixSelection.tableId) {
+                const sel = window.getSelection();
+                if (sel && sel.toString().length > 0) return;
+                copyMatrixSelection();
+                e.preventDefault();
+            }
+        });
+        document.addEventListener('paste', async (e) => {
+            if (!matrixSelection.tableId || !isAdminRole()) return;
+            const text = (e.clipboardData || window.clipboardData).getData('text');
+            if (!text || !text.trim()) return;
+            const first = text.trim().split(/[\t\n]/)[0]?.trim().toUpperCase();
+            if (!STATUS_CODES[first]) return;
+            e.preventDefault();
+            await pasteMatrixSelection(text);
+        });
 
         window.loadKasGlobalView = function() {
             const sel = document.getElementById('kasGlobalTahunSelect'), body = document.getElementById('kasGlobalBody'), sumCont = document.getElementById('kasGlobalSummary');
             if (!sel || !body) return;
-            if (sel.options.length === 0) { const now = getTahunBerjalan(); for (let y = now; y >= now - 4; y--) sel.add(new Option(String(y), String(y))); }
+            if (sel.options.length === 0) {
+                const now = getTahunBerjalan();
+                for (let y = now + 10; y >= 2000; y--) sel.add(new Option(String(y), String(y)));
+                sel.value = String(now);
+            }
             const tahun = parseInt(sel.value) || getTahunBerjalan(); const months = getBulanList(tahun);
+            currentGlobalMonths = months;
             const isAdmin = isAdminRole();
-            document.querySelectorAll('.admin-only-col').forEach(el => el.classList.toggle('hidden', !isAdmin));
             document.querySelectorAll('.admin-only-hint').forEach(el => el.classList.toggle('hidden', !isAdmin));
-            document.querySelectorAll('.warga-only-hint').forEach(el => el.classList.toggle('hidden', isAdmin));
             body.innerHTML = `<tr><td colspan="13" class="text-center py-5"><i class="fa-solid fa-spinner fa-spin text-slate-400"></i></td></tr>`;
             if (sumCont) sumCont.innerHTML = '';
             getDocs(collection(db, 'artifacts', appId, 'warga_master')).then(s => {
@@ -1478,18 +1420,16 @@
                         const cls = `cell-${st}`;
                         const gratis = (isL && nom === 0) ? ' cell-gratis' : '';
                         const custCls = custom ? ' cell-custom' : '';
-                        if (isAdmin) {
-                            cells += `<td class="p-0 border border-slate-100"><button onclick="openEditSel('${w.id}','${sB}','${sN}')" class="matrix-cell-btn ${cls}${gratis}${custCls} hover:opacity-80">${st}</button></td>`;
-                        } else {
-                            cells += `<td class="p-0 border border-slate-100"><div class="matrix-cell-btn ${cls}${gratis}${custCls}">${st}</div></td>`;
-                        }
+                        if (isAdmin) { cells += `<td class="p-0 border border-slate-100"><button onclick="openEditSel('${w.id}','${sB}','${sN}')" class="matrix-cell-btn ${cls}${gratis}${custCls} hover:opacity-80">${st}</button></td>`; }
+                        else { cells += `<td class="p-0 border border-slate-100"><div class="matrix-cell-btn ${cls}${gratis}${custCls}">${st}</div></td>`; }
                     });
                     gp += poin; gr += rp;
                     const bl = `${w.blok || '-'} ${w.no || '-'}`;
-                    html += `<tr class="hover:bg-slate-50"><td class="p-1 border border-slate-100 text-left matrix-blok-col"><div class="flex flex-col leading-tight"><span class="font-bold text-slate-800 text-[10px]">${escapeHtml(bl)}</span><span class="text-[8px] text-slate-500 truncate max-w-[55px]">${escapeHtml(w.nama || '')}</span></div></td>${cells}</tr>`;
+                    html += `<tr class="hover:bg-slate-50" data-master-id="${w.id}"><td class="p-1 border border-slate-100 text-left matrix-blok-col"><div class="flex flex-col leading-tight"><span class="font-bold text-slate-800 text-[10px]">${escapeHtml(bl)}</span><span class="text-[8px] text-slate-500 truncate max-w-[55px]">${escapeHtml(w.nama || '')}</span></div></td>${cells}</tr>`;
                 });
                 body.innerHTML = html;
                 if (isAdmin && sumCont) sumCont.innerHTML = `<div class="bg-white p-3 rounded-xl border shadow-sm"><div class="flex justify-between items-center mb-1"><span class="text-xs font-bold text-slate-700"><i class="fa-solid fa-calculator text-emerald-600 mr-1"></i> Akumulasi ${tahun}</span><span class="text-[10px] text-slate-500">${arr.length} rumah</span></div><div class="grid grid-cols-2 gap-2"><div class="bg-emerald-50 p-2 rounded-lg text-center"><p class="text-[9px] text-emerald-700 font-semibold uppercase">Total Point</p><p class="text-base font-bold text-emerald-600">${gp}</p></div><div class="bg-slate-100 p-2 rounded-lg text-center"><p class="text-[9px] text-slate-700 font-semibold uppercase">Total Rp</p><p class="text-xs font-bold text-slate-800">${formatRupiah(gr)}</p></div></div></div>`;
+                setTimeout(() => { initResizableTable('kasGlobalTable'); initMatrixSelection('kasGlobalTable'); }, 50);
             }).catch(err => { console.error(err); body.innerHTML = '<tr><td colspan="13" class="text-center text-xs text-red-500 py-5">Gagal memuat.</td></tr>'; });
         };
 
@@ -1501,8 +1441,7 @@
         };
 
         window.autofillKasKet = function() { const k = document.getElementById('formKasKategori').value; const i = document.getElementById('formKasKet'); if (k && k !== 'Lainnya') i.value = k; };
-        window.filterKas = function(tipe) { currentKasFilter = tipe; ['semua', 'masuk', 'keluar'].forEach(t => { const btn = document.getElementById('tabKas' + t.charAt(0).toUpperCase() + t.slice(1)); if(btn) { if(t === tipe) btn.className = "flex-1 py-1.5 text-[10px] font-bold bg-white shadow-sm rounded-md text-emerald-600 transition-all"; else btn.className = "flex-1 py-1.5 text-[10px] font-semibold text-slate-500 rounded-md transition-all"; } }); renderKasList(); };
-
+        window.filterKas = function(tipe) { currentKasFilter = tipe; renderKasList(); };
         window.openModalInputKas = function() {
             const now = new Date();
             const y = now.getFullYear(), m = String(now.getMonth() + 1).padStart(2, '0'), d = String(now.getDate()).padStart(2, '0');
@@ -1510,7 +1449,6 @@
             if (el) el.value = `${y}-${m}-${d}`;
             document.getElementById('modalInputKas').classList.remove('hidden');
         };
-
         window.tambahTransaksiKasForm = async function (e) {
             e.preventDefault(); if (!firebaseReady) return;
             const kat = document.getElementById('formKasKategori')?.value || '';
@@ -1529,12 +1467,11 @@
                 loadBukuKas();
             } catch (err) { showToast("Gagal.", true); }
         };
-
         window.hapusTransaksiKas = async function (id) { if (!confirm("Hapus transaksi ini?")) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'kas', id)); showToast("Dihapus."); loadBukuKas(); } catch(e) {} };
 
         window.loadBukuKas = async function () {
-            const wc = document.getElementById('kasWargaListContainer'), ac = document.getElementById('adminKasTableBody');
-            if (!firebaseReady || !wc) return; wc.innerHTML = '<div class="text-center py-10"><i class="fa-solid fa-spinner fa-spin text-slate-400 text-2xl"></i></div>';
+            const wc = document.getElementById('kasWargaListContainer');
+            if (!firebaseReady || !wc) return;
             try {
                 const s = await getDocs(collection(db, 'artifacts', appId, 'kas')); let tm = 0, tk = 0; globalKasList = [];
                 s.forEach(d => { if (d.id === 'config_iuran' || d.id === 'config_sos') return; const it = d.data(); if (!it.nominal) return; globalKasList.push({ id: d.id, ...it }); });
@@ -1546,9 +1483,7 @@
                 const sa = tm - tk;
                 const elS = document.getElementById('kasTotalSaldo'), elM = document.getElementById('kasTotalMasuk'), elK = document.getElementById('kasTotalKeluar'), elA = document.getElementById('kasSaldoAwal');
                 if (elS) elS.innerText = formatRupiah(sa); if (elM) elM.innerText = formatRupiah(tm); if (elK) elK.innerText = formatRupiah(tk); if (elA) elA.innerText = formatRupiah(0);
-                if (currentKasView === 'riwayat') renderKasList(fl);
-                if(ac) { let ha = ''; fl.forEach(x => { const iM = x.jenis === 'masuk'; const tgl = x.timestamp ? new Date(x.timestamp).toLocaleDateString('id-ID', { day: '2-digit', month: 'short' }) : '-'; ha += `<tr class="hover:bg-slate-50"><td class="p-2 whitespace-nowrap">${tgl}</td><td class="p-2">${escapeHtml(x.kategori || (iM ? 'Iuran' : 'Pengeluaran'))}</td><td class="p-2 font-semibold text-slate-800">${escapeHtml(x.keterangan)}</td><td class="p-2 text-right font-bold ${iM ? 'text-emerald-600' : 'text-red-600'}">${iM ? '+' : '-'}${formatRupiah(x.nominal)}</td><td class="p-2 text-center"><button onclick="hapusTransaksiKas('${x.id}')" class="w-6 h-6 bg-red-50 text-red-500 rounded hover:bg-red-100 inline-flex items-center justify-center"><i class="fa-solid fa-trash text-[10px]"></i></button></td></tr>`; }); ac.innerHTML = ha || '<tr><td colspan="5" class="text-center py-4">Belum ada transaksi.</td></tr>'; }
-            } catch (e) { wc.innerHTML = '<p class="text-center text-red-500 text-xs py-5">Gagal memuat.</p>'; }
+            } catch (e) { if (wc) wc.innerHTML = '<p class="text-center text-red-500 text-xs py-5">Gagal memuat.</p>'; }
         };
 
         function renderKasList(list = globalKasList) {
@@ -1594,6 +1529,275 @@
             doc.text(`Kalanganyar, ${ti}`, 145, fy, { align: "center" }); doc.text("Bendahara RT. 010", 145, fy + 6, { align: "center" }); doc.text("(........................)", 145, fy + 30, { align: "center" });
             doc.text("Ketua RT. 010 / RW. 002", 45, fy + 6, { align: "center" }); doc.text(`( ${KETUA_RT_NAMA} )`, 45, fy + 30, { align: "center" });
             doc.save(`Laporan_Kas_RT010_${Date.now()}.pdf`); showToast("📄 PDF diunduh!");
+        };
+
+        /* ══════════════════════════════════════════════════════════════════
+           FITUR BARU 2: GAJI & INSENTIF
+        ══════════════════════════════════════════════════════════════════ */
+        const BULAN_IDX_GAJI = { 'Januari':0,'Februari':1,'Maret':2,'April':3,'Mei':4,'Juni':5,'Juli':6,'Agustus':7,'September':8,'Oktober':9,'November':10,'Desember':11 };
+        let currentGajiData = { pekerja: [], kas: [], gaji: new Map(), bulan: 'Januari', tahun: 2026 };
+
+        window.loadGajiInsentif = async function() {
+            const cont = document.getElementById('gajiListContainer');
+            if (!cont) return;
+            const selTahun = document.getElementById('gajiTahunSelect');
+            if (selTahun && selTahun.options.length === 0) {
+                const now = new Date().getFullYear();
+                for (let y = now + 10; y >= 2000; y--) selTahun.add(new Option(String(y), String(y)));
+                selTahun.value = String(now);
+            }
+            const now = new Date();
+            const bulan = document.getElementById('gajiBulanSelect')?.value || ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'][now.getMonth()];
+            const tahun = parseInt(selTahun?.value) || now.getFullYear();
+            currentGajiData.bulan = bulan;
+            currentGajiData.tahun = tahun;
+            cont.innerHTML = '<div class="text-center py-8"><i class="fa-solid fa-spinner fa-spin text-slate-400 text-2xl"></i></div>';
+            try {
+                const workSnap = await getDocs(collection(db, 'artifacts', appId, 'pekerja'));
+                const pekerja = [];
+                workSnap.forEach(d => pekerja.push({ id: d.id, ...d.data() }));
+                pekerja.sort((a, b) => (a.nama || '').localeCompare(b.nama || ''));
+                const kasSnap = await getDocs(collection(db, 'artifacts', appId, 'kas'));
+                const allKas = [];
+                kasSnap.forEach(d => { if (d.id === 'config_iuran' || d.id === 'config_sos') return; const it = d.data(); if (!it.nominal) return; allKas.push({ id: d.id, ...it }); });
+                const gajiSnap = await getDocs(collection(db, 'artifacts', appId, 'gaji'));
+                const gajiMap = new Map();
+                gajiSnap.forEach(d => { const g = d.data(); if (g.bulan === bulan && g.tahun === tahun) gajiMap.set(g.pekerjaId, { id: d.id, ...g }); });
+                currentGajiData = { pekerja, kas: allKas, gaji: gajiMap, bulan, tahun };
+                if (pekerja.length === 0) {
+                    cont.innerHTML = '<div class="bg-white border rounded-xl p-6 text-center"><i class="fa-solid fa-users-slash text-4xl text-slate-300 mb-3"></i><p class="text-sm text-slate-500">Belum ada data pekerja.</p><p class="text-xs text-slate-400 mt-1">Tambahkan pekerja di Panel Admin → Pekerja.</p></div>';
+                    return;
+                }
+                const monthIdx = BULAN_IDX_GAJI[bulan];
+                let html = '';
+                pekerja.forEach(w => {
+                    const rec = gajiMap.get(w.id);
+                    const gajiPokok = rec?.gajiPokok ?? Number(w.gaji) || 0;
+                    const insentif = rec?.insentif ?? 0;
+                    const status = rec?.status || 'BELUM';
+                    const namaLower = (w.nama || '').toLowerCase();
+                    const kasbonItems = allKas.filter(k => {
+                        if (k.jenis !== 'keluar') return false;
+                        const kat = (k.kategori || '').toLowerCase();
+                        const ket = (k.keterangan || '').toLowerCase();
+                        const isKasbon = kat.includes('kasbon') || ket.includes('kasbon');
+                        if (!isKasbon) return false;
+                        const tgl = new Date(k.timestamp);
+                        if (tgl.getMonth() !== monthIdx || tgl.getFullYear() !== tahun) return false;
+                        return ket.includes(namaLower) || namaLower.split(' ').some(part => part.length > 2 && ket.includes(part));
+                    });
+                    const totalKasbon = kasbonItems.reduce((s, k) => s + (Number(k.nominal) || 0), 0);
+                    const sisaDibayar = gajiPokok + insentif - totalKasbon;
+                    const sNama = String(w.nama || 'Pekerja');
+                    const sJab = String(w.statusPekerjaan || 'Petugas');
+                    const initial = sNama.charAt(0).toUpperCase();
+                    const id = w.id;
+                    const kasbonHtml = kasbonItems.length > 0 ? `
+                        <div class="bg-blue-50 border border-blue-200 rounded-xl p-2.5 mb-2">
+                            <p class="text-[10px] font-bold text-blue-800 mb-1.5"><i class="fa-solid fa-magnifying-glass mr-1"></i>Kasbon terdeteksi otomatis dari KAS bulan ${bulan}</p>
+                            <div class="space-y-0.5 mb-1.5">
+                                ${kasbonItems.map(k => {
+                                    const tgl = new Date(k.timestamp);
+                                    const tglStr = String(tgl.getDate()).padStart(2,'0') + ' ' + bulan.substring(0,3);
+                                    return `<div class="flex justify-between text-[10px] text-slate-700"><span class="truncate pr-2">${tglStr} · ${escapeHtml(k.keterangan || '-')}</span><span class="font-semibold shrink-0">${formatRupiah(k.nominal)}</span></div>`;
+                                }).join('')}
+                            </div>
+                            <div class="border-t border-blue-200 pt-1 flex justify-between text-[11px] font-bold">
+                                <span class="text-red-600"><i class="fa-solid fa-arrow-trend-down mr-1"></i>Total Kasbon</span>
+                                <span class="text-red-600">${formatRupiah(totalKasbon)}</span>
+                            </div>
+                        </div>` : '';
+                    const statusBadge = status === 'LUNAS'
+                        ? '<span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full"><i class="fa-solid fa-check-circle mr-1"></i>LUNAS</span>'
+                        : '<span class="bg-yellow-100 text-yellow-700 text-[10px] font-bold px-2 py-0.5 rounded-full"><i class="fa-solid fa-clock mr-1"></i>BELUM BAYAR</span>';
+                    html += `
+                    <div class="gaji-card bg-white border border-slate-200 rounded-2xl p-3.5 shadow-sm">
+                        <div class="flex justify-between items-start mb-2.5">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                                <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center font-bold shrink-0">${initial}</div>
+                                <div class="min-w-0">
+                                    <h4 class="font-bold text-sm text-slate-800 truncate">👤 ${escapeHtml(sNama)}</h4>
+                                    <p class="text-[10px] text-slate-500 truncate">${escapeHtml(sJab)} · Gajian tgl 20</p>
+                                </div>
+                            </div>
+                            <div class="shrink-0">${statusBadge}</div>
+                        </div>
+                        <div class="space-y-1.5 mb-2">
+                            <div class="flex items-center gap-2">
+                                <label class="text-[11px] font-semibold text-slate-700 flex-1">💵 Gaji Pokok</label>
+                                <input type="number" inputmode="numeric" id="gajiPokok_${id}" value="${gajiPokok}" onchange="updateGajiField('${id}', 'gajiPokok', this.value)" ${status === 'LUNAS' ? 'disabled' : ''} class="w-32 px-2 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-xs font-bold text-right outline-none focus:border-emerald-500 disabled:opacity-60">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <label class="text-[11px] font-semibold text-slate-700 flex-1">🎁 Insentif</label>
+                                <input type="number" inputmode="numeric" id="insentif_${id}" value="${insentif}" onchange="updateGajiField('${id}', 'insentif', this.value)" ${status === 'LUNAS' ? 'disabled' : ''} class="w-32 px-2 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-xs font-bold text-right outline-none focus:border-emerald-500 disabled:opacity-60">
+                            </div>
+                        </div>
+                        ${kasbonHtml}
+                        <div class="bg-green-50 border border-green-200 rounded-xl p-2.5 mb-2.5">
+                            <div class="flex justify-between items-center">
+                                <span class="text-[11px] font-bold text-green-800">💚 SISA GAJI DIBAYAR CASH</span>
+                                <span class="text-sm font-extrabold text-green-700" id="sisa_${id}">${formatRupiah(sisaDibayar)}</span>
+                            </div>
+                            <p class="text-[9px] text-green-700 text-right mt-0.5">(${formatRupiah(gajiPokok)} + ${formatRupiah(insentif)} − ${formatRupiah(totalKasbon)})</p>
+                        </div>
+                        <div class="flex gap-1.5">
+                            <button onclick="downloadGajiPDF('${id}')" class="flex-1 bg-slate-700 hover:bg-slate-800 text-white text-xs font-bold py-2 rounded-lg flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-file-pdf"></i> PDF
+                            </button>
+                            ${status === 'BELUM' ? `<button onclick="bayarGaji('${id}')" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 rounded-lg flex items-center justify-center gap-1.5"><i class="fa-solid fa-credit-card"></i> Bayar ${formatRupiah(sisaDibayar)}</button>` : `<button onclick="batalkanGaji('${id}')" class="flex-1 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold py-2 rounded-lg flex items-center justify-center gap-1.5"><i class="fa-solid fa-rotate-left"></i> Batalkan</button>`}
+                        </div>
+                    </div>`;
+                });
+                cont.innerHTML = html;
+            } catch (e) {
+                console.error(e);
+                cont.innerHTML = `<div class="bg-red-50 border border-red-200 rounded-xl p-4 text-xs text-red-700">Gagal memuat: ${escapeHtml(e.message)}</div>`;
+            }
+        };
+
+        window.updateGajiField = function(pekerjaId, field, value) {
+            const w = currentGajiData.pekerja.find(x => x.id === pekerjaId);
+            if (!w) return;
+            const num = Number(value) || 0;
+            const rec = currentGajiData.gaji.get(pekerjaId);
+            const gajiPokok = field === 'gajiPokok' ? num : (rec?.gajiPokok ?? Number(w.gaji) || 0);
+            const insentif = field === 'insentif' ? num : (rec?.insentif ?? 0);
+            const totalKasbon = rec?.totalKasbon || 0;
+            const sisa = gajiPokok + insentif - totalKasbon;
+            const el = document.getElementById('sisa_' + pekerjaId);
+            if (el) el.textContent = formatRupiah(sisa);
+        };
+
+        window.bayarGaji = async function(pekerjaId) {
+            if (!isAdminRole()) return showToast("Hanya pengurus.", true);
+            const w = currentGajiData.pekerja.find(x => x.id === pekerjaId);
+            if (!w) return;
+            const bulan = currentGajiData.bulan, tahun = currentGajiData.tahun;
+            const elGaji = document.getElementById('gajiPokok_' + pekerjaId);
+            const elIns = document.getElementById('insentif_' + pekerjaId);
+            const gajiPokok = Number(elGaji?.value) || 0;
+            const insentif = Number(elIns?.value) || 0;
+            const monthIdx = BULAN_IDX_GAJI[bulan];
+            const namaLower = (w.nama || '').toLowerCase();
+            const kasbonItems = currentGajiData.kas.filter(k => {
+                if (k.jenis !== 'keluar') return false;
+                const kat = (k.kategori || '').toLowerCase();
+                const ket = (k.keterangan || '').toLowerCase();
+                if (!kat.includes('kasbon') && !ket.includes('kasbon')) return false;
+                const tgl = new Date(k.timestamp);
+                if (tgl.getMonth() !== monthIdx || tgl.getFullYear() !== tahun) return false;
+                return ket.includes(namaLower) || namaLower.split(' ').some(p => p.length > 2 && ket.includes(p));
+            });
+            const totalKasbon = kasbonItems.reduce((s, k) => s + (Number(k.nominal) || 0), 0);
+            const sisa = gajiPokok + insentif - totalKasbon;
+            if (!confirm(`Bayar gaji ${w.nama}?\n\nBulan: ${bulan} ${tahun}\nGaji Pokok: ${formatRupiah(gajiPokok)}\nInsentif: ${formatRupiah(insentif)}\nTotal Kasbon: ${formatRupiah(totalKasbon)}\n\nSisa dibayar CASH: ${formatRupiah(sisa)}\n\nLanjutkan?`)) return;
+            try {
+                const docId = `${pekerjaId}_${bulan}_${tahun}`;
+                const u = window.currentUserData || {};
+                await setDoc(doc(db, 'artifacts', appId, 'gaji', docId), {
+                    pekerjaId, nama: w.nama || '', jabatan: w.statusPekerjaan || '',
+                    bulan, tahun, gajiPokok, insentif, totalKasbon,
+                    kasbonItems: kasbonItems.map(k => ({ tanggal: k.timestamp, keterangan: k.keterangan, nominal: k.nominal })),
+                    sisaDibayar: sisa, status: 'LUNAS',
+                    dibayarAt: Date.now(), dibayarOleh: u.nama || 'Admin'
+                });
+                if (sisa > 0) {
+                    await addDoc(collection(db, 'artifacts', appId, 'kas'), {
+                        tipeDoc: 'transaksi', jenis: 'keluar', kategori: 'Gaji Satpam',
+                        keterangan: `Gaji ${w.nama} - ${bulan} ${tahun}`,
+                        nominal: sisa, oleh: u.nama || 'Admin', timestamp: Date.now(),
+                        source: 'gaji_system', gajiRef: docId
+                    });
+                }
+                showToast(`✅ Gaji ${w.nama} dibayar. Sisa: ${formatRupiah(sisa)}`);
+                loadGajiInsentif();
+                if (typeof loadBukuKas === 'function') loadBukuKas();
+            } catch(e) { showToast('Gagal: ' + e.message, true); }
+        };
+
+        window.batalkanGaji = async function(pekerjaId) {
+            if (!confirm("Batalkan pembayaran gaji ini?")) return;
+            const bulan = currentGajiData.bulan, tahun = currentGajiData.tahun;
+            const docId = `${pekerjaId}_${bulan}_${tahun}`;
+            try {
+                await deleteDoc(doc(db, 'artifacts', appId, 'gaji', docId));
+                const s = await getDocs(collection(db, 'artifacts', appId, 'kas'));
+                for (const d of s.docs) {
+                    if (d.data().gajiRef === docId) await deleteDoc(doc(db, 'artifacts', appId, 'kas', d.id));
+                }
+                showToast('✅ Pembayaran dibatalkan');
+                loadGajiInsentif();
+                if (typeof loadBukuKas === 'function') loadBukuKas();
+            } catch(e) { showToast('Gagal: ' + e.message, true); }
+        };
+
+        window.downloadGajiPDF = function(pekerjaId) {
+            if (!window.jspdf || !window.jspdf.jsPDF) return showToast('PDF belum siap', true);
+            const w = currentGajiData.pekerja.find(x => x.id === pekerjaId);
+            if (!w) return;
+            const bulan = currentGajiData.bulan, tahun = currentGajiData.tahun;
+            const gajiPokok = Number(document.getElementById('gajiPokok_' + pekerjaId)?.value) || 0;
+            const insentif = Number(document.getElementById('insentif_' + pekerjaId)?.value) || 0;
+            const monthIdx = BULAN_IDX_GAJI[bulan];
+            const namaLower = (w.nama || '').toLowerCase();
+            const kasbonItems = currentGajiData.kas.filter(k => {
+                if (k.jenis !== 'keluar') return false;
+                const kat = (k.kategori || '').toLowerCase();
+                const ket = (k.keterangan || '').toLowerCase();
+                if (!kat.includes('kasbon') && !ket.includes('kasbon')) return false;
+                const tgl = new Date(k.timestamp);
+                if (tgl.getMonth() !== monthIdx || tgl.getFullYear() !== tahun) return false;
+                return ket.includes(namaLower) || namaLower.split(' ').some(p => p.length > 2 && ket.includes(p));
+            });
+            const totalKasbon = kasbonItems.reduce((s, k) => s + (Number(k.nominal) || 0), 0);
+            const sisa = gajiPokok + insentif - totalKasbon;
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            doc.setFont("helvetica", "bold"); doc.setFontSize(13);
+            doc.text("RUKUN TETANGGA 010 RUKUN WARGA 002", 105, 15, { align: "center" });
+            doc.setFontSize(15);
+            doc.text("PERUMAHAN MABU PARK", 105, 22, { align: "center" });
+            doc.setFont("helvetica", "normal"); doc.setFontSize(10);
+            doc.text("Desa Aweh, Kecamatan Kalanganyar, Kabupaten Lebak - Provinsi Banten", 105, 28, { align: "center" });
+            doc.setLineWidth(0.8); doc.line(15, 32, 195, 32);
+            doc.setLineWidth(0.2); doc.line(15, 33, 195, 33);
+            doc.setFont("helvetica", "bold"); doc.setFontSize(13);
+            doc.text("SLIP GAJI / INVOICE", 105, 42, { align: "center" });
+            doc.setFontSize(10);
+            doc.text(`Periode: ${bulan} ${tahun}`, 105, 48, { align: "center" });
+            doc.setFont("helvetica", "normal"); doc.setFontSize(10);
+            let y = 58;
+            const info = [["Nama Pekerja", w.nama || '-'],["Jabatan", w.statusPekerjaan || '-'],["No. HP", w.hp || '-'],["Alamat", w.alamat || '-'],["Tanggal Masuk", w.tglMasuk ? new Date(w.tglMasuk).toLocaleDateString('id-ID') : '-']];
+            info.forEach(([k, v]) => { doc.text(k, 20, y); doc.text(":", 70, y); doc.text(String(v), 75, y); y += 6; });
+            y += 4;
+            const salaryBody = [['Gaji Pokok', '', formatRupiah(gajiPokok)],['Insentif', '', formatRupiah(insentif)],['Total Bruto', '', formatRupiah(gajiPokok + insentif)]];
+            doc.autoTable({ startY: y, head: [['Komponen', 'Keterangan', 'Nominal']], body: salaryBody, theme: 'grid', headStyles: { fillColor: [5, 150, 105], fontSize: 10 }, bodyStyles: { fontSize: 9 }, columnStyles: { 2: { halign: 'right' } } });
+            y = doc.lastAutoTable.finalY + 8;
+            if (kasbonItems.length > 0) {
+                doc.setFont("helvetica", "bold"); doc.setFontSize(10);
+                doc.text("Rincian Kasbon", 20, y); y += 3;
+                const kasbonBody = kasbonItems.map(k => { const tgl = new Date(k.timestamp); return [String(tgl.getDate()).padStart(2, '0') + ' ' + bulan.substring(0, 3) + ' ' + tahun, k.keterangan || '-', formatRupiah(k.nominal)]; });
+                kasbonBody.push(['', 'TOTAL KASBON', formatRupiah(totalKasbon)]);
+                doc.autoTable({ startY: y, head: [['Tanggal', 'Keterangan', 'Nominal']], body: kasbonBody, theme: 'grid', headStyles: { fillColor: [220, 38, 38], fontSize: 9 }, bodyStyles: { fontSize: 9 }, columnStyles: { 2: { halign: 'right' } } });
+                y = doc.lastAutoTable.finalY + 8;
+            }
+            doc.setFillColor(236, 253, 245); doc.rect(15, y, 180, 16, 'F');
+            doc.setDrawColor(5, 150, 105); doc.setLineWidth(0.5); doc.rect(15, y, 180, 16);
+            doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(5, 150, 105);
+            doc.text("SISA GAJI DIBAYAR CASH:", 20, y + 6);
+            doc.setFontSize(13); doc.text(formatRupiah(sisa), 190, y + 6, { align: 'right' });
+            doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(0, 0, 0);
+            doc.text(`(${formatRupiah(gajiPokok)} + ${formatRupiah(insentif)} - ${formatRupiah(totalKasbon)})`, 190, y + 12, { align: 'right' });
+            y += 30;
+            const tgl = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            doc.setFont("helvetica", "normal"); doc.setFontSize(10);
+            doc.text(`Kalanganyar, ${tgl}`, 140, y);
+            doc.text("Bendahara RT. 010", 140, y + 6);
+            doc.text("(_____________________)", 140, y + 30);
+            doc.text("Penerima", 40, y + 6);
+            doc.text(`(${w.nama || '____________'})`, 40, y + 30);
+            doc.save(`SlipGaji_${(w.nama || 'Pekerja').replace(/[^a-z0-9]/gi, '_')}_${bulan}_${tahun}.pdf`);
+            showToast('📄 PDF slip gaji diunduh!');
         };
 
         window.cetakSuratPDF = function (enc) {
@@ -1707,8 +1911,6 @@
                     if (d.tarifStandar) window.tarifConfig.tarifStandar = d.tarifStandar;
                     if (d.tarifPerubahan) window.tarifConfig.tarifPerubahan = d.tarifPerubahan;
                     if (d.bulanBerlaku) window.tarifConfig.bulanBerlaku = d.bulanBerlaku;
-                    const kt = document.getElementById('kasTagihanContainer');
-                    if (kt && !kt.classList.contains('hidden')) loadKasTagihanWarga();
                     if (d.reminderBulan) { const b = document.getElementById('iuranReminderBanner'); if (b && !iK) { const t = document.getElementById('iuranReminderTitle'), tx = document.getElementById('iuranReminderText'); if (t) t.innerText = `Pengingat Iuran ${d.reminderBulan}`; if (tx) tx.innerText = `Iuran ${formatRupiah(d.reminderNominal || nominalIuranDefault)} belum tercatat lunas.`; b.classList.remove('hidden'); kirimNotifikasiPesan(`Pengingat Iuran ${d.reminderBulan}`, `Mohon cek Kartu Iuran.`); } } iK = false; }, () => {})); } catch(e) {}
         }
 
@@ -2096,7 +2298,6 @@
         window.loadInventarisWarga = async function () { const cont = document.getElementById('inventarisDynamicList'); if (!cont) return; cont.innerHTML = 'Loading...'; try { const s = await getDocs(query(collection(db, 'artifacts', appId, 'inventaris'), orderBy('timestamp', 'asc'))); let h = '', i = 1; s.forEach(d => { const data = d.data(); h += `<label class="flex items-center justify-between p-3 border rounded-xl cursor-pointer hover:bg-emerald-50 transition bg-white"><div class="min-w-0 flex-1"><span class="font-medium text-sm text-slate-800 block truncate">${i}. ${escapeHtml(data.nama)}</span>${data.detail ? `<span class="text-[10px] text-slate-500 mt-0.5 block truncate">${escapeHtml(data.detail)}</span>` : ''}</div><input type="checkbox" value="${escapeHtml(data.nama)}" class="inv-checkbox shrink-0 ml-2"></label>`; i++; }); cont.innerHTML = h || '<p class="text-sm text-center text-slate-500 py-4">Belum ada barang.</p>'; } catch(e) { cont.innerHTML = 'Gagal.'; } };
 
         let editCtx = { masterId: null, bulanKey: null, status: 'BL', nominal: 0, custom: false, namaWarga: '' };
-
         window.openEditSel = async function(masterId, bulanKey, namaWarga) {
             if (!isAdminRole()) return showToast("Hanya pengurus yang bisa edit.", true);
             try {
@@ -2116,12 +2317,9 @@
                 document.getElementById('editCellModal').classList.remove('hidden');
             } catch(e) { showToast("Gagal buka.", true); }
         };
-
         window.tutupEditSel = function() { document.getElementById('editCellModal').classList.add('hidden'); };
-
         function renderEcStatusPicker() {
-            const el = document.getElementById('ecStatusPicker');
-            if (!el) return;
+            const el = document.getElementById('ecStatusPicker'); if (!el) return;
             let h = '';
             Object.keys(STATUS_CODES).forEach(k => {
                 const active = editCtx.status === k;
@@ -2129,7 +2327,6 @@
             });
             el.innerHTML = h;
         }
-
         window.pilihEcStatus = function(k) {
             editCtx.status = k;
             const preset = STATUS_CODES[k]?.isLunas ? getTarifAktif(k, editCtx.bulanKey) : 0;
@@ -2137,7 +2334,6 @@
             document.getElementById('ecNominal').value = preset;
             renderEcStatusPicker(); updateEcInfo();
         };
-
         window.updateEcNominal = function() {
             const v = Number(document.getElementById('ecNominal').value) || 0;
             editCtx.nominal = v;
@@ -2145,14 +2341,12 @@
             editCtx.custom = (v !== preset) && STATUS_CODES[editCtx.status]?.isLunas;
             updateEcInfo();
         };
-
         window.resetEcNominal = function() {
             const preset = STATUS_CODES[editCtx.status]?.isLunas ? getTarifAktif(editCtx.status, editCtx.bulanKey) : 0;
             editCtx.nominal = preset; editCtx.custom = false;
             document.getElementById('ecNominal').value = preset;
             updateEcInfo();
         };
-
         function updateEcInfo() {
             const preset = STATUS_CODES[editCtx.status]?.isLunas ? getTarifAktif(editCtx.status, editCtx.bulanKey) : 0;
             const infoBox = document.getElementById('ecInfoBox');
@@ -2161,21 +2355,10 @@
             if (!infoBox) return;
             document.getElementById('ecNominal').disabled = !STATUS_CODES[editCtx.status]?.isLunas;
             if (presetInfo) presetInfo.innerText = `Preset ${editCtx.status} = ${formatRupiah(preset)}`;
-            if (!STATUS_CODES[editCtx.status]?.isLunas) {
-                infoBox.className = 'rounded-xl p-2.5 mb-4 text-[11px] leading-relaxed bg-slate-50 text-slate-700 border border-slate-200';
-                infoBox.innerHTML = `<b>${editCtx.status}</b> bukan status lunas — nominal otomatis <b>Rp 0</b>.`;
-                resetBtn.classList.add('hidden');
-            } else if (editCtx.custom) {
-                infoBox.className = 'rounded-xl p-2.5 mb-4 text-[11px] leading-relaxed bg-amber-50 text-amber-800 border border-amber-300';
-                infoBox.innerHTML = `⚡ <b>Nominal custom</b> aktif. Preset = ${formatRupiah(preset)}, Anda tetapkan <b>${formatRupiah(editCtx.nominal)}</b>.`;
-                resetBtn.classList.remove('hidden');
-            } else {
-                infoBox.className = 'rounded-xl p-2.5 mb-4 text-[11px] leading-relaxed bg-emerald-50 text-emerald-800 border border-emerald-200';
-                infoBox.innerHTML = `✅ Menggunakan <b>preset</b>: ${formatRupiah(preset)}. Ketik nominal lain untuk override.`;
-                resetBtn.classList.add('hidden');
-            }
+            if (!STATUS_CODES[editCtx.status]?.isLunas) { infoBox.className = 'rounded-xl p-2.5 mb-4 text-[11px] leading-relaxed bg-slate-50 text-slate-700 border border-slate-200'; infoBox.innerHTML = `<b>${editCtx.status}</b> bukan status lunas — nominal otomatis <b>Rp 0</b>.`; resetBtn.classList.add('hidden'); }
+            else if (editCtx.custom) { infoBox.className = 'rounded-xl p-2.5 mb-4 text-[11px] leading-relaxed bg-amber-50 text-amber-800 border border-amber-300'; infoBox.innerHTML = `⚡ <b>Nominal custom</b> aktif. Preset = ${formatRupiah(preset)}, Anda tetapkan <b>${formatRupiah(editCtx.nominal)}</b>.`; resetBtn.classList.remove('hidden'); }
+            else { infoBox.className = 'rounded-xl p-2.5 mb-4 text-[11px] leading-relaxed bg-emerald-50 text-emerald-800 border border-emerald-200'; infoBox.innerHTML = `✅ Menggunakan <b>preset</b>: ${formatRupiah(preset)}. Ketik nominal lain untuk override.`; resetBtn.classList.add('hidden'); }
         }
-
         window.simpanEditSel = async function() {
             if (!editCtx.masterId) return;
             const preset = STATUS_CODES[editCtx.status]?.isLunas ? getTarifAktif(editCtx.status, editCtx.bulanKey) : 0;
@@ -2200,7 +2383,6 @@
                 } else if (ext) await deleteDoc(doc(db, 'artifacts', appId, 'kas', ext));
                 tutupEditSel();
                 showToast(`${bl} ${editCtx.bulanKey} → ${editCtx.status}${editCtx.custom ? ' (' + formatRupiah(editCtx.nominal) + ')' : ''}`);
-                loadKasTagihanWarga();
                 if (document.getElementById('kasGlobalView') && !document.getElementById('kasGlobalView').classList.contains('hidden')) loadKasGlobalView();
                 loadBukuKas();
             } catch(e) { console.error(e); showToast("Gagal simpan.", true); }
@@ -2220,7 +2402,12 @@
             else if (t === 'tamu') { show('tamuView', 'flex'); }
             else if (t === 'umkm') { show('umkmView', 'flex'); loadUmkmWarga(); }
             else if (t === 'iuran') { show('iuranView', 'flex'); const n = document.getElementById('navIuranBtn'); if(n){ n.classList.remove('text-slate-400'); n.classList.add('text-emerald-600'); } const u = window.currentUserData || {}; const e1 = document.getElementById('kartuIuranNama'), e2 = document.getElementById('kartuIuranBlok'), e3 = document.getElementById('kartuIuranNominalAktif'); if (e1) e1.innerText = u.nama || 'Warga'; if (e2) e2.innerText = `Blok ${u.blok || '-'} / No. ${u.no || '-'}`; if (e3) e3.innerText = formatRupiah(nominalIuranDefault) + ' / bln'; loadIuranUser(); }
-            else if (t === 'kas') { show('kasView', 'flex'); const n = document.getElementById('navKasBtn'); if (n) { n.classList.remove('text-slate-400'); n.classList.add('text-emerald-600'); } const isRT = isAdminRole(); document.getElementById('kasTabsContainer').classList.remove('hidden'); if (!isRT) { document.getElementById('kasFilterContainer').classList.add('hidden'); currentKasFilter = 'keluar'; } else { document.getElementById('kasFilterContainer').classList.remove('hidden'); currentKasFilter = 'semua'; } document.querySelectorAll('.admin-only-hint').forEach(el => el.classList.toggle('hidden', !isRT)); document.querySelectorAll('.warga-only-hint').forEach(el => el.classList.toggle('hidden', isRT)); switchKasTab('tagihan'); }
+            else if (t === 'kas') {
+                show('kasView', 'flex');
+                const n = document.getElementById('navKasBtn');
+                if (n) { n.classList.remove('text-slate-400'); n.classList.add('text-emerald-600'); }
+                loadGajiInsentif();
+            }
             else if (t === 'kas_global') { show('kasGlobalView', 'flex'); loadKasGlobalView(); }
             else if (t === 'inventaris') { show('inventarisView', 'flex'); prefillFormData(); loadInventarisWarga(); }
             else if (t === 'sos') { show('sosView', 'flex'); }
