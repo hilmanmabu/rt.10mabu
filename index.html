@@ -205,8 +205,9 @@
         </div>
     </div>
 
-        <div id="authContainer" class="w-full h-[100dvh] bg-slate-50 relative flex flex-col items-center justify-start sm:justify-center overflow-y-auto overscroll-contain px-3 py-4 sm:px-6 sm:py-8">
-        <div class="w-full max-w-4xl bg-white rounded-none sm:rounded-[2rem] sm:shadow-2xl flex flex-col md:flex-row shrink-0 md:overflow-hidden relative">
+            <div id="authContainer" class="w-full h-[100dvh] bg-slate-50 relative overflow-y-auto overscroll-contain flex flex-col">
+        <div class="m-auto w-full max-w-4xl px-3 py-6 sm:px-6 sm:py-8">
+            <div class="w-full bg-white rounded-none sm:rounded-[2rem] sm:shadow-2xl flex flex-col md:flex-row shrink-0 md:overflow-hidden relative">
             <div class="hidden md:flex md:w-1/2 bg-emerald-600 p-10 flex-col justify-center items-center text-center relative overflow-hidden">
                 <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
                 <img src="1000531885.png" alt="Logo" class="relative w-32 h-32 rounded-[2rem] object-cover bg-white border-4 border-white shadow-xl mb-6" onerror="this.src='/icon-192.png';">
@@ -253,7 +254,7 @@
                     <button type="submit" id="btnRegister" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl mt-4 shadow-lg">Daftar Sekarang</button>
                 </form>
 
-                <form id="forgotForm" onsubmit="handleForgot(event)" class="w-full space-y-4 fade-transition hidden bg-white p-2 sm:p-4 z-20 mt-4 relative">
+                                <form id="forgotForm" onsubmit="handleForgot(event)" class="w-full space-y-4 fade-transition hidden bg-white p-2 sm:p-4 z-20 mt-4 relative">                     <div class="flex items-center gap-3 mb-6"><button type="button" onclick="switchAuthView('login')" class="w-9 h-9 bg-slate-100 rounded-full"><i class="fa-solid fa-arrow-left text-slate-600"></i></button><h2 class="text-lg font-bold text-slate-800">Lupa Password</h2></div>                     <p class="text-sm text-slate-600 mb-4">Masukkan <b>Email</b> atau <b>No. WhatsApp</b> terdaftar.</p>                     <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Email / No. WhatsApp</label><input type="text" id="forgotEmail" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"></div>                     <button type="submit" id="btnForgot" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg">Tampilkan Password</button>                 </form>             </div>             </div>         </div>     </div>      <!-- ============================== MAIN APP ============================== -->
                     <div class="flex items-center gap-3 mb-6"><button type="button" onclick="switchAuthView('login')" class="w-9 h-9 bg-slate-100 rounded-full"><i class="fa-solid fa-arrow-left text-slate-600"></i></button><h2 class="text-lg font-bold text-slate-800">Lupa Password</h2></div>
                     <p class="text-sm text-slate-600 mb-4">Masukkan <b>Email</b> atau <b>No. WhatsApp</b> terdaftar.</p>
                     <div><label class="block text-xs font-semibold text-slate-600 mb-1.5">Email / No. WhatsApp</label><input type="text" id="forgotEmail" required class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-sm"></div>
@@ -501,7 +502,7 @@
 
             <div id="kasView" class="hidden flex-col h-full bg-slate-50 w-full overflow-hidden">
                 <div id="kasScrollContainer" class="flex-1 overflow-y-auto scroll-smooth">
-                    <div class="bg-emerald-600 text-white pt-safe-top px-4 pb-8 shadow-md w-full">
+                    <div class="bg-emerald-600 text-white pt-safe-top px-4 pb-16 shadow-md w-full">
                         <div class="max-w-4xl mx-auto w-full">
                             <div class="flex justify-between items-center mb-4"><h2 class="font-bold text-lg">Laporan Keuangan</h2><button onclick="switchTab('beranda')" class="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full text-white flex items-center justify-center"><i class="fa-solid fa-arrow-left"></i></button></div>
                             <div class="flex gap-2 mb-4">
@@ -513,7 +514,7 @@
                             <div class="flex gap-2"><button onclick="downloadLaporanKasPDF()" class="flex-1 bg-white text-emerald-700 font-bold py-2 rounded-lg shadow-sm text-xs flex items-center justify-center gap-1.5 hover:bg-slate-100"><i class="fa-solid fa-file-pdf"></i> Cetak PDF</button><button id="btnKasPengeluaranHeader" onclick="openModalInputKas()" class="hidden flex-1 bg-red-600 text-white font-bold py-2 rounded-lg shadow-sm text-xs flex items-center justify-center gap-1.5 hover:bg-red-700"><i class="fa-solid fa-plus"></i> Pengeluaran</button>
                         </div>
                     </div>
-                    <div class="relative max-w-4xl mx-auto w-full -mt-4 rounded-t-3xl bg-slate-50 min-h-[60vh]">
+                    <div class="relative max-w-4xl mx-auto w-full -mt-6 rounded-t-3xl bg-slate-50 min-h-[60vh]">
                         <div class="sticky top-0 z-20 bg-slate-50 pt-4 pb-3 px-4 rounded-t-3xl"><div id="kasTabsContainer" class="flex bg-slate-200 p-1 rounded-xl shadow-sm"><button onclick="switchKasTab('tagihan')" id="tabKasTagihan" class="flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all">Tagihan Warga</button><button onclick="switchKasTab('riwayat')" id="tabKasRiwayat" class="flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all">Riwayat Kas</button></div></div>
                         <div class="px-4 pb-6">
                             <div id="kasRiwayatContainer" class="hidden">
