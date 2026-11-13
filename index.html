@@ -714,7 +714,7 @@
                 <div class="p-4 md:p-6 flex-1 flex flex-col justify-center">
                     
                     <!-- KTP DIGITAL DESIGN (Tanpa Frame di PC) -->
-                    <div class="bg-white md:bg-transparent rounded-2xl p-6 shadow-xl md:shadow-none border border-slate-200 md:border-none flex flex-col md:flex-row items-center md:items-start gap-6 relative overflow-hidden">
+                    <div class="bg-white md:bg-transparent rounded-2xl p-6 shadow-xl md:shadow-none border border-slate-200 md:border-none flex flex-col md:flex-row items-center md:items-center gap-6 relative overflow-hidden">
                         
                         <!-- Foto (Centering text/biodata) -->
                         <div class="relative w-32 h-32 md:w-40 md:h-40 shrink-0 group cursor-pointer z-10 md:mr-6 md:mb-0 mb-2" onclick="document.getElementById('editPhotoInput').click()">
@@ -729,7 +729,7 @@
                         </div>
 
                         <!-- Biodata (Kanan) -->
-                        <div class="w-full space-y-1 text-[12px] md:text-[13px] text-slate-700 relative z-10 flex-1">
+                        <div class="w-full space-y-1 text-[13px] md:text-[15px] text-slate-700 relative z-10 flex-1">
                             <h3 class="font-bold text-xl md:text-2xl text-slate-800 mb-3" id="profNama">Nama Warga</h3>
                             <div class="flex py-0.5 border-b border-slate-100/50">
                                 <span class="w-32 font-medium text-slate-500">NIK</span> <span class="mr-2 text-slate-400">:</span> <span id="profNik" class="font-mono">-</span>
@@ -764,10 +764,11 @@
                         </div>
 
                         <!-- Tombol Aksi (HANYA PC/TABLET) -->
-                        <div class="hidden md:flex flex-col gap-2 w-full md:w-auto md:self-end mt-4 md:mt-0">
+                        <div class="hidden md:flex flex-col gap-2 w-full md:w-auto mt-4 md:mt-0 md:self-center">
                             <button onclick="switchTab('data')" class="w-full md:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-xl flex justify-center items-center gap-2 transition text-sm shadow-sm"><i class="fa-solid fa-user-pen"></i> Edit Data</button>
+                            <!-- TOMBOL HAPUS CACHE DI ATAS LOGOUT -->
+                            <button onclick="clearAllAppCache()" class="w-full md:w-auto bg-slate-800 hover:bg-slate-900 text-white font-bold py-2 px-6 rounded-xl flex justify-center items-center gap-2 transition text-sm shadow-sm"><i class="fa-solid fa-broom"></i> Hapus Cache</button>
                             <button onclick="handleLogout()" class="w-full md:w-auto bg-red-50 hover:bg-red-100 text-red-600 font-bold py-2 px-6 rounded-xl border border-red-200 flex justify-center items-center gap-2 transition text-sm shadow-sm"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
-                            <button onclick="clearAllAppCache()" class="w-full md:w-auto bg-slate-800 hover:bg-slate-900 text-white font-bold py-2 px-6 rounded-xl flex justify-center items-center gap-2 transition text-sm shadow-sm mt-2"><i class="fa-solid fa-broom"></i> Hapus Cache & Perbarui</button>
                         </div>
                     </div>
 
@@ -780,11 +781,12 @@
                             </div>
                             <div class="flex gap-2">
                                 <button id="btnToggleFp" onclick="daftarkanFingerprint()" class="flex-1 bg-emerald-600 text-white text-xs font-bold py-2.5 rounded-lg hover:bg-emerald-700">Aktifkan</button>
-                                <button onclick="handleLogout()" class="flex-1 bg-red-50 text-red-600 border border-red-200 text-xs font-bold py-2.5 rounded-lg hover:bg-red-100">Logout</button>
                             </div>
                         </div>
                         <button onclick="switchTab('data')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition text-sm shadow-sm"><i class="fa-solid fa-user-pen"></i> Edit Data Saya</button>
-                        <button onclick="clearAllAppCache()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition text-sm shadow-sm mt-2"><i class="fa-solid fa-broom"></i> Hapus Cache & Perbarui</button>
+                        <!-- TOMBOL HAPUS CACHE DI ATAS LOGOUT -->
+                        <button onclick="clearAllAppCache()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition text-sm shadow-sm mt-2"><i class="fa-solid fa-broom"></i> Hapus Cache</button>
+                        <button onclick="handleLogout()" class="w-full bg-red-50 hover:bg-red-100 text-red-600 font-bold py-3 rounded-xl border border-red-200 flex justify-center items-center gap-2 transition text-sm shadow-sm mt-2"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
                     </div>
                 </div>
             </div>
@@ -845,7 +847,7 @@
                     <h2 class="font-bold text-lg text-emerald-600 flex items-center gap-2"><i class="fa-solid fa-id-card-clip"></i> Kartu Iuran</h2>
                 </div>
                 <div class="p-4 md:p-6 space-y-4 flex-1">
-                    <div class="bg-emerald-700 text-white rounded-2xl p-5 shadow-sm overflow-hidden"><div class="relative"><div class="flex justify-between items-start mb-4"><div class="min-w-0"><p class="text-[9px] uppercase tracking-widest text-emerald-200 font-semibold">Pemegang Kartu</p><h3 class="font-bold text-lg leading-tight mt-1 truncate" id="kartuIuranNama">Warga</h3><p class="text-xs text-emerald-100 mt-1" id="kartuIuranBlok">Blok - / No -</p></div><div class="bg-white/10 px-3 py-1.5 rounded-lg text-right shrink-0"><p class="text-[8px] uppercase tracking-wider text-emerald-200">Iuran</p><p class="font-bold text-xs mt-0.5" id="kartuIuranNominalAktif">Rp 50.000</p></div></div><div class="border-t border-emerald-600 pt-3 flex justify-between items-center text-[10px]"><span class="text-emerald-100">Status: <b class="text-white">Resmi RT.010</b></span><span class="text-emerald-100">Ketua: <b class="text-white">Ade Hilman F.</b></span></div></div></div>
+                    <div class="bg-emerald-700 text-white rounded-2xl p-5 shadow-sm overflow-hidden"><div class="relative"><div class="flex justify-between items-start mb-4"><div class="min-w-0"><p class="text-[9px] uppercase tracking-widest text-emerald-200 font-semibold">Pemegang Kartu</p><h3 class="font-bold text-lg leading-tight mt-1 truncate" id="kartuIuranNama">Warga</h3><p class="text-xs text-emerald-100 mt-1" id="kartuIuranBlok">Blok - / No -</p></div><div class="bg-white/10 px-3 py-1.5 rounded-lg text-right shrink-0"><p class="text-[8px] uppercase tracking-wider text-emerald-200">Iuran</p><p class="font-bold text-xs mt-0.5" id="kartuIuranNominalAktif">Rp 125.000</p></div></div><div class="border-t border-emerald-600 pt-3 flex justify-between items-center text-[10px]"><span class="text-emerald-100">Status: <b class="text-white">Resmi RT.010</b></span><span class="text-emerald-100">Ketua: <b class="text-white">Ade Hilman F.</b></span></div></div></div>
                     <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 flex items-center gap-2.5 text-[11px] text-blue-800"><i class="fa-solid fa-shield-halved text-blue-600 text-base shrink-0"></i><span>Status pembayaran diperbarui oleh <b>Bendahara RT</b> (Berlaku untuk 1 Keluarga).</span></div>
                     
                     <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm text-center">
@@ -1092,7 +1094,25 @@
 
                         <!-- VIEW IURAN -->
                         <div id="admViewIuran" class="hidden">
-                            <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mb-4 space-y-3"><div class="flex justify-between items-center"><h3 class="font-bold text-emerald-900 text-sm">Pengaturan Iuran</h3><button onclick="kirimPengingatIuran()" class="bg-amber-500 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg shadow-sm flex items-center gap-1 transition"><i class="fa-solid fa-bell"></i> Ingatkan</button></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"><div><label class="block text-[11px] font-semibold text-emerald-800 mb-1">Bulan Tagihan</label><select id="adminBulanIuran" onchange="loadAdminIuran()" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none"></select></div><div><label class="block text-[11px] font-semibold text-emerald-800 mb-1">Nominal Default</label><select id="adminNominalIuran" onchange="simpanNominalDefault()" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none"></select></div></div></div>
+                            <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 mb-4 space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <h3 class="font-bold text-emerald-900 text-sm">Pengaturan Iuran</h3>
+                                    <button onclick="kirimPengingatIuran()" class="bg-amber-500 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg shadow-sm flex items-center gap-1 transition"><i class="fa-solid fa-bell"></i> Ingatkan</button>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                    <div>
+                                        <label class="block text-[11px] font-semibold text-emerald-800 mb-1">Bulan Tagihan</label>
+                                        <select id="adminBulanIuran" onchange="loadAdminIuran()" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none"></select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-[11px] font-semibold text-emerald-800 mb-1">Nominal Default (Kunci Tarif)</label>
+                                        <div class="flex gap-2">
+                                            <select id="adminNominalIuran" onchange="simpanNominalDefault()" class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none"></select>
+                                            <button onclick="simpanNominalDefault()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded-lg text-xs font-bold shadow-sm whitespace-nowrap" title="Kunci tarif ini agar berlaku seterusnya"><i class="fa-solid fa-lock"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div id="adminIuranWargaList" class="space-y-2"></div>
                         </div>
                         
@@ -1188,7 +1208,7 @@
         window.currentUserData = null;
         let unSubs = [];
         let isFiturSOSEnabled = true;
-        let nominalIuranDefault = 50000;
+        let nominalIuranDefault = 125000; // Default diubah ke 125.000
         let pendingUpdateWorker = null;
         let swRegistered = false;
         let myChart = null;
@@ -1542,20 +1562,22 @@
             }
         };
 
-        window.prosesHapusPesan = function() {
+        // PERBAIKAN BUG HAPUS PESAN
+        window.prosesHapusPesan = async function() {
             document.getElementById('chatActionModal').classList.add('hidden');
-            if(!activeChatActionId) return;
-            if(confirm("Yakin ingin menghapus pesan ini?")) {
-                hapusPesanChat(activeChatActionId);
+            if(!activeChatActionId) return showToast("ID Pesan tidak ditemukan.", true);
+            
+            try {
+                await deleteDoc(doc(db, 'artifacts', appId, 'chats', activeChatActionId));
+                showToast("Pesan dihapus.");
+            } catch(e) {
+                console.error("Gagal hapus:", e);
+                showToast("Gagal menghapus pesan. Cek koneksi / akses.", true);
             }
         };
 
         async function editPesanChat(id, teksBaru) {
             try { await updateDoc(doc(db, 'artifacts', appId, 'chats', id), { text: teksBaru, isEdited: true }); showToast("✅ Pesan diubah."); } catch(e) { showToast("Gagal mengubah pesan.", true); }
-        }
-
-        async function hapusPesanChat(id) {
-            try { await deleteDoc(doc(db, 'artifacts', appId, 'chats', id)); showToast("Pesan dihapus."); } catch(e) { showToast("Gagal menghapus pesan.", true); }
         }
 
         window.hapusRiwayatChat = async function() {
@@ -2378,7 +2400,17 @@
             alert("Silakan buka aplikasi Mobile Banking atau Dompet Digital Anda (seperti GoPay, OVO, Dana, BCA, dll), lalu pilih menu 'Scan QRIS' atau 'Bayar' dan arahkan kamera ke layar ini.");
         };
 
-        window.simpanNominalDefault = async function () { const aNom = document.getElementById('adminNominalIuran'); if (!aNom) return; nominalIuranDefault = Number(aNom.value); try { await setDoc(doc(db, 'artifacts', appId, 'kas', 'config_iuran'), { nominalDefault: nominalIuranDefault, updatedAt: Date.now() }, { merge: true }); showToast(`Nominal aktif: ${formatRupiah(nominalIuranDefault)}`); } catch (e) { } };
+        // FUNGSI SIMPAN NOMINAL & KUNCI TARIF
+        window.simpanNominalDefault = async function () { 
+            const aNom = document.getElementById('adminNominalIuran'); 
+            if (!aNom) return; 
+            nominalIuranDefault = Number(aNom.value); 
+            try { 
+                await setDoc(doc(db, 'artifacts', appId, 'kas', 'config_iuran'), { nominalDefault: nominalIuranDefault, updatedAt: Date.now() }, { merge: true }); 
+                showToast(`✅ Tarif dikunci: ${formatRupiah(nominalIuranDefault)} berlaku seterusnya.`); 
+            } catch (e) { showToast("Gagal mengunci tarif.", true); } 
+        };
+        
         window.kirimPengingatIuran = async function () { const bln = document.getElementById('adminBulanIuran')?.value; const nom = document.getElementById('adminNominalIuran')?.value; if (!bln || !nom) return; try { await setDoc(doc(db, 'artifacts', appId, 'kas', 'config_iuran'), { nominalDefault: Number(nom), reminderBulan: bln, reminderNominal: Number(nom), reminderTimestamp: Date.now() }, { merge: true }); showToast(`🔔 Pengingat iuran ${bln} dikirim!`); } catch (e) { showToast("Gagal mengirim pengingat.", true); } };
         window.loadAdminIuran = async function () { initDropdownIuran(); const blnSelect = document.getElementById('adminBulanIuran'); if (!blnSelect) return; const selectedBln = blnSelect.value; const cont = document.getElementById('adminIuranWargaList'); if (!cont) return; cont.innerHTML = 'Loading...'; try { const s = await getDocs(collection(db, 'artifacts', appId, 'users')); 
             
@@ -2612,7 +2644,39 @@
             if (!firebaseReady || !db) return; unSubs.forEach(u => { try { u(); } catch (e) { } }); unSubs = []; cekTombolNotifikasi();
             loadMarquee();
             let initL = true; try { unSubs.push(onSnapshot(collection(db, 'artifacts', appId, 'laporan'), (s) => { if (initL) { initL = false; return; } s.docChanges().forEach(c => { if (c.type === 'added' && c.doc.data().userId !== user.uid) { const lap = c.doc.data(); if (lap.layanan && lap.layanan.startsWith('DARURAT SOS')) { bunyikanSireneDarurat(); kirimNotifikasiPesan(`🚨 ${lap.layanan}`, `${lap.nama} (Blok ${lap.blok}/${lap.no}) butuh bantuan!`); } else { kirimNotifikasiPesan(`Laporan Baru`, lap.layanan || 'Laporan'); } const admView = document.getElementById('admViewLaporan'); if (admView && !admView.classList.contains('hidden')) loadAdminLaporan(); } }); }, (e) => console.warn(e))); } catch (e) { }
-            let initC = true; try { unSubs.push(onSnapshot(collection(db, 'artifacts', appId, 'chats'), (s) => { allChatMessages = []; s.forEach(d => allChatMessages.push(Object.assign({ id: d.id }, d.data()))); renderChatMessages(); if (initC) { initC = false; return; } s.docChanges().forEach(c => { const m = c.doc.data(); const isRT = window.currentUserData && window.currentUserData.role === 'Admin RT'; if (c.type === 'added' && m.senderId !== user.uid && (m.roomId === 'GLOBAL' || m.recipientId === user.uid || isRT)) { const msgText = m.text || (m.imageUrl ? '[Foto]' : '[Stiker]'); if (msgText.includes('SINYAL DARURAT SOS')) bunyikanSireneDarurat(); if (!isChatMuted) kirimNotifikasiPesan(`Chat: ${m.senderName}`, msgText); const cv = document.getElementById('chatView'); if (cv && cv.classList.contains('hidden')) updateChatBadge(unreadChatCount + 1); } }); }, (e) => console.warn(e))); } catch (e) { }
+            
+            let initC = true; 
+            try { 
+                unSubs.push(onSnapshot(collection(db, 'artifacts', appId, 'chats'), (s) => { 
+                    allChatMessages = []; 
+                    s.forEach(d => allChatMessages.push(Object.assign({ id: d.id }, d.data()))); 
+                    renderChatMessages(); 
+                    if (initC) { initC = false; return; } 
+                    s.docChanges().forEach(c => { 
+                        const m = c.doc.data(); 
+                        const isRT = window.currentUserData && window.currentUserData.role === 'Admin RT'; 
+                        if (c.type === 'added' && m.senderId !== user.uid) {
+                            const isMyMsg = m.recipientId === user.uid;
+                            const isGlobal = m.roomId === 'GLOBAL';
+                            const isFromMeToPartner = currentChatPartner && m.senderId === currentChatPartner.uid && (m.recipientId === user.uid || m.recipientId === 'ALL');
+                            
+                            if (isGlobal || isMyMsg || isFromMeToPartner || isRT) { 
+                                const msgText = m.text || (m.imageUrl ? '[Foto]' : '[Stiker]'); 
+                                if (msgText.includes('SINYAL DARURAT SOS')) bunyikanSireneDarurat(); 
+                                
+                                // Notifikasi suara & Badge HANYA muncul jika sedang tidak di dalam room tersebut
+                                if (m.roomId !== currentChatRoom) {
+                                    if (!isChatMuted) kirimNotifikasiPesan(`Chat: ${m.senderName}`, msgText); 
+                                    if (document.getElementById('chatView').classList.contains('hidden')) {
+                                        updateChatBadge(unreadChatCount + 1); 
+                                    }
+                                }
+                            } 
+                        } 
+                    }); 
+                }, (e) => console.warn(e))); 
+            } catch (e) { }
+            
             let initP = true; try { unSubs.push(onSnapshot(collection(db, 'artifacts', appId, 'pengumuman'), (s) => { if (initP) { initP = false; return; } s.docChanges().forEach(c => { if (c.type === 'added') { loadPengumumanUtama(); loadMarquee(); const isRT = window.currentUserData && window.currentUserData.role === 'Admin RT'; if (!isRT) kirimNotifikasiPesan(`Pengumuman RT`, c.doc.data().judul); } }); }, (e) => console.warn(e))); } catch (e) { }
             try { unSubs.push(onSnapshot(doc(db, 'artifacts', appId, 'kas', 'config_sos'), (snap) => { const d = snap.exists() ? snap.data() : { enabled: true }; isFiturSOSEnabled = d.enabled !== false; const bHead = document.getElementById('btnHeaderSOS'); const bHome = document.getElementById('btnHomeSOS'); const cbAdmin = document.getElementById('toggleFiturSOSCheckbox'); if (cbAdmin) cbAdmin.checked = isFiturSOSEnabled; if (isFiturSOSEnabled) { if (bHead) bHead.classList.remove('hidden'); if (bHome) bHome.classList.remove('hidden'); } else { if (bHead) bHead.classList.add('hidden'); if (bHome) bHome.classList.add('hidden'); } const alertBanner = document.getElementById('sosActiveAlertBanner'); const statusTxt = document.getElementById('adminStatusSOSText'); const isRT = window.currentUserData && ['Admin RT', 'Pengurus RT', 'Bendahara', 'Sekretaris'].includes(window.currentUserData.role); const btnStopBanner = document.getElementById('btnAdminStopSOSBanner'); if (btnStopBanner) btnStopBanner.classList.toggle('hidden', !isRT); if (d.activeSOS && d.activeSOS.jenis) { if (alertBanner) { const t = document.getElementById('sosAlertTitle'); const desc = document.getElementById('sosAlertDesc'); if (t) t.innerText = `DARURAT: ${d.activeSOS.jenis}!`; if (desc) desc.innerText = `Pelapor: ${d.activeSOS.nama} (${d.activeSOS.blok}) butuh bantuan!`; alertBanner.classList.remove('hidden'); } if (statusTxt) statusTxt.innerText = `🚨 DARURAT AKTIF: ${d.activeSOS.jenis} oleh ${d.activeSOS.nama} (${d.activeSOS.blok})`; } else { if (alertBanner) alertBanner.classList.add('hidden'); if (statusTxt) statusTxt.innerText = "Aman. Tidak ada sinyal darurat aktif."; } }, () => { })); } catch (e) { }
             try { unSubs.push(onSnapshot(doc(db, 'artifacts', appId, 'users', user.uid), (snap) => { if (!snap.exists()) return; window.currentUserData = snap.data(); const iuranMod = document.getElementById('iuranView'); if (iuranMod && !iuranMod.classList.contains('hidden')) loadIuranUser(); loadMarquee(); }, () => { })); } catch (e) { }
