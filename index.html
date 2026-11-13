@@ -74,6 +74,10 @@
         }
         #kasWargaListContainer::-webkit-scrollbar { width: 4px; }
         #kasWargaListContainer::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+        /* Sticky kolom Blok di matriks tagihan */
+        .matrix-blok-col { position: sticky; left: 0; z-index: 5; background: #fff; }
+        .matrix-header-blok { position: sticky; left: 0; z-index: 11; }
     </style>
 </head>
 <body class="w-full h-full text-ink select-none bg-slate-50 flex flex-col">
@@ -614,27 +618,18 @@
                 </form>
             </div>
 
-            <!-- ============================================== -->
-            <!-- PROFIL — TOMBOL PENSIL DI KANAN BAWAH FRAME    -->
-            <!-- ============================================== -->
+            <!-- PROFIL -->
             <div id="profilView" class="hidden flex-col h-full bg-slate-50 w-full max-w-3xl mx-auto overflow-y-auto">
                 <div class="p-4 md:p-6 flex-1 flex flex-col justify-center">
-
                     <div class="bg-white md:bg-transparent rounded-2xl p-6 shadow-xl md:shadow-none border border-slate-200 md:border-none flex flex-col md:flex-row items-center md:items-center gap-6 relative overflow-hidden">
-                        
-                        <!-- Foto Profil -->
                         <div class="relative w-32 h-32 md:w-40 md:h-40 shrink-0 group cursor-pointer z-10 md:mr-6 md:mb-0 mb-2" onclick="document.getElementById('editPhotoInput').click()">
                             <div class="w-full h-full bg-slate-100 rounded-full overflow-hidden border-4 border-emerald-500 shadow-md">
                                 <img id="profPhotoDisplay" src="" class="w-full h-full object-cover hidden">
                                 <i id="profIconDisplay" class="fa-solid fa-user text-5xl text-slate-300 w-full h-full flex items-center justify-center"></i>
                             </div>
-                            <div class="absolute bottom-0 right-0 bg-emerald-600 text-white w-8 h-8 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
-                                <i class="fa-solid fa-camera text-xs"></i>
-                            </div>
+                            <div class="absolute bottom-0 right-0 bg-emerald-600 text-white w-8 h-8 rounded-full flex items-center justify-center border-2 border-white shadow-sm"><i class="fa-solid fa-camera text-xs"></i></div>
                             <input type="file" id="editPhotoInput" accept="image/*" class="hidden" onchange="handleProfilePhoto(event)">
                         </div>
-
-                        <!-- Biodata -->
                         <div class="w-full space-y-1 text-[13px] md:text-[15px] text-slate-700 relative z-10 flex-1 pb-12 md:pb-0">
                             <h3 class="font-bold text-xl md:text-2xl text-slate-800 mb-3" id="profNama">Nama Warga</h3>
                             <div class="flex py-0.5 border-b border-slate-100/50"><span class="w-32 font-medium text-slate-500">NIK</span><span class="mr-2 text-slate-400">:</span><span id="profNik" class="font-mono">-</span></div>
@@ -648,14 +643,9 @@
                             <div class="flex py-0.5 border-b border-slate-100/50"><span class="w-32 font-medium text-slate-500">Status Perkawinan</span><span class="mr-2 text-slate-400">:</span><span id="profStatusKeluarga">-</span></div>
                             <div class="flex py-0.5 border-b border-slate-100/50"><span class="w-32 font-medium text-slate-500">Pekerjaan</span><span class="mr-2 text-slate-400">:</span><span id="profPekerjaan">-</span></div>
                         </div>
-
-                        <!-- TOMBOL PENSIL (KANAN BAWAH FRAME BIODATA) -->
-                        <button onclick="switchTab('data')" class="absolute bottom-3 right-3 w-11 h-11 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full shadow-lg flex items-center justify-center z-20 transition active:scale-95" title="Edit Data Saya">
-                            <i class="fa-solid fa-pen-to-square text-base"></i>
-                        </button>
+                        <button onclick="switchTab('data')" class="absolute bottom-3 right-3 w-11 h-11 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full shadow-lg flex items-center justify-center z-20 transition active:scale-95" title="Edit Data Saya"><i class="fa-solid fa-pen-to-square text-base"></i></button>
                     </div>
 
-                    <!-- Fingerprint (mobile only) -->
                     <div class="block md:hidden mt-6">
                         <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
                             <div class="flex items-center gap-3 mb-3">
@@ -668,7 +658,6 @@
                         </div>
                     </div>
 
-                    <!-- Hapus Cache + Logout bersebelahan -->
                     <div class="mt-4 flex gap-2 w-full">
                         <button onclick="clearAllAppCache()" class="flex-1 bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition text-sm shadow-sm"><i class="fa-solid fa-broom"></i> Hapus Cache</button>
                         <button onclick="handleLogout()" class="flex-1 bg-red-50 hover:bg-red-100 text-red-600 font-bold py-3 rounded-xl border border-red-200 flex justify-center items-center gap-2 transition text-sm shadow-sm"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
@@ -776,9 +765,11 @@
                                     <div class="min-w-0"><p class="text-[8px] uppercase tracking-wider opacity-80">Pengeluaran</p><p class="font-bold text-xs truncate" id="kasTotalKeluar">Rp 0</p></div>
                                 </div>
                             </div>
-                            <div class="grid grid-cols-2 gap-2">
-                                <button onclick="downloadLaporanKas()" class="w-full bg-emerald-800 text-white font-bold py-2 rounded-lg shadow-sm text-xs flex items-center justify-center gap-1.5 hover:bg-emerald-900"><i class="fa-solid fa-file-csv"></i> Excel/CSV</button>
-                                <button onclick="downloadLaporanKasPDF()" class="w-full bg-white text-emerald-700 font-bold py-2 rounded-lg shadow-sm text-xs flex items-center justify-center gap-1.5 hover:bg-slate-100"><i class="fa-solid fa-file-pdf"></i> Cetak PDF</button>
+
+                            <!-- ============ TOMBOL HEADER KAS ============ -->
+                            <div class="flex gap-2">
+                                <button onclick="downloadLaporanKasPDF()" class="flex-1 bg-white text-emerald-700 font-bold py-2 rounded-lg shadow-sm text-xs flex items-center justify-center gap-1.5 hover:bg-slate-100"><i class="fa-solid fa-file-pdf"></i> Cetak PDF</button>
+                                <button id="btnKasPengeluaranHeader" onclick="document.getElementById('modalInputKas').classList.remove('hidden')" class="hidden flex-1 bg-red-600 text-white font-bold py-2 rounded-lg shadow-sm text-xs flex items-center justify-center gap-1.5 hover:bg-red-700"><i class="fa-solid fa-plus"></i> Pengeluaran</button>
                             </div>
                         </div>
                     </div>
@@ -793,24 +784,39 @@
                         <div class="px-4 pb-6">
                             <div id="kasRiwayatContainer" class="hidden">
                                 <div id="kasFilterContainer" class="flex justify-between items-center mb-3">
-                                    <div class="flex bg-slate-100 p-1 rounded-lg flex-1 mr-2">
+                                    <div class="flex bg-slate-100 p-1 rounded-lg flex-1">
                                         <button onclick="filterKas('semua')" id="tabKasSemua" class="flex-1 py-1.5 text-[10px] font-bold bg-white shadow-sm rounded-md text-emerald-600 transition-all">Semua</button>
                                         <button onclick="filterKas('masuk')" id="tabKasMasuk" class="flex-1 py-1.5 text-[10px] font-semibold text-slate-500 rounded-md transition-all">Masuk</button>
                                         <button onclick="filterKas('keluar')" id="tabKasKeluar" class="flex-1 py-1.5 text-[10px] font-semibold text-slate-500 rounded-md transition-all">Keluar</button>
                                     </div>
-                                    <button id="btnInputKas" onclick="document.getElementById('modalInputKas').classList.remove('hidden')" class="hidden bg-red-600 text-white px-3 py-2 rounded-lg text-xs font-bold shadow-sm whitespace-nowrap"><i class="fa-solid fa-plus"></i> Pengeluaran</button>
                                 </div>
                                 <div id="kasWargaListContainer" class="space-y-4 pb-10"></div>
                             </div>
+
+                            <!-- ============ MATRIKS TAGIHAN WARGA (BARU) ============ -->
                             <div id="kasTagihanContainer">
-                                <div class="mb-3 flex gap-2">
-                                    <select id="kasBulanTagihan" onchange="loadKasTagihanWarga()" class="flex-1 px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold outline-none"></select>
-                                    <div class="relative flex-1">
+                                <div class="mb-3">
+                                    <div class="relative w-full">
                                         <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-600 text-sm font-bold"></i>
-                                        <input type="text" id="searchTagihanWarga" oninput="filterTagihanWarga()" placeholder="Cari warga / V1 1..." class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold text-slate-800 outline-none focus:border-emerald-500">
+                                        <input type="text" id="searchTagihanWarga" oninput="filterTagihanWarga()" placeholder="Cari warga / V1 1 / v1.1 / K 9-10..." class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold text-slate-800 outline-none focus:border-emerald-500">
                                     </div>
                                 </div>
-                                <div id="kasTagihanList" class="space-y-2 pb-10"></div>
+                                <div id="kasTagihanSummary" class="mb-3"></div>
+                                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm mb-3">
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-center" style="min-width: 640px;">
+                                            <thead class="bg-emerald-600 text-white font-bold text-[10px]">
+                                                <tr>
+                                                    <th class="p-1.5 text-left matrix-header-blok bg-emerald-600 min-w-[70px]">Blok</th>
+                                                    <th class="p-1">JAN</th><th class="p-1">FEB</th><th class="p-1">MAR</th><th class="p-1">APR</th><th class="p-1">MEI</th><th class="p-1">JUN</th><th class="p-1">JUL</th><th class="p-1">AGU</th><th class="p-1">SEP</th><th class="p-1">OKT</th><th class="p-1">NOV</th><th class="p-1">DES</th>
+                                                    <th class="p-1 bg-emerald-700">TOTAL</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="kasTagihanMatrixBody" class="text-[10px]"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <p class="text-[10px] text-slate-500 text-center italic">Klik sel <b>L</b>/<b>BL</b> untuk mengubah status (Admin/Ketua/Bendahara). Total = jumlah L × Nominal Default.</p>
                             </div>
                         </div>
                     </div>
@@ -1025,9 +1031,19 @@
         const DAFTAR_BULAN_IURAN = ['Okt 2026', 'Nov 2026', 'Des 2026', 'Jan 2027', 'Feb 2027', 'Mar 2027', 'Apr 2027', 'Mei 2027', 'Jun 2027', 'Jul 2027', 'Agu 2027', 'Sep 2027'];
 
         /* ============================================================
+           MATRIKS 12 BULAN - Tahun Berjalan
+           ============================================================ */
+        const LABEL_BULAN_SINGKAT = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+        function getTahunBerjalan() { return new Date().getFullYear(); }
+        function getBulanTahunIni() {
+            const y = getTahunBerjalan();
+            return LABEL_BULAN_SINGKAT.map(m => `${m} ${y}`);
+        }
+        function isLunasStatus(st) { return ['L', 'LK', 'LA', 'LC', 'P', 'T'].includes(st); }
+
+        /* ============================================================
            DATA MASTER WARGA (seed dari Excel)
-           Blok gabungan (2 rumah 1 iuran): "9-10", "1-2", "6-7", "9-11", "7-8", "2/4"
-           Format: { blok, no, nama, status }
+           Blok gabungan: K 9-10, O 1-2, N 6-7, Q 9-11, U 7-8, V2 2/4
            ============================================================ */
         const DATA_WARGA_DEFAULT = [
             {blok:'E',no:'1',nama:'IRNI PRIJAYANTINI'},{blok:'E',no:'2',nama:'ASEP TATA'},
@@ -1132,66 +1148,40 @@
 
         /* ============================================================
            NORMALISASI BLOK
-           - V1/V2/V3 dengan berbagai format ("V1 1", "V1.1", "V1-1") → kanonik
-           - Blok gabungan (2 rumah 1 iuran): "K 9/K 10" → "K-9-10" dst.
            ============================================================ */
         function normalizeHouseData(rawBlok, rawNo) {
             let blok = String(rawBlok || '').toUpperCase().trim();
             let no = String(rawNo || '').toUpperCase().trim();
-
-            // Jika blok berisi V1/V2/V3 yang menempel nomor (V1.1, V1 1, V1-1)
             const vMatch = blok.match(/^(V[123])[\s\.\-\_\/]+(\d.*)$/);
-            if (vMatch) {
-                blok = vMatch[1];
-                if (!no) no = vMatch[2].trim();
-            }
-
-            // Bersihkan no dari karakter pemisah di depan
+            if (vMatch) { blok = vMatch[1]; if (!no) no = vMatch[2].trim(); }
             no = no.replace(/^[\s\.\-\_\/]+/, '').trim();
-
-            // Blok gabungan (2 rumah 1 iuran)
             if (blok === 'K' && (no === '9' || no === '10')) no = '9-10';
             else if (blok === 'O' && (no === '1' || no === '2')) no = '1-2';
             else if (blok === 'N' && (no === '6' || no === '7')) no = '6-7';
             else if (blok === 'Q' && (no === '9' || no === '10' || no === '11')) no = '9-11';
             else if (blok === 'U' && (no === '7' || no === '8')) no = '7-8';
             else if (blok === 'V2' && (no === '2' || no === '4' || no === '2/4' || no === '2.4' || no === '2-4')) no = '2/4';
-
             return { blok, no };
         }
-
-        function getHouseKey(blok, no) {
-            const n = normalizeHouseData(blok, no);
-            return `${n.blok}-${n.no}`;
-        }
-
+        function getHouseKey(blok, no) { const n = normalizeHouseData(blok, no); return `${n.blok}-${n.no}`; }
         function findWargaDefault(blok, no) {
             const n = normalizeHouseData(blok, no);
             return DATA_WARGA_DEFAULT.find(w => w.blok === n.blok && w.no === n.no) || null;
         }
-
-        // Normalisasi query pencarian: "V1 1", "v1.1", "V1-1" → "V1 1"
         function normalizeSearch(str) {
             let s = String(str || '').toUpperCase().trim();
             s = s.replace(/V([123])[\s\.\-\_\/]+(\d)/g, 'V$1 $2');
             return s;
         }
-
-        // Hint pencocokan data warga default saat mengisi form
         window.checkWargaDefaultHint = function (blokId, noId, hintBoxId, hintTextId) {
             const b = document.getElementById(blokId)?.value || '';
             const n = document.getElementById(noId)?.value || '';
-            const box = document.getElementById(hintBoxId);
-            const txt = document.getElementById(hintTextId);
+            const box = document.getElementById(hintBoxId); const txt = document.getElementById(hintTextId);
             if (!box || !txt) return;
             if (!b) { box.classList.add('hidden'); return; }
             const found = findWargaDefault(b, n);
-            if (found) {
-                txt.innerHTML = `Data warga ditemukan untuk <b>Blok ${found.blok}/${found.no}</b>: <b>${escapeHtml(found.nama)}</b>. Silakan lengkapi data Anda.`;
-                box.classList.remove('hidden');
-            } else {
-                box.classList.add('hidden');
-            }
+            if (found) { txt.innerHTML = `Data warga ditemukan untuk <b>Blok ${found.blok}/${found.no}</b>: <b>${escapeHtml(found.nama)}</b>. Silakan lengkapi data Anda.`; box.classList.remove('hidden'); }
+            else box.classList.add('hidden');
         };
 
         window.currentUserData = null;
@@ -1631,7 +1621,7 @@
                 btnTagihan.className = "flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all";
                 btnRiwayat.className = "flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all";
                 contTagihan.classList.remove('hidden'); contRiwayat.classList.add('hidden');
-                initDropdownIuran(); loadKasTagihanWarga();
+                loadKasTagihanWarga();
             } else {
                 btnRiwayat.className = "flex-1 py-2 text-xs font-bold bg-white shadow-sm rounded-lg text-emerald-600 transition-all";
                 btnTagihan.className = "flex-1 py-2 text-xs font-semibold text-slate-500 rounded-lg transition-all";
@@ -1639,17 +1629,23 @@
             }
         };
 
+        /* ============================================================
+           MATRIKS TAGIHAN WARGA 12 BULAN (BARU)
+           ============================================================ */
         window.loadKasTagihanWarga = async function() {
-            const cont = document.getElementById('kasTagihanList'); const bulanSelect = document.getElementById('kasBulanTagihan');
-            if(!cont || !firebaseReady) return;
+            const body = document.getElementById('kasTagihanMatrixBody');
+            const sumCont = document.getElementById('kasTagihanSummary');
+            if (!body || !firebaseReady) return;
+
             const isAdmin = window.currentUserData && ['Admin RT', 'Ketua RT', 'Pengurus RT', 'Bendahara', 'Sekretaris'].includes(window.currentUserData.role);
-            const tabContainer = document.getElementById('tabKasTagihan');
-            if(!isAdmin) { if(tabContainer) tabContainer.classList.add('hidden'); if(currentKasView === 'tagihan') { switchKasTab('riwayat'); return; } } else { if(tabContainer) tabContainer.classList.remove('hidden'); }
-            if (bulanSelect && bulanSelect.options.length === 0) DAFTAR_BULAN_IURAN.forEach(b => bulanSelect.add(new Option(b, b)));
-            const selectedBulan = bulanSelect ? bulanSelect.value : DAFTAR_BULAN_IURAN[0];
-            cont.innerHTML = '<div class="text-center py-5"><i class="fa-solid fa-spinner fa-spin text-slate-400"></i></div>';
+            const months = getBulanTahunIni();
+            const nominal = nominalIuranDefault;
+
+            body.innerHTML = `<tr><td colspan="14" class="text-center py-5"><i class="fa-solid fa-spinner fa-spin text-slate-400"></i></td></tr>`;
+            if (sumCont) sumCont.innerHTML = '';
+
             try {
-                const s = await getDocs(collection(db, 'artifacts', appId, 'users')); let h = '';
+                const s = await getDocs(collection(db, 'artifacts', appId, 'users'));
                 const houseGroups = new Map();
                 s.forEach(d => {
                     const u = d.data();
@@ -1657,38 +1653,168 @@
                     if (!houseGroups.has(hKey)) houseGroups.set(hKey, { primaryUser: u, users: [d.id], blok: u.blok, no: u.no, nama: u.nama });
                     else houseGroups.get(hKey).users.push(d.id);
                 });
-                houseGroups.forEach((grp, hKey) => {
-                    const u = grp.primaryUser;
-                    const statusIuran = (u.iuran && u.iuran[selectedBulan]) || 'BL';
-                    const isLunas = ['L', 'LK', 'LA', 'LC', 'P', 'T'].includes(statusIuran);
-                    const blokFormat = `${grp.blok}/${grp.no}`;
-                    let btnHtml = '';
-                    if (isAdmin) {
-                        if (isLunas) btnHtml = `<button onclick="toggleBayarKasWarga('${hKey}', '${escapeHtml(grp.nama)}', '${escapeHtml(blokFormat)}', '${selectedBulan}', false)" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm transition">Lunas</button>`;
-                        else btnHtml = `<button onclick="toggleBayarKasWarga('${hKey}', '${escapeHtml(grp.nama)}', '${escapeHtml(blokFormat)}', '${selectedBulan}', true)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm transition">Belum Lunas</button>`;
-                    } else {
-                        btnHtml = isLunas ? `<span class="bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-emerald-200">LUNAS</span>` : `<span class="bg-red-100 text-red-700 px-3 py-1.5 rounded-lg text-xs font-bold border border-red-200">BELUM LUNAS</span>`;
-                    }
-                    const searchKey = `${(grp.nama || '').toLowerCase()} ${normalizeSearch(blokFormat).toLowerCase()}`;
-                    h += `<div class="tagihan-warga-card bg-white p-3 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm mb-2" data-search="${escapeHtml(searchKey)}"><div><h4 class="font-bold text-sm text-slate-800">${escapeHtml(grp.nama || 'Warga')}</h4><p class="text-xs text-slate-500">Blok ${escapeHtml(blokFormat)} <span class="text-[9px] bg-slate-100 px-1.5 py-0.5 rounded ml-1">${grp.users.length} Akun</span></p></div>${btnHtml}</div>`;
+
+                // Sort blok A-Z then no ascending numeric
+                let houseArr = Array.from(houseGroups.entries());
+                houseArr.sort((a, b) => {
+                    const A = a[1], B = b[1];
+                    const blkA = (A.blok || '').toUpperCase().padEnd(4);
+                    const blkB = (B.blok || '').toUpperCase().padEnd(4);
+                    if (blkA !== blkB) return blkA.localeCompare(blkB);
+                    return String(A.no || '').localeCompare(String(B.no || ''), undefined, { numeric: true });
                 });
-                cont.innerHTML = h || '<p class="text-center text-xs text-slate-400 py-5">Belum ada data warga.</p>';
-            } catch(e) { cont.innerHTML = '<p class="text-center text-red-500 text-xs py-5">Gagal memuat tagihan.</p>'; }
+
+                // Warga: only own house
+                if (!isAdmin) {
+                    const myKey = getHouseKey(window.currentUserData?.blok, window.currentUserData?.no);
+                    houseArr = houseArr.filter(([k]) => k === myKey);
+                }
+
+                const monthTotals = new Array(12).fill(0);
+                let grandTotalLunas = 0;
+                let html = '';
+
+                houseArr.forEach(([hKey, grp]) => {
+                    const u = grp.primaryUser;
+                    const iuran = u.iuran || {};
+                    let lunasCount = 0;
+                    let rowHtml = '';
+                    months.forEach((bln, idx) => {
+                        const rawSt = iuran[bln] || 'BL';
+                        const lunas = isLunasStatus(rawSt);
+                        if (lunas) { lunasCount++; monthTotals[idx]++; }
+                        const label = lunas ? 'L' : 'BL';
+                        const bg = lunas ? 'bg-emerald-100 text-emerald-700' : 'bg-red-50 text-red-500';
+                        const safeBlokJs = String(u.blok || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                        const safeNoJs = String(u.no || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                        const safeNamaJs = String(u.nama || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                        const safeBlnJs = String(bln).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                        if (isAdmin) {
+                            rowHtml += `<td class="p-0 border border-slate-100"><button onclick="toggleIuranCell('${safeBlokJs}', '${safeNoJs}', '${safeBlnJs}', '${safeNamaJs}', ${lunas})" class="w-full py-1.5 text-[10px] font-bold ${bg} hover:opacity-80 transition" title="Blok ${escapeHtml(u.blok)}/${escapeHtml(u.no)} - ${escapeHtml(bln)}: ${escapeHtml(rawSt)} (klik untuk toggle)">${label}</button></td>`;
+                        } else {
+                            rowHtml += `<td class="p-1.5 border border-slate-100 text-[10px] font-bold ${bg}" title="Blok ${escapeHtml(u.blok)}/${escapeHtml(u.no)} - ${escapeHtml(bln)}: ${escapeHtml(rawSt)}">${label}</td>`;
+                        }
+                    });
+                    grandTotalLunas += lunasCount;
+                    const blokLabel = `${u.blok || '-'}/${u.no || '-'}`;
+                    const totalAmt = lunasCount * nominal;
+                    const totalBg = lunasCount === 12 ? 'text-emerald-600' : lunasCount === 0 ? 'text-red-500' : 'text-amber-600';
+                    const searchKey = `${(u.nama || '').toLowerCase()} ${normalizeSearch(blokLabel).toLowerCase()} blok${(u.blok || '').toLowerCase()}${(u.no || '').toLowerCase()}`;
+                    html += `<tr class="tagihan-row hover:bg-slate-50" data-search="${escapeHtml(searchKey)}">
+                        <td class="p-1.5 border border-slate-100 text-left matrix-blok-col">
+                            <div class="flex flex-col leading-tight">
+                                <span class="font-bold text-slate-800 text-[10px]">${escapeHtml(blokLabel)}</span>
+                                <span class="text-[8px] text-slate-500 truncate max-w-[65px]">${escapeHtml(u.nama || '')}</span>
+                            </div>
+                        </td>
+                        ${rowHtml}
+                        <td class="p-1.5 border border-slate-100 bg-slate-50">
+                            <div class="flex flex-col items-center leading-tight">
+                                <span class="font-bold text-[10px] ${totalBg}">${lunasCount}/12</span>
+                                <span class="text-[7px] text-slate-500">${formatRupiah(totalAmt)}</span>
+                            </div>
+                        </td>
+                    </tr>`;
+                });
+
+                body.innerHTML = html || '<tr><td colspan="14" class="text-center text-xs text-slate-400 py-5">Belum ada data warga.</td></tr>';
+
+                // SUMMARY (formula/accumulated)
+                if (sumCont) {
+                    const totalRumah = houseArr.length;
+                    const totalSlots = totalRumah * 12;
+                    const totalBelum = totalSlots - grandTotalLunas;
+                    const tahun = getTahunBerjalan();
+                    sumCont.innerHTML = `
+                        <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs font-bold text-slate-700"><i class="fa-solid fa-calculator text-emerald-600 mr-1"></i> Akumulasi Tahun ${tahun}</span>
+                                <span class="text-[10px] text-slate-500">${totalRumah} Rumah × 12 bln</span>
+                            </div>
+                            <div class="grid grid-cols-3 gap-2 text-center mb-2">
+                                <div class="bg-emerald-50 p-2 rounded-lg"><p class="text-[8px] text-emerald-700 font-semibold uppercase">Lunas</p><p class="text-sm font-bold text-emerald-600">${grandTotalLunas}</p></div>
+                                <div class="bg-red-50 p-2 rounded-lg"><p class="text-[8px] text-red-700 font-semibold uppercase">Belum</p><p class="text-sm font-bold text-red-500">${totalBelum}</p></div>
+                                <div class="bg-slate-100 p-2 rounded-lg"><p class="text-[8px] text-slate-700 font-semibold uppercase">Akumulasi</p><p class="text-xs font-bold text-slate-800">${formatRupiah(grandTotalLunas * nominal)}</p></div>
+                            </div>
+                            <p class="text-[9px] text-slate-500 italic text-center leading-tight">Rumus: <b>Total LUNAS (L)</b> × <b>${formatRupiah(nominal)}</b> = <b>${formatRupiah(grandTotalLunas * nominal)}</b></p>
+                        </div>
+                    `;
+                }
+            } catch (e) {
+                console.error(e);
+                body.innerHTML = '<tr><td colspan="14" class="text-center text-xs text-red-500 py-5">Gagal memuat data.</td></tr>';
+            }
+        };
+
+        /* TOGGLE SEL IURAN (Klik L ↔ BL) */
+        window.toggleIuranCell = async function(blokVal, noVal, bulan, nama, isCurrentlyLunas) {
+            if (!window.currentUserData || !['Admin RT', 'Ketua RT', 'Pengurus RT', 'Bendahara', 'Sekretaris'].includes(window.currentUserData.role)) {
+                return showToast("Hanya pengurus yang bisa mengubah status.", true);
+            }
+            const isLunas = !isCurrentlyLunas;
+            const nominal = isLunas ? nominalIuranDefault : 0;
+            const currentUser = window.currentUserData.nama || 'Admin';
+            const blokLabel = `${blokVal}/${noVal}`;
+
+            try {
+                const q = query(collection(db, 'artifacts', appId, 'users'), where('blok', '==', blokVal), where('no', '==', noVal));
+                const s = await getDocs(q);
+                if (s.empty) return showToast("Data rumah tidak ditemukan.", true);
+
+                const updates = [];
+                s.forEach(docSnap => {
+                    updates.push(updateDoc(doc(db, 'artifacts', appId, 'users', docSnap.id), {
+                        [`iuran.${bulan}`]: isLunas ? 'L' : 'BL',
+                        [`iuranNominal.${bulan}`]: nominal
+                    }));
+                });
+                await Promise.all(updates);
+
+                const ket = `Iuran ${nama} (${blokLabel}) - ${bulan}`;
+                if (isLunas) {
+                    await addDoc(collection(db, 'artifacts', appId, 'kas'), {
+                        tipeDoc: 'transaksi', jenis: 'masuk', nominal: nominal,
+                        keterangan: ket, oleh: currentUser, timestamp: Date.now()
+                    });
+                    showToast(`✅ LUNAS: ${blokLabel} - ${bulan}`);
+                } else {
+                    const qKas = query(collection(db, 'artifacts', appId, 'kas'));
+                    const sKas = await getDocs(qKas);
+                    let txIdToDelete = null;
+                    sKas.forEach(docSnap => {
+                        const k = docSnap.data();
+                        if (k.keterangan === ket && k.jenis === 'masuk') txIdToDelete = docSnap.id;
+                    });
+                    if (txIdToDelete) await deleteDoc(doc(db, 'artifacts', appId, 'kas', txIdToDelete));
+                    showToast(`❌ BELUM LUNAS: ${blokLabel} - ${bulan}`);
+                }
+                loadKasTagihanWarga();
+                loadBukuKas();
+            } catch (e) {
+                console.error(e);
+                showToast("Gagal mengubah status.", true);
+            }
         };
 
         window.filterTagihanWarga = function() {
             const raw = document.getElementById('searchTagihanWarga')?.value || '';
+            if (!raw.trim()) { document.querySelectorAll('.tagihan-row').forEach(r => r.style.display = 'table-row'); return; }
             const input = raw.toLowerCase().trim();
             const normInput = normalizeSearch(raw).toLowerCase();
-            document.querySelectorAll('.tagihan-warga-card').forEach(card => {
-                const s = (card.dataset.search || '').toLowerCase();
-                card.style.display = (s.includes(input) || s.includes(normInput)) ? 'flex' : 'none';
+            document.querySelectorAll('.tagihan-row').forEach(row => {
+                const s = (row.dataset.search || '').toLowerCase();
+                const match = s.includes(input) || s.includes(normInput);
+                row.style.display = match ? 'table-row' : 'none';
             });
         };
 
         window.toggleBayarKasWarga = async function(houseKey, nama, blok, bulan, isLunas) {
-            const nominal = nominalIuranDefault; const currentUser = (window.currentUserData && window.currentUserData.nama) || 'Admin';
-            const [blokStr, noStr] = houseKey.split('-');
+            // Legacy compatibility (tidak dipakai lagi di UI tapi tetap ada)
+            const nominal = nominalIuranDefault;
+            const currentUser = (window.currentUserData && window.currentUserData.nama) || 'Admin';
+            const parts = houseKey.split('-');
+            const blokStr = parts[0];
+            const noStr = parts.slice(1).join('-');
             try {
                 const q = query(collection(db, 'artifacts', appId, 'users'), where('blok', '==', blokStr), where('no', '==', noStr));
                 const s = await getDocs(q); const updates = [];
@@ -1698,14 +1824,11 @@
                     else updates.push(updateDoc(doc(db, 'artifacts', appId, 'users', uid), { [`iuran.${bulan}`]: 'BL', [`iuranNominal.${bulan}`]: 0 }));
                 });
                 await Promise.all(updates);
-                if (isLunas) {
-                    await addDoc(collection(db, 'artifacts', appId, 'kas'), { tipeDoc: 'transaksi', jenis: 'masuk', nominal, keterangan: `Iuran ${nama} (${blok}) - ${bulan}`, oleh: currentUser, timestamp: Date.now() });
-                    showToast("✅ Status: LUNAS (Berlaku 1 Keluarga)");
-                } else {
+                if (isLunas) await addDoc(collection(db, 'artifacts', appId, 'kas'), { tipeDoc: 'transaksi', jenis: 'masuk', nominal, keterangan: `Iuran ${nama} (${blok}) - ${bulan}`, oleh: currentUser, timestamp: Date.now() });
+                else {
                     const qKas = query(collection(db, 'artifacts', appId, 'kas')); const sKas = await getDocs(qKas); let txIdToDelete = null;
                     sKas.forEach(docSnap => { const k = docSnap.data(); if(k.keterangan === `Iuran ${nama} (${blok}) - ${bulan}` && k.jenis === 'masuk') txIdToDelete = docSnap.id; });
                     if(txIdToDelete) await deleteDoc(doc(db, 'artifacts', appId, 'kas', txIdToDelete));
-                    showToast("❌ Status: BELUM LUNAS");
                 }
                 loadKasTagihanWarga(); loadBukuKas();
             } catch(e) { showToast("Gagal memproses.", true); }
@@ -1778,6 +1901,7 @@
             cont.innerHTML = hWarga;
         }
 
+        // downloadLaporanKas (CSV) — dihapus dari UI, fungsi dibiarkan untuk kompatibilitas
         window.downloadLaporanKas = function() {
             const filterBln = document.getElementById('kasFilterBulan')?.value; const filterThn = document.getElementById('kasFilterTahun')?.value;
             let dataToDl = globalKasList;
@@ -1864,7 +1988,7 @@
         window.simpanNominalDefault = async function () {
             const aNom = document.getElementById('adminNominalIuran'); if (!aNom) return;
             nominalIuranDefault = Number(aNom.value);
-            try { await setDoc(doc(db, 'artifacts', appId, 'kas', 'config_iuran'), { nominalDefault: nominalIuranDefault, updatedAt: Date.now() }, { merge: true }); showToast(`✅ Tarif dikunci: ${formatRupiah(nominalIuranDefault)} berlaku seterusnya.`); } catch (e) { showToast("Gagal mengunci tarif.", true); }
+            try { await setDoc(doc(db, 'artifacts', appId, 'kas', 'config_iuran'), { nominalDefault: nominalIuranDefault, updatedAt: Date.now() }, { merge: true }); showToast(`✅ Tarif dikunci: ${formatRupiah(nominalIuranDefault)} berlaku seterusnya.`); if (currentKasView === 'tagihan') loadKasTagihanWarga(); } catch (e) { showToast("Gagal mengunci tarif.", true); }
         };
 
         window.kirimPengingatIuran = async function () { const bln = document.getElementById('adminBulanIuran')?.value; const nom = document.getElementById('adminNominalIuran')?.value; if (!bln || !nom) return; try { await setDoc(doc(db, 'artifacts', appId, 'kas', 'config_iuran'), { nominalDefault: Number(nom), reminderBulan: bln, reminderNominal: Number(nom), reminderTimestamp: Date.now() }, { merge: true }); showToast(`🔔 Pengingat iuran ${bln} dikirim!`); } catch (e) { showToast("Gagal mengirim pengingat.", true); } };
@@ -2002,7 +2126,7 @@
             const navRiwayat = document.getElementById('navRiwayatBtn'); if (navRiwayat) { if (isRT) { navRiwayat.classList.remove('hidden'); navRiwayat.classList.add('flex'); } else { navRiwayat.classList.add('hidden'); navRiwayat.classList.remove('flex'); } }
             const btnMute = document.getElementById('btnToggleMute'); if (btnMute) { if (isRT) btnMute.classList.remove('hidden'); else btnMute.classList.add('hidden'); }
             const isKetuaBendahara = window.currentUserData && ['Admin RT', 'Ketua RT', 'Bendahara'].includes(window.currentUserData.role);
-            const btnInputKas = document.getElementById('btnInputKas'); if(btnInputKas) { if(isKetuaBendahara) btnInputKas.classList.remove('hidden'); else btnInputKas.classList.add('hidden'); }
+            const btnKasPen = document.getElementById('btnKasPengeluaranHeader'); if(btnKasPen) { if(isKetuaBendahara) btnKasPen.classList.remove('hidden'); else btnKasPen.classList.add('hidden'); }
             const nm = (window.currentUserData && window.currentUserData.nama) || 'Warga';
             const wN = document.getElementById('welcomeName'); if (wN) wN.innerText = nm.split(' ')[0] + '!';
             const pN = document.getElementById('profNama'); if (pN) pN.innerText = nm;
@@ -2080,7 +2204,6 @@
             finally { b.disabled = false; }
         };
         
-        // Auto-hint di form Registrasi (saat blok/no diisi)
         document.addEventListener('DOMContentLoaded', () => {
             const rb = document.getElementById('regBlok'); const rn = document.getElementById('regNo');
             const upd = () => {
@@ -2244,7 +2367,6 @@
                     roleOptions.forEach(r => { roleSelect += `<option value="${r}" ${u.role === r ? 'selected' : ''}>${r}</option>`; });
                     roleSelect += `</select>`;
                     let detailBtn = isKetuaRT ? `<button onclick="openDetailWargaModal('${uid}')" class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center hover:bg-emerald-200 transition mr-1" title="Lihat Detail"><i class="fa-solid fa-eye text-xs"></i></button>` : '';
-                    // data-search normalized
                     const searchKey = `${(u.nama || '').toLowerCase()} ${normalizeSearch(`${u.blok || ''}/${u.no || ''}`).toLowerCase()} blok${(u.blok || '').toLowerCase()}${(u.no || '').toLowerCase()}`;
                     h += `<div class="warga-card p-3 border border-slate-200 rounded-xl bg-white flex flex-col gap-2" data-search="${escapeHtml(searchKey)}"><div class="flex items-start justify-between"><div class="min-w-0"><h3 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(u.nama || 'Warga')}</h3><p class="text-xs text-slate-500 truncate">Blok ${escapeHtml(u.blok || '-')}/${escapeHtml(u.no || '-')} • ${grp.users.length} Akun Terhubung</p></div><div class="flex gap-1 shrink-0">${detailBtn}<button onclick="openAdminEditModal('${uid}', '${dStr}')" class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center hover:bg-blue-200 transition" title="Edit Data Keluarga"><i class="fa-solid fa-pen text-xs"></i></button><button onclick="hapusLaporanWarga('${uid}', null, 'warga')" class="w-8 h-8 bg-red-100 text-red-600 rounded-full flex items-center justify-center hover:bg-red-200 transition"><i class="fa-solid fa-trash text-xs"></i></button></div></div><div class="border-t border-slate-100 pt-2 mt-1">${roleSelect}</div></div>`;
                 });
@@ -2297,15 +2419,12 @@
             } catch(error) { showToast("Gagal update data", true); }
         };
 
-        // SEARCH WARGA ADMIN — Normalisasi V1 1 ↔ v1.1 ↔ V1-1
         window.filterWarga = function () {
             const raw = (document.getElementById('searchWarga')?.value || '').trim();
             if (!raw) { document.querySelectorAll('.warga-card').forEach(c => c.style.display = 'flex'); return; }
-            const input = raw.toLowerCase();
-            const normInput = normalizeSearch(raw).toLowerCase();
+            const input = raw.toLowerCase(); const normInput = normalizeSearch(raw).toLowerCase();
             document.querySelectorAll('.warga-card').forEach(card => {
-                const s = (card.dataset.search || '').toLowerCase();
-                const txt = card.innerText.toLowerCase();
+                const s = (card.dataset.search || '').toLowerCase(); const txt = card.innerText.toLowerCase();
                 const match = s.includes(input) || s.includes(normInput) || txt.includes(input) || txt.includes(normInput);
                 card.style.display = match ? 'flex' : 'none';
             });
@@ -2359,8 +2478,15 @@
                 show('kasView', 'flex'); 
                 const nk = document.getElementById('navKasBtn'); if (nk) { nk.classList.remove('text-slate-400'); nk.classList.add('text-emerald-600'); } 
                 const isRT = window.currentUserData && ['Admin RT', 'Ketua RT', 'Pengurus RT', 'Bendahara', 'Sekretaris'].includes(window.currentUserData.role);
-                if (!isRT) { document.getElementById('kasTabsContainer').classList.add('hidden'); document.getElementById('kasFilterContainer').classList.add('hidden'); currentKasFilter = 'keluar'; } 
-                else { document.getElementById('kasTabsContainer').classList.remove('hidden'); document.getElementById('kasFilterContainer').classList.remove('hidden'); currentKasFilter = 'semua'; }
+                // Semua bisa lihat tab (warga lihat barisnya sendiri di matriks)
+                document.getElementById('kasTabsContainer').classList.remove('hidden');
+                if (!isRT) {
+                    document.getElementById('kasFilterContainer').classList.add('hidden');
+                    currentKasFilter = 'keluar';
+                } else {
+                    document.getElementById('kasFilterContainer').classList.remove('hidden');
+                    currentKasFilter = 'semua';
+                }
                 switchKasTab('tagihan');
             }
             else if (t === 'inventaris') { show('inventarisView', 'flex'); prefillFormData(); loadInventarisWarga(); }
