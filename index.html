@@ -166,6 +166,25 @@
             </form>
         </div>
     </div>
+    <!-- MODAL INPUT KASBON BARU -->
+    <div id="modalInputKasbon" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4" onclick="document.getElementById('modalInputKasbon').classList.add('hidden')">
+        <div class="bg-white w-full max-w-md rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up" onclick="event.stopPropagation()">
+            <button onclick="document.getElementById('modalInputKasbon').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-lg font-bold text-slate-800 mb-4">Input Kasbon Pekerja</h3>
+            <form id="formInputKasbon" onsubmit="simpanKasbonBaru(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Pilih Pekerja</label>
+                    <select id="formKasbonPekerja" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500">
+                        <option value="">-- Pilih Pekerja --</option>
+                    </select>
+                </div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Keterangan Kasbon</label><input type="text" id="formKasbonKet" required placeholder="Contoh: Beli rokok, uang makan, dll" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Jumlah (Rp)</label><input type="number" inputmode="numeric" pattern="[0-9]*" id="formKasbonNominal" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Tanggal Kasbon</label><input type="date" id="formKasbonTanggal" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <button type="submit" class="w-full bg-orange-500 text-white font-bold py-3 rounded-xl shadow-md mt-2"><i class="fa-solid fa-hand-holding-dollar mr-1"></i> Simpan Kasbon</button>
+            </form>
+        </div>
+    </div>
     <div id="modalEditKas" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4" onclick="document.getElementById('modalEditKas').classList.add('hidden')">
         <div class="bg-white w-full max-w-md rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('modalEditKas').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
@@ -504,12 +523,15 @@
                         </div>
                         <div class="px-4 pb-6">
                             <div id="kasGajiContainer">
-                                <div class="bg-white border border-slate-200 rounded-xl p-2.5 mb-3 flex items-center gap-1.5 shadow-sm">
-                                    <select id="gajiBulanSelect" onchange="loadGajiInsentif()" class="flex-1 bg-slate-50 border border-slate-200 text-slate-800 text-xs font-bold rounded-lg px-2 py-2 outline-none focus:border-emerald-500">
-                                        <option value="Januari">Januari</option><option value="Februari">Februari</option><option value="Maret">Maret</option><option value="April">April</option><option value="Mei">Mei</option><option value="Juni">Juni</option><option value="Juli">Juli</option><option value="Agustus">Agustus</option><option value="September">September</option><option value="Oktober">Oktober</option><option value="November">November</option><option value="Desember">Desember</option>
-                                    </select>
-                                    <select id="gajiTahunSelect" onchange="loadGajiInsentif()" class="flex-1 bg-slate-50 border border-slate-200 text-slate-800 text-xs font-bold rounded-lg px-2 py-2 outline-none focus:border-emerald-500"></select>
-                                    <button onclick="loadGajiInsentif()" class="w-9 h-9 bg-emerald-600 text-white rounded-lg flex items-center justify-center shadow-sm"><i class="fa-solid fa-refresh text-xs"></i></button>
+                                <div class="flex gap-2 mb-3">
+                                    <div class="bg-white border border-slate-200 rounded-xl p-2.5 flex items-center gap-1.5 shadow-sm flex-1">
+                                        <select id="gajiBulanSelect" onchange="loadGajiInsentif()" class="flex-1 bg-slate-50 border border-slate-200 text-slate-800 text-xs font-bold rounded-lg px-2 py-2 outline-none focus:border-emerald-500">
+                                            <option value="Januari">Januari</option><option value="Februari">Februari</option><option value="Maret">Maret</option><option value="April">April</option><option value="Mei">Mei</option><option value="Juni">Juni</option><option value="Juli">Juli</option><option value="Agustus">Agustus</option><option value="September">September</option><option value="Oktober">Oktober</option><option value="November">November</option><option value="Desember">Desember</option>
+                                        </select>
+                                        <select id="gajiTahunSelect" onchange="loadGajiInsentif()" class="flex-1 bg-slate-50 border border-slate-200 text-slate-800 text-xs font-bold rounded-lg px-2 py-2 outline-none focus:border-emerald-500"></select>
+                                        <button onclick="loadGajiInsentif()" class="w-9 h-9 bg-emerald-600 text-white rounded-lg flex items-center justify-center shadow-sm shrink-0"><i class="fa-solid fa-refresh text-xs"></i></button>
+                                    </div>
+                                    <button onclick="openModalInputKasbon()" class="bg-orange-500 hover:bg-orange-600 text-white font-bold px-4 rounded-xl shadow-sm text-xs flex items-center justify-center gap-1.5 shrink-0"><i class="fa-solid fa-hand-holding-dollar"></i> Kasbon</button>
                                 </div>
                                 <div id="gajiListContainer" class="space-y-3">
                                     <p class="text-center text-xs text-slate-400 py-6">Memuat data pekerja...</p>
@@ -1483,6 +1505,65 @@
                 loadBukuKas();
             } catch (err) { showToast("Gagal.", true); }
         };
+        
+        // --- FITUR KASBON BARU ---
+        window.openModalInputKasbon = function() {
+            const sel = document.getElementById('formKasbonPekerja');
+            sel.innerHTML = '<option value="">-- Pilih Pekerja --</option>';
+            if (currentGajiData.pekerja && currentGajiData.pekerja.length > 0) {
+                currentGajiData.pekerja.forEach(p => {
+                    sel.innerHTML += `<option value="${p.id}" data-nama="${escapeHtml(p.nama)}">${escapeHtml(p.nama)}</option>`;
+                });
+            } else {
+                showToast("Belum ada data pekerja.", true); return;
+            }
+            const now = new Date();
+            const y = now.getFullYear(), m = String(now.getMonth() + 1).padStart(2, '0'), d = String(now.getDate()).padStart(2, '0');
+            document.getElementById('formKasbonTanggal').value = `${y}-${m}-${d}`;
+            document.getElementById('formKasbonKet').value = '';
+            document.getElementById('formKasbonNominal').value = '';
+            document.getElementById('modalInputKasbon').classList.remove('hidden');
+        };
+
+        window.simpanKasbonBaru = async function(e) {
+            e.preventDefault();
+            const sel = document.getElementById('formKasbonPekerja');
+            const pekerjaId = sel.value;
+            const namaPekerja = sel.options[sel.selectedIndex]?.getAttribute('data-nama');
+            const ket = document.getElementById('formKasbonKet').value.trim();
+            const nom = Number(document.getElementById('formKasbonNominal').value);
+            const tglVal = document.getElementById('formKasbonTanggal').value;
+            
+            if (!pekerjaId || !ket || !nom || !tglVal) return showToast("Lengkapi data!", true);
+            
+            let ts = Date.now();
+            try { const [yy, mm, dd] = tglVal.split('-').map(Number); ts = new Date(yy, mm - 1, dd, 12, 0, 0).getTime(); } catch (err) {}
+
+            try {
+                // 1. Simpan ke collection khusus kasbon
+                await addDoc(collection(db, 'artifacts', appId, 'kasbon'), {
+                    pekerjaId, namaPekerja, keterangan: ket, nominal: nom, timestamp: ts,
+                    dibuatOleh: (window.currentUserData && window.currentUserData.nama) || 'Admin',
+                    createdAt: Date.now()
+                });
+                
+                // 2. Simpan ke laporan kas sebagai pengeluaran
+                await addDoc(collection(db, 'artifacts', appId, 'kas'), {
+                    tipeDoc: 'transaksi', jenis: 'keluar', kategori: 'Kasbon',
+                    keterangan: `Kasbon ${namaPekerja} - ${ket}`, nominal: nom,
+                    oleh: (window.currentUserData && window.currentUserData.nama) || 'Admin', timestamp: ts
+                });
+
+                document.getElementById('modalInputKasbon').classList.add('hidden');
+                showToast("✅ Kasbon berhasil dicatat!");
+                loadGajiInsentif();
+                loadBukuKas();
+            } catch(err) {
+                showToast("Gagal simpan kasbon: " + err.message, true);
+            }
+        };
+        // -------------------------
+
         window.hapusTransaksiKas = async function (id) { if (!confirm("Hapus transaksi ini?")) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'kas', id)); showToast("Dihapus."); loadBukuKas(); } catch(e) {} };
 
         window.loadBukuKas = async function () {
@@ -1551,7 +1632,7 @@
         };
 
         const BULAN_IDX_GAJI = { 'Januari':0,'Februari':1,'Maret':2,'April':3,'Mei':4,'Juni':5,'Juli':6,'Agustus':7,'September':8,'Oktober':9,'November':10,'Desember':11 };
-        let currentGajiData = { pekerja: [], kas: [], gaji: new Map(), bulan: 'Januari', tahun: 2026 };
+        let currentGajiData = { pekerja: [], kasbon: [], gaji: new Map(), bulan: 'Januari', tahun: 2026 };
 
         window.loadGajiInsentif = async function() {
             const cont = document.getElementById('gajiListContainer');
@@ -1573,13 +1654,17 @@
                 const pekerja = [];
                 workSnap.forEach(d => pekerja.push({ id: d.id, ...d.data() }));
                 pekerja.sort((a, b) => (a.nama || '').localeCompare(b.nama || ''));
-                const kasSnap = await getDocs(collection(db, 'artifacts', appId, 'kas'));
-                const allKas = [];
-                kasSnap.forEach(d => { if (d.id === 'config_iuran' || d.id === 'config_sos') return; const it = d.data(); if (!it.nominal) return; allKas.push({ id: d.id, ...it }); });
+                
+                const kasbonSnap = await getDocs(collection(db, 'artifacts', appId, 'kasbon'));
+                const allKasbon = [];
+                kasbonSnap.forEach(d => allKasbon.push({ id: d.id, ...d.data() }));
+
                 const gajiSnap = await getDocs(collection(db, 'artifacts', appId, 'gaji'));
                 const gajiMap = new Map();
                 gajiSnap.forEach(d => { const g = d.data(); if (g.bulan === bulan && g.tahun === tahun) gajiMap.set(g.pekerjaId, { id: d.id, ...g }); });
-                currentGajiData = { pekerja, kas: allKas, gaji: gajiMap, bulan, tahun };
+                
+                currentGajiData = { pekerja, kasbon: allKasbon, gaji: gajiMap, bulan, tahun };
+                
                 if (pekerja.length === 0) {
                     cont.innerHTML = '<div class="bg-white border rounded-xl p-6 text-center"><i class="fa-solid fa-users-slash text-4xl text-slate-300 mb-3"></i><p class="text-sm text-slate-500">Belum ada data pekerja.</p><p class="text-xs text-slate-400 mt-1">Tambahkan pekerja di Panel Admin → Pekerja.</p></div>';
                     return;
@@ -1591,26 +1676,24 @@
                     const gajiPokok = (rec?.gajiPokok) ?? (Number(w.gaji) || 0);
                     const insentif = rec?.insentif ?? 0;
                     const status = rec?.status || 'BELUM';
-                    const namaLower = (w.nama || '').toLowerCase();
-                    const kasbonItems = allKas.filter(k => {
-                        if (k.jenis !== 'keluar') return false;
-                        const kat = (k.kategori || '').toLowerCase();
-                        const ket = (k.keterangan || '').toLowerCase();
-                        const isKasbon = kat.includes('kasbon') || ket.includes('kasbon');
-                        if (!isKasbon) return false;
+                    
+                    // FILTER KASBON BERDASARKAN ID PEKERJA DAN BULAN
+                    const kasbonItems = allKasbon.filter(k => {
+                        if (k.pekerjaId !== w.id) return false;
                         const tgl = new Date(k.timestamp);
-                        if (tgl.getMonth() !== monthIdx || tgl.getFullYear() !== tahun) return false;
-                        return ket.includes(namaLower) || namaLower.split(' ').some(part => part.length > 2 && ket.includes(part));
+                        return tgl.getMonth() === monthIdx && tgl.getFullYear() === tahun;
                     });
+                    
                     const totalKasbon = kasbonItems.reduce((s, k) => s + (Number(k.nominal) || 0), 0);
                     const sisaDibayar = gajiPokok + insentif - totalKasbon;
                     const sNama = String(w.nama || 'Pekerja');
                     const sJab = String(w.statusPekerjaan || 'Petugas');
                     const initial = sNama.charAt(0).toUpperCase();
                     const id = w.id;
+                    
                     const kasbonHtml = kasbonItems.length > 0 ? `
                         <div class="bg-blue-50 border border-blue-200 rounded-xl p-2.5 mb-2">
-                            <p class="text-[10px] font-bold text-blue-800 mb-1.5"><i class="fa-solid fa-magnifying-glass mr-1"></i>Kasbon terdeteksi otomatis dari KAS bulan ${bulan}</p>
+                            <p class="text-[10px] font-bold text-blue-800 mb-1.5"><i class="fa-solid fa-hand-holding-dollar mr-1"></i>Kasbon tercatat bulan ${bulan}</p>
                             <div class="space-y-0.5 mb-1.5">
                                 ${kasbonItems.map(k => {
                                     const tgl = new Date(k.timestamp);
@@ -1693,17 +1776,14 @@
             const elIns = document.getElementById('insentif_' + pekerjaId);
             const gajiPokok = Number(elGaji?.value) || 0;
             const insentif = Number(elIns?.value) || 0;
+            
             const monthIdx = BULAN_IDX_GAJI[bulan];
-            const namaLower = (w.nama || '').toLowerCase();
-            const kasbonItems = currentGajiData.kas.filter(k => {
-                if (k.jenis !== 'keluar') return false;
-                const kat = (k.kategori || '').toLowerCase();
-                const ket = (k.keterangan || '').toLowerCase();
-                if (!kat.includes('kasbon') && !ket.includes('kasbon')) return false;
+            const kasbonItems = currentGajiData.kasbon.filter(k => {
+                if (k.pekerjaId !== pekerjaId) return false;
                 const tgl = new Date(k.timestamp);
-                if (tgl.getMonth() !== monthIdx || tgl.getFullYear() !== tahun) return false;
-                return ket.includes(namaLower) || namaLower.split(' ').some(p => p.length > 2 && ket.includes(p));
+                return tgl.getMonth() === monthIdx && tgl.getFullYear() === tahun;
             });
+            
             const totalKasbon = kasbonItems.reduce((s, k) => s + (Number(k.nominal) || 0), 0);
             const sisa = gajiPokok + insentif - totalKasbon;
             if (!confirm(`Bayar gaji ${w.nama}?\n\nBulan: ${bulan} ${tahun}\nGaji Pokok: ${formatRupiah(gajiPokok)}\nInsentif: ${formatRupiah(insentif)}\nTotal Kasbon: ${formatRupiah(totalKasbon)}\n\nSisa dibayar CASH: ${formatRupiah(sisa)}\n\nLanjutkan?`)) return;
@@ -1754,17 +1834,14 @@
             const bulan = currentGajiData.bulan, tahun = currentGajiData.tahun;
             const gajiPokok = Number(document.getElementById('gajiPokok_' + pekerjaId)?.value) || 0;
             const insentif = Number(document.getElementById('insentif_' + pekerjaId)?.value) || 0;
+            
             const monthIdx = BULAN_IDX_GAJI[bulan];
-            const namaLower = (w.nama || '').toLowerCase();
-            const kasbonItems = currentGajiData.kas.filter(k => {
-                if (k.jenis !== 'keluar') return false;
-                const kat = (k.kategori || '').toLowerCase();
-                const ket = (k.keterangan || '').toLowerCase();
-                if (!kat.includes('kasbon') && !ket.includes('kasbon')) return false;
+            const kasbonItems = currentGajiData.kasbon.filter(k => {
+                if (k.pekerjaId !== pekerjaId) return false;
                 const tgl = new Date(k.timestamp);
-                if (tgl.getMonth() !== monthIdx || tgl.getFullYear() !== tahun) return false;
-                return ket.includes(namaLower) || namaLower.split(' ').some(p => p.length > 2 && ket.includes(p));
+                return tgl.getMonth() === monthIdx && tgl.getFullYear() === tahun;
             });
+            
             const totalKasbon = kasbonItems.reduce((s, k) => s + (Number(k.nominal) || 0), 0);
             const sisa = gajiPokok + insentif - totalKasbon;
             const { jsPDF } = window.jspdf;
