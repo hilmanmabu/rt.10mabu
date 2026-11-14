@@ -207,16 +207,24 @@
         </div>
     </div>
     <div id="editMasterModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4" onclick="document.getElementById('editMasterModal').classList.add('hidden')">
-        <div class="bg-white w-full max-w-sm rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up" onclick="event.stopPropagation()">
+        <div class="bg-white w-full max-w-md rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('editMasterModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-lg font-bold text-slate-800 mb-1">Edit Data Rumah (Master)</h3>
-            <p class="text-xs text-slate-500 mb-3">Nama akan tampil di seluruh aplikasi.</p>
+            <h3 class="text-lg font-bold text-slate-800 mb-1">Edit Data Warga</h3>
+            <p class="text-xs text-slate-500 mb-4">Data akan tersinkron ke profil warga.</p>
             <form id="editMasterForm" onsubmit="simpanEditMaster(event)" class="space-y-3">
                 <input type="hidden" id="editMasterId">
+                <input type="hidden" id="editMasterUserId">
                 <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nama Kepala Keluarga</label><input type="text" id="editMasterNama" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
                 <div class="flex gap-2"><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Blok</label><input type="text" id="editMasterBlok" readonly class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-100 text-slate-600 text-sm outline-none"></div><div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">No</label><input type="text" id="editMasterNo" readonly class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-100 text-slate-600 text-sm outline-none"></div></div>
-                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Status Rumah</label><select id="editMasterStatus" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"><option value="HUNI">HUNI</option><option value="KOSONG">KOSONG</option></select></div>
-                <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl shadow-md mt-2">Simpan</button>
+                <div class="flex gap-2">
+                    <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">NIK</label><input type="number" id="editMasterNik" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500" placeholder="16 Digit"></div>
+                    <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">No. WA</label><input type="tel" id="editMasterHp" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                </div>
+                <div class="flex gap-2">
+                    <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Jumlah Jiwa</label><input type="number" id="editMasterJiwa" min="0" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                    <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Status Rumah</label><select id="editMasterStatus" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"><option value="HUNI">HUNI</option><option value="KOSONG">KOSONG</option></select></div>
+                </div>
+                <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl shadow-md mt-2">Simpan Data</button>
             </form>
         </div>
     </div>
@@ -531,7 +539,7 @@
                                         <select id="gajiTahunSelect" onchange="loadGajiInsentif()" class="flex-1 bg-slate-50 border border-slate-200 text-slate-800 text-xs font-bold rounded-lg px-2 py-2 outline-none focus:border-emerald-500"></select>
                                         <button onclick="loadGajiInsentif()" class="w-9 h-9 bg-emerald-600 text-white rounded-lg flex items-center justify-center shadow-sm shrink-0"><i class="fa-solid fa-refresh text-xs"></i></button>
                                     </div>
-                                    <button onclick="openModalInputKasbon()" class="bg-orange-500 hover:bg-orange-600 text-white font-bold px-4 rounded-xl shadow-sm text-xs flex items-center justify-center gap-1.5 shrink-0"><i class="fa-solid fa-hand-holding-dollar"></i> Kasbon</button>
+                                    <button id="btnKasbonInput" onclick="openModalInputKasbon()" class="hidden bg-orange-500 hover:bg-orange-600 text-white font-bold px-4 rounded-xl shadow-sm text-xs flex items-center justify-center gap-1.5 shrink-0"><i class="fa-solid fa-hand-holding-dollar"></i> Kasbon</button>
                                 </div>
                                 <div id="gajiListContainer" class="space-y-3">
                                     <p class="text-center text-xs text-slate-400 py-6">Memuat data pekerja...</p>
@@ -545,10 +553,24 @@
                 </div>
             </div>
             <div id="kasGlobalView" class="hidden flex-col h-full bg-slate-50 w-full overflow-y-auto">
-                <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0"><button onclick="switchTab('beranda')" class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-arrow-left text-slate-700"></i></button><h2 class="font-bold text-lg text-emerald-700 flex items-center gap-2 flex-1"><i class="fa-solid fa-calendar-check"></i> Kas Global</h2></div>
+                <div class="sticky top-0 bg-white px-4 py-3 border-b border-slate-200 flex items-center gap-3 z-10 shrink-0">
+                    <h2 class="font-bold text-lg text-emerald-700 flex items-center gap-2 flex-1"><i class="fa-solid fa-calendar-check"></i> Kas Global</h2>
+                </div>
                 <div class="p-3 md:p-5 w-full max-w-7xl mx-auto">
                     <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 mb-3 flex items-center gap-2"><i class="fa-solid fa-calendar text-emerald-600"></i><label class="text-xs font-bold text-emerald-900">Tahun:</label><select id="kasGlobalTahunSelect" onchange="loadKasGlobalView()" class="flex-1 bg-white border border-emerald-300 rounded-lg px-2 py-1.5 text-xs font-bold outline-none"></select></div>
-                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-2.5 mb-3 text-[10px] text-blue-800 leading-relaxed"><i class="fa-solid fa-circle-info mr-1"></i> <b>Tips:</b> Drag garis di header untuk atur lebar kolom · Klik-drag sel untuk seleksi · <kbd class="bg-white px-1 rounded border">Ctrl+C</kbd> salin (Excel/Sheets) · <kbd class="bg-white px-1 rounded border">Ctrl+V</kbd> paste status (Admin).</div>
+                    <!-- LEGENDA STATUS BARU -->
+                    <div class="bg-white border border-slate-200 rounded-xl p-3 mb-3 shadow-sm text-[10px] leading-relaxed">
+                        <p class="font-bold text-slate-800 mb-2">Keterangan Status:</p>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                            <div class="flex items-center gap-1.5"><span class="w-7 text-center font-bold text-white bg-[#059669] rounded py-0.5">L</span> <span>Lunas</span></div>
+                            <div class="flex items-center gap-1.5"><span class="w-7 text-center font-bold text-[#64748b] bg-[#f1f5f9] border border-[#cbd5e1] rounded py-0.5">BL</span> <span>Belum Lunas</span></div>
+                            <div class="flex items-center gap-1.5"><span class="w-7 text-center font-bold text-white bg-[#10b981] rounded py-0.5">LK</span> <span>Lunas Kosong (Rumah Kosong)</span></div>
+                            <div class="flex items-center gap-1.5"><span class="w-7 text-center font-bold text-white bg-[#94a3b8] rounded py-0.5">A</span> <span>Abai</span></div>
+                            <div class="flex items-center gap-1.5"><span class="w-7 text-center font-bold text-white bg-[#3b82f6] rounded py-0.5">P</span> <span>Pengurus</span></div>
+                            <div class="flex items-center gap-1.5"><span class="w-7 text-center font-bold text-white bg-[#a78bfa] rounded py-0.5">T</span> <span>Tidak Mampu</span></div>
+                            <div class="flex items-center gap-1.5 col-span-2"><span class="w-7 text-center font-bold text-[#065f46] bg-[#6ee7b7] rounded py-0.5">LC</span> <span>Lunas CCTV (Warga yang listrik rumahnya digunakan untuk CCTV)</span></div>
+                        </div>
+                    </div>
                     <div id="kasGlobalSummary" class="mb-3 admin-only-hint hidden"></div>
                     <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
                         <div class="overflow-auto" style="max-height:60vh;">
@@ -664,6 +686,7 @@
                 <button id="navBerandaBtn" onclick="switchTab('beranda')" class="flex flex-col items-center text-emerald-600 flex-1 py-1"><i class="fa-solid fa-house text-lg mb-1"></i><span class="text-[9px] font-semibold">Beranda</span></button>
                 <button id="navChatBtn" onclick="switchTab('chat')" class="relative flex flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-comments text-lg mb-1"></i><span class="text-[9px] font-semibold">Obrolan</span><span id="navChatBadge" class="hidden absolute top-0 right-1/4 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span></button>
                 <button id="navIuranBtn" onclick="switchTab('iuran')" class="flex flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-id-card-clip text-lg mb-1"></i><span class="text-[9px] font-semibold">Iuran</span></button>
+                <button id="navKasGlobalBtn" onclick="switchTab('kas_global')" class="hidden flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-table-cells text-lg mb-1"></i><span class="text-[9px] font-semibold">Kas Global</span></button>
                 <button id="navKasBtn" onclick="switchTab('kas')" class="flex flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-wallet text-lg mb-1"></i><span class="text-[9px] font-semibold">KAS</span></button>
                 <button id="navRiwayatBtn" onclick="switchTab('riwayat')" class="hidden flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-clock-rotate-left text-lg mb-1"></i><span class="text-[9px] font-semibold">Riwayat</span></button>
                 <button onclick="switchTab('profil')" class="flex flex-col items-center text-slate-400 flex-1 py-1"><i class="fa-solid fa-user text-lg mb-1"></i><span class="text-[9px] font-semibold">Profil</span></button>
@@ -959,6 +982,15 @@
                 await updateDoc(doc(db, 'artifacts', appId, 'kas', id), { kategori, keterangan, nominal, timestamp: ts, updatedAt: Date.now() });
                 document.getElementById('modalEditKas').classList.add('hidden');
                 showToast("✅ Pengeluaran diperbarui!");
+                loadBukuKas();
+            } catch(e) { showToast("Gagal: " + e.message, true); }
+        };
+        window.hapusKas = async function(id) {
+            if (!isAdminRole()) return showToast("Hanya pengurus.", true);
+            if (!confirm("Hapus pengeluaran ini?")) return;
+            try {
+                await deleteDoc(doc(db, 'artifacts', appId, 'kas', id));
+                showToast("Pengeluaran dihapus.");
                 loadBukuKas();
             } catch(e) { showToast("Gagal: " + e.message, true); }
         };
@@ -1506,7 +1538,6 @@
             } catch (err) { showToast("Gagal.", true); }
         };
         
-        // --- FITUR KASBON BARU ---
         window.openModalInputKasbon = function() {
             const sel = document.getElementById('formKasbonPekerja');
             sel.innerHTML = '<option value="">-- Pilih Pekerja --</option>';
@@ -1562,7 +1593,6 @@
                 showToast("Gagal simpan kasbon: " + err.message, true);
             }
         };
-        // -------------------------
 
         window.hapusTransaksiKas = async function (id) { if (!confirm("Hapus transaksi ini?")) return; try { await deleteDoc(doc(db, 'artifacts', appId, 'kas', id)); showToast("Dihapus."); loadBukuKas(); } catch(e) {} };
 
@@ -1603,7 +1633,8 @@
                 it.forEach(x => {
                     const ts = new Date(x.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
                     const editBtn = canEditKas ? `<button onclick="openEditKas('${x.id}')" class="w-7 h-7 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-100 shrink-0 ml-1" title="Edit"><i class="fa-solid fa-pen text-[10px]"></i></button>` : '';
-                    h += `<div class="bg-white p-3.5 rounded-2xl flex justify-between items-center shadow-sm border border-slate-100"><div class="flex items-center gap-3 min-w-0 flex-1"><div class="w-9 h-9 rounded-full border flex items-center justify-center shrink-0 text-red-500 border-red-200"><i class="fa-solid fa-arrow-up text-xs"></i></div><div class="min-w-0 flex-1"><h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(x.keterangan)}</h4><p class="text-[10px] text-slate-500">${ts} WIB ${x.kategori ? '• ' + escapeHtml(x.kategori) : ''}</p></div></div><div class="flex items-center gap-1 shrink-0"><span class="font-bold text-sm text-red-500">- ${formatRupiah(x.nominal)}</span>${editBtn}</div></div>`;
+                    const hapusBtn = canEditKas ? `<button onclick="hapusKas('${x.id}')" class="w-7 h-7 bg-red-50 text-red-500 rounded-lg flex items-center justify-center hover:bg-red-100 shrink-0 ml-1" title="Hapus"><i class="fa-solid fa-trash text-[10px]"></i></button>` : '';
+                    h += `<div class="bg-white p-3.5 rounded-2xl flex justify-between items-center shadow-sm border border-slate-100"><div class="flex items-center gap-3 min-w-0 flex-1"><div class="w-9 h-9 rounded-full border flex items-center justify-center shrink-0 text-red-500 border-red-200"><i class="fa-solid fa-arrow-up text-xs"></i></div><div class="min-w-0 flex-1"><h4 class="font-bold text-sm text-slate-800 truncate">${escapeHtml(x.keterangan)}</h4><p class="text-[10px] text-slate-500">${ts} WIB ${x.kategori ? '• ' + escapeHtml(x.kategori) : ''}</p></div></div><div class="flex items-center gap-1 shrink-0"><span class="font-bold text-sm text-red-500">- ${formatRupiah(x.nominal)}</span>${editBtn}${hapusBtn}</div></div>`;
                 });
                 h += `</div></div>`;
             }
@@ -1677,7 +1708,6 @@
                     const insentif = rec?.insentif ?? 0;
                     const status = rec?.status || 'BELUM';
                     
-                    // FILTER KASBON BERDASARKAN ID PEKERJA DAN BULAN
                     const kasbonItems = allKasbon.filter(k => {
                         if (k.pekerjaId !== w.id) return false;
                         const tgl = new Date(k.timestamp);
@@ -2034,6 +2064,22 @@
             const bm = document.getElementById('btnToggleMute'); if (bm) { if (isRT) bm.classList.remove('hidden'); else bm.classList.add('hidden'); }
             const isKB = window.currentUserData && ['Admin RT', 'Ketua RT', 'Bendahara'].includes(window.currentUserData.role);
             const bk = document.getElementById('btnKasPengeluaranHeader'); if(bk) { if(isKB) bk.classList.remove('hidden'); else bk.classList.add('hidden'); }
+            
+            // Toggle Menu Kasbon
+            const btnKasbon = document.getElementById('btnKasbonInput');
+            if (btnKasbon) { if (isRT) btnKasbon.classList.remove('hidden'); else btnKasbon.classList.add('hidden'); }
+
+            // Toggle Bottom Nav (Iuran vs Kas Global)
+            const btnNavIuran = document.getElementById('navIuranBtn');
+            const btnNavKasGlobal = document.getElementById('navKasGlobalBtn');
+            if (isRT) {
+                if (btnNavIuran) { btnNavIuran.classList.add('hidden'); btnNavIuran.classList.remove('flex'); }
+                if (btnNavKasGlobal) { btnNavKasGlobal.classList.remove('hidden'); btnNavKasGlobal.classList.add('flex'); }
+            } else {
+                if (btnNavIuran) { btnNavIuran.classList.remove('hidden'); btnNavIuran.classList.add('flex'); }
+                if (btnNavKasGlobal) { btnNavKasGlobal.classList.add('hidden'); btnNavKasGlobal.classList.remove('flex'); }
+            }
+
             const nm = (window.currentUserData && window.currentUserData.nama) || 'Warga';
             const wn = document.getElementById('welcomeName'); if (wn) wn.innerText = nm.split(' ')[0] + '!';
             const pn = document.getElementById('profNama'); if (pn) pn.innerText = nm;
@@ -2311,7 +2357,13 @@
                     const sB = escapeHtml(w.blok || '-');
                     const sNo = escapeHtml(w.no || '-');
                     const sK = `${(w.nama || '').toLowerCase()} ${normalizeSearch(`${w.blok || ''} ${w.no || ''}`).toLowerCase()} blok${(w.blok || '').toLowerCase()}${(w.no || '').toLowerCase()}`;
-                    const dS = safeEncode({ nama: w.nama, blok: w.blok, no: w.no, status_rumah: w.status_rumah });
+                    
+                    const userDoc = accs.length > 0 ? accs[0] : {}; 
+                    const dS = safeEncode({ 
+                        nama: w.nama, blok: w.blok, no: w.no, status_rumah: w.status_rumah, jumlah_jiwa: w.jumlah_jiwa || 0,
+                        nik: userDoc.nik || '', hp: userDoc.hp || '', userId: userDoc.id || null
+                    });
+
                     let akunHtml = '';
                     if (hasAcc) {
                         akunHtml = accs.map(a => {
@@ -2325,7 +2377,7 @@
                         <div class="flex items-start justify-between gap-2">
                             <div class="min-w-0 flex-1"><h3 class="font-bold text-sm text-slate-800 truncate">${sN}</h3><p class="text-xs text-slate-500 truncate">Blok ${sB} ${sNo} • <span class="${hasAcc ? 'text-emerald-600 font-bold' : 'text-slate-400'}">${accs.length} Akun</span>${w.status_rumah === 'KOSONG' ? ' <span class="bg-amber-100 text-amber-700 text-[9px] px-1.5 py-0.5 rounded">KOSONG</span>' : ''}</p></div>
                             <div class="flex gap-1 shrink-0">
-                                <button onclick="openEditMasterModal('${w.id}', '${dS}')" class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center hover:bg-blue-200" title="Edit Master"><i class="fa-solid fa-pen text-xs"></i></button>
+                                <button onclick="openEditMasterModal('${w.id}', '${dS}')" class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center hover:bg-blue-200" title="Edit Data Warga"><i class="fa-solid fa-pen text-xs"></i></button>
                                 ${!hasAcc ? `<button onclick="buatAkunManual('${w.id}', '${sB}', '${sNo}', '${sN.replace(/'/g, "\\'")}')" class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center hover:bg-emerald-200" title="Buat Akun"><i class="fa-solid fa-user-plus text-xs"></i></button>` : ''}
                                 <button onclick="hapusMaster('${w.id}', '${sN.replace(/'/g, "\\'")}', '${sB} ${sNo}')" class="w-8 h-8 bg-red-100 text-red-600 rounded-full flex items-center justify-center hover:bg-red-200" title="Hapus"><i class="fa-solid fa-trash text-xs"></i></button>
                             </div>
@@ -2339,23 +2391,46 @@
         window.openEditMasterModal = function (id, enc) {
             const d = safeDecode(enc);
             document.getElementById('editMasterId').value = id;
+            document.getElementById('editMasterUserId').value = d.userId || '';
             document.getElementById('editMasterNama').value = d.nama || '';
             document.getElementById('editMasterBlok').value = d.blok || '';
             document.getElementById('editMasterNo').value = d.no || '';
+            document.getElementById('editMasterNik').value = d.nik || '';
+            document.getElementById('editMasterHp').value = d.hp || '';
+            document.getElementById('editMasterJiwa').value = d.jumlah_jiwa || 0;
             document.getElementById('editMasterStatus').value = d.status_rumah || 'HUNI';
             document.getElementById('editMasterModal').classList.remove('hidden');
         };
         window.simpanEditMaster = async function (e) {
             e.preventDefault();
             const id = document.getElementById('editMasterId').value;
+            const userId = document.getElementById('editMasterUserId').value;
             const nama = document.getElementById('editMasterNama').value.trim();
             const status = document.getElementById('editMasterStatus').value;
+            const jiwa = parseInt(document.getElementById('editMasterJiwa').value) || 0;
+            const nik = document.getElementById('editMasterNik').value.trim();
+            const hp = document.getElementById('editMasterHp').value.trim();
+
             try {
-                await updateDoc(doc(db, 'artifacts', appId, 'warga_master', id), { nama: nama.toUpperCase(), status_rumah: status, updatedAt: Date.now() });
-                showToast("✅ Master diperbarui!");
+                // Update data di collection warga_master
+                await updateDoc(doc(db, 'artifacts', appId, 'warga_master', id), { 
+                    nama: nama.toUpperCase(), 
+                    status_rumah: status, 
+                    jumlah_jiwa: jiwa, 
+                    updatedAt: Date.now() 
+                });
+
+                // Jika ada akun warga yang terkait, update NIK dan No HP ke collection users
+                if (userId) {
+                    await updateDoc(doc(db, 'artifacts', appId, 'users', userId), {
+                        nik: nik, hp: hp
+                    });
+                }
+
+                showToast("✅ Data warga berhasil diperbarui!");
                 document.getElementById('editMasterModal').classList.add('hidden');
                 loadAdminWargaList(); loadStatistik();
-            } catch (e) { showToast("Gagal.", true); }
+            } catch (e) { showToast("Gagal: " + e.message, true); }
         };
         window.hapusMaster = async function (id, nama, blk) {
             if (!confirm(`Hapus data master ${nama} (${blk})?\n\nAkun-akun yang terkait tidak akan terhapus.`)) return;
@@ -2484,7 +2559,7 @@
         window.switchTab = function (t) {
             const views = ['homeView','chatView','riwayatView','laporView','suratView','dataView','profilView','umkmView','iuranView','kasView','kasGlobalView','inventarisView','sosView','adminView','pekerjaView','pengurusView','tamuView'];
             views.forEach(id => { const el = document.getElementById(id); if (el) { el.classList.add('hidden'); el.classList.remove('flex'); } });
-            ['navBerandaBtn','navChatBtn','navKasBtn','navRiwayatBtn','navIuranBtn'].forEach(id => { const el = document.getElementById(id); if (el) { el.classList.remove('text-emerald-600'); el.classList.add('text-slate-400'); } });
+            ['navBerandaBtn','navChatBtn','navKasBtn','navRiwayatBtn','navIuranBtn', 'navKasGlobalBtn'].forEach(id => { const el = document.getElementById(id); if (el) { el.classList.remove('text-emerald-600'); el.classList.add('text-slate-400'); } });
             const show = (id, display = 'block') => { const el = document.getElementById(id); if (el) { el.classList.remove('hidden'); el.classList.add(display); } };
             if (t === 'riwayat') { show('riwayatView'); const n = document.getElementById('navRiwayatBtn'); if (n) { n.classList.remove('text-slate-400'); n.classList.add('text-emerald-600'); } loadRiwayat(); }
             else if (t === 'chat') { show('chatView', 'flex'); const n = document.getElementById('navChatBtn'); if (n) { n.classList.remove('text-slate-400'); n.classList.add('text-emerald-600'); } updateChatBadge(0); renderChatMessages(); }
@@ -2501,7 +2576,12 @@
                 if (n) { n.classList.remove('text-slate-400'); n.classList.add('text-emerald-600'); }
                 switchKasTab('gaji');
             }
-            else if (t === 'kas_global') { show('kasGlobalView', 'flex'); loadKasGlobalView(); }
+            else if (t === 'kas_global') { 
+                show('kasGlobalView', 'flex'); 
+                const n = document.getElementById('navKasGlobalBtn'); 
+                if (n) { n.classList.remove('text-slate-400'); n.classList.add('text-emerald-600'); }
+                loadKasGlobalView(); 
+            }
             else if (t === 'inventaris') { show('inventarisView', 'flex'); prefillFormData(); loadInventarisWarga(); }
             else if (t === 'sos') { show('sosView', 'flex'); }
             else if (t === 'pekerja') { show('pekerjaView', 'flex'); loadDataPekerjaWarga(); }
