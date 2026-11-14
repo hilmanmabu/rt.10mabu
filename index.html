@@ -206,6 +206,8 @@
             <div id="detailWargaContent" class="space-y-3"></div>
         </div>
     </div>
+    
+    <!-- MODAL EDIT MASTER (DENGAN L/P & STATUS KONTRAK) -->
     <div id="editMasterModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4" onclick="document.getElementById('editMasterModal').classList.add('hidden')">
         <div class="bg-white w-full max-w-md rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('editMasterModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
@@ -221,13 +223,42 @@
                     <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">No. WA</label><input type="tel" id="editMasterHp" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
                 </div>
                 <div class="flex gap-2">
-                    <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Jumlah Jiwa</label><input type="number" id="editMasterJiwa" min="0" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
-                    <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Status Rumah</label><select id="editMasterStatus" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"><option value="HUNI">HUNI</option><option value="KOSONG">KOSONG</option></select></div>
+                    <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Laki-laki</label><input type="number" id="editMasterLaki" min="0" value="0" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                    <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Perempuan</label><input type="number" id="editMasterPerempuan" min="0" value="0" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                    <div class="flex-1"><label class="block text-xs font-semibold text-slate-600 mb-1">Status Rumah</label><select id="editMasterStatus" onchange="toggleFormKontrak()" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"><option value="HUNI">HUNI</option><option value="KOSONG">KOSONG</option><option value="DIKONTRAKAN">DIKONTRAKAN</option></select></div>
                 </div>
-                <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl shadow-md mt-2">Simpan Data</button>
+                <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl shadow-md mt-4">Simpan Data Warga</button>
             </form>
         </div>
     </div>
+
+    <!-- MODAL DATA KONTRAKAN -->
+    <div id="modalKontrak" class="hidden fixed inset-0 bg-slate-950/70 z-[130] flex items-center justify-center p-4" onclick="document.getElementById('modalKontrak').classList.add('hidden')">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+            <button onclick="document.getElementById('modalKontrak').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-lg font-bold text-slate-800 mb-4">Data Pengontrak</h3>
+            <form id="formKontrak" onsubmit="simpanDataKontrak(event)" class="space-y-3">
+                <input type="hidden" id="kontrakMasterId">
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Nama Pengontrak</label><input type="text" id="kontrakNama" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Alamat Asal</label><input type="text" id="kontrakAlamat" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">No. WA</label><input type="tel" id="kontrakHp" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div><label class="block text-xs font-semibold text-slate-600 mb-1">Jumlah Yang Huni</label><input type="number" id="kontrakJumlah" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm outline-none focus:border-emerald-500"></div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Foto KTP</label>
+                    <div class="flex items-center gap-2">
+                        <img id="kontrakKtpPreview" class="hidden w-14 h-14 rounded-lg object-cover border border-slate-200">
+                        <button type="button" onclick="bukaKameraRealtime('kontrakKtpPreview','kontrakKtpIcon','kontrakKtpBase64',null,null,'KTP')" class="bg-emerald-600 text-white px-3 py-2 rounded-lg text-[11px] font-bold shadow-sm flex items-center gap-1.5"><i class="fa-solid fa-camera"></i> Kamera</button>
+                        <button type="button" onclick="document.getElementById('kontrakKtpInput').click()" class="bg-slate-100 text-slate-700 px-3 py-2 rounded-lg text-[11px] font-semibold border border-slate-200 flex items-center gap-1.5"><i class="fa-regular fa-image"></i> Galeri</button>
+                        <i id="kontrakKtpIcon" class="fa-solid fa-id-card text-slate-400 text-2xl"></i>
+                        <input type="file" id="kontrakKtpInput" accept="image/*" class="hidden" onchange="handleDocPhoto(event,'kontrakKtpPreview','kontrakKtpIcon','kontrakKtpBase64')">
+                        <input type="hidden" id="kontrakKtpBase64">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl shadow-md mt-2">Simpan Kontrak</button>
+            </form>
+        </div>
+    </div>
+
     <div id="editPekerjaModal" class="hidden fixed inset-0 bg-slate-950/70 z-[120] flex items-center justify-center p-4" onclick="document.getElementById('editPekerjaModal').classList.add('hidden')">
         <div class="bg-white w-full max-w-sm rounded-3xl p-6 relative shadow-2xl animate-fade-slide-up max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
             <button onclick="document.getElementById('editPekerjaModal').classList.add('hidden')" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
@@ -558,6 +589,16 @@
                 </div>
                 <div class="p-3 md:p-5 w-full max-w-7xl mx-auto">
                     <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 mb-3 flex items-center gap-2"><i class="fa-solid fa-calendar text-emerald-600"></i><label class="text-xs font-bold text-emerald-900">Tahun:</label><select id="kasGlobalTahunSelect" onchange="loadKasGlobalView()" class="flex-1 bg-white border border-emerald-300 rounded-lg px-2 py-1.5 text-xs font-bold outline-none"></select></div>
+                    
+                    <div id="mobileCopyPasteBar" class="hidden flex gap-2 mb-3">
+                        <button onclick="copyMatrixSelection()" class="flex-1 bg-emerald-600 text-white font-bold py-2 rounded-lg shadow text-xs flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-copy"></i> Salin (Copy)
+                        </button>
+                        <button id="btnMobilePaste" onclick="triggerMobilePaste()" class="hidden flex-1 bg-blue-600 text-white font-bold py-2 rounded-lg shadow text-xs flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-paste"></i> Tempel (Paste)
+                        </button>
+                    </div>
+                    
                     <!-- LEGENDA STATUS BARU -->
                     <div class="bg-white border border-slate-200 rounded-xl p-3 mb-3 shadow-sm text-[10px] leading-relaxed">
                         <p class="font-bold text-slate-800 mb-2">Keterangan Status:</p>
@@ -892,7 +933,7 @@
                     try {
                         const snap = await getDoc(doc(db, 'artifacts', appId, 'warga_master', docId));
                         if (snap.exists()) { skipped++; continue; }
-                        await setDoc(doc(db, 'artifacts', appId, 'warga_master', docId), { nama: w.nama, blok: w.blok, no: w.no, status_rumah: 'HUNI', jumlah_jiwa: 0, iuran: {}, iuranNominal: {}, status_aktif: 'A', createdAt: Date.now(), updatedAt: Date.now() });
+                        await setDoc(doc(db, 'artifacts', appId, 'warga_master', docId), { nama: w.nama, blok: w.blok, no: w.no, status_rumah: 'HUNI', jumlah_jiwa: 0, jumlah_laki_laki: 0, jumlah_perempuan: 0, iuran: {}, iuranNominal: {}, status_aktif: 'A', createdAt: Date.now(), updatedAt: Date.now() });
                         added++;
                     } catch (e) { errors++; console.warn('seed err', docId, e); }
                 }
@@ -910,7 +951,7 @@
             try {
                 const snap = await getDoc(doc(db, 'artifacts', appId, 'warga_master', docId));
                 if (snap.exists()) return showToast("Rumah ini sudah ada di master.", true);
-                await setDoc(doc(db, 'artifacts', appId, 'warga_master', docId), { nama: nama.toUpperCase(), blok: norm.blok, no: norm.no, status_rumah: 'HUNI', jumlah_jiwa: 0, iuran: {}, iuranNominal: {}, status_aktif: 'A', createdAt: Date.now(), updatedAt: Date.now() });
+                await setDoc(doc(db, 'artifacts', appId, 'warga_master', docId), { nama: nama.toUpperCase(), blok: norm.blok, no: norm.no, status_rumah: 'HUNI', jumlah_jiwa: 0, jumlah_laki_laki: 0, jumlah_perempuan: 0, iuran: {}, iuranNominal: {}, status_aktif: 'A', createdAt: Date.now(), updatedAt: Date.now() });
                 showToast(`✅ Rumah ${norm.blok} ${norm.no} ditambahkan`);
                 loadAdminWargaList(); loadStatistik();
             } catch (e) { showToast("Gagal: " + e.message, true); }
@@ -1319,15 +1360,18 @@
             const body = table.querySelector('tbody');
             if (!body || body.dataset.selectionInit === '1') return;
             body.dataset.selectionInit = '1';
-            body.addEventListener('mousedown', (e) => {
-                if (e.button !== 0) return;
-                const td = e.target.closest('td');
-                if (!td) return;
+
+            const getCellInfo = (target) => {
+                const td = target.closest('td');
+                if (!td) return null;
                 const row = td.parentElement;
                 const rowIdx = Array.from(body.rows).indexOf(row);
                 const colIdx = Array.from(row.cells).indexOf(td);
-                if (rowIdx < 0 || colIdx < 0) return;
-                if (e.shiftKey && matrixSelection.tableId === tableId) {
+                return { rowIdx, colIdx };
+            };
+
+            const updateSelection = (rowIdx, colIdx, isShift) => {
+                if (isShift && matrixSelection.tableId === tableId) {
                     matrixSelection.endR = rowIdx;
                     matrixSelection.endC = colIdx;
                 } else {
@@ -1339,12 +1383,28 @@
                     matrixSelection.tableId = tableId;
                 }
                 updateMatrixHighlight();
+                
+                const bar = document.getElementById('mobileCopyPasteBar');
+                if (bar) {
+                    bar.classList.remove('hidden');
+                    const btnPaste = document.getElementById('btnMobilePaste');
+                    if (btnPaste && isAdminRole()) btnPaste.classList.remove('hidden');
+                }
+            };
+
+            body.addEventListener('mousedown', (e) => {
+                if (e.button !== 0) return;
+                const info = getCellInfo(e.target);
+                if (!info) return;
+                updateSelection(info.rowIdx, info.colIdx, e.shiftKey);
+
                 const onMove = (ev) => {
-                    const t = ev.target.closest('td');
-                    if (!t) return;
-                    const r = Array.from(body.rows).indexOf(t.parentElement);
-                    const c = Array.from(t.parentElement.cells).indexOf(t);
-                    if (r >= 0 && c >= 0) { matrixSelection.endR = r; matrixSelection.endC = c; updateMatrixHighlight(); }
+                    const moveInfo = getCellInfo(ev.target);
+                    if (moveInfo) {
+                        matrixSelection.endR = moveInfo.rowIdx;
+                        matrixSelection.endC = moveInfo.colIdx;
+                        updateMatrixHighlight();
+                    }
                 };
                 const onUp = () => {
                     document.removeEventListener('mousemove', onMove);
@@ -1353,6 +1413,26 @@
                 document.addEventListener('mousemove', onMove);
                 document.addEventListener('mouseup', onUp);
             });
+
+            body.addEventListener('touchstart', (e) => {
+                if (e.touches.length > 1) return;
+                const info = getCellInfo(e.target);
+                if (!info) return;
+                updateSelection(info.rowIdx, info.colIdx, false);
+            }, { passive: false });
+
+            body.addEventListener('touchmove', (e) => {
+                if (!matrixSelection.active) return;
+                e.preventDefault();
+                const touch = e.touches[0];
+                const elem = document.elementFromPoint(touch.clientX, touch.clientY);
+                const moveInfo = getCellInfo(elem);
+                if (moveInfo) {
+                    matrixSelection.endR = moveInfo.rowIdx;
+                    matrixSelection.endC = moveInfo.colIdx;
+                    updateMatrixHighlight();
+                }
+            }, { passive: false });
         };
 
         function updateMatrixHighlight() {
@@ -1440,6 +1520,20 @@
                 if (document.getElementById('kasRiwayatContainer') && !document.getElementById('kasRiwayatContainer').classList.contains('hidden')) loadBukuKas();
             } catch(e) { showToast('Gagal paste: ' + e.message, true); }
         }
+
+        window.triggerMobilePaste = async function() {
+            if (!matrixSelection.tableId || !isAdminRole()) return;
+            try {
+                const text = await navigator.clipboard.readText();
+                if (!text || !text.trim()) {
+                    showToast("Clipboard kosong atau tidak ada data.", true);
+                    return;
+                }
+                await pasteMatrixSelection(text);
+            } catch (err) {
+                showToast("Gagal mengakses clipboard. Pastikan izin clipboard aktif.", true);
+            }
+        };
 
         document.addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'c' && matrixSelection.tableId) {
@@ -1571,14 +1665,12 @@
             try { const [yy, mm, dd] = tglVal.split('-').map(Number); ts = new Date(yy, mm - 1, dd, 12, 0, 0).getTime(); } catch (err) {}
 
             try {
-                // 1. Simpan ke collection khusus kasbon
                 await addDoc(collection(db, 'artifacts', appId, 'kasbon'), {
                     pekerjaId, namaPekerja, keterangan: ket, nominal: nom, timestamp: ts,
                     dibuatOleh: (window.currentUserData && window.currentUserData.nama) || 'Admin',
                     createdAt: Date.now()
                 });
                 
-                // 2. Simpan ke laporan kas sebagai pengeluaran
                 await addDoc(collection(db, 'artifacts', appId, 'kas'), {
                     tipeDoc: 'transaksi', jenis: 'keluar', kategori: 'Kasbon',
                     keterangan: `Kasbon ${namaPekerja} - ${ket}`, nominal: nom,
@@ -1988,11 +2080,14 @@
                 const houseGroups = new Map();
                 us.forEach(d => { const u = d.data(); if (u.role === 'Warga') { const hk = getHouseKey(u.blok, u.no); if (!houseGroups.has(hk)) houseGroups.set(hk, []); houseGroups.get(hk).push(u); } });
                 arr.forEach(w => {
-                    const hk = getHouseKey(w.blok, w.no);
-                    const akun = houseGroups.get(hk) || [];
-                    const jiwa = parseInt(w.jumlah_jiwa) || akun.length || 1;
+                    // Update perhitungan menggunakan Laki-laki & Perempuan yang diinput manual oleh Admin
+                    const laki = parseInt(w.jumlah_laki_laki) || 0;
+                    const perempuan = parseInt(w.jumlah_perempuan) || 0;
+                    const jiwa = laki + perempuan;
+                    
                     tj += jiwa;
-                    akun.forEach(u => { if (u.jenis_kelamin === 'Laki-laki') tl++; else if (u.jenis_kelamin === 'Perempuan') tp++; });
+                    tl += laki;
+                    tp += perempuan;
                 });
                 document.getElementById('statRumah').innerText = totalRumah;
                 document.getElementById('statJiwa').innerText = tj;
@@ -2175,7 +2270,7 @@
                 const gender = document.getElementById('regGender')?.value || 'Laki-laki';
                 const mSnap = await getDoc(doc(db, 'artifacts', appId, 'warga_master', docId));
                 if (!mSnap.exists()) {
-                    await setDoc(doc(db, 'artifacts', appId, 'warga_master', docId), { nama: nm.toUpperCase(), blok: norm.blok, no: norm.no, status_rumah: 'HUNI', jumlah_jiwa: 0, iuran: {}, iuranNominal: {}, status_aktif: 'A', createdAt: Date.now(), updatedAt: Date.now() });
+                    await setDoc(doc(db, 'artifacts', appId, 'warga_master', docId), { nama: nm.toUpperCase(), blok: norm.blok, no: norm.no, status_rumah: 'HUNI', jumlah_jiwa: 0, jumlah_laki_laki: 0, jumlah_perempuan: 0, iuran: {}, iuranNominal: {}, status_aktif: 'A', createdAt: Date.now(), updatedAt: Date.now() });
                 }
                 await setDoc(doc(db, 'artifacts', appId, 'users', c.user.uid), { nama: nm, email: id, jenis_kelamin: gender, hp, blok: norm.blok, no: norm.no, role: 'Warga', password: pw });
                 showToast("Daftar sukses! Akun Anda tersinkron ke rumah " + norm.blok + " " + norm.no);
@@ -2361,7 +2456,9 @@
                     const userDoc = accs.length > 0 ? accs[0] : {}; 
                     const dS = safeEncode({ 
                         nama: w.nama, blok: w.blok, no: w.no, status_rumah: w.status_rumah, jumlah_jiwa: w.jumlah_jiwa || 0,
-                        nik: userDoc.nik || '', hp: userDoc.hp || '', userId: userDoc.id || null
+                        jumlah_laki: w.jumlah_laki_laki || 0, jumlah_perempuan: w.jumlah_perempuan || 0,
+                        nik: userDoc.nik || '', hp: userDoc.hp || '', userId: userDoc.id || null,
+                        kontrak_data: w.kontrak_data || null
                     });
 
                     let akunHtml = '';
@@ -2373,15 +2470,46 @@
                     } else {
                         akunHtml = `<div class="text-[10px] text-slate-400 italic flex items-center gap-1"><i class="fa-solid fa-user-slash text-[9px]"></i> Belum ada akun</div>`;
                     }
+
+                    let kontrakHtml = '';
+                    if (w.status_rumah === 'DIKONTRAKAN') {
+                        const kd = w.kontrak_data;
+                        if (kd && kd.nama) {
+                            kontrakHtml = `
+                                <div class="mt-2 border border-blue-200 bg-blue-50 rounded-xl p-2.5 flex flex-col gap-1.5 relative">
+                                    <div class="absolute top-2 right-2 flex gap-1">
+                                        <button onclick="openModalKontrak('${w.id}', '${safeEncode(kd)}')" class="w-6 h-6 bg-white text-blue-600 rounded flex items-center justify-center shadow-sm border border-blue-200"><i class="fa-solid fa-pen text-[9px]"></i></button>
+                                        <button onclick="hapusDataKontrak('${w.id}')" class="w-6 h-6 bg-white text-red-600 rounded flex items-center justify-center shadow-sm border border-red-200"><i class="fa-solid fa-trash text-[9px]"></i></button>
+                                    </div>
+                                    <p class="text-[10px] font-bold text-blue-800 uppercase tracking-wider mb-1"><i class="fa-solid fa-file-contract mr-1"></i> Data Kontrak</p>
+                                    <div class="text-[11px] text-slate-700 grid grid-cols-[70px_1fr] gap-x-1 gap-y-0.5 pr-14">
+                                        <span class="font-semibold">Nama</span><span>: ${escapeHtml(kd.nama)}</span>
+                                        <span class="font-semibold">No WA</span><span>: ${escapeHtml(kd.hp)}</span>
+                                        <span class="font-semibold">Alamat</span><span>: ${escapeHtml(kd.alamat)}</span>
+                                        <span class="font-semibold">Jml Huni</span><span>: ${escapeHtml(kd.jumlah_huni)} Orang</span>
+                                    </div>
+                                    ${kd.foto_ktp ? `<div class="mt-1"><img onclick="lihatGambarModal('KTP Pengontrak', '${kd.foto_ktp.replace(/'/g, "%27")}')" src="${kd.foto_ktp}" class="h-10 rounded border border-blue-200 cursor-pointer"></div>` : ''}
+                                </div>
+                            `;
+                        } else {
+                            kontrakHtml = `
+                                <button onclick="openModalKontrak('${w.id}')" class="mt-2 w-full bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 font-bold py-2 rounded-xl text-[11px] flex items-center justify-center gap-1.5 transition">
+                                    <i class="fa-solid fa-plus"></i> Tambah Data Kontrak
+                                </button>
+                            `;
+                        }
+                    }
+
                     h += `<div class="warga-card p-3 border border-slate-200 rounded-xl bg-white flex flex-col gap-2" data-search="${escapeHtml(sK)}">
                         <div class="flex items-start justify-between gap-2">
-                            <div class="min-w-0 flex-1"><h3 class="font-bold text-sm text-slate-800 truncate">${sN}</h3><p class="text-xs text-slate-500 truncate">Blok ${sB} ${sNo} • <span class="${hasAcc ? 'text-emerald-600 font-bold' : 'text-slate-400'}">${accs.length} Akun</span>${w.status_rumah === 'KOSONG' ? ' <span class="bg-amber-100 text-amber-700 text-[9px] px-1.5 py-0.5 rounded">KOSONG</span>' : ''}</p></div>
+                            <div class="min-w-0 flex-1"><h3 class="font-bold text-sm text-slate-800 truncate">${sN}</h3><p class="text-xs text-slate-500 truncate">Blok ${sB} ${sNo} • <span class="${hasAcc ? 'text-emerald-600 font-bold' : 'text-slate-400'}">${accs.length} Akun</span>${w.status_rumah === 'KOSONG' ? ' <span class="bg-amber-100 text-amber-700 text-[9px] px-1.5 py-0.5 rounded">KOSONG</span>' : ''}${w.status_rumah === 'DIKONTRAKAN' ? ' <span class="bg-blue-100 text-blue-700 text-[9px] px-1.5 py-0.5 rounded">KONTRAK</span>' : ''}</p></div>
                             <div class="flex gap-1 shrink-0">
                                 <button onclick="openEditMasterModal('${w.id}', '${dS}')" class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center hover:bg-blue-200" title="Edit Data Warga"><i class="fa-solid fa-pen text-xs"></i></button>
                                 ${!hasAcc ? `<button onclick="buatAkunManual('${w.id}', '${sB}', '${sNo}', '${sN.replace(/'/g, "\\'")}')" class="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center hover:bg-emerald-200" title="Buat Akun"><i class="fa-solid fa-user-plus text-xs"></i></button>` : ''}
                                 <button onclick="hapusMaster('${w.id}', '${sN.replace(/'/g, "\\'")}', '${sB} ${sNo}')" class="w-8 h-8 bg-red-100 text-red-600 rounded-full flex items-center justify-center hover:bg-red-200" title="Hapus"><i class="fa-solid fa-trash text-xs"></i></button>
                             </div>
                         </div>
+                        ${kontrakHtml}
                         <div class="border-t border-slate-100 pt-1.5 flex flex-col gap-1">${akunHtml}</div>
                     </div>`;
                 });
@@ -2397,7 +2525,8 @@
             document.getElementById('editMasterNo').value = d.no || '';
             document.getElementById('editMasterNik').value = d.nik || '';
             document.getElementById('editMasterHp').value = d.hp || '';
-            document.getElementById('editMasterJiwa').value = d.jumlah_jiwa || 0;
+            document.getElementById('editMasterLaki').value = d.jumlah_laki || 0;
+            document.getElementById('editMasterPerempuan').value = d.jumlah_perempuan || 0;
             document.getElementById('editMasterStatus').value = d.status_rumah || 'HUNI';
             document.getElementById('editMasterModal').classList.remove('hidden');
         };
@@ -2407,7 +2536,9 @@
             const userId = document.getElementById('editMasterUserId').value;
             const nama = document.getElementById('editMasterNama').value.trim();
             const status = document.getElementById('editMasterStatus').value;
-            const jiwa = parseInt(document.getElementById('editMasterJiwa').value) || 0;
+            const laki = parseInt(document.getElementById('editMasterLaki').value) || 0;
+            const perempuan = parseInt(document.getElementById('editMasterPerempuan').value) || 0;
+            const totalJiwa = laki + perempuan;
             const nik = document.getElementById('editMasterNik').value.trim();
             const hp = document.getElementById('editMasterHp').value.trim();
 
@@ -2416,7 +2547,9 @@
                 await updateDoc(doc(db, 'artifacts', appId, 'warga_master', id), { 
                     nama: nama.toUpperCase(), 
                     status_rumah: status, 
-                    jumlah_jiwa: jiwa, 
+                    jumlah_laki_laki: laki,
+                    jumlah_perempuan: perempuan,
+                    jumlah_jiwa: totalJiwa, 
                     updatedAt: Date.now() 
                 });
 
@@ -2432,6 +2565,73 @@
                 loadAdminWargaList(); loadStatistik();
             } catch (e) { showToast("Gagal: " + e.message, true); }
         };
+
+        // --- FUNGSI DATA KONTRAK ---
+        window.openModalKontrak = function(masterId, encKontrak = null) {
+            document.getElementById('kontrakMasterId').value = masterId;
+            const form = document.getElementById('formKontrak');
+            form.reset();
+            
+            const prev = document.getElementById('kontrakKtpPreview');
+            const ico = document.getElementById('kontrakKtpIcon');
+            const hid = document.getElementById('kontrakKtpBase64');
+            if (prev) prev.classList.add('hidden');
+            if (ico) ico.classList.remove('hidden');
+            if (hid) hid.value = '';
+
+            if (encKontrak) {
+                const d = safeDecode(encKontrak);
+                document.getElementById('kontrakNama').value = d.nama || '';
+                document.getElementById('kontrakAlamat').value = d.alamat || '';
+                document.getElementById('kontrakHp').value = d.hp || '';
+                document.getElementById('kontrakJumlah').value = d.jumlah_huni || '';
+                if (d.foto_ktp) {
+                    if (prev) { prev.src = d.foto_ktp; prev.classList.remove('hidden'); }
+                    if (ico) ico.classList.add('hidden');
+                    if (hid) hid.value = d.foto_ktp;
+                }
+            }
+            document.getElementById('modalKontrak').classList.remove('hidden');
+        };
+
+        window.simpanDataKontrak = async function(e) {
+            e.preventDefault();
+            const masterId = document.getElementById('kontrakMasterId').value;
+            const nama = document.getElementById('kontrakNama').value.trim();
+            const alamat = document.getElementById('kontrakAlamat').value.trim();
+            const hp = document.getElementById('kontrakHp').value.trim();
+            const jumlah_huni = parseInt(document.getElementById('kontrakJumlah').value) || 0;
+            const foto_ktp = document.getElementById('kontrakKtpBase64').value;
+
+            if (!masterId || !nama || !alamat || !hp || !jumlah_huni) return showToast("Lengkapi data kontrak!", true);
+
+            const kontrakData = {
+                nama, alamat, hp, jumlah_huni, foto_ktp, updatedAt: Date.now()
+            };
+
+            try {
+                await updateDoc(doc(db, 'artifacts', appId, 'warga_master', masterId), {
+                    kontrak_data: kontrakData
+                });
+                showToast("✅ Data Kontrak disimpan!");
+                document.getElementById('modalKontrak').classList.add('hidden');
+                loadAdminWargaList();
+            } catch(err) { showToast("Gagal: " + err.message, true); }
+        };
+
+        window.hapusDataKontrak = async function(masterId) {
+            if (!confirm("Hapus data pengontrak ini?\nStatus rumah akan menjadi 'HUNI' kembali.")) return;
+            try {
+                await updateDoc(doc(db, 'artifacts', appId, 'warga_master', masterId), {
+                    kontrak_data: null,
+                    status_rumah: 'HUNI'
+                });
+                showToast("Data kontrak dihapus.");
+                loadAdminWargaList();
+            } catch(e) { showToast("Gagal.", true); }
+        };
+        // -------------------------
+
         window.hapusMaster = async function (id, nama, blk) {
             if (!confirm(`Hapus data master ${nama} (${blk})?\n\nAkun-akun yang terkait tidak akan terhapus.`)) return;
             try { await deleteDoc(doc(db, 'artifacts', appId, 'warga_master', id)); showToast("Master dihapus."); loadAdminWargaList(); loadStatistik(); } catch(e) { showToast("Gagal.", true); }
